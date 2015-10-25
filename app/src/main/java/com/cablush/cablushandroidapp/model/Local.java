@@ -5,6 +5,7 @@ package com.cablush.cablushandroidapp.model;
  */
 public class Local {
 
+    private int id;
     private double latitude;
     private double longitude;
     private String logradouro;
@@ -19,17 +20,26 @@ public class Local {
     public Local() {
     }
 
-    public Local(double latitude, double longitude, String logradouro, String numero, String complemento, String bairro, String cidade, String estado, String cep, String pais) {
-        this.latitude = latitude;
-        this.longitude = longitude;
-        this.logradouro = logradouro;
-        this.numero = numero;
+    public Local(int id, double latitude, double longitude, String logradouro, String numero, String complemento, String bairro, String cidade, String estado, String cep, String pais) {
+        this.id          = id;
+        this.latitude    = latitude;
+        this.longitude   = longitude;
+        this.logradouro  = logradouro;
+        this.numero      = numero;
         this.complemento = complemento;
-        this.bairro = bairro;
-        this.cidade = cidade;
-        this.estado = estado;
-        this.cep = cep;
-        this.pais = pais;
+        this.bairro      = bairro;
+        this.cidade      = cidade;
+        this.estado      = estado;
+        this.cep         = cep;
+        this.pais        = pais;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public double getLatitude() {

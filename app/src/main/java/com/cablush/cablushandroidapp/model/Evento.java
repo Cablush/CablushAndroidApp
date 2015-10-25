@@ -13,18 +13,20 @@ public class Evento {
     private Time time;
     private Date date;
     private String cartaz;
+    private Local local;
     private boolean fundo;
 
     public Evento() {
     }
 
-    public Evento(String nome, String descricao, Time time, Date date, String cartaz, boolean fundo) {
-        this.nome = nome;
-        this.descricao = descricao;
-        this.time = time;
-        this.date = date;
-        this.cartaz = cartaz;
-        this.fundo = fundo;
+    public Evento(String nome, String descricao, Time time, Date date, String cartaz,Local local,boolean fundo) {
+        this.nome       = nome;
+        this.descricao  = descricao;
+        this.time       = time;
+        this.date       = date;
+        this.cartaz     = cartaz;
+        this.local      = local;
+        this.fundo      = fundo;
     }
 
     public String getNome() {
@@ -65,6 +67,14 @@ public class Evento {
 
     public void setCartaz(String cartaz) {
         this.cartaz = cartaz;
+    }
+
+    public Local getLocal() {
+        return local;
+    }
+
+    public void setLocal(Local local) {
+        this.local = local;
     }
 
     public boolean isFundo() {
