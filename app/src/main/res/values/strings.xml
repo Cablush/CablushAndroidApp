@@ -1,6 +1,12 @@
 <resources>
     <string name="app_name">Cablush</string>
 
-    <string name="action_settings">Settings</string>
-    <string name="error_create_map">Error Map!</string>
+    <string name="action_search">Buscar</string>
+    <string name="error_create_map">Error a carregar o Mapa!</string>
+
+
+    <!--Dialog Buscar -->
+    <string name="txt_estados">Buscar</string>
+    <string name="txt_esportes">Buscar</string>
+    <string name="txt_nome">Buscar</string>
 </resources>
