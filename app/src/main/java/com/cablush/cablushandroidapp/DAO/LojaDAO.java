@@ -36,6 +36,10 @@ public class LojaDAO {
         return new Loja();
     }
 
+    public void close(){
+        db.close();
+    }
+
     private ContentValues getContentValues(Loja loja){
         ContentValues ctv = new ContentValues();
 

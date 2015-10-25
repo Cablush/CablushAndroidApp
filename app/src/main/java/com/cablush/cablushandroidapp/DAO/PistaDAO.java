@@ -40,7 +40,6 @@ public class PistaDAO {
 
     private ContentValues getContentValues(Pista pista){
         ContentValues ctv = new ContentValues();
-        //String nome, String descricao, String foto, Local local, boolean fundo
         ctv.put("nome"     , pista.getNome());
         ctv.put("descricao", pista.getDescricao());
         ctv.put("foto"     , pista.getFoto());
