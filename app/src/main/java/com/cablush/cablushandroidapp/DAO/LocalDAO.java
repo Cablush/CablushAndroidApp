@@ -52,4 +52,7 @@ public class LocalDAO {
 
         return ctv;
     }
+    public void close(){
+        db.close();
+    }
 }

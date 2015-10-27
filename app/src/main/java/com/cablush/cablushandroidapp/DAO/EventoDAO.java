@@ -48,4 +48,8 @@ public class EventoDAO {
         return ctv;
     }
 
+    public void close(){
+        db.close();
+    }
+
 }

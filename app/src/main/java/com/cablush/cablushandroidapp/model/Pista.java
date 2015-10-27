@@ -1,5 +1,7 @@
 package com.cablush.cablushandroidapp.model;
 
+import org.json.JSONObject;
+
 /**
  * Created by jonathan on 22/10/15.
  */
@@ -61,4 +63,6 @@ public class Pista {
     public void setFundo(boolean fundo) {
         this.fundo = fundo;
     }
+
+
 }

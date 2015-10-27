@@ -6,7 +6,7 @@
 
 
     <!--Dialog Buscar -->
-    <string name="txt_estados">Buscar</string>
-    <string name="txt_esportes">Buscar</string>
-    <string name="txt_nome">Buscar</string>
+    <string name="txt_estados">Estado</string>
+    <string name="txt_esportes">Esportes</string>
+    <string name="txt_nome">Nome da Loja</string>
 </resources>

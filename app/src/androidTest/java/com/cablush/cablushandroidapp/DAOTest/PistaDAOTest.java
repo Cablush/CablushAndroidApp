@@ -1,28 +1,28 @@
-package com.cablush.cablushandroidapp;
+package com.cablush.cablushandroidapp.DAOTest;
 
 import android.test.AndroidTestCase;
 import android.test.RenamingDelegatingContext;
 
-import com.cablush.cablushandroidapp.DAO.LojaDAO;
+import com.cablush.cablushandroidapp.DAO.PistaDAO;
 import com.cablush.cablushandroidapp.model.Local;
-import com.cablush.cablushandroidapp.model.Loja;
+import com.cablush.cablushandroidapp.model.Pista;
 
 /**
- * Created by jonathan on 25/10/15.
+ * Created by jonathan on 24/10/15.
  */
-public class LojaDAOTest extends AndroidTestCase {
-    private LojaDAO lojaDB;
+public class PistaDAOTest extends AndroidTestCase {
+    private PistaDAO pistaDB;
 
     @Override
     public void setUp() throws Exception {
         super.setUp();
         RenamingDelegatingContext context = new RenamingDelegatingContext(getContext(), "test_");
-        lojaDB = new LojaDAO(context);
+        pistaDB = new PistaDAO(context);
     }
 
     @Override
     public void tearDown() throws Exception {
-        lojaDB.close();
+        pistaDB.close();
         super.tearDown();
     }
 
@@ -30,8 +30,8 @@ public class LojaDAOTest extends AndroidTestCase {
     //@Test
     public void testAddEntry(){
         // Here i have my new database wich is not connected to the standard database of the App
-        Loja l = new Loja("nome", "descricao", "telefone", "email", "site", "facebook", "logo", new Local(), true);
-        long r = lojaDB.insert(l);
-        assertEquals(1,l);
-    }
+        Pista p = new Pista("nome", "descricao", "foto", new Local(), true);
+        long r = pistaDB.insert(p);
+        assertEquals(1,r);
+        }
 }

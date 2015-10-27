@@ -1,6 +1,7 @@
 package com.cablush.cablushandroidapp;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.location.Criteria;
 import android.location.LocationManager;
@@ -14,6 +15,8 @@ import android.widget.Toast;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
+
+import java.util.zip.Inflater;
 
 
 public class MainActivity extends Activity {
@@ -82,13 +85,18 @@ public class MainActivity extends Activity {
 
         switch (id){
             case R.id.action_search:
-
-                break;
+                showBuscarDialog();
+            break;
         }
 
 
         return super.onOptionsItemSelected(item);
     }
 
+    private void showBuscarDialog(){
+        Dialog dialog = new Dialog(MainActivity.this);
+        dialog.setContentView(R.layout.dialog_search);
+        dialog.show();
+    }
 
 }
