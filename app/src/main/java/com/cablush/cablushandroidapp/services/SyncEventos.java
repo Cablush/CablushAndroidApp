@@ -8,9 +8,6 @@ import retrofit.Callback;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
-import retrofit.http.Path;
-import retrofit.http.Query;
-import retrofit.Retrofit;
 
 /**
  * Created by jonathan on 26/10/15.
