@@ -14,14 +14,14 @@ import retrofit.http.Query;
  * Created by jonathan on 26/10/15.
  */
 public interface ApiLojas {
-    @GET("/loja/{name}")
+    @GET("/{name}")
     void getLojaByName(@Path("name") String username, Callback<Loja> cb);
 
 
-    @GET("/loja/esporte")
-    void getLojaByEsporte(@Path("esporte") String esporte, @Query("sort") String sort, Callback<List<Loja>> cb);
+    @GET("/esporte")
+    void getLojaByEsporte(@Path("esporte") String esporte, Callback<List<Loja>> cb);
 
-    @GET("/loja/estado")
-    void getLojaByEstado(@Path("estado") String estado, @Query("sort") String sort, Callback<List<Loja>> cb);
+    @GET("/estado")
+    void getLojaByEstado(@Path("estado") String estado,  Callback<List<Loja>> cb);
 
 }

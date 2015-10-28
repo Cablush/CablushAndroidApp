@@ -1,16 +1,22 @@
 package com.cablush.cablushandroidapp.model;
 
+import com.google.gson.annotations.Expose;
+
 import org.json.JSONObject;
 
 /**
  * Created by jonathan on 22/10/15.
  */
 public class Pista {
-
+    @Expose
     private String nome;
+    @Expose
     private String descricao;
+    @Expose
     private String foto;
+    @Expose
     private Local local;
+    @Expose
     private boolean fundo;
 
     public Pista() {

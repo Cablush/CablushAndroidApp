@@ -1,29 +1,70 @@
 package com.cablush.cablushandroidapp.services;
 
+import com.cablush.cablushandroidapp.model.Loja;
+import com.cablush.cablushandroidapp.model.Pista;
+
+import java.util.List;
+
+import retrofit.Callback;
+import retrofit.RestAdapter;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
+
 /**
  * Created by jonathan on 26/10/15.
  */
 public class SyncLojas {
-    private static ApiPistas REST_CLIENT;
-    private static String ROOT ="http://api.cablush.com/";
+    private static ApiLojas apiLojas;
+    private static String ROOT ="http://api.cablush.com/loja";
 
-    static {
-        setupRestClient();
+    private SyncLojas() {
+        RestAdapter restAdapter = new RestAdapter.Builder()
+                .setEndpoint(ROOT).build();
+
+        apiLojas = restAdapter.create(ApiLojas.class);
     }
 
-    private SyncLojas() {}
+    public void getLojaByName(String name){
+        apiLojas.getLojaByName(name, new Callback<Loja>() {
+            @Override
+            public void success(Loja loja, Response response) {
 
-    public static ApiPistas get() {
-        return REST_CLIENT;
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+
+            }
+        });
     }
 
-    private static void setupRestClient() {
-//        RestAdapter.Builder builder = new RestAdapter.Builder()
-//                .setEndpoint(ROOT)
-//                .setClient(new OkClient(new OkHttpClient()))
-//                .builder().setLogLevel(RestAdapter.LogLevel.FULL);
-//
-//        RestAdapter restAdapter = builder.build();
-//        REST_CLIENT = restAdapter.create(ApiPistas.class);
+    public void getLojaByEsporte(String esporte){
+
+        apiLojas.getLojaByEsporte(esporte, new Callback<List<Loja>>() {
+            @Override
+            public void success(List<Loja> lojas, Response response) {
+
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+
+            }
+        });
+    }
+
+    public void getLojaByEstado(String estado){
+
+        apiLojas.getLojaByEstado(estado, new Callback<List<Loja>>() {
+            @Override
+            public void success(List<Loja> lojas, Response response) {
+
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+
+            }
+        });
     }
 }

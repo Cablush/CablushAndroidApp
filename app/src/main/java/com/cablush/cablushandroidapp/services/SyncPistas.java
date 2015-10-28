@@ -1,35 +1,70 @@
 package com.cablush.cablushandroidapp.services;
 
-import com.google.android.gms.common.api.Api;
-import com.squareup.okhttp.OkHttpClient;
+import com.cablush.cablushandroidapp.model.Loja;
+import com.cablush.cablushandroidapp.model.Pista;
 
+import java.util.List;
+
+import retrofit.Callback;
 import retrofit.RestAdapter;
-import retrofit.client.OkClient;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 /**
  * Created by jonathan on 26/10/15.
  */
 public class SyncPistas {
-    private static ApiPistas REST_CLIENT;
-    private static String ROOT ="http://api.cablush.com/";
+    private static ApiPistas apiPistas;
+    private static String ROOT ="http://api.cablush.com/pista";
+    private SyncPistas() {
+        RestAdapter restAdapter = new RestAdapter.Builder()
+                .setEndpoint(ROOT).build();
 
-    static {
-        setupRestClient();
+        apiPistas = restAdapter.create(ApiPistas.class);
     }
 
-    private SyncPistas() {}
+    public void getLojaByName(String name){
+        apiPistas.getPistaByName(name, new Callback<Pista>() {
+            @Override
+            public void success(Pista pista, Response response) {
 
-    public static ApiPistas get() {
-        return REST_CLIENT;
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+
+            }
+        });
     }
 
-    private static void setupRestClient() {
-//        RestAdapter.Builder builder = new RestAdapter.Builder()
-//                .setEndpoint(ROOT)
-//                .setClient(new OkClient(new OkHttpClient()))
-//                .builder().setLogLevel(RestAdapter.LogLevel.FULL);
-//
-//        RestAdapter restAdapter = builder.build();
-//        REST_CLIENT = restAdapter.create(ApiPistas.class);
+    public void getLojaByEsporte(String esporte){
+
+        apiPistas.getPistaByEsporte(esporte, new Callback<List<Pista>>() {
+            @Override
+            public void success(List<Pista> pistas, Response response) {
+
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+
+            }
+        });
     }
+
+    public void getLojaByEstado(String estado){
+
+        apiPistas.getPistaByEstado(estado, new Callback<List<Pista>>() {
+            @Override
+            public void success(List<Pista> pistas, Response response) {
+
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+
+            }
+        });
+    }
+
 }

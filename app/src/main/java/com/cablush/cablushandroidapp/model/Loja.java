@@ -1,18 +1,28 @@
 package com.cablush.cablushandroidapp.model;
 
+import com.google.gson.annotations.Expose;
+
 /**
  * Created by jonathan on 22/10/15.
  */
 public class Loja {
-
+    @Expose
     private String nome;
+    @Expose
     private String descricao;
+    @Expose
     private String telefone;
+    @Expose
     private String email;
+    @Expose
     private String site;
+    @Expose
     private String facebook;
+    @Expose
     private String logo;
+    @Expose
     private Local local;
+    @Expose
     private boolean fundo;
 
     public Loja() {

@@ -14,14 +14,14 @@ import retrofit.http.Query;
  * Created by jonathan on 26/10/15.
  */
 public interface ApiEventos {
-    @GET("/evento/{name}")
-    void getEventoByName(@Path("name") String username, Callback<Evento> cb);
+    @GET("/{name}")
+    void getEventoByName(@Path("name") String name, Callback<Evento> eventoCallback);
 
 
-    @GET("/evento/esporte")
-    void getEventoByEsporte(@Path("esporte") String esporte, @Query("sort") String sort, Callback<List<Evento>> cb);
+    @GET("/esporte")
+    void getEventoByEsporte(@Path("esporte") String esporte, Callback<List<Evento>> eveListCallback);
 
-    @GET("/evento/estado")
-    void getEventoByEstado(@Path("estado") String estado, @Query("sort") String sort, Callback<List<Evento>> cb);
+    @GET("/estado")
+    void getEventoByEstado(@Path("estado") String estado, Callback<List<Evento>> eveListCallback);
 
 }

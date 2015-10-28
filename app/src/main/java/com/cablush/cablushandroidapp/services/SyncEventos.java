@@ -5,49 +5,73 @@ import com.cablush.cablushandroidapp.model.Evento;
 import java.util.List;
 
 import retrofit.Callback;
+import retrofit.RestAdapter;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 import retrofit.http.Path;
 import retrofit.http.Query;
+import retrofit.Retrofit;
 
 /**
  * Created by jonathan on 26/10/15.
  */
-public class SyncEventos implements ApiEventos {
-    private static ApiPistas REST_CLIENT;
-    private static String ROOT ="http://api.cablush.com/";
+public class SyncEventos {
+    private static ApiEventos apiEventos;
+    private static String ROOT ="http://api.cablush.com/evento";
 
-    static {
-        setupRestClient();
+    private SyncEventos() {
+        RestAdapter restAdapter = new RestAdapter.Builder()
+                .setEndpoint(ROOT).build();
+
+        apiEventos = restAdapter.create(ApiEventos.class);
     }
 
-    private SyncEventos() {}
 
-    public static ApiPistas get() {
-        return REST_CLIENT;
-    }
 
-    @Override
-    public void getEventoByName(@Path("name") String username, Callback<Evento> cb) {
-        /*
-            Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        */
 
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://api.github.com")
-                .build();
+    public void getEventoByName(String name) {
+        apiEventos.getEventoByName(name, new Callback<Evento>() {
+            @Override
+            public void success(Evento evento, Response response) {
 
-        ApiEventos service = retrofit.create(ApiEventos.class);
-    }
+            }
 
-    @Override
-    public void getEventoByEsporte(@Path("esporte") String esporte, @Query("sort") String sort, Callback<List<Evento>> cb) {
+            @Override
+            public void failure(RetrofitError error) {
+
+            }
+        });
 
     }
 
-    @Override
-    public void getEventoByEstado(@Path("estado") String estado, @Query("sort") String sort, Callback<List<Evento>> cb) {
+
+    public void getEventoByEsporte(String esporte) {
+        apiEventos.getEventoByEsporte(esporte, new Callback<List<Evento>>() {
+            @Override
+            public void success(List<Evento> eventos, Response response) {
+
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+
+            }
+        });
+    }
+
+
+    public void getEventoByEstado(String estado) {
+        apiEventos.getEventoByEstado(estado, new Callback<List<Evento>>() {
+            @Override
+            public void success(List<Evento> eventos, Response response) {
+
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+
+            }
+        });
 
     }
 }

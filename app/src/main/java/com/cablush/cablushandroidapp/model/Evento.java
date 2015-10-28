@@ -1,5 +1,7 @@
 package com.cablush.cablushandroidapp.model;
 
+import com.google.gson.annotations.Expose;
+
 import java.sql.Date;
 import java.sql.Time;
 
@@ -7,13 +9,19 @@ import java.sql.Time;
  * Created by jonathan on 22/10/15.
  */
 public class Evento {
-
+    @Expose
     private String nome;
+    @Expose
     private String descricao;
+    @Expose
     private Time time;
+    @Expose
     private Date date;
+    @Expose
     private String cartaz;
+    @Expose
     private Local local;
+    @Expose
     private boolean fundo;
 
     public Evento() {

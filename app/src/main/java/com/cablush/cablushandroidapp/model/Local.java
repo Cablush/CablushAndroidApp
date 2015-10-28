@@ -1,20 +1,32 @@
 package com.cablush.cablushandroidapp.model;
 
+import com.google.gson.annotations.Expose;
+
 /**
  * Created by jonathan on 22/10/15.
  */
 public class Local {
-
+    @Expose
     private int id;
+    @Expose
     private double latitude;
+    @Expose
     private double longitude;
+    @Expose
     private String logradouro;
+    @Expose
     private String numero;
+    @Expose
     private String complemento;
+    @Expose
     private String bairro;
+    @Expose
     private String cidade;
+    @Expose
     private String estado;
+    @Expose
     private String cep;
+    @Expose
     private String pais;
 
     public Local() {
