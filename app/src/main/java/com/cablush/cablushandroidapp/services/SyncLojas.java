@@ -1,15 +1,9 @@
 package com.cablush.cablushandroidapp.services;
 
-import com.google.android.gms.common.api.Api;
-import com.squareup.okhttp.OkHttpClient;
-
-import retrofit.RestAdapter;
-import retrofit.client.OkClient;
-
 /**
  * Created by jonathan on 26/10/15.
  */
-public class SyncPistas {
+public class SyncLojas {
     private static ApiPistas REST_CLIENT;
     private static String ROOT ="http://api.cablush.com/";
 
@@ -17,7 +11,7 @@ public class SyncPistas {
         setupRestClient();
     }
 
-    private SyncPistas() {}
+    private SyncLojas() {}
 
     public static ApiPistas get() {
         return REST_CLIENT;
