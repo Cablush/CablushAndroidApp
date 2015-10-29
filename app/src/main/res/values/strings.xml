@@ -9,4 +9,10 @@
     <string name="txt_estados">Estado</string>
     <string name="txt_esportes">Esportes</string>
     <string name="txt_nome">Nome da Loja</string>
+    <array name="estados">
+        <item></item>
+    </array>
+    <array name="esportes">
+        <item></item>
+    </array>
 </resources>
