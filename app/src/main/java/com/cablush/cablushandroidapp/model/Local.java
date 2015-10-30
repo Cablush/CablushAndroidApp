@@ -46,6 +46,19 @@ public class Local {
         this.pais        = pais;
     }
 
+    public Local( double latitude, double longitude, String logradouro, String numero, String complemento, String bairro, String cidade, String estado, String cep, String pais) {
+        this.latitude    = latitude;
+        this.longitude   = longitude;
+        this.logradouro  = logradouro;
+        this.numero      = numero;
+        this.complemento = complemento;
+        this.bairro      = bairro;
+        this.cidade      = cidade;
+        this.estado      = estado;
+        this.cep         = cep;
+        this.pais        = pais;
+    }
+
     public int getId() {
         return id;
     }

@@ -14,14 +14,8 @@ import retrofit.http.Query;
  * Created by jonathan on 26/10/15.
  */
 public interface ApiLojas {
-    @GET("/{name}")
-    void getLojaByName(@Path("name") String username, Callback<Loja> cb);
+    @GET("/")
+    void getLojas(@Path("nome") String nome,@Path("estado") String estado,@Path("esporte") String esporte, Callback<Loja> cb);
 
-
-    @GET("/esporte")
-    void getLojaByEsporte(@Path("esporte") String esporte, Callback<List<Loja>> cb);
-
-    @GET("/estado")
-    void getLojaByEstado(@Path("estado") String estado,  Callback<List<Loja>> cb);
 
 }

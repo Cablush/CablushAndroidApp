@@ -8,11 +8,53 @@
     <!--Dialog Buscar -->
     <string name="txt_estados">Estado</string>
     <string name="txt_esportes">Esportes</string>
-    <string name="txt_nome">Nome da Loja</string>
-    <array name="estados">
-        <item></item>
-    </array>
-    <array name="esportes">
-        <item></item>
-    </array>
+    <string name="txt_nome">Nome</string>
+    <string name="buscar">Buscar</string>
+    <string name="tipo">Buscar por:</string>
+    <string-array name="tipo">
+        <item>Selecione...</item>
+        <item>Loja</item>
+        <item>Evento</item>
+        <item>Pista</item>
+    </string-array>
+
+    <string-array name="esportes">
+        <item>Selecione...</item>
+        <item>Skate - Longboard</item>
+        <item>Skate - Street</item>
+        <item>Bike - BMX</item>
+        <item>Bike - MTB</item>
+        <item>Bike - Speed</item>
+        <item>Bike - Trike Bike</item>
+    </string-array>
+
+    <string-array name="estados">
+        <item>Selecione...</item>
+        <item>Acre</item>
+        <item>Alagoas</item>
+        <item>Amapá</item>
+        <item>Amazonas</item>
+        <item>Bahia</item>
+        <item>Ceará</item>
+        <item>Distrito Federal</item>
+        <item>Espírito Santo</item>
+        <item>Goiás</item>
+        <item>Maranhão</item>
+        <item>Mato Grosso</item>
+        <item>Mato Grosso do Sul</item>
+        <item>Minas Gerais</item>
+        <item>Pará</item>
+        <item>Paraíba</item>
+        <item>Paraná</item>
+        <item>Pernambuco</item>
+        <item>Piauí</item>
+        <item>Rio de Janeiro</item>
+        <item>Rio Grande do Norte</item>
+        <item>Rio Grande do Sul</item>
+        <item>Rondônia</item>
+        <item>Roraima</item>
+        <item>Santa Catarina</item>
+        <item>São Paulo</item>
+        <item>Tocantins</item>
+    </string-array>
 </resources>

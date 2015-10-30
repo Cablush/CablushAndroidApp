@@ -1,5 +1,6 @@
 package com.cablush.cablushandroidapp.services;
 
+import com.cablush.cablushandroidapp.DAO.EventoDAO;
 import com.cablush.cablushandroidapp.model.Evento;
 
 import java.util.List;
@@ -14,20 +15,16 @@ import retrofit.client.Response;
  */
 public class SyncEventos {
     private static ApiEventos apiEventos;
-    private static String ROOT ="http://api.cablush.com/evento";
 
-    private SyncEventos() {
+    public SyncEventos() {
         RestAdapter restAdapter = new RestAdapter.Builder()
-                .setEndpoint(ROOT).build();
+                .setEndpoint(SyncLocalizavel.ROOT).build();
 
         apiEventos = restAdapter.create(ApiEventos.class);
     }
 
-
-
-
-    public void getEventoByName(String name) {
-        apiEventos.getEventoByName(name, new Callback<Evento>() {
+    public void getEventos(String name,String estado, String esporte) {
+        apiEventos.getEventos(name, estado, esporte, new Callback<Evento>() {
             @Override
             public void success(Evento evento, Response response) {
 
@@ -42,33 +39,4 @@ public class SyncEventos {
     }
 
 
-    public void getEventoByEsporte(String esporte) {
-        apiEventos.getEventoByEsporte(esporte, new Callback<List<Evento>>() {
-            @Override
-            public void success(List<Evento> eventos, Response response) {
-
-            }
-
-            @Override
-            public void failure(RetrofitError error) {
-
-            }
-        });
-    }
-
-
-    public void getEventoByEstado(String estado) {
-        apiEventos.getEventoByEstado(estado, new Callback<List<Evento>>() {
-            @Override
-            public void success(List<Evento> eventos, Response response) {
-
-            }
-
-            @Override
-            public void failure(RetrofitError error) {
-
-            }
-        });
-
-    }
 }

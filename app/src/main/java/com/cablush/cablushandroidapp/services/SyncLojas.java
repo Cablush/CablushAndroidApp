@@ -1,5 +1,7 @@
 package com.cablush.cablushandroidapp.services;
 
+import com.cablush.cablushandroidapp.MainActivity;
+import com.cablush.cablushandroidapp.model.Local;
 import com.cablush.cablushandroidapp.model.Loja;
 import com.cablush.cablushandroidapp.model.Pista;
 
@@ -15,49 +17,23 @@ import retrofit.client.Response;
  */
 public class SyncLojas {
     private static ApiLojas apiLojas;
-    private static String ROOT ="http://api.cablush.com/loja";
 
-    private SyncLojas() {
+
+    public SyncLojas() {
         RestAdapter restAdapter = new RestAdapter.Builder()
-                .setEndpoint(ROOT).build();
+                .setEndpoint(SyncLocalizavel.ROOT).build();
 
         apiLojas = restAdapter.create(ApiLojas.class);
     }
 
-    public void getLojaByName(String name){
-        apiLojas.getLojaByName(name, new Callback<Loja>() {
+    public void getLojas(String name,String estado, String esporte){
+        Local local = new Local(-19.7928431,-43.8830101, "lograoudor", "10", "complemento","bairro","cidade","estado","cep","pais");
+        Loja l = new Loja("nome", "descricao", "telefone", "email", "site", "facebook", "logo", local, true);
+        MainActivity.setMarker("retorno das lojas","nome",-19.7928431,-43.8830101);
+
+        apiLojas.getLojas(name, estado, esporte, new Callback<Loja>() {
             @Override
             public void success(Loja loja, Response response) {
-
-            }
-
-            @Override
-            public void failure(RetrofitError error) {
-
-            }
-        });
-    }
-
-    public void getLojaByEsporte(String esporte){
-
-        apiLojas.getLojaByEsporte(esporte, new Callback<List<Loja>>() {
-            @Override
-            public void success(List<Loja> lojas, Response response) {
-
-            }
-
-            @Override
-            public void failure(RetrofitError error) {
-
-            }
-        });
-    }
-
-    public void getLojaByEstado(String estado){
-
-        apiLojas.getLojaByEstado(estado, new Callback<List<Loja>>() {
-            @Override
-            public void success(List<Loja> lojas, Response response) {
 
             }
 

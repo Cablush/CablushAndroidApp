@@ -13,14 +13,10 @@ import retrofit.http.Query;
  * Created by jonathan on 26/10/15.
  */
 public interface ApiPistas {
-    @GET("/{name}")
-    void getPistaByName(@Path("name") String username, Callback<Pista> cb);
+    @GET("/")
+    void getPistaByName(@Path("name") String name,@Path("estado") String estado,@Path("esporte") String esporte, Callback<Pista> pista);
 
 
-    @GET("/esporte")
-    void getPistaByEsporte(@Path("esporte") String esporte, Callback<List<Pista>> pistasCallback);
 
-    @GET("/estado")
-    void getPistaByEstado(@Path("estado") String estado, Callback<List<Pista>> pistasCallback);
 
 }
