@@ -1,10 +1,8 @@
 package com.cablush.cablushandroidapp.services;
 
-import com.cablush.cablushandroidapp.model.Loja;
+import android.util.Log;
+
 import com.cablush.cablushandroidapp.model.Pista;
-
-import java.util.List;
-
 import retrofit.Callback;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
@@ -24,15 +22,15 @@ public class SyncPistas {
     }
 
     public void getPistas(String name,String estado, String esporte) {
-        apiPistas.getPistaByName(name,estado,esporte, new Callback<Pista>() {
+        apiPistas.getPistas(name,estado,esporte, new Callback<Pista>() {
             @Override
             public void success(Pista pista, Response response) {
-
+                Log.i("Pista", pista.toString());
             }
 
             @Override
             public void failure(RetrofitError error) {
-
+                Log.e("Pista", "Falha ao carregar as pistas");
             }
         });
     }

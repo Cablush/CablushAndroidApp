@@ -8,5 +8,5 @@
         android:layout_height="fill_parent"
         android:id="@+id/imageView"
         android:background="@android:color/white"
-        android:src="@drawable/cablush"/>
+        android:src="@drawable/logo_azul"/>
 </LinearLayout>

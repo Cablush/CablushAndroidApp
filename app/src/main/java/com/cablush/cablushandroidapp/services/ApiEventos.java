@@ -14,7 +14,7 @@ import retrofit.http.Query;
  * Created by jonathan on 26/10/15.
  */
 public interface ApiEventos {
-    @GET("/")
+    @GET("/eventos")
     void getEventos(@Path("name") String name,@Path("estado") String estado,@Path("esporte") String esporte, Callback<Evento> eventoCallback);
 
 

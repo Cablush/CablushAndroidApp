@@ -1,5 +1,7 @@
 package com.cablush.cablushandroidapp.services;
 
+import android.util.Log;
+
 import com.cablush.cablushandroidapp.MainActivity;
 import com.cablush.cablushandroidapp.model.Local;
 import com.cablush.cablushandroidapp.model.Loja;
@@ -34,12 +36,12 @@ public class SyncLojas {
         apiLojas.getLojas(name, estado, esporte, new Callback<Loja>() {
             @Override
             public void success(Loja loja, Response response) {
-
+                
             }
 
             @Override
             public void failure(RetrofitError error) {
-
+                Log.e("Lojas","Falha ao buscar Lojas");
             }
         });
     }

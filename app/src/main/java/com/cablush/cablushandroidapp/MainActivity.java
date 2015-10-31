@@ -1,5 +1,6 @@
 package com.cablush.cablushandroidapp;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -19,6 +20,7 @@ import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -65,9 +67,31 @@ public class MainActivity extends Activity {
         }
         configGPS();
 
-        getActionBar().show();
+        customActionBar();
+
         createMapView();
 
+    }
+
+    private void customActionBar(){
+        ActionBar mActionBar = getActionBar();
+        mActionBar.setDisplayShowHomeEnabled(false);
+        mActionBar.setDisplayShowTitleEnabled(false);
+        LayoutInflater mInflater = LayoutInflater.from(this);
+
+        View mCustomView = mInflater.inflate(R.layout.custom_actionbar, null);
+        ImageButton ibtnSearch = (ImageButton) mCustomView.findViewById(R.id.ibtSearch);
+
+        ibtnSearch.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                showBuscarDialog();
+            }
+        });
+
+        mActionBar.setCustomView(mCustomView);
+        mActionBar.setDisplayShowCustomEnabled(true);
     }
 
     @Override
@@ -127,29 +151,6 @@ public class MainActivity extends Activity {
                     1000, // 1km
                     mLocationListener);
 
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_main, menu);
-
-
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        switch (id){
-            case R.id.action_search:
-                showBuscarDialog();
-            break;
-        }
-
-
-        return super.onOptionsItemSelected(item);
     }
 
 
