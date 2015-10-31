@@ -107,7 +107,7 @@ public class MainActivity extends Activity {
             locationManager = null;
     }
 
-    public static void setMarker(String descricao,String nome, double lat, double lng) {
+    public static void setMarker(String nome,String descricao, double lat, double lng) {
         googleMap.addMarker(new MarkerOptions()
             .position(new LatLng(lat, lng))
             .title(nome)
@@ -188,8 +188,8 @@ public class MainActivity extends Activity {
         btnBuscar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String estado  = !spnEstados.getSelectedItem().equals("Selecione...")? "" : spnEstados.getSelectedItem().toString();
-                String esporte = !spnEsportes.getSelectedItem().equals("Selecione...")? "" : spnEsportes.getSelectedItem().toString();
+                String estado  = spnEstados.getSelectedItem().equals("Selecione...")? "" : spnEstados.getSelectedItem().toString();
+                String esporte = spnEsportes.getSelectedItem().equals("Selecione...")? "" : spnEsportes.getSelectedItem().toString();
                 String nome    =   edtName.getText().toString();
 
                 if(spnTipo.getSelectedItem().equals(tipo[1])){//Loja

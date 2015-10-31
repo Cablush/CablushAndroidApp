@@ -29,14 +29,12 @@ public class SyncLojas {
     }
 
     public void getLojas(String name,String estado, String esporte){
-        Local local = new Local(-19.7928431,-43.8830101, "lograoudor", "10", "complemento","bairro","cidade","estado","cep","pais");
-        Loja l = new Loja("nome", "descricao", "telefone", "email", "site", "facebook", "logo", local, true);
-        MainActivity.setMarker("retorno das lojas","nome",-19.7928431,-43.8830101);
-
-        apiLojas.getLojas(name, estado, esporte, new Callback<Loja>() {
+        apiLojas.getLojas(name, estado, esporte, new Callback<List<Loja>>() {
             @Override
-            public void success(Loja loja, Response response) {
-                
+            public void success(List<Loja> lojas, Response response) {
+                for(Loja loja: lojas) {
+                    MainActivity.setMarker(loja.getNome(), loja.getDescricao(), loja.getLocal().getLatitude(), loja.getLocal().getLongitude());
+                }
             }
 
             @Override

@@ -2,7 +2,11 @@ package com.cablush.cablushandroidapp.services;
 
 import android.util.Log;
 
+import com.cablush.cablushandroidapp.MainActivity;
 import com.cablush.cablushandroidapp.model.Pista;
+
+import java.util.List;
+
 import retrofit.Callback;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
@@ -22,10 +26,12 @@ public class SyncPistas {
     }
 
     public void getPistas(String name,String estado, String esporte) {
-        apiPistas.getPistas(name,estado,esporte, new Callback<Pista>() {
+        apiPistas.getPistas(name,estado,esporte, new Callback<List<Pista>>() {
             @Override
-            public void success(Pista pista, Response response) {
-                Log.i("Pista", pista.toString());
+            public void success(List<Pista> pistas, Response response) {
+                for(Pista pista: pistas) {
+                    MainActivity.setMarker(pista.getNome(), pista.getDescricao(), pista.getLocal().getLatitude(), pista.getLocal().getLongitude());
+                }
             }
 
             @Override

@@ -1,13 +1,11 @@
 package com.cablush.cablushandroidapp.services;
 
 import com.cablush.cablushandroidapp.model.Loja;
-import com.cablush.cablushandroidapp.model.Pista;
 
 import java.util.List;
 
 import retrofit.Callback;
 import retrofit.http.GET;
-import retrofit.http.Path;
 import retrofit.http.Query;
 
 /**
@@ -15,7 +13,7 @@ import retrofit.http.Query;
  */
 public interface ApiLojas {
     @GET("/lojas")
-    void getLojas(@Path("nome") String nome,@Path("estado") String estado,@Path("esporte") String esporte, Callback<Loja> cb);
+    void getLojas(@Query("nome") String nome,@Query("estado") String estado,@Query("esporte") String esporte, Callback<List<Loja>> cb);
 
 
 }

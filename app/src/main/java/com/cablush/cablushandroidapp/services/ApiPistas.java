@@ -6,7 +6,6 @@ import java.util.List;
 
 import retrofit.Callback;
 import retrofit.http.GET;
-import retrofit.http.Path;
 import retrofit.http.Query;
 
 /**
@@ -14,7 +13,7 @@ import retrofit.http.Query;
  */
 public interface ApiPistas {
     @GET("/pistas")
-    void getPistas(@Path("name") String name,@Path("estado") String estado,@Path("esporte") String esporte, Callback<Pista> pista);
+    void getPistas(@Query("name") String name,@Query("estado") String estado,@Query("esporte") String esporte, Callback<List<Pista>> pista);
 
 
 

@@ -1,6 +1,9 @@
 package com.cablush.cablushandroidapp.services;
 
-import com.cablush.cablushandroidapp.DAO.EventoDAO;
+
+import android.util.Log;
+
+import com.cablush.cablushandroidapp.MainActivity;
 import com.cablush.cablushandroidapp.model.Evento;
 
 import java.util.List;
@@ -24,15 +27,17 @@ public class SyncEventos {
     }
 
     public void getEventos(String name,String estado, String esporte) {
-        apiEventos.getEventos(name, estado, esporte, new Callback<Evento>() {
+        apiEventos.getEventos(name, estado, esporte, new Callback<List<Evento>>() {
             @Override
-            public void success(Evento evento, Response response) {
-
+            public void success(List<Evento> eventos, Response response) {
+                for(Evento evento: eventos) {
+                    MainActivity.setMarker(evento.getNome(), evento.getDescricao(), evento.getLocal().getLatitude(), evento.getLocal().getLongitude());
+                }
             }
 
             @Override
             public void failure(RetrofitError error) {
-
+                Log.e("Evento", "Falha ao carregar os eventos");
             }
         });
 
