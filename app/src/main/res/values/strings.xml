@@ -4,20 +4,27 @@
     <string name="action_search">Buscar</string>
     <string name="error_create_map">Error a carregar o Mapa!</string>
     <string name="desc_list_item_icon">Item Icon</string>
-
+    <!--Dialog Login -->
+    <string name="txt_usuario">Email</string>
+    <string name="txt_senha">Senha</string>
+    <string name="txt_login">Logar</string>
+    <string name="title_login">Login</string>
+    <string name="txt_cancelar">Cancelar</string>
     <!--Dialog Buscar -->
     <string name="txt_estados">Estado</string>
     <string name="txt_esportes">Esportes</string>
     <string name="txt_nome">Nome</string>
-    <string name="buscar">Buscar</string>
+    <string name="buscar">Buscar %s</string>
     <string name="tipo">Buscar por:</string>
     <string-array name="tipo">
+        <item>Login</item>
         <item>Loja</item>
         <item>Evento</item>
         <item>Pista</item>
     </string-array>
 
     <array name="icons">
+        <item>@drawable/circle_login</item>
         <item>@drawable/ic_launcher</item>
         <item>@drawable/ic_launcher</item>
         <item>@drawable/ic_launcher</item>
