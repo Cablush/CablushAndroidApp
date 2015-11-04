@@ -6,26 +6,33 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 
+import android.content.res.TypedArray;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
 import android.location.LocationListener;
 
+import com.cablush.cablushandroidapp.Adapters.NavDrawerListAdapter;
+import com.cablush.cablushandroidapp.model.NavDrawerItem;
 import com.cablush.cablushandroidapp.services.SyncEventos;
 import com.cablush.cablushandroidapp.services.SyncLojas;
 import com.cablush.cablushandroidapp.services.SyncPistas;
@@ -37,20 +44,86 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.ArrayList;
+
 public class MainActivity extends Activity {
     private Menu menu;
     private static GoogleMap googleMap; // Might be null if Google Play services APK is not available.
     private LocationManager locationManager;
-    long minTime = 5 * 1000;
-    long minDistance = 100;
     private AlertDialog alerta;
 
+    private CharSequence mTitle;
+    private CharSequence mDrawerTitle;
+
+    private String[] navMenuTitles;
+    private TypedArray navMenuIcons;
+
+    private ArrayList<NavDrawerItem> navDrawerItens;
+    private NavDrawerListAdapter adapter;
+
+    private DrawerLayout mDrawerLayout;
+    private ListView mDrawerList;
+    private ActionBarDrawerToggle mDrawerToggle;
+    private String selectedTipo;
+    private static boolean init = true;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
-
         setContentView(R.layout.activity_main);
+
+        mTitle = mDrawerTitle = getTitle();
+
+        navMenuTitles = getResources().getStringArray(R.array.tipo);
+        navMenuIcons = getResources().obtainTypedArray(R.array.icons);
+
+        mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
+        mDrawerList   = (ListView)findViewById(R.id.list_slidermenu);
+
+        navDrawerItens = new ArrayList<>();
+
+        navDrawerItens.add(new NavDrawerItem(navMenuTitles[0], navMenuIcons.getResourceId(0, -1)));
+        navDrawerItens.add(new NavDrawerItem(navMenuTitles[1], navMenuIcons.getResourceId(1, -1)));
+        navDrawerItens.add(new NavDrawerItem(navMenuTitles[2], navMenuIcons.getResourceId(2, -1)));
+        navMenuIcons.recycle();
+
+        mDrawerList.setOnItemClickListener(new SlideMenuClickListener());
+        // setting the nav drawer list adapter
+        adapter = new NavDrawerListAdapter(getApplicationContext(),
+                navDrawerItens);
+        mDrawerList.setAdapter(adapter);
+        ImageView img = new ImageView(this);
+                img.setImageResource(R.drawable.logo_branca);
+        mDrawerList.addHeaderView(img);
+
+        getActionBar().setDisplayHomeAsUpEnabled(true);
+        getActionBar().setHomeButtonEnabled(true);
+
+        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
+                R.drawable.ic_drawer, //nav menu toggle icon
+                R.string.app_name, // nav drawer open - description for accessibility
+                R.string.app_name // nav drawer close - description for accessibility
+        ){
+            public void onDrawerClosed(View view) {
+                getActionBar().setTitle(mTitle);
+                // calling onPrepareOptionsMenu() to show action bar icons
+                invalidateOptionsMenu();
+            }
+
+            public void onDrawerOpened(View drawerView) {
+                getActionBar().setTitle(mDrawerTitle);
+                // calling onPrepareOptionsMenu() to hide action bar icons
+                invalidateOptionsMenu();
+            }
+        };
+
+        mDrawerLayout.setDrawerListener(mDrawerToggle);
+
+        if (savedInstanceState == null) {
+            // on first time display view for first nav item
+            displayView(0);
+        }
+
 
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         int checkGooglePlayServices = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
@@ -67,7 +140,7 @@ public class MainActivity extends Activity {
         }
         configGPS();
 
-        customActionBar();
+       // customActionBar();
 
         createMapView();
 
@@ -109,10 +182,10 @@ public class MainActivity extends Activity {
 
     public static void setMarker(String nome,String descricao, double lat, double lng) {
         googleMap.addMarker(new MarkerOptions()
-            .position(new LatLng(lat, lng))
-            .title(nome)
-            .snippet(descricao)
-            .icon(BitmapDescriptorFactory.fromResource(R.drawable.marker)));
+                .position(new LatLng(lat, lng))
+                .title(nome)
+                .snippet(descricao)
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.marker)));
     }
 
     private void createMapView() {
@@ -159,11 +232,16 @@ public class MainActivity extends Activity {
         View view = inflater.inflate(R.layout.dialog_search, null);
 
         alerta = getAlertBuilder(this, view).create();
-        alerta.show();
+        if(!init) {
+            alerta.show();
+        }else{
+            init = false;
+        }
+
     }
 
     private AlertDialog.Builder getAlertBuilder(final Context context,  View view) {
-        final Spinner spnTipo  = (Spinner)view.findViewById(R.id.spnTipo);
+
         final Spinner spnEstados  = (Spinner)view.findViewById(R.id.spnEstados);
         final Spinner spnEsportes = (Spinner)view.findViewById(R.id.spnEsportes);
         Button btnBuscar    = (Button)view.findViewById(R.id.btnBuscar);
@@ -174,8 +252,7 @@ public class MainActivity extends Activity {
         String[] estados  = getResources().getStringArray(R.array.estados);
         String[] esportes = getResources().getStringArray(R.array.esportes);
 
-        spnTipo.setAdapter(new ArrayAdapter<>(context, R.layout.simple_item, tipo));
-        spnEstados.setAdapter(new ArrayAdapter<>(context, R.layout.simple_item,estados));
+        spnEstados.setAdapter(new ArrayAdapter<>(context, R.layout.simple_item, estados));
         spnEsportes.setAdapter(new ArrayAdapter<>(context, R.layout.simple_item, esportes));
 
 
@@ -188,33 +265,56 @@ public class MainActivity extends Activity {
         btnBuscar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String estado  = spnEstados.getSelectedItem().equals("Selecione...")? "" : spnEstados.getSelectedItem().toString();
-                String esporte = spnEsportes.getSelectedItem().equals("Selecione...")? "" : spnEsportes.getSelectedItem().toString();
-                String nome    =   edtName.getText().toString();
+                String estado = spnEstados.getSelectedItem().equals("Selecione...") ? "" : spnEstados.getSelectedItem().toString();
+                String esporte = spnEsportes.getSelectedItem().equals("Selecione...") ? "" : spnEsportes.getSelectedItem().toString();
+                String nome = edtName.getText().toString();
 
-                if(spnTipo.getSelectedItem().equals(tipo[1])){//Loja
+                if (selectedTipo.equals(tipo[0])) {//Loja
                     SyncLojas syncLojas = new SyncLojas();
-                    syncLojas.getLojas(nome, estado,esporte);
-                }else if(spnTipo.getSelectedItem().equals(tipo[2])){//Evento
+                    syncLojas.getLojas(nome, estado, esporte);
+                } else if (selectedTipo.equals(tipo[1])) {//Evento
                     SyncEventos syncEventos = new SyncEventos();
-                    syncEventos.getEventos(nome,estado,esporte);
-                }else if(spnTipo.getSelectedItem().equals(tipo[3])){//Pista
+                    syncEventos.getEventos(nome, estado, esporte);
+                } else if (selectedTipo.equals(tipo[2])) {//Pista
                     SyncPistas syncPistas = new SyncPistas();
-                    syncPistas.getPistas(nome, estado,esporte);
-                }else{
-                    Toast.makeText(context,"Selecione um tipo para a busca",Toast.LENGTH_SHORT).show();
+                    syncPistas.getPistas(nome, estado, esporte);
+                } else {
+                    Toast.makeText(context, "Selecione um tipo para a busca", Toast.LENGTH_SHORT).show();
+                    alerta.dismiss();
                 }
                 alerta.dismiss();
             }
         });
 
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle("   Buscar  ");
+        builder.setTitle("   Buscar  "+selectedTipo);
         builder.setView(view);
 
 
 
         return builder;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // toggle nav drawer on selecting action bar app icon/title
+        if (mDrawerToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+        // Handle action bar actions click
+        /*switch (item.getItemId()) {
+            case R.id.action_settings:
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }*/
+        return true;
     }
 
     private final LocationListener mLocationListener = new LocationListener(){
@@ -239,4 +339,40 @@ public class MainActivity extends Activity {
 
         }
     };
+    /**
+     * Slide menu item click listener
+     * */
+    private class SlideMenuClickListener implements
+            ListView.OnItemClickListener {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position,
+                                long id) {
+            // display view for selected nav drawer item
+            displayView(position);
+        }
+    }
+
+    /**
+     * Diplaying fragment view for selected nav drawer list item
+     * */
+    private void displayView(int position) {
+        // update the main content by replacing fragments
+        switch (position) {
+            case 0:
+                selectedTipo = getResources().getStringArray(R.array.tipo)[0];
+                showBuscarDialog();
+                break;
+            case 1:
+                selectedTipo = getResources().getStringArray(R.array.tipo)[1];
+                showBuscarDialog();
+                break;
+            case 2:
+                selectedTipo = getResources().getStringArray(R.array.tipo)[2];
+                showBuscarDialog();
+                break;
+            default:
+                break;
+        }
+
+    }
 }

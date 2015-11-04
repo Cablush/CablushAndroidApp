@@ -3,7 +3,7 @@
 
     <string name="action_search">Buscar</string>
     <string name="error_create_map">Error a carregar o Mapa!</string>
-
+    <string name="desc_list_item_icon">Item Icon</string>
 
     <!--Dialog Buscar -->
     <string name="txt_estados">Estado</string>
@@ -12,11 +12,16 @@
     <string name="buscar">Buscar</string>
     <string name="tipo">Buscar por:</string>
     <string-array name="tipo">
-        <item>Selecione...</item>
         <item>Loja</item>
         <item>Evento</item>
         <item>Pista</item>
     </string-array>
+
+    <array name="icons">
+        <item>@drawable/ic_launcher</item>
+        <item>@drawable/ic_launcher</item>
+        <item>@drawable/ic_launcher</item>
+    </array>
 
     <string-array name="esportes">
         <item>Selecione...</item>
