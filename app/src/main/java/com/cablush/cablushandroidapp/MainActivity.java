@@ -280,7 +280,6 @@ public class MainActivity extends Activity {
                     syncPistas.getPistas(nome, estado, esporte);
                 } else {
                     Toast.makeText(context, "Selecione um tipo para a busca", Toast.LENGTH_SHORT).show();
-                    alerta.dismiss();
                 }
                 alerta.dismiss();
             }
@@ -348,7 +347,7 @@ public class MainActivity extends Activity {
         public void onItemClick(AdapterView<?> parent, View view, int position,
                                 long id) {
             // display view for selected nav drawer item
-            displayView(position);
+            displayView(position-1);
         }
     }
 
@@ -359,15 +358,15 @@ public class MainActivity extends Activity {
         // update the main content by replacing fragments
         switch (position) {
             case 0:
-                selectedTipo = getResources().getStringArray(R.array.tipo)[0];
+                selectedTipo = getResources().getStringArray(R.array.tipo)[position];
                 showBuscarDialog();
                 break;
             case 1:
-                selectedTipo = getResources().getStringArray(R.array.tipo)[1];
+                selectedTipo = getResources().getStringArray(R.array.tipo)[position];
                 showBuscarDialog();
                 break;
             case 2:
-                selectedTipo = getResources().getStringArray(R.array.tipo)[2];
+                selectedTipo = getResources().getStringArray(R.array.tipo)[position];
                 showBuscarDialog();
                 break;
             default:
