@@ -13,7 +13,7 @@ import com.cablush.cablushandroidapp.model.Local;
 public class LocalDAO {
 
     BancoDeDados db;
-    public static final String SQL_CREATE = "CREATE TABLE local ( id INTEGER primary key AUTOINCREMENT, logradouro TEXT, numero TEXT, complemento TEXT, cidade TEXT, estado TEXT,cep TEXT, pais TEXT, " +
+    public static final String SQL_CREATE = "CREATE TABLE local ( id INTEGER primary key AUTOINCREMENT,bairro TEXT ,logradouro TEXT, numero TEXT, complemento TEXT, cidade TEXT, estado TEXT,cep TEXT, pais TEXT, " +
             "latitude TEXT, longitude TEXT);";
     public LocalDAO(Context ctx) {
         db = new BancoDeDados(ctx);
@@ -22,7 +22,7 @@ public class LocalDAO {
     public long insert(Local local){
         SQLiteDatabase sql = db.getWritableDatabase();
 
-        long r = sql.insert("loja",null,getContentValues(local));
+        long r = sql.insert("local",null,getContentValues(local));
         if(r == -1 ){
             Log.e("LocalDAO ERROR", "Local não inserido");
         }

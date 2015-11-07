@@ -36,7 +36,7 @@ public class SlideMenuClickListener implements ListView.OnItemClickListener {
             case DialogHelpers.LOJA:
             case DialogHelpers.PISTA:
             case DialogHelpers.EVENTO:
-                DialogHelpers.getInstance().showBuscarDialog(context,position);
+                DialogHelpers.getInstance().showOptionsDialog(context,position);
                 break;
             default:
                 break;

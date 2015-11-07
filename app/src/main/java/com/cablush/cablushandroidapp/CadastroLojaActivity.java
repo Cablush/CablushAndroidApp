@@ -1,22 +1,17 @@
 package com.cablush.cablushandroidapp;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
-import android.widget.Button;
 import android.widget.EditText;
 
-import com.cablush.cablushandroidapp.DAO.PistaDAO;
-import com.cablush.cablushandroidapp.Helpers.DialogHelpers;
-import com.cablush.cablushandroidapp.model.Local;
-import com.cablush.cablushandroidapp.model.Pista;
-import com.cablush.cablushandroidapp.services.SyncPistas;
+import com.cablush.cablushandroidapp.DAO.EventoDAO;
+import com.cablush.cablushandroidapp.model.Evento;
 
 /**
  * Created by jonathan on 07/11/15.
  */
-public class CadastroPistaActivity extends CadastrosLocalizavel {
+public class CadastroLojaActivity extends CadastrosLocalizavel {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,12 +27,12 @@ public class CadastroPistaActivity extends CadastrosLocalizavel {
             EditText edtSite = (EditText) findViewById(R.id.edtSite);
             EditText edtFacebook = (EditText) findViewById(R.id.edtFacebook);
 
-            Pista p = new Pista();
-            p.setLocal(local);
-            PistaDAO pistaDAO = new PistaDAO(CadastroPistaActivity.this);
-            pistaDAO.insert(p);
-            SyncPistas syncPistas = new SyncPistas();
-            syncPistas.postPistas(p);
+            Evento evento = new Evento();
+            evento.setLocal(local);
+            EventoDAO eventoDAO = new EventoDAO(CadastroLojaActivity.this);
+            eventoDAO.insert(evento);
+
         }
     }
 }
+

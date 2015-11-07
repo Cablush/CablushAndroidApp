@@ -2,15 +2,26 @@ package com.cablush.cablushandroidapp.Helpers;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
+import android.location.Location;
+import android.location.LocationManager;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.Toast;
 
+import com.cablush.cablushandroidapp.CadastroEventosActivity;
+import com.cablush.cablushandroidapp.CadastroLojaActivity;
+import com.cablush.cablushandroidapp.CadastroPistaActivity;
+import com.cablush.cablushandroidapp.DAO.LocalDAO;
 import com.cablush.cablushandroidapp.R;
+import com.cablush.cablushandroidapp.model.Local;
 import com.cablush.cablushandroidapp.services.SyncEventos;
 import com.cablush.cablushandroidapp.services.SyncLojas;
 import com.cablush.cablushandroidapp.services.SyncPistas;
@@ -21,6 +32,7 @@ import com.cablush.cablushandroidapp.services.SyncPistas;
 public class DialogHelpers {
 
     public static final int LOGIN = 0,PISTA = 3, EVENTO =2, LOJA = 1;
+    public static final int CADASTRAR = 1,BUSCAR = 0;
     private AlertDialog alerta;
 
     private boolean dismiss = true;
@@ -31,8 +43,8 @@ public class DialogHelpers {
         return ourInstance;
     }
 
-
     private DialogHelpers() {
+
     }
 
     public void showBuscarDialog(Context context, final int op){
@@ -40,13 +52,28 @@ public class DialogHelpers {
         View view = inflater.inflate(R.layout.search_dialog, null);
 
         alerta = getAlertBuilderBuscar(context, view, op).create();
-        if(!dismiss) {
-            alerta.show();
-        }else{
-            dismiss = false;
-        }
+        alerta.show();
+
     }
 
+    public void showOptionsDialog(Context context,int op){
+        LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View view = inflater.inflate(R.layout.options_dialog, null);
+        switch (op) {
+            case PISTA:
+                alerta = getAlertBuilderOptions(context, view, op,CadastroPistaActivity.class).create();
+                break;
+            case EVENTO:
+                alerta = getAlertBuilderOptions(context, view, op,CadastroEventosActivity.class).create();
+                break;
+            case LOJA:
+                alerta = getAlertBuilderOptions(context, view, op,CadastroLojaActivity.class).create();
+                break;
+            default:
+                Toast.makeText(context, "Selecione um tipo para a busca", Toast.LENGTH_SHORT).show();
+        }
+        alerta.show();
+    }
     public void showLoginDialog(Context context){
         LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = inflater.inflate(R.layout.login_dialog, null);
@@ -58,6 +85,44 @@ public class DialogHelpers {
             dismiss = false;
         }
 
+    }
+
+
+    public void showCadastroLocal(Context context, Local local){
+        LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View view = inflater.inflate(R.layout.endereco_layout, null);
+
+        alerta = getAlertBuilderCadastroLocal(context, view,local).create();
+        alerta.show();
+
+    }
+
+
+    private AlertDialog.Builder getAlertBuilderOptions(final Context context, View view, final int op,final Class cadastro) {
+
+        ListView listView = (ListView)view.findViewById(R.id.listView);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                switch(i){
+                    case CADASTRAR:
+                        Intent intent = new Intent(context, cadastro);
+                        context.startActivity(intent);
+                        alerta.dismiss();
+                        break;
+                    case BUSCAR:
+                        alerta.dismiss();
+                        showBuscarDialog(context, op);
+                        break;
+                }
+            }
+        });
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle(R.string.title_login);
+        builder.setView(view);
+
+        return builder;
     }
 
     private AlertDialog.Builder getAlertBuilderLogin(Context context, View view) {
@@ -144,4 +209,68 @@ public class DialogHelpers {
 
         return builder;
     }
+
+    private AlertDialog.Builder getAlertBuilderCadastroLocal(final Context context, View view,final Local local) {
+
+        final EditText edtCep           = (EditText)view.findViewById(R.id.edtCep);
+        final EditText edtCidade        = (EditText)view.findViewById(R.id.edtCidade);
+        final EditText edtBairro        = (EditText)view.findViewById(R.id.edtBairro);
+        final EditText edtLogradouro    = (EditText)view.findViewById(R.id.edtLogradouro);
+        final EditText edtNumero        = (EditText)view.findViewById(R.id.edtNumero);
+        final EditText edtComplemento   = (EditText)view.findViewById(R.id.edtComplemento);
+        final Spinner spnEstado         = (Spinner)view.findViewById(R.id.spnEstados);
+
+        Button btnSalvar                = (Button)view.findViewById(R.id.btnSalvar);
+        Button btnCancelar              = (Button)view.findViewById(R.id.btnCancelar);
+
+        String[] estados    = context.getResources().getStringArray(R.array.estados);
+        spnEstado.setAdapter(new ArrayAdapter<>(context, R.layout.simple_item, estados));
+
+
+        LocationManager lm = (LocationManager)context.getSystemService(Context.LOCATION_SERVICE);
+        Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        final double longitude = location.getLongitude();
+        final double latitude = location.getLatitude();
+
+        btnCancelar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                alerta.dismiss();
+            }
+        });
+
+        btnSalvar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String logradouro   = edtLogradouro.getText().toString();
+                String numero       = edtNumero.getText().toString();
+                String complemento  = edtComplemento.getText().toString();
+                String bairro       = edtBairro.getText().toString();
+                String cidade       = edtCidade.getText().toString();
+                String estado       = ""+spnEstado.getSelectedItem();
+                String cep          = edtCep.getText().toString();
+                String pais         = "";
+                local.setLatitude(latitude);
+                local.setLongitude(longitude);
+                local.setLogradouro(logradouro);
+                local.setNumero(numero);
+                local.setCep(cep);
+                local.setComplemento(complemento);
+                local.setBairro(bairro);
+                local.setCidade(cidade);
+                local.setEstado(estado);
+                local.setPais(pais);
+
+                LocalDAO localDAO = new LocalDAO(context);
+                local.setId((int) localDAO.insert(local));;
+                alerta.dismiss();
+            }
+        });
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle(R.string.title_login);
+        builder.setView(view);
+
+        return builder;
+    }
+
 }
