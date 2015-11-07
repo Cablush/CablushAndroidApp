@@ -4,6 +4,7 @@
     <string name="action_search">Buscar</string>
     <string name="error_create_map">Error a carregar o Mapa!</string>
     <string name="desc_list_item_icon">Item Icon</string>
+    <string name="txt_cadastrar">Cadastrar</string>
     <!--Dialog Login -->
     <string name="txt_usuario">Email</string>
     <string name="txt_senha">Senha</string>
@@ -11,11 +12,27 @@
     <string name="title_login">Login</string>
     <string name="txt_cancelar">Cancelar</string>
     <!--Dialog Buscar -->
-    <string name="txt_estados">Estado</string>
+    <string name="txt_estados">Estados</string>
     <string name="txt_esportes">Esportes</string>
     <string name="txt_nome">Nome</string>
     <string name="buscar">Buscar %s</string>
     <string name="tipo">Buscar por:</string>
+
+
+    <!-- Horario Funcionamento Layout -->
+    <string name="txt_dias">Dias</string>
+    <string name="txt_periodo">Período</string>
+    <string name="txt_hora_inicio">Hora início</string>
+    <string name="txt_hora_fim">Hora fim</string>
+
+    <!-- Endereco Layout -->
+    <string name="txt_cep">CEP</string>
+    <string name="txt_cidade">Cidade</string>
+    <string name="txt_bairro">Bairro</string>
+    <string name="txt_logradouro">Logradouro</string>
+    <string name="txt_numero">Numero</string>
+    <string name="txt_complemento">Complemento</string>
+
     <string-array name="tipo">
         <item>Login</item>
         <item>Loja</item>

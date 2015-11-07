@@ -5,7 +5,10 @@ import com.cablush.cablushandroidapp.model.Pista;
 import java.util.List;
 
 import retrofit.Callback;
+import retrofit.http.Body;
+import retrofit.http.Field;
 import retrofit.http.GET;
+import retrofit.http.POST;
 import retrofit.http.Query;
 
 /**
@@ -14,7 +17,8 @@ import retrofit.http.Query;
 public interface ApiPistas {
     @GET("/pistas")
     void getPistas(@Query("name") String name,@Query("estado") String estado,@Query("esporte") String esporte, Callback<List<Pista>> pista);
-
+    @POST("/pistas")
+    void postPistas(@Field("uuid")String userId, @Body Pista pista, Callback<Pista> savedPista);
 
 
 

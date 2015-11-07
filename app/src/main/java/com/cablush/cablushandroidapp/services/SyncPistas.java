@@ -42,5 +42,17 @@ public class SyncPistas {
     }
 
 
+    public void postPistas(Pista pista) {
+        apiPistas.postPistas("",pista, new Callback<Pista>() {
+            @Override
+            public void success(Pista pista, Response response) {
 
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+
+            }
+        });
+    }
 }
