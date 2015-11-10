@@ -13,7 +13,7 @@ import com.cablush.cablushandroidapp.model.Loja;
  */
 public class HorariosDAO {
 
-    public static final String SQL_CREATE = "CREATE TABLE horarios (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,dias varchar, periodo varchar,inicio time, fim time);";
+    public static final String SQL_CREATE = "CREATE TABLE horarios (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,dias TEXT, periodo TEXT,inicio time, fim time);";
     BancoDeDados db;
     Context ctx;
 
@@ -24,7 +24,7 @@ public class HorariosDAO {
     public long insert(Horarios horarios){
         SQLiteDatabase sql = db.getWritableDatabase();
 
-        long r = sql.insert("loja",null,getContentValues(horarios));
+        long r = sql.insert("horarios",null,getContentValues(horarios));
         if(r == -1 ){
             Log.e("LocalDAO ERROR", "Horarios não inseridos");
         }

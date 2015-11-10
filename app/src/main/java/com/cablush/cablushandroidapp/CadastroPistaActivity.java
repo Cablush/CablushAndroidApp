@@ -1,6 +1,6 @@
 package com.cablush.cablushandroidapp;
 
-import android.app.AlertDialog;
+
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -9,6 +9,8 @@ import android.widget.Toast;
 import com.cablush.cablushandroidapp.DAO.PistaDAO;
 import com.cablush.cablushandroidapp.model.Pista;
 import com.cablush.cablushandroidapp.services.SyncPistas;
+
+import java.sql.Time;
 
 /**
  * Created by jonathan on 07/11/15.
@@ -25,13 +27,9 @@ public class CadastroPistaActivity extends CadastrosLocalizavel {
 
     @Override
     public void actionHorarioFuncionamento(View view) {
-
+        showCadastroLocal(R.layout.horario_funcionamento_layout);
     }
 
-    @Override
-    public AlertDialog.Builder getAlertBuilderCadastroHorarios(View view) {
-        return null;
-    }
 
     public void actionSalvar(View view){
         if(local != null) {
@@ -49,4 +47,7 @@ public class CadastroPistaActivity extends CadastrosLocalizavel {
             }
         }
     }
+
+
+
 }

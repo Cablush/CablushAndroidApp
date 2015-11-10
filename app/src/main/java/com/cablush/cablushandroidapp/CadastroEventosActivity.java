@@ -31,11 +31,6 @@ public class CadastroEventosActivity extends CadastrosLocalizavel {
         return null;
     }
 
-    public void showCadastroHorariofuncionamento(Context context){
-
-
-    }
-
     public void actionSalvar(View view){
         if(local != null) {
             getDefaultFields();
