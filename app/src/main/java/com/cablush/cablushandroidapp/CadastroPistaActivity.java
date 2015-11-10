@@ -1,15 +1,12 @@
 package com.cablush.cablushandroidapp;
 
-import android.app.Activity;
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
-import android.widget.Button;
-import android.widget.EditText;
+import android.widget.Toast;
 
 import com.cablush.cablushandroidapp.DAO.PistaDAO;
-import com.cablush.cablushandroidapp.Helpers.DialogHelpers;
-import com.cablush.cablushandroidapp.model.Local;
 import com.cablush.cablushandroidapp.model.Pista;
 import com.cablush.cablushandroidapp.services.SyncPistas;
 
@@ -21,23 +18,35 @@ public class CadastroPistaActivity extends CadastrosLocalizavel {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
-        setContentView(R.layout.cad_pistas_activity);
+        setContentView(R.layout.cad_localizavel_activity);
+        setTitle(getString(R.string.txt_cadastrar_params, getString(R.string.txt_pista)));
 
+    }
+
+    @Override
+    public void actionHorarioFuncionamento(View view) {
+
+    }
+
+    @Override
+    public AlertDialog.Builder getAlertBuilderCadastroHorarios(View view) {
+        return null;
     }
 
     public void actionSalvar(View view){
         if(local != null) {
-            EditText edtNome = (EditText) findViewById(R.id.edtNome);
-            EditText edtDescricao = (EditText) findViewById(R.id.edtDescricao);
-            EditText edtSite = (EditText) findViewById(R.id.edtSite);
-            EditText edtFacebook = (EditText) findViewById(R.id.edtFacebook);
+            getDefaultFields();
+            if(validaCamposObrigatorios()) {
+                Pista p = new Pista();
+                p.setLocal(local);
 
-            Pista p = new Pista();
-            p.setLocal(local);
-            PistaDAO pistaDAO = new PistaDAO(CadastroPistaActivity.this);
-            pistaDAO.insert(p);
-            SyncPistas syncPistas = new SyncPistas();
-            syncPistas.postPistas(p);
+                PistaDAO pistaDAO = new PistaDAO(CadastroPistaActivity.this);
+                pistaDAO.insert(p);
+                SyncPistas syncPistas = new SyncPistas();
+                syncPistas.postPistas(p);
+            }else{
+                Toast.makeText(CadastroPistaActivity.this,msgError,Toast.LENGTH_SHORT).show();
+            }
         }
     }
 }

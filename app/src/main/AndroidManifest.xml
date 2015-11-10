@@ -31,6 +31,8 @@
         </activity>
         <activity android:name=".MainActivity"/>
         <activity android:name=".CadastroPistaActivity"/>
+        <activity android:name=".CadastroEventosActivity"/>
+        <activity android:name=".CadastroLojaActivity"/>
     </application>
 
 </manifest>

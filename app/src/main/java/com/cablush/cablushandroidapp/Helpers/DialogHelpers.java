@@ -21,6 +21,7 @@ import com.cablush.cablushandroidapp.CadastroLojaActivity;
 import com.cablush.cablushandroidapp.CadastroPistaActivity;
 import com.cablush.cablushandroidapp.DAO.LocalDAO;
 import com.cablush.cablushandroidapp.R;
+import com.cablush.cablushandroidapp.model.Evento;
 import com.cablush.cablushandroidapp.model.Local;
 import com.cablush.cablushandroidapp.services.SyncEventos;
 import com.cablush.cablushandroidapp.services.SyncLojas;
@@ -43,9 +44,7 @@ public class DialogHelpers {
         return ourInstance;
     }
 
-    private DialogHelpers() {
-
-    }
+    private DialogHelpers() {}
 
     public void showBuscarDialog(Context context, final int op){
         LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -74,25 +73,20 @@ public class DialogHelpers {
         }
         alerta.show();
     }
+
     public void showLoginDialog(Context context){
         LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = inflater.inflate(R.layout.login_dialog, null);
 
         alerta = getAlertBuilderLogin(context, view).create();
-        if(!dismiss) {
             alerta.show();
-        }else{
-            dismiss = false;
-        }
-
     }
-
 
     public void showCadastroLocal(Context context, Local local){
         LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = inflater.inflate(R.layout.endereco_layout, null);
 
-        alerta = getAlertBuilderCadastroLocal(context, view,local).create();
+        alerta = getAlertBuilderCadastroLocal(context, view, local).create();
         alerta.show();
 
     }
@@ -229,8 +223,19 @@ public class DialogHelpers {
 
         LocationManager lm = (LocationManager)context.getSystemService(Context.LOCATION_SERVICE);
         Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        final double longitude = location.getLongitude();
-        final double latitude = location.getLatitude();
+        location = location == null ? lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER) : null;
+
+        double longitude =0.0;
+         double latitude = 0.0;
+        if(location != null) {
+            longitude = location.getLongitude();
+            latitude = location.getLatitude();
+
+        }else{
+            Toast.makeText(context, R.string.gps_nao_funcionando,Toast.LENGTH_SHORT).show();
+        }
+        local.setLatitude(latitude);
+        local.setLongitude(longitude);
 
         btnCancelar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -250,8 +255,7 @@ public class DialogHelpers {
                 String estado       = ""+spnEstado.getSelectedItem();
                 String cep          = edtCep.getText().toString();
                 String pais         = "";
-                local.setLatitude(latitude);
-                local.setLongitude(longitude);
+
                 local.setLogradouro(logradouro);
                 local.setNumero(numero);
                 local.setCep(cep);

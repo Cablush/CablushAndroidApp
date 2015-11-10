@@ -7,68 +7,23 @@ import org.json.JSONObject;
 /**
  * Created by jonathan on 22/10/15.
  */
-public class Pista {
+public class Pista extends Localizavel {
     @Expose
-    private String nome;
-    @Expose
-    private String descricao;
-    @Expose
-    private String foto;
-    @Expose
-    private Local local;
-    @Expose
-    private boolean fundo;
+    private Horarios horarios;
 
     public Pista() {
     }
 
-    public Pista(String nome, String descricao, String foto, Local local, boolean fundo) {
-        this.nome = nome;
-        this.descricao = descricao;
-        this.foto = foto;
-        this.local = local;
-        this.fundo = fundo;
+    public Pista(String uuid, String nome, String descricao, String site, String facebook, String logo, Local local, boolean fundo, Horarios horarios) {
+        super(uuid, nome, descricao, site, facebook, logo, local, fundo);
+        this.horarios = horarios;
     }
 
-    public String getNome() {
-        return nome;
+    public Horarios getHorarios() {
+        return horarios;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
+    public void setHorarios(Horarios horarios) {
+        this.horarios = horarios;
     }
-
-    public String getDescricao() {
-        return descricao;
-    }
-
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
-    }
-
-    public String getFoto() {
-        return foto;
-    }
-
-    public void setFoto(String foto) {
-        this.foto = foto;
-    }
-
-    public Local getLocal() {
-        return local;
-    }
-
-    public void setLocal(Local local) {
-        this.local = local;
-    }
-
-    public boolean isFundo() {
-        return fundo;
-    }
-
-    public void setFundo(boolean fundo) {
-        this.fundo = fundo;
-    }
-
-
 }

@@ -42,7 +42,7 @@ public class PistaDAO {
         ContentValues ctv = new ContentValues();
         ctv.put("nome"     , pista.getNome());
         ctv.put("descricao", pista.getDescricao());
-        ctv.put("foto"     , pista.getFoto());
+        ctv.put("foto"     , pista.getLogo());
         ctv.put("fundo"    , pista.isFundo());
         ctv.put("local"    , pista.getLocal().getId());
         return ctv;

@@ -5,6 +5,10 @@
     <string name="error_create_map">Error a carregar o Mapa!</string>
     <string name="desc_list_item_icon">Item Icon</string>
     <string name="txt_cadastrar">Cadastrar</string>
+    <string name="txt_cadastrar_params">Cadastrar %s</string>
+
+    <string name="txt_salvar">Salvar</string>
+    <string name="gps_nao_funcionando">O seu gps aparenta esta desligado, favor conferir para cadastrar o local!</string>
     <!--Dialog Login -->
     <string name="txt_usuario">Email</string>
     <string name="txt_senha">Senha</string>
@@ -33,6 +37,9 @@
     <string name="txt_numero">Numero</string>
     <string name="txt_complemento">Complemento</string>
 
+    <string name="txt_loja">Loja</string>
+    <string name="txt_evento">Evento</string>
+    <string name="txt_pista">Pista</string>
     <string-array name="options">
         <item>Buscar</item>
         <item>Cadastrar</item>
@@ -91,4 +98,31 @@
         <item>São Paulo</item>
         <item>Tocantins</item>
     </string-array>
+
+    <string-array name="dias">
+        <item>Selecione...</item>
+        <item>Domingo</item>
+        <item>Segunda</item>
+        <item>Terça</item>
+        <item>Quarta</item>
+        <item>Quinta</item>
+        <item>Sexta</item>
+        <item>Sabado</item>
+        <item>Seg-Sex</item>
+        <item>Sab-Dom</item>
+        <item>Seg-Dom</item>
+    </string-array>
+
+    <string-array name="periodo">
+        <item>Selecione...</item>
+        <item>Todo</item>
+        <item>Manha</item>
+        <item>Tarde</item>
+        <item>Noite</item>
+    </string-array>
+    <!-- Mensagens de Error -->
+    <string name="msg_nome_missing">Favor preencher o nome!</string>
+    <string name="msg_descrição_missing">Favor preencher a descrição!</string>
+    <string name="msg_local_missing">Favor preencher o local!</string>
+
 </resources>

@@ -40,7 +40,7 @@ public class EventoDAO {
 
         ctv.put("nome"     , evento.getNome());
         ctv.put("descricao", evento.getDescricao());
-        ctv.put("foto"     , evento.getCartaz());
+        ctv.put("foto"     , evento.getLogo());
         ctv.put("fundo"    , evento.isFundo());
         ctv.put("local"    , evento.getLocal().getId());
         ctv.put("hora"     , sdfTime.format(evento.getTime()));

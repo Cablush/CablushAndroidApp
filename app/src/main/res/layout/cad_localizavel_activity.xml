@@ -112,7 +112,6 @@
         android:layout_toStartOf="@+id/btnCancelar" />
 
     <Button
-
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/txt_cancelar"
@@ -132,16 +131,6 @@
         android:layout_alignRight="@+id/btnCancelar"
         android:layout_alignEnd="@+id/btnCancelar" />
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="funcionamento"
-        android:id="@+id/btnHorario"
-        android:onClick="actionHorarioFuncionamento"
-        android:layout_below="@+id/textView12"
-        android:layout_alignRight="@+id/btnEndereco"
-        android:layout_alignEnd="@+id/btnEndereco" />
-
     <TextView
         android:textColor="@android:color/black"
         android:layout_width="wrap_content"
@@ -152,13 +141,13 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
-    <EditText
+    <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/editText"
-        android:layout_below="@+id/btnHorario"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginLeft="72dp"
-        android:layout_marginStart="72dp" />
+        android:text="Horários"
+        android:id="@+id/button"
+        android:layout_below="@+id/textView12"
+        android:layout_alignRight="@+id/btnEndereco"
+        android:layout_alignEnd="@+id/btnEndereco"
+        android:onClick="actionHorarioFuncionamento"/>
 </RelativeLayout>
