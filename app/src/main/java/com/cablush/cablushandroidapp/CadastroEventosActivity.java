@@ -16,8 +16,6 @@ public class CadastroEventosActivity extends CadastrosLocalizavel {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
-        setContentView(R.layout.cad_localizavel_activity);
         setTitle(getString(R.string.txt_cadastrar_params, getString(R.string.txt_evento)));
     }
 

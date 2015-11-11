@@ -34,7 +34,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
 
-public class MainActivity extends Activity {
+public class MainActivity extends CablushActivity {
     private Menu menu;
     private static GoogleMap googleMap; // Might be null if Google Play services APK is not available.
     private LocationManager locationManager;
@@ -56,8 +56,8 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
         setContentView(R.layout.activity_main);
+
 
 
         mTitle = mDrawerTitle = getTitle();
@@ -121,6 +121,7 @@ public class MainActivity extends Activity {
         }
         configGPS();
         createMapView();
+//TODO        getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
     }
 
 

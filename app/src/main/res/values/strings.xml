@@ -14,6 +14,9 @@
     <string name="txt_senha">Senha</string>
     <string name="txt_login">Logar</string>
     <string name="title_login">Login</string>
+    <string name="title_endereco">Endereco</string>
+    <string name="title_horario_funcionamento">Horário de Funcionamento</string>
+    <string name="title_menu">Menu</string>
     <string name="txt_cancelar">Cancelar</string>
     <!--Dialog Buscar -->
     <string name="txt_estados">Estados</string>
@@ -126,3 +129,4 @@
     <string name="msg_local_missing">Favor preencher o local!</string>
 
 </resources>
+

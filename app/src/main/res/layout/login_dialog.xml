@@ -5,12 +5,13 @@
     android:background="@android:color/white">
 
     <TextView
+        android:textColor="@android:color/black"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="@string/txt_usuario"
-        android:textColor="@android:color/black"
-        android:id="@+id/textView5" />
+        android:id="@+id/textView5"
+        style="@style/TextAppearance.FontPath"/>
 
     <EditText
         android:layout_width="match_parent"
@@ -22,7 +23,8 @@
         android:id="@+id/edtUsuario"
         android:layout_below="@+id/textView5"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        />
 
     <TextView
         android:layout_width="wrap_content"
@@ -33,7 +35,8 @@
         android:id="@+id/textView6"
         android:layout_below="@+id/edtUsuario"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        style="@style/TextAppearance.FontPath"/>
 
     <EditText
         android:layout_width="match_parent"
@@ -44,7 +47,8 @@
         android:id="@+id/edtSenha"
         android:layout_below="@+id/textView6"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        />
 
     <Button
         android:layout_width="wrap_content"
@@ -54,7 +58,8 @@
         android:layout_gravity="right"
         android:layout_below="@+id/edtSenha"
         android:layout_toLeftOf="@+id/btnCancelar"
-        android:layout_toStartOf="@+id/btnCancelar" />
+        android:layout_toStartOf="@+id/btnCancelar"
+        style="@style/TextAppearance.FontPath"/>
 
     <Button
         android:layout_width="wrap_content"
@@ -64,6 +69,7 @@
         android:layout_gravity="center_horizontal"
         android:layout_below="@+id/edtSenha"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        style="@style/TextAppearance.FontPath"/>
 
 </RelativeLayout>

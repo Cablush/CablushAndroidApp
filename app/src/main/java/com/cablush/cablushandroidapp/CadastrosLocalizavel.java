@@ -3,6 +3,8 @@ package com.cablush.cablushandroidapp;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,7 +29,7 @@ import java.util.Calendar;
 /**
  * Created by jonathan on 07/11/15.
  */
-public abstract class CadastrosLocalizavel extends Activity {
+public abstract class CadastrosLocalizavel extends CablushActivity {
     protected Local local;
     protected Horarios horarios;
     protected String nome;
@@ -36,6 +38,27 @@ public abstract class CadastrosLocalizavel extends Activity {
     protected String facebook;
     protected int msgError=0;
     protected AlertDialog alerta;
+
+    EditText edtNome;
+    EditText edtDescricao;
+    EditText edtSite;
+    EditText edtFacebook;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.cad_localizavel_activity);
+
+        edtNome        = (EditText) findViewById(R.id.edtNome);
+        edtDescricao   = (EditText) findViewById(R.id.edtDescricao);
+        edtSite        = (EditText) findViewById(R.id.edtSite);
+        edtFacebook    = (EditText) findViewById(R.id.edtFacebook);
+
+        edtNome.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.SRC_ATOP);
+        edtDescricao.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.SRC_ATOP);
+        edtSite.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.SRC_ATOP);
+        edtFacebook.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.SRC_ATOP);
+    }
 
     public void actionCancelar(View view){
         finish();
@@ -46,16 +69,11 @@ public abstract class CadastrosLocalizavel extends Activity {
     public void actionEndereco(View view){
         local = new Local();
         DialogHelpers.getInstance().showCadastroLocal(CadastrosLocalizavel.this,local);
-
     }
 
     public abstract void actionHorarioFuncionamento(View view);
 
     public void getDefaultFields(){
-        EditText edtNome        = (EditText) findViewById(R.id.edtNome);
-        EditText edtDescricao   = (EditText) findViewById(R.id.edtDescricao);
-        EditText edtSite        = (EditText) findViewById(R.id.edtSite);
-        EditText edtFacebook    = (EditText) findViewById(R.id.edtFacebook);
 
         nome         = edtNome.getText().toString();
         descricao    = edtDescricao.getText().toString();
@@ -126,7 +144,7 @@ public abstract class CadastrosLocalizavel extends Activity {
             }
         });
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(R.string.title_login);
+        builder.setTitle(R.string.title_horario_funcionamento);
         builder.setView(view);
 
         return builder;
