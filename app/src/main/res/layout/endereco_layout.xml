@@ -169,29 +169,32 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
         />
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/txt_cancelar"
+                android:id="@+id/btnCancelar"
+                android:layout_below="@id/edtComplemento"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
 
+                style="@style/TextAppearance.FontPath"/>
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/txt_cadastrar"
+                android:id="@+id/btnSalvar"
+                android:layout_below="@id/edtComplemento"
+                android:layout_alignParentBottom="true"
+                android:layout_toLeftOf="@+id/btnCancelar"
+                android:layout_toStartOf="@+id/btnCancelar"
+                style="@style/TextAppearance.FontPath"/>
         </RelativeLayout>
     </ScrollView>
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/txt_cancelar"
-        android:id="@+id/btnCancelar"
-        android:layout_alignParentBottom="true"
-        android:layout_toLeftOf="@+id/btnSalvar"
-        android:layout_toStartOf="@+id/btnSalvar"
-        style="@style/TextAppearance.FontPath"/>
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/txt_cadastrar"
-        android:id="@+id/btnSalvar"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        style="@style/TextAppearance.FontPath"/>
 </RelativeLayout>
+
