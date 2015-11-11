@@ -9,7 +9,7 @@ import android.os.Handler;
 /**
  * Created by jonathan on 22/10/15.
  */
-public class SplashScreen extends Activity implements  Runnable{
+public class SplashScreen extends CablushActivity implements  Runnable{
 
     private final int DELAY = 3000;
 

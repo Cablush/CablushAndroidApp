@@ -17,8 +17,8 @@ public class Evento extends Localizavel {
     public Evento() {
     }
 
-    public Evento(String uuid, String nome, String descricao, String site, String facebook, String logo, Local local, boolean fundo, Time time, Date date) {
-        super(uuid, nome, descricao, site, facebook, logo, local, fundo);
+    public Evento(String uuid, String nome, String descricao, String site, String facebook, String logo, Local local, Horarios horario, boolean fundo, Time time, Date date) {
+        super(uuid, nome, descricao, site, facebook, logo, local, horario, fundo);
         this.time = time;
         this.date = date;
     }

@@ -113,7 +113,7 @@ public class DialogHelpers {
             }
         });
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle(R.string.title_login);
+        builder.setTitle(R.string.title_menu);
         builder.setView(view);
 
         return builder;
@@ -271,7 +271,7 @@ public class DialogHelpers {
             }
         });
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle(R.string.title_login);
+        builder.setTitle(R.string.title_endereco);
         builder.setView(view);
 
         return builder;

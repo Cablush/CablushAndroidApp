@@ -19,25 +19,16 @@ public class CadastroPistaActivity extends CadastrosLocalizavel {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
-        setContentView(R.layout.cad_localizavel_activity);
         setTitle(getString(R.string.txt_cadastrar_params, getString(R.string.txt_pista)));
-
     }
-
-    @Override
-    public void actionHorarioFuncionamento(View view) {
-        showCadastroLocal(R.layout.horario_funcionamento_layout);
-    }
-
 
     public void actionSalvar(View view){
-        if(local != null) {
+        if(local != null ) {
             getDefaultFields();
             if(validaCamposObrigatorios()) {
                 Pista p = new Pista();
                 p.setLocal(local);
-
+                p.setHorario(horarios);
                 PistaDAO pistaDAO = new PistaDAO(CadastroPistaActivity.this);
                 pistaDAO.insert(p);
                 SyncPistas syncPistas = new SyncPistas();

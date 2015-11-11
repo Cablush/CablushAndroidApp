@@ -16,15 +16,9 @@ public class CadastroEventosActivity extends CadastrosLocalizavel {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
-        setContentView(R.layout.cad_localizavel_activity);
         setTitle(getString(R.string.txt_cadastrar_params, getString(R.string.txt_evento)));
     }
 
-    @Override
-    public void actionHorarioFuncionamento(View view) {
-
-    }
 
     @Override
     public AlertDialog.Builder getAlertBuilderCadastroHorarios(View view) {
@@ -37,6 +31,7 @@ public class CadastroEventosActivity extends CadastrosLocalizavel {
 
             Evento evento = new Evento();
             evento.setLocal(local);
+            evento.setHorario(horarios);
             EventoDAO eventoDAO = new EventoDAO(CadastroEventosActivity.this);
             eventoDAO.insert(evento);
 

@@ -10,14 +10,12 @@ public class Loja extends Localizavel {
     private String telefone;
     @Expose
     private String email;
-    @Expose
-    private Horarios horarios;
 
     public Loja() {
     }
 
-    public Loja(String uuid, String nome, String descricao, String site, String facebook, String logo, Local local, boolean fundo, String telefone, String email) {
-        super(uuid, nome, descricao, site, facebook, logo, local, fundo);
+    public Loja(String uuid, String nome, String descricao, String site, String facebook, String logo, Local local, Horarios horario, boolean fundo, String telefone, String email) {
+        super(uuid, nome, descricao, site, facebook, logo, local, horario, fundo);
         this.telefone = telefone;
         this.email = email;
     }
@@ -38,11 +36,5 @@ public class Loja extends Localizavel {
         this.email = email;
     }
 
-    public Horarios getHorarios() {
-        return horarios;
-    }
 
-    public void setHorarios(Horarios horarios) {
-        this.horarios = horarios;
-    }
 }
