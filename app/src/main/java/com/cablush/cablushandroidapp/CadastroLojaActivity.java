@@ -20,10 +20,7 @@ public class CadastroLojaActivity extends CadastrosLocalizavel {
         setTitle(getString(R.string.txt_cadastrar_params,getString(R.string.txt_loja)));
 
     }
-    @Override
-    public void actionHorarioFuncionamento(View view) {
-        showCadastroLocal(R.layout.horario_funcionamento_layout);
-    }
+
 
     public void actionSalvar(View view){
         if(local != null) {
@@ -31,7 +28,7 @@ public class CadastroLojaActivity extends CadastrosLocalizavel {
 
             Loja loja = new Loja();
             loja.setLocal(local);
-            loja.setHorarios(horarios);
+            loja.setHorario(horarios);
             LojaDAO lojaDAO = new LojaDAO(CadastroLojaActivity.this);
             lojaDAO.insert(loja);
 

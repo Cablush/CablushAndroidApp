@@ -71,7 +71,9 @@ public abstract class CadastrosLocalizavel extends CablushActivity {
         DialogHelpers.getInstance().showCadastroLocal(CadastrosLocalizavel.this,local);
     }
 
-    public abstract void actionHorarioFuncionamento(View view);
+    public void actionHorarioFuncionamento(View view){
+        showCadastroLocal(R.layout.horario_funcionamento_layout);
+    }
 
     public void getDefaultFields(){
 
