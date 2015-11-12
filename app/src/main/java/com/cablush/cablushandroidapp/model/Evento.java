@@ -10,32 +10,43 @@ import java.sql.Time;
  */
 public class Evento extends Localizavel {
     @Expose
-    private Time time;
+    private Time hora;
     @Expose
-    private Date date;
+    private Date data;
+    @Expose
+    private Date dataFim;
 
     public Evento() {
     }
 
-    public Evento(String uuid, String nome, String descricao, String site, String facebook, String logo, Local local, Horarios horario, boolean fundo, Time time, Date date) {
+    public Evento(String uuid, String nome, String descricao, String site, String facebook, String logo, Local local, Horarios horario, boolean fundo, Time time, Date data, Date dataFim) {
         super(uuid, nome, descricao, site, facebook, logo, local, horario, fundo);
-        this.time = time;
-        this.date = date;
+        this.hora = time;
+        this.data = data;
+        this.dataFim = dataFim;
     }
 
-    public Time getTime() {
-        return time;
+    public Time getHora() {
+        return hora;
     }
 
-    public void setTime(Time time) {
-        this.time = time;
+    public void setHora(Time time) {
+        this.hora = time;
     }
 
-    public Date getDate() {
-        return date;
+    public Date getData() {
+        return data;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
+    public void setData(Date data) {
+        this.data = data;
+    }
+
+    public Date getDataFim() {
+        return dataFim;
+    }
+
+    public void setDataFim(Date dataFim) {
+        this.dataFim = dataFim;
     }
 }

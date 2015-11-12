@@ -17,7 +17,7 @@ public class EventoDAO {
     BancoDeDados db;
     Context ctx;
     //String nome, String descricao, Time time, Date date, String cartaz, boolean fundo
-    public static final String SQL_CREATE = "CREATE TABLE evento ( id INTEGER primary key AUTOINCREMENT, nome TEXT, descricao TEXT,hora TIME, data DATE,cartaz TEXT ,local integer,fundo boolean);";
+    public static final String SQL_CREATE = "CREATE TABLE evento ( id INTEGER primary key AUTOINCREMENT, nome TEXT, descricao TEXT,hora TIME, data DATE,dataFim DATE,cartaz TEXT ,local integer,fundo boolean);";
 
     public EventoDAO(Context ctx) {
         this.ctx = ctx;
@@ -43,8 +43,9 @@ public class EventoDAO {
         ctv.put("foto"     , evento.getLogo());
         ctv.put("fundo"    , evento.isFundo());
         ctv.put("local"    , evento.getLocal().getId());
-        ctv.put("hora"     , sdfTime.format(evento.getTime()));
-        ctv.put("data"     , sdfDate.format(evento.getDate()));
+        ctv.put("hora"     , sdfTime.format(evento.getHora()));
+        ctv.put("data"     , sdfDate.format(evento.getData()));
+        ctv.put("dataFim"  , sdfDate.format(evento.getDataFim()));
         return ctv;
     }
 

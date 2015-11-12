@@ -121,7 +121,6 @@ public class MainActivity extends CablushActivity {
         }
         configGPS();
         createMapView();
-//TODO        getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
     }
 
 

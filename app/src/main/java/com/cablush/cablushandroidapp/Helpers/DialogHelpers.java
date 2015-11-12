@@ -3,6 +3,8 @@ package com.cablush.cablushandroidapp.Helpers;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.location.Location;
 import android.location.LocationManager;
 import android.view.LayoutInflater;
@@ -13,7 +15,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
-import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cablush.cablushandroidapp.CadastroEventosActivity;
@@ -21,7 +23,6 @@ import com.cablush.cablushandroidapp.CadastroLojaActivity;
 import com.cablush.cablushandroidapp.CadastroPistaActivity;
 import com.cablush.cablushandroidapp.DAO.LocalDAO;
 import com.cablush.cablushandroidapp.R;
-import com.cablush.cablushandroidapp.model.Evento;
 import com.cablush.cablushandroidapp.model.Local;
 import com.cablush.cablushandroidapp.services.SyncEventos;
 import com.cablush.cablushandroidapp.services.SyncLojas;
@@ -99,7 +100,7 @@ public class DialogHelpers {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                switch(i){
+                switch (i) {
                     case CADASTRAR:
                         Intent intent = new Intent(context, cadastro);
                         context.startActivity(intent);
@@ -113,7 +114,7 @@ public class DialogHelpers {
             }
         });
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle(R.string.title_menu);
+        builder.setCustomTitle(getInflateView(context,R.string.title_menu));
         builder.setView(view);
 
         return builder;
@@ -126,6 +127,8 @@ public class DialogHelpers {
         Button btnLogar            = (Button)view.findViewById(R.id.btnLogar);
         Button btnCancelar         = (Button)view.findViewById(R.id.btnCancelar);
 
+        edtUsuario.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.SRC_ATOP);
+        edtSenha.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.SRC_ATOP);
         btnCancelar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -140,7 +143,9 @@ public class DialogHelpers {
             }
         });
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle(R.string.title_login);
+
+        builder.setCustomTitle(getInflateView(context,R.string.title_login));
+
         builder.setView(view);
 
         return builder;
@@ -153,6 +158,7 @@ public class DialogHelpers {
         Button btnBuscar          = (Button)view.findViewById(R.id.btnBuscar);
         Button btnCancelar        = (Button)view.findViewById(R.id.btnCancelar);
         final EditText edtName    = (EditText)view.findViewById(R.id.edtName);
+        edtName.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.SRC_ATOP);
 
         final String[] tipo  = context.getResources().getStringArray(R.array.tipo);
         String[] estados     = context.getResources().getStringArray(R.array.estados);
@@ -196,7 +202,7 @@ public class DialogHelpers {
         });
 
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle(context.getString(R.string.buscar,tipo[op]));
+        builder.setCustomTitle(getInflateView(context, context.getString(R.string.buscar,tipo[op])));
         builder.setView(view);
 
 
@@ -207,12 +213,19 @@ public class DialogHelpers {
     private AlertDialog.Builder getAlertBuilderCadastroLocal(final Context context, View view,final Local local) {
 
         final EditText edtCep           = (EditText)view.findViewById(R.id.edtCep);
-        final EditText edtCidade        = (EditText)view.findViewById(R.id.edtCidade);
+        final EditText edtCidade        = (EditText) view.findViewById(R.id.edtCidade);
         final EditText edtBairro        = (EditText)view.findViewById(R.id.edtBairro);
         final EditText edtLogradouro    = (EditText)view.findViewById(R.id.edtLogradouro);
         final EditText edtNumero        = (EditText)view.findViewById(R.id.edtNumero);
         final EditText edtComplemento   = (EditText)view.findViewById(R.id.edtComplemento);
         final Spinner spnEstado         = (Spinner)view.findViewById(R.id.spnEstados);
+
+        edtCep.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.SRC_ATOP);
+        edtCidade.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.SRC_ATOP);
+        edtBairro.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.SRC_ATOP);
+        edtLogradouro.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.SRC_ATOP);
+        edtNumero.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.SRC_ATOP);
+        edtComplemento.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.SRC_ATOP);
 
         Button btnSalvar                = (Button)view.findViewById(R.id.btnSalvar);
         Button btnCancelar              = (Button)view.findViewById(R.id.btnCancelar);
@@ -247,14 +260,14 @@ public class DialogHelpers {
         btnSalvar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String logradouro   = edtLogradouro.getText().toString();
-                String numero       = edtNumero.getText().toString();
-                String complemento  = edtComplemento.getText().toString();
-                String bairro       = edtBairro.getText().toString();
-                String cidade       = edtCidade.getText().toString();
-                String estado       = ""+spnEstado.getSelectedItem();
-                String cep          = edtCep.getText().toString();
-                String pais         = "";
+                String logradouro = edtLogradouro.getText().toString();
+                String numero = edtNumero.getText().toString();
+                String complemento = edtComplemento.getText().toString();
+                String bairro = edtBairro.getText().toString();
+                String cidade = edtCidade.getText().toString();
+                String estado = "" + spnEstado.getSelectedItem();
+                String cep = edtCep.getText().toString();
+                String pais = "";
 
                 local.setLogradouro(logradouro);
                 local.setNumero(numero);
@@ -266,15 +279,31 @@ public class DialogHelpers {
                 local.setPais(pais);
 
                 LocalDAO localDAO = new LocalDAO(context);
-                local.setId((int) localDAO.insert(local));;
+                local.setId((int) localDAO.insert(local));
+                ;
                 alerta.dismiss();
             }
         });
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle(R.string.title_endereco);
+        builder.setCustomTitle(getInflateView(context,R.string.title_endereco));
+
         builder.setView(view);
 
         return builder;
     }
+
+
+    public View getInflateView(Context context, String title){
+        LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View view = inflater.inflate(R.layout.custom_title, null);
+        TextView txt_title = (TextView)view.findViewById(R.id.txtTitle);
+        txt_title.setText(title);
+        return view;
+    }
+
+    public View getInflateView(Context context, int title){
+       return getInflateView(context, context.getString(title));
+    }
+
 
 }

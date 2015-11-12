@@ -9,6 +9,7 @@
 
     <string name="txt_salvar">Salvar</string>
     <string name="gps_nao_funcionando">O seu gps aparenta esta desligado, favor conferir para cadastrar o local!</string>
+
     <!--Dialog Login -->
     <string name="txt_usuario">Email</string>
     <string name="txt_senha">Senha</string>
@@ -17,7 +18,9 @@
     <string name="title_endereco">Endereco</string>
     <string name="title_horario_funcionamento">Horário de Funcionamento</string>
     <string name="title_menu">Menu</string>
+    <string name="title_evento">Evento Data e Horário</string>
     <string name="txt_cancelar">Cancelar</string>
+
     <!--Dialog Buscar -->
     <string name="txt_estados">Estados</string>
     <string name="txt_esportes">Esportes</string>
@@ -25,12 +28,22 @@
     <string name="buscar">Buscar %s</string>
     <string name="tipo">Buscar por:</string>
 
+    <!--Cadastro localizavel -->
+    <string name="txt_site">Site</string>
+    <string name="txt_facebook">Facebook</string>
+    <string name="txt_descricao">Descrição</string>
+    <string name="txt_endereco">Endereço</string>
+    <string name="txt_horario_funcionameto">Horário Funcionamento</string>
 
     <!-- Horario Funcionamento Layout -->
     <string name="txt_dias">Dias</string>
     <string name="txt_periodo">Período</string>
     <string name="txt_hora_inicio">Hora início</string>
     <string name="txt_hora_fim">Hora fim</string>
+
+    <!-- Cadastro Horario Evento -->
+    <string name="txt_data_inicio">Data Inicio</string>
+    <string name="txt_data_fim">Data Fim</string>
 
     <!-- Endereco Layout -->
     <string name="txt_cep">CEP</string>

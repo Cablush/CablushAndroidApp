@@ -100,18 +100,18 @@
         android:layout_height="wrap_content"
         android:text="@string/txt_cancelar"
         android:id="@+id/btnCancelar"
-        android:layout_alignParentBottom="true"
+        style="@style/TextAppearance.FontPath"
+        android:layout_alignTop="@+id/btnCadastrar"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        style="@style/TextAppearance.FontPath"/>
+        android:layout_alignParentEnd="true" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/txt_cadastrar"
         android:id="@+id/btnCadastrar"
-        android:layout_alignTop="@+id/btnCancelar"
+        style="@style/TextAppearance.FontPath"
+        android:layout_below="@+id/edtFim"
         android:layout_toLeftOf="@+id/btnCancelar"
-        android:layout_toStartOf="@+id/btnCancelar"
-        style="@style/TextAppearance.FontPath"/>
+        android:layout_toStartOf="@+id/btnCancelar" />
 </RelativeLayout>

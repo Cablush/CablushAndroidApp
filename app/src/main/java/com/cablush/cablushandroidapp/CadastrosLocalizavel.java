@@ -1,28 +1,27 @@
 package com.cablush.cablushandroidapp;
 
-import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
+import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.Toast;
+import android.widget.TimePicker;
 
 import com.cablush.cablushandroidapp.DAO.HorariosDAO;
-import com.cablush.cablushandroidapp.DAO.PistaDAO;
 import com.cablush.cablushandroidapp.Helpers.DialogHelpers;
 import com.cablush.cablushandroidapp.model.Horarios;
 import com.cablush.cablushandroidapp.model.Local;
-import com.cablush.cablushandroidapp.model.Pista;
-import com.cablush.cablushandroidapp.services.SyncPistas;
 
-import java.sql.Date;
 import java.sql.Time;
 import java.util.Calendar;
 
@@ -58,6 +57,7 @@ public abstract class CadastrosLocalizavel extends CablushActivity {
         edtDescricao.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.SRC_ATOP);
         edtSite.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.SRC_ATOP);
         edtFacebook.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.SRC_ATOP);
+
     }
 
     public void actionCancelar(View view){
@@ -72,7 +72,7 @@ public abstract class CadastrosLocalizavel extends CablushActivity {
     }
 
     public void actionHorarioFuncionamento(View view){
-        showCadastroLocal(R.layout.horario_funcionamento_layout);
+        showCadastroHorario(R.layout.horario_funcionamento_layout);
     }
 
     public void getDefaultFields(){
@@ -101,7 +101,7 @@ public abstract class CadastrosLocalizavel extends CablushActivity {
     }
 
 
-    public void showCadastroLocal(int layout ){
+    public void showCadastroHorario(int layout){
         LayoutInflater inflater = (LayoutInflater)this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = inflater.inflate(layout, null);
 
@@ -119,6 +119,15 @@ public abstract class CadastrosLocalizavel extends CablushActivity {
         final EditText edtFim    = (EditText)view.findViewById(R.id.edtFim);
         Button btnCancelar       = (Button)view.findViewById(R.id.btnCancelar);
         Button btnCadastrar      = (Button)view.findViewById(R.id.btnCadastrar);
+
+        edtInicio.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DialogFragment newFragment = new TimePickerFragment();
+               // newFragment.show();
+
+            }
+        });
 
         spnDias.setAdapter(new ArrayAdapter<>(CadastrosLocalizavel.this, R.layout.simple_item, dias));
         spnPeriodo.setAdapter(new ArrayAdapter<>(CadastrosLocalizavel.this, R.layout.simple_item, periodo));
@@ -152,12 +161,33 @@ public abstract class CadastrosLocalizavel extends CablushActivity {
         return builder;
     }
 
-    public long getDate(String date){
+    protected long getDate(String date){
         Calendar cal = Calendar.getInstance();
         String[] splitTime = date.split(":");
-        cal.set(Calendar.HOUR, Integer.parseInt(splitTime[0]));
-        cal.set(Calendar.MINUTE, Integer.parseInt(splitTime[1]));
-
+        if(splitTime.length >= 1) {
+            cal.set(Calendar.HOUR, Integer.parseInt(splitTime[0]));
+            cal.set(Calendar.MINUTE, Integer.parseInt(splitTime[1]));
+        }
         return cal.getTimeInMillis();
+    }
+
+    public static class TimePickerFragment extends DialogFragment
+            implements TimePickerDialog.OnTimeSetListener {
+
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            // Use the current time as the default values for the picker
+            final Calendar c = Calendar.getInstance();
+            int hour = c.get(Calendar.HOUR_OF_DAY);
+            int minute = c.get(Calendar.MINUTE);
+
+            // Create a new instance of TimePickerDialog and return it
+            return new TimePickerDialog(getActivity(), this, hour, minute,
+                    DateFormat.is24HourFormat(getActivity()));
+        }
+
+        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+            // Do something with the time chosen by the user
+        }
     }
 }
