@@ -1,6 +1,7 @@
 package com.cablush.cablushandroidapp;
 
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
@@ -8,11 +9,13 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentActivity;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TimePicker;
@@ -123,9 +126,35 @@ public abstract class CadastrosLocalizavel extends CablushActivity {
         edtInicio.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DialogFragment newFragment = new TimePickerFragment();
-               // newFragment.show();
-
+                TimePickerDialog.OnTimeSetListener onTimeSetListener = new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                        StringBuilder sb = new StringBuilder();
+                        sb.append(hourOfDay < 10 ? "0"+hourOfDay:""+hourOfDay);
+                        sb.append(":");
+                        sb.append(minute < 10 ? "0"+minute:""+minute);
+                        edtInicio.setText(sb.toString());
+                    }
+                };
+                Dialog dialog = new TimePickerDialog(CadastrosLocalizavel.this,onTimeSetListener,0,0,true);
+                dialog.show();
+            }
+        });
+        edtFim.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TimePickerDialog.OnTimeSetListener onTimeSetListener = new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                        StringBuilder sb = new StringBuilder();
+                        sb.append(hourOfDay < 10 ? "0"+hourOfDay:""+hourOfDay);
+                        sb.append(":");
+                        sb.append(minute < 10 ? "0"+minute:""+minute);
+                        edtInicio.setText(sb.toString());
+                    }
+                };
+                Dialog dialog = new TimePickerDialog(CadastrosLocalizavel.this,onTimeSetListener,0,0,true);
+                dialog.show();
             }
         });
 
@@ -171,23 +200,21 @@ public abstract class CadastrosLocalizavel extends CablushActivity {
         return cal.getTimeInMillis();
     }
 
-    public static class TimePickerFragment extends DialogFragment
-            implements TimePickerDialog.OnTimeSetListener {
+    public DatePickerDialog.OnDateSetListener mDateSetListener =
+            new DatePickerDialog.OnDateSetListener() {
 
+                @Override
+                public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+
+                }
+            };
+
+    public TimePickerDialog.OnTimeSetListener onTimeSetListener = new TimePickerDialog.OnTimeSetListener() {
         @Override
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
-            // Use the current time as the default values for the picker
-            final Calendar c = Calendar.getInstance();
-            int hour = c.get(Calendar.HOUR_OF_DAY);
-            int minute = c.get(Calendar.MINUTE);
-
-            // Create a new instance of TimePickerDialog and return it
-            return new TimePickerDialog(getActivity(), this, hour, minute,
-                    DateFormat.is24HourFormat(getActivity()));
-        }
-
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-            // Do something with the time chosen by the user
+
         }
-    }
+    };
+
+
 }
