@@ -4,6 +4,8 @@ import android.util.Log;
 
 import com.cablush.cablushandroidapp.MainActivity;
 import com.cablush.cablushandroidapp.model.Pista;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 
 import java.util.List;
 
@@ -29,8 +31,11 @@ public class SyncPistas {
         apiPistas.getPistas(name,estado,esporte, new Callback<List<Pista>>() {
             @Override
             public void success(List<Pista> pistas, Response response) {
+                LatLngBounds.Builder latBuilder = new LatLngBounds.Builder();
+
                 for(Pista pista: pistas) {
                     MainActivity.setMarker(pista.getNome(), pista.getDescricao(), pista.getLocal().getLatitude(), pista.getLocal().getLongitude());
+
                 }
             }
 

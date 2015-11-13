@@ -140,6 +140,7 @@ public class MainActivity extends CablushActivity {
         super.onDestroy();
     }
 
+    static LatLngBounds.Builder latBuilder;
     public static void setMarker(String nome,String descricao, double lat, double lng) {
 
 
@@ -149,7 +150,7 @@ public class MainActivity extends CablushActivity {
                 .snippet(descricao)
                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.marker)));
 
-        LatLngBounds.Builder latBuilder = new LatLngBounds.Builder();
+        latBuilder = new LatLngBounds.Builder();
         latBuilder.include(new LatLng(lat,lng));
         int padding = 5; // offset from edges of the map in pixels
         CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(latBuilder.build(), padding);
