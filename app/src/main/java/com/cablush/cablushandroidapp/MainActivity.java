@@ -22,6 +22,7 @@ import android.widget.Toast;
 
 import com.cablush.cablushandroidapp.Adapters.NavDrawerListAdapter;
 import com.cablush.cablushandroidapp.Helpers.CablushLocation;
+import com.cablush.cablushandroidapp.Helpers.Locations;
 import com.cablush.cablushandroidapp.Helpers.SlideMenuClickListener;
 import com.cablush.cablushandroidapp.model.NavDrawerItem;
 import com.google.android.gms.common.ConnectionResult;
@@ -133,8 +134,6 @@ public class MainActivity extends CablushActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-            locationManager.removeUpdates(mLocationListener);
-            locationManager = null;
     }
 
     public static void setMarker(String nome,String descricao, double lat, double lng) {
@@ -156,10 +155,6 @@ public class MainActivity extends CablushActivity {
                     Toast.makeText(getApplicationContext(),
                             getString(R.string.error_create_map), Toast.LENGTH_SHORT).show();
                 }
-
-                LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-                Criteria criteria = new Criteria();
-
             }
         } catch (NullPointerException e) {
             Log.e("ERROR!! -- ", e.toString());
@@ -168,23 +163,12 @@ public class MainActivity extends CablushActivity {
     }
 
     private void configGPS() {
-        Criteria criteria = new Criteria();
-        criteria.setAccuracy(Criteria.ACCURACY_FINE);
-        criteria.setAltitudeRequired(false);
-        criteria.setBearingRequired(false);
-        criteria.setCostAllowed(true);
-        criteria.setPowerRequirement(Criteria.POWER_LOW);
-
-        String provider = locationManager.getBestProvider(criteria, true);
-        // Location location = locationManager.getLastKnownLocation(provider);
-            locationManager.requestLocationUpdates(provider, 60000, // 1min
+        String provider = Locations.getProvider(MainActivity.this);
+        locationManager.requestLocationUpdates(provider, 60000, // 1min
                     1000, // 1km
                     mLocationListener);
 
     }
-
-
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
