@@ -22,14 +22,19 @@ import android.widget.Toast;
 
 import com.cablush.cablushandroidapp.Adapters.NavDrawerListAdapter;
 import com.cablush.cablushandroidapp.Helpers.CablushLocation;
+import com.cablush.cablushandroidapp.Helpers.Locations;
 import com.cablush.cablushandroidapp.Helpers.SlideMenuClickListener;
 import com.cablush.cablushandroidapp.model.NavDrawerItem;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
@@ -133,16 +138,23 @@ public class MainActivity extends CablushActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-            locationManager.removeUpdates(mLocationListener);
-            locationManager = null;
     }
 
+    static LatLngBounds.Builder latBuilder;
     public static void setMarker(String nome,String descricao, double lat, double lng) {
+
+
         googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(lat, lng))
                 .title(nome)
                 .snippet(descricao)
                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.marker)));
+
+        latBuilder = new LatLngBounds.Builder();
+        latBuilder.include(new LatLng(lat,lng));
+        int padding = 5; // offset from edges of the map in pixels
+        CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(latBuilder.build(), padding);
+        googleMap.animateCamera(cu);
     }
 
     private void createMapView() {
@@ -156,10 +168,6 @@ public class MainActivity extends CablushActivity {
                     Toast.makeText(getApplicationContext(),
                             getString(R.string.error_create_map), Toast.LENGTH_SHORT).show();
                 }
-
-                LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-                Criteria criteria = new Criteria();
-
             }
         } catch (NullPointerException e) {
             Log.e("ERROR!! -- ", e.toString());
@@ -168,23 +176,12 @@ public class MainActivity extends CablushActivity {
     }
 
     private void configGPS() {
-        Criteria criteria = new Criteria();
-        criteria.setAccuracy(Criteria.ACCURACY_FINE);
-        criteria.setAltitudeRequired(false);
-        criteria.setBearingRequired(false);
-        criteria.setCostAllowed(true);
-        criteria.setPowerRequirement(Criteria.POWER_LOW);
-
-        String provider = locationManager.getBestProvider(criteria, true);
-        // Location location = locationManager.getLastKnownLocation(provider);
-            locationManager.requestLocationUpdates(provider, 60000, // 1min
+        String provider = Locations.getProvider(MainActivity.this);
+        locationManager.requestLocationUpdates(provider, 60000, // 1min
                     1000, // 1km
                     mLocationListener);
 
     }
-
-
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

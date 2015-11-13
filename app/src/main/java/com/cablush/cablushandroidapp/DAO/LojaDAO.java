@@ -47,7 +47,7 @@ public class LojaDAO {
         ctv.put("descricao", loja.getDescricao());
         ctv.put("logo"     , loja.getLogo());
         ctv.put("fundo"    , loja.isFundo());
-        ctv.put("local"    , loja.getLocal().getId());
+        //ctv.put("local"    , loja.getLocal().getId());
         ctv.put("telefone" , loja.getTelefone());
         ctv.put("email"    , loja.getEmail());
         ctv.put("facebook" , loja.getFacebook());

@@ -2,6 +2,8 @@ package com.cablush.cablushandroidapp.model;
 
 import com.google.gson.annotations.Expose;
 
+import java.util.List;
+
 /**
  * Created by jonathan on 22/10/15.
  */
@@ -10,14 +12,17 @@ public class Loja extends Localizavel {
     private String telefone;
     @Expose
     private String email;
+    @Expose
+    private List<Local> locais;
 
     public Loja() {
     }
 
-    public Loja(String uuid, String nome, String descricao, String site, String facebook, String logo, Local local, Horarios horario, boolean fundo, String telefone, String email) {
-        super(uuid, nome, descricao, site, facebook, logo, local, horario, fundo);
+    public Loja(String uuid, String nome, String descricao, String site, String facebook, String logo, Local local, Horarios horario, boolean fundo, String telefone, String email, List<Local> locais) {
+        super(uuid, nome, descricao, site, facebook, logo,horario, fundo);
         this.telefone = telefone;
         this.email = email;
+        this.locais = locais;
     }
 
     public String getTelefone() {
@@ -36,5 +41,11 @@ public class Loja extends Localizavel {
         this.email = email;
     }
 
+    public List<Local> getLocais() {
+        return locais;
+    }
 
+    public void setLocais(List<Local> locais) {
+        this.locais = locais;
+    }
 }

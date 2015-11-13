@@ -28,35 +28,43 @@ public class Local {
     private String cep;
     @Expose
     private String pais;
+    @Expose
+    private String localizavel_type;
+
+
+    private String localizavelUUID;
 
     public Local() {
     }
 
-    public Local(int id, double latitude, double longitude, String logradouro, String numero, String complemento, String bairro, String cidade, String estado, String cep, String pais) {
-        this.id          = id;
-        this.latitude    = latitude;
-        this.longitude   = longitude;
-        this.logradouro  = logradouro;
-        this.numero      = numero;
+    public Local(int id, double latitude, double longitude, String logradouro, String numero, String complemento, String bairro, String cidade, String estado, String cep, String pais, String localizavel_type, String localizavelUUID) {
+        this.id = id;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.logradouro = logradouro;
+        this.numero = numero;
         this.complemento = complemento;
-        this.bairro      = bairro;
-        this.cidade      = cidade;
-        this.estado      = estado;
-        this.cep         = cep;
-        this.pais        = pais;
+        this.bairro = bairro;
+        this.cidade = cidade;
+        this.estado = estado;
+        this.cep = cep;
+        this.pais = pais;
+        this.localizavel_type = localizavel_type;
+        this.localizavelUUID = localizavelUUID;
     }
 
-    public Local( double latitude, double longitude, String logradouro, String numero, String complemento, String bairro, String cidade, String estado, String cep, String pais) {
-        this.latitude    = latitude;
-        this.longitude   = longitude;
-        this.logradouro  = logradouro;
-        this.numero      = numero;
+    public Local(double latitude, double longitude, String logradouro, String numero, String complemento, String bairro, String cidade, String estado, String cep, String pais, String localizavel_type) {
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.logradouro = logradouro;
+        this.numero = numero;
         this.complemento = complemento;
-        this.bairro      = bairro;
-        this.cidade      = cidade;
-        this.estado      = estado;
-        this.cep         = cep;
-        this.pais        = pais;
+        this.bairro = bairro;
+        this.cidade = cidade;
+        this.estado = estado;
+        this.cep = cep;
+        this.pais = pais;
+        this.localizavel_type = localizavel_type;
     }
 
     public int getId() {
@@ -146,4 +154,22 @@ public class Local {
     public void setPais(String pais) {
         this.pais = pais;
     }
+
+    public String getLocalizavel_type() {
+        return localizavel_type;
+    }
+
+    public void setLocalizavel_type(String localizavel_type) {
+        this.localizavel_type = localizavel_type;
+    }
+
+    public String getLocalizavelUUID() {
+        return localizavelUUID;
+    }
+
+    public void setLocalizavelUUID(String localizavelUUID) {
+        this.localizavelUUID = localizavelUUID;
+    }
+
+
 }

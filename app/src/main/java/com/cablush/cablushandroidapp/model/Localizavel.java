@@ -19,8 +19,7 @@ public class Localizavel {
     private String facebook;
     @Expose
     private String logo;
-    @Expose
-    private Local local;
+
     @Expose
     private Horarios horario;
     @Expose
@@ -29,14 +28,13 @@ public class Localizavel {
     public Localizavel() {
     }
 
-    public Localizavel(String uuid, String nome, String descricao, String site, String facebook, String logo, Local local, Horarios horario, boolean fundo) {
+    public Localizavel(String uuid, String nome, String descricao, String site, String facebook, String logo, Horarios horario, boolean fundo) {
         this.uuid = uuid;
         this.nome = nome;
         this.descricao = descricao;
         this.site = site;
         this.facebook = facebook;
         this.logo = logo;
-        this.local = local;
         this.horario = horario;
         this.fundo = fundo;
     }
@@ -87,14 +85,6 @@ public class Localizavel {
 
     public void setLogo(String logo) {
         this.logo = logo;
-    }
-
-    public Local getLocal() {
-        return local;
-    }
-
-    public void setLocal(Local local) {
-        this.local = local;
     }
 
     public Horarios getHorario() {

@@ -5,8 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
-import android.location.Location;
-import android.location.LocationManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -234,21 +232,12 @@ public class DialogHelpers {
         spnEstado.setAdapter(new ArrayAdapter<>(context, R.layout.simple_item, estados));
 
 
-        LocationManager lm = (LocationManager)context.getSystemService(Context.LOCATION_SERVICE);
-        Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        location = location == null ? lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER) : null;
-
-        double longitude =0.0;
-         double latitude = 0.0;
-        if(location != null) {
-            longitude = location.getLongitude();
-            latitude = location.getLatitude();
-
-        }else{
+        double[] latlng = Locations.getLocationLatLng(context);
+        if(latlng[0] == 0 && latlng[1] == 0){
             Toast.makeText(context, R.string.gps_nao_funcionando,Toast.LENGTH_SHORT).show();
         }
-        local.setLatitude(latitude);
-        local.setLongitude(longitude);
+        local.setLatitude(latlng[0]);
+        local.setLongitude(latlng[1]);
 
         btnCancelar.setOnClickListener(new View.OnClickListener() {
             @Override

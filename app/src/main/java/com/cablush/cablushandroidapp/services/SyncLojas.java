@@ -33,7 +33,9 @@ public class SyncLojas {
             @Override
             public void success(List<Loja> lojas, Response response) {
                 for(Loja loja: lojas) {
-                    MainActivity.setMarker(loja.getNome(), loja.getDescricao(), loja.getLocal().getLatitude(), loja.getLocal().getLongitude());
+                    for(Local local : loja.getLocais()) {
+                        MainActivity.setMarker(loja.getNome(), loja.getDescricao(), local.getLatitude(), local.getLongitude());
+                    }
                 }
             }
 

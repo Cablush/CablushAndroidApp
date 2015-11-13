@@ -6,7 +6,12 @@ import android.view.Window;
 
 
 import com.cablush.cablushandroidapp.DAO.LojaDAO;
+import com.cablush.cablushandroidapp.Helpers.Locations;
+import com.cablush.cablushandroidapp.model.Local;
 import com.cablush.cablushandroidapp.model.Loja;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -25,9 +30,11 @@ public class CadastroLojaActivity extends CadastrosLocalizavel {
     public void actionSalvar(View view){
         if(local != null) {
             getDefaultFields();
+            List<Local> locais = new ArrayList<>();
+            locais.add(local);
 
             Loja loja = new Loja();
-            loja.setLocal(local);
+            loja.setLocais(locais);
             loja.setHorario(horarios);
             LojaDAO lojaDAO = new LojaDAO(CadastroLojaActivity.this);
             lojaDAO.insert(loja);
