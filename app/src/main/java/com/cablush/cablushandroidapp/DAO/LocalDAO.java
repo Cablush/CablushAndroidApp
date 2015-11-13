@@ -14,7 +14,7 @@ public class LocalDAO {
 
     BancoDeDados db;
     public static final String SQL_CREATE = "CREATE TABLE local ( id INTEGER primary key AUTOINCREMENT,bairro TEXT ,logradouro TEXT, numero TEXT, complemento TEXT, cidade TEXT, estado TEXT,cep TEXT, pais TEXT, " +
-            "latitude TEXT, longitude TEXT);";
+            "latitude TEXT, longitude TEXT, localizavel_uuid TEXT);";
     public LocalDAO(Context ctx) {
         db = new BancoDeDados(ctx);
     }
@@ -38,18 +38,18 @@ public class LocalDAO {
     private ContentValues getContentValues(Local local){
         ContentValues ctv = new ContentValues();
 
-        ctv.put("logradouro" , local.getLogradouro());
-        ctv.put("numero"     , local.getNumero());
-        ctv.put("complemento", local.getComplemento());
-        ctv.put("bairro"     , local.getBairro());
-        ctv.put("cep"        , local.getCep());
-        ctv.put("cidade"     , local.getCidade());
-        ctv.put("estado"     , local.getEstado());
-        ctv.put("pais"       , local.getPais());
-        ctv.put("latitude"   , local.getLatitude());
-        ctv.put("longitude"  , local.getLongitude());
-        ctv.put("id"         , local.getId());
-
+        ctv.put("logradouro"        , local.getLogradouro());
+        ctv.put("numero"            , local.getNumero());
+        ctv.put("complemento"       , local.getComplemento());
+        ctv.put("bairro"            , local.getBairro());
+        ctv.put("cep"               , local.getCep());
+        ctv.put("cidade"            , local.getCidade());
+        ctv.put("estado"            , local.getEstado());
+        ctv.put("pais"              , local.getPais());
+        ctv.put("latitude"          , local.getLatitude());
+        ctv.put("longitude"         , local.getLongitude());
+        ctv.put("id"                , local.getId());
+        ctv.put("localizavel_uuid", local.getLocalizavelUUID());
         return ctv;
     }
     public void close(){

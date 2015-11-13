@@ -27,10 +27,14 @@ import com.cablush.cablushandroidapp.Helpers.SlideMenuClickListener;
 import com.cablush.cablushandroidapp.model.NavDrawerItem;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
@@ -137,11 +141,19 @@ public class MainActivity extends CablushActivity {
     }
 
     public static void setMarker(String nome,String descricao, double lat, double lng) {
+
+
         googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(lat, lng))
                 .title(nome)
                 .snippet(descricao)
                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.marker)));
+
+        LatLngBounds.Builder latBuilder = new LatLngBounds.Builder();
+        latBuilder.include(new LatLng(lat,lng));
+        int padding = 5; // offset from edges of the map in pixels
+        CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(latBuilder.build(), padding);
+        googleMap.animateCamera(cu);
     }
 
     private void createMapView() {

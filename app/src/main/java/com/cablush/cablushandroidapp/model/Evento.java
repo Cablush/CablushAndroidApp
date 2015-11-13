@@ -15,23 +15,26 @@ public class Evento extends Localizavel {
     private Date data;
     @Expose
     private Date dataFim;
+    @Expose
+    private Local local;
 
     public Evento() {
     }
 
-    public Evento(String uuid, String nome, String descricao, String site, String facebook, String logo, Local local, Horarios horario, boolean fundo, Time time, Date data, Date dataFim) {
-        super(uuid, nome, descricao, site, facebook, logo, local, horario, fundo);
-        this.hora = time;
+    public Evento(String uuid, String nome, String descricao, String site, String facebook, String logo, Horarios horario, boolean fundo, Time hora, Date data, Date dataFim, Local local) {
+        super(uuid, nome, descricao, site, facebook, logo, horario, fundo);
+        this.hora = hora;
         this.data = data;
         this.dataFim = dataFim;
+        this.local = local;
     }
 
     public Time getHora() {
         return hora;
     }
 
-    public void setHora(Time time) {
-        this.hora = time;
+    public void setHora(Time hora) {
+        this.hora = hora;
     }
 
     public Date getData() {
@@ -48,5 +51,13 @@ public class Evento extends Localizavel {
 
     public void setDataFim(Date dataFim) {
         this.dataFim = dataFim;
+    }
+
+    public Local getLocal() {
+        return local;
+    }
+
+    public void setLocal(Local local) {
+        this.local = local;
     }
 }
