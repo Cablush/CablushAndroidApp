@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.cablush.cablushandroidapp.DAO.EventoDAO;
 import com.cablush.cablushandroidapp.Helpers.DialogHelpers;
@@ -25,7 +26,12 @@ import java.util.Calendar;
  * Created by jonathan on 07/11/15.
  */
 public class CadastroEventosActivity extends CadastrosLocalizavel {
-
+    EditText edtDataInicio;
+    EditText edtDataFim;
+    EditText edtHoraInicio;
+    Time horaInicio;
+    Date dataInicio;
+    Date dataFim;
     Evento evento;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,24 +46,40 @@ public class CadastroEventosActivity extends CadastrosLocalizavel {
     }
 
     public void actionSalvar(View view){
-        if(local != null) {
+        if(local != null && dataInicio!= null && horaInicio !=null) {
             getDefaultFields();
 
-            evento = new Evento();
+            evento = new Evento(nome,descricao,site,facebook,"logo",null,false);
             evento.setLocal(local);
-            evento.setHorario(horarios);
+            evento.setData(dataInicio);
+            evento.setDataFim(dataFim);
+            evento.setHora(horaInicio);
+
             EventoDAO eventoDAO = new EventoDAO(CadastroEventosActivity.this);
             eventoDAO.insert(evento);
-
         }
     }
 
+    @Override
+    public boolean validaCamposObrigatorios() {
+        boolean valid = true;
+        if(dataInicio == null){
+            showMsgErro(R.string.msg_dataInicio_missing);
+            valid = false;
+        }else if(horaInicio == null) {
+            showMsgErro(R.string.msg_horaInicio_missing);
+            valid = false;
+        }
+        return valid && super.validaCamposObrigatorios();
+    }
+
+    //String nome, String descricao, String site, String facebook, String logo, Horarios horario, boolean fundo, Time hora, Date data, Date dataFim, Local local
 
     @Override
     public AlertDialog.Builder getAlertBuilderCadastroHorarios(View view) {
-        final EditText edtDataInicio = (EditText)view.findViewById(R.id.edtDataInicio);
-        final EditText edtDataFim    = (EditText)view.findViewById(R.id.edtDataFim);
-        final EditText edtHoraInicio = (EditText)view.findViewById(R.id.edtHoraInicio);
+        edtDataInicio = (EditText)view.findViewById(R.id.edtDataInicio);
+        edtDataFim    = (EditText)view.findViewById(R.id.edtDataFim);
+        edtHoraInicio = (EditText)view.findViewById(R.id.edtHoraInicio);
         Button btnCancelar       = (Button)view.findViewById(R.id.btnCancelar);
         Button btnCadastrar      = (Button)view.findViewById(R.id.btnCadastrar);
 
@@ -70,7 +92,12 @@ public class CadastroEventosActivity extends CadastrosLocalizavel {
                         StringBuilder sb = new StringBuilder();
                         sb.append(hourOfDay < 10 ? "0"+hourOfDay:""+hourOfDay);
                         sb.append(":");
-                        sb.append(minute < 10 ? "0"+minute:""+minute);
+                        sb.append(minute < 10 ? "0" + minute : "" + minute);
+                        Calendar cal = Calendar.getInstance();
+                        cal.set(Calendar.HOUR, hourOfDay);
+                        cal.set(Calendar.MINUTE,minute);
+                        horaInicio = new Time(cal.getTimeInMillis());
+
                         edtHoraInicio.setText(sb.toString());
                     }
                 };
@@ -85,7 +112,17 @@ public class CadastroEventosActivity extends CadastrosLocalizavel {
                 DatePickerDialog.OnDateSetListener onDateSetListener = new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                        StringBuilder sb = new StringBuilder();
+                        sb.append(dayOfMonth < 10 ? "0"+dayOfMonth:""+dayOfMonth);
+                        sb.append(":");
+                        sb.append(monthOfYear < 10 ? "0" + monthOfYear : "" + monthOfYear);
+                        Calendar cal = Calendar.getInstance();
+                        cal.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                        cal.set(Calendar.MONTH, monthOfYear);
+                        cal.set(Calendar.YEAR,year);
+                        dataFim = new Date(cal.getTimeInMillis());
 
+                        edtDataFim.setText(sb.toString());
                     }
                 };
                 Calendar cal = Calendar.getInstance();
@@ -104,7 +141,17 @@ public class CadastroEventosActivity extends CadastrosLocalizavel {
                 DatePickerDialog.OnDateSetListener onDateSetListener = new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                        StringBuilder sb = new StringBuilder();
+                        sb.append(dayOfMonth < 10 ? "0"+dayOfMonth:""+dayOfMonth);
+                        sb.append(":");
+                        sb.append(monthOfYear < 10 ? "0" + monthOfYear : "" + monthOfYear);
+                        Calendar cal = Calendar.getInstance();
+                        cal.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                        cal.set(Calendar.MONTH, monthOfYear);
+                        cal.set(Calendar.YEAR,year);
+                        dataInicio= new Date(cal.getTimeInMillis());
 
+                        edtDataInicio.setText(sb.toString());
                     }
                 };
                 Calendar cal = Calendar.getInstance();
@@ -127,10 +174,11 @@ public class CadastroEventosActivity extends CadastrosLocalizavel {
         btnCadastrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                evento.setData(new Date(Calendar.getInstance().getTimeInMillis()));
-                evento.setDataFim(new Date(Calendar.getInstance().getTimeInMillis()));
-                evento.setHora(new Time(Calendar.getInstance().getTimeInMillis()));
-                alerta.dismiss();
+                if(dataInicio == null || horaInicio == null){
+                    // TODO Toast.makeText()
+                }else {
+                    alerta.dismiss();
+                }
             }
         });
         AlertDialog.Builder builder = new AlertDialog.Builder(this);

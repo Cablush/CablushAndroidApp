@@ -6,7 +6,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/txt_nome"
-        android:textColor="@android:color/black"
+        android:textColor="@color/azul_cablush"
         android:id="@+id/textView7"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
@@ -16,7 +16,7 @@
           />
 
     <EditText
-        android:textColor="@android:color/black"
+        android:textColor="@color/azul_cablush"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/edtNome"
@@ -28,7 +28,7 @@
         android:imeOptions="actionNext"/>
 
     <TextView
-        android:textColor="@android:color/black"
+        android:textColor="@color/azul_cablush"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/txt_site"
@@ -39,7 +39,7 @@
         style="@style/TextAppearance.FontPath"/>
 
     <EditText
-        android:textColor="@android:color/black"
+        android:textColor="@color/azul_cablush"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/edtSite"
@@ -51,7 +51,7 @@
         android:imeOptions="actionNext"/>
 
     <TextView
-        android:textColor="@android:color/black"
+        android:textColor="@color/azul_cablush"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/txt_facebook"
@@ -62,7 +62,7 @@
         style="@style/TextAppearance.FontPath"/>
 
     <EditText
-        android:textColor="@android:color/black"
+        android:textColor="@color/azul_cablush"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/edtFacebook"
@@ -74,7 +74,7 @@
         android:imeOptions="actionNext"/>
 
     <TextView
-        android:textColor="@android:color/black"
+        android:textColor="@color/azul_cablush"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/txt_descricao"
@@ -85,7 +85,7 @@
         style="@style/TextAppearance.FontPath"/>
 
     <EditText
-        android:textColor="@android:color/black"
+        android:textColor="@color/azul_cablush"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="textMultiLine"
@@ -96,19 +96,20 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:height="100dp"
+        android:height="50dp"
+        android:textSize="12dp"
         android:imeOptions="actionDone"/>
 
     <TextView
-        android:textColor="@android:color/black"
+        android:textColor="@color/azul_cablush"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/txt_endereco"
         android:id="@+id/textView11"
-        android:layout_below="@+id/edtDescricao"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        style="@style/TextAppearance.FontPath"/>
+        style="@style/TextAppearance.FontPath"
+        android:layout_alignTop="@+id/btnEndereco"
+        android:layout_alignRight="@+id/textView10"
+        android:layout_alignEnd="@+id/textView10" />
 
     <Button
         android:layout_width="wrap_content"
@@ -138,30 +139,83 @@
         android:text="@string/txt_endereco"
         android:id="@+id/btnEndereco"
         android:onClick="actionEndereco"
-        android:layout_below="@+id/textView11"
-        android:layout_alignRight="@+id/btnCancelar"
-        android:layout_alignEnd="@+id/btnCancelar"
-        style="@style/TextAppearance.FontPath"/>
+        style="@style/TextAppearance.FontPath"
+        android:layout_above="@+id/button"
+        android:layout_alignRight="@+id/button"
+        android:layout_alignEnd="@+id/button" />
 
     <TextView
-        android:textColor="@android:color/black"
+        android:textColor="@color/azul_cablush"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/txt_horario_funcionameto"
         android:id="@+id/textView12"
-        android:layout_below="@+id/btnEndereco"
+        style="@style/TextAppearance.FontPath"
+        android:layout_alignTop="@+id/button"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        style="@style/TextAppearance.FontPath"/>
+        android:layout_alignParentStart="true" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Horários"
         android:id="@+id/button"
-        android:layout_below="@+id/textView12"
-        android:layout_alignRight="@+id/btnEndereco"
-        android:layout_alignEnd="@+id/btnEndereco"
         android:onClick="actionHorarioFuncionamento"
-        style="@style/TextAppearance.FontPath"/>
+        style="@style/TextAppearance.FontPath"
+        android:layout_above="@+id/btnCancelar"
+        android:layout_alignLeft="@+id/btnCancelar"
+        android:layout_alignStart="@+id/btnCancelar" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/txt_telefone"
+        android:id="@+id/txtvTelefone"
+        android:textColor="@color/azul_cablush"
+        style="@style/TextAppearance.FontPath"
+        android:layout_below="@+id/edtDescricao"
+        android:layout_alignLeft="@+id/edtTelefone"
+        android:layout_alignStart="@+id/edtTelefone"
+        android:visibility="invisible"/>
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="phone"
+        android:ems="10"
+        android:maxLength="12"
+        android:id="@+id/edtTelefone"
+        android:layout_below="@+id/txtvTelefone"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignRight="@+id/button"
+        android:layout_alignEnd="@+id/button"
+        android:visibility="invisible"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/txt_email"
+        android:id="@+id/txtvEmail"
+        android:layout_below="@+id/edtTelefone"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:textColor="@color/azul_cablush"
+        style="@style/TextAppearance.FontPath"
+        android:visibility="invisible"/>
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textEmailAddress"
+        android:ems="10"
+        android:maxLength="40"
+        android:id="@+id/edtEmail"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/txtvEmail"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:visibility="invisible"/>
+
 </RelativeLayout>

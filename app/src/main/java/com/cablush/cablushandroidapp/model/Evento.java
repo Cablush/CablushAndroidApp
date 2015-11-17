@@ -29,6 +29,18 @@ public class Evento extends Localizavel {
         this.local = local;
     }
 
+    public Evento(String nome, String descricao, String site, String facebook, String logo, Horarios horario, boolean fundo, Time hora, Date data, Date dataFim, Local local) {
+        super(nome, descricao, site, facebook, logo, horario, fundo);
+        this.hora = hora;
+        this.data = data;
+        this.dataFim = dataFim;
+        this.local = local;
+    }
+
+    public Evento(String nome, String descricao, String site, String facebook, String logo, Horarios horario, boolean fundo) {
+        super(nome, descricao, site, facebook, logo, horario, fundo);
+    }
+
     public Time getHora() {
         return hora;
     }

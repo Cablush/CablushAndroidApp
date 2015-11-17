@@ -19,6 +19,11 @@ public class Pista extends Localizavel {
         this.local = local;
     }
 
+    public Pista(String nome, String descricao, String site, String facebook, String logo, Horarios horario, boolean fundo, Local local) {
+        super(nome, descricao, site, facebook, logo, horario, fundo);
+        this.local = local;
+    }
+
     public Local getLocal() {
         return local;
     }

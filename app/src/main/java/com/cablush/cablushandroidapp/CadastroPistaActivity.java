@@ -23,22 +23,17 @@ public class CadastroPistaActivity extends CadastrosLocalizavel {
     }
 
     public void actionSalvar(View view){
-        if(local != null ) {
+        if(validaCamposObrigatorios()) {
             getDefaultFields();
-            if(validaCamposObrigatorios()) {
-                Pista p = new Pista();
-                p.setLocal(local);
-                p.setHorario(horarios);
-                PistaDAO pistaDAO = new PistaDAO(CadastroPistaActivity.this);
-                pistaDAO.insert(p);
-                SyncPistas syncPistas = new SyncPistas();
-                syncPistas.postPistas(p);
-            }else{
-                Toast.makeText(CadastroPistaActivity.this,msgError,Toast.LENGTH_SHORT).show();
-            }
+            Pista p = new Pista(nome,descricao,site,facebook,"logo",horarios,false,local);
+
+            PistaDAO pistaDAO = new PistaDAO(CadastroPistaActivity.this);
+            pistaDAO.insert(p);
+            SyncPistas syncPistas = new SyncPistas();
+            syncPistas.postPistas(p);
         }
     }
 
 
-
 }
+//String nome, String descricao, String site, String facebook, String logo, Horarios horario, boolean fundo, Local local

@@ -25,6 +25,13 @@ public class Loja extends Localizavel {
         this.locais = locais;
     }
 
+    public Loja(String nome, String descricao, String site, String facebook, String logo, Horarios horario, boolean fundo, String telefone, String email, List<Local> locais) {
+        super(nome, descricao, site, facebook, logo, horario, fundo);
+        this.telefone = telefone;
+        this.email = email;
+        this.locais = locais;
+    }
+
     public String getTelefone() {
         return telefone;
     }

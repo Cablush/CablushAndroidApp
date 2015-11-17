@@ -19,6 +19,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.cablush.cablushandroidapp.DAO.HorariosDAO;
 import com.cablush.cablushandroidapp.Helpers.DialogHelpers;
@@ -38,7 +39,7 @@ public abstract class CadastrosLocalizavel extends CablushActivity {
     protected String descricao;
     protected String site;
     protected String facebook;
-    protected int msgError=0;
+
     protected AlertDialog alerta;
 
     EditText edtNome;
@@ -91,16 +92,20 @@ public abstract class CadastrosLocalizavel extends CablushActivity {
 
        boolean valid = true;
         if(nome == null || nome.isEmpty()){
-            msgError = R.string.msg_nome_missing;
+            showMsgErro(R.string.msg_nome_missing);
             valid = false;
         }else if(descricao == null || descricao.isEmpty()){
-            msgError = R.string.msg_descrição_missing;
+            showMsgErro(R.string.msg_descrição_missing);
             valid = false;
         }else if(local == null){
-            msgError = R.string.msg_local_missing;
+            showMsgErro(R.string.msg_local_missing);
             valid = false;
         }
         return valid;
+    }
+
+    protected void showMsgErro(int msgError){
+        Toast.makeText(CadastrosLocalizavel.this,msgError,Toast.LENGTH_SHORT).show();
     }
 
 

@@ -30,6 +30,8 @@
 
     <!--Cadastro localizavel -->
     <string name="txt_site">Site</string>
+    <string name="txt_telefone">Telefone</string>
+    <string name="txt_email">Email</string>
     <string name="txt_facebook">Facebook</string>
     <string name="txt_descricao">Descrição</string>
     <string name="txt_endereco">Endereço</string>
@@ -140,6 +142,8 @@
     <string name="msg_nome_missing">Favor preencher o nome!</string>
     <string name="msg_descrição_missing">Favor preencher a descrição!</string>
     <string name="msg_local_missing">Favor preencher o local!</string>
+    <string name="msg_dataInicio_missing">Favor preencher a data de inicio!</string>
+    <string name="msg_horaInicio_missing">Favor preencher a hora de inicio!</string>
 
 </resources>
 

@@ -39,6 +39,16 @@ public class Localizavel {
         this.fundo = fundo;
     }
 
+    public Localizavel(String nome, String descricao, String site, String facebook, String logo, Horarios horario, boolean fundo) {
+        this.nome = nome;
+        this.descricao = descricao;
+        this.site = site;
+        this.facebook = facebook;
+        this.logo = logo;
+        this.horario = horario;
+        this.fundo = fundo;
+    }
+
     public String getUuid() {
         return uuid;
     }
