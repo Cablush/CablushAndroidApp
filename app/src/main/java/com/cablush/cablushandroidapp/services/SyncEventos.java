@@ -1,10 +1,18 @@
 package com.cablush.cablushandroidapp.services;
 
 
+import android.content.Context;
 import android.util.Log;
 
+import com.cablush.cablushandroidapp.Helpers.CustomInfoWindow;
 import com.cablush.cablushandroidapp.MainActivity;
+import com.cablush.cablushandroidapp.R;
 import com.cablush.cablushandroidapp.model.Evento;
+import com.cablush.cablushandroidapp.model.Localizavel;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.List;
 
@@ -19,19 +27,12 @@ import retrofit.client.Response;
 public class SyncEventos {
     private static ApiEventos apiEventos;
 
-    public SyncEventos() {
-        RestAdapter restAdapter = new RestAdapter.Builder()
-                .setEndpoint(SyncLocalizavel.ROOT).build();
-
-        apiEventos = restAdapter.create(ApiEventos.class);
-    }
-
     public void getEventos(String name,String estado, String esporte) {
         apiEventos.getEventos(name, estado, esporte, new Callback<List<Evento>>() {
             @Override
             public void success(List<Evento> eventos, Response response) {
                 for(Evento evento: eventos) {
-                    MainActivity.setMarker(evento.getNome(), evento.getDescricao(), evento.getLocal().getLatitude(), evento.getLocal().getLongitude());
+
                 }
             }
 

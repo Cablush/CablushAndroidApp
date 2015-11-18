@@ -24,12 +24,13 @@ public class Localizavel {
     private Horarios horario;
     @Expose
     private boolean fundo;
+    @Expose
+    private Local local;
 
     public Localizavel() {
     }
 
-    public Localizavel(String uuid, String nome, String descricao, String site, String facebook, String logo, Horarios horario, boolean fundo) {
-        this.uuid = uuid;
+    public Localizavel(String nome, String descricao, String site, String facebook, String logo, Horarios horario, boolean fundo) {
         this.nome = nome;
         this.descricao = descricao;
         this.site = site;
@@ -39,7 +40,31 @@ public class Localizavel {
         this.fundo = fundo;
     }
 
-    public Localizavel(String nome, String descricao, String site, String facebook, String logo, Horarios horario, boolean fundo) {
+    public Localizavel(String nome, String descricao, String site, String facebook, String logo, Horarios horario, boolean fundo, Local local) {
+        this.nome = nome;
+        this.descricao = descricao;
+        this.site = site;
+        this.facebook = facebook;
+        this.logo = logo;
+        this.horario = horario;
+        this.fundo = fundo;
+        this.local = local;
+    }
+
+    public Localizavel(String uuid, String nome, String descricao, String site, String facebook, String logo, Horarios horario, boolean fundo, Local local) {
+        this.uuid = uuid;
+        this.nome = nome;
+        this.descricao = descricao;
+        this.site = site;
+        this.facebook = facebook;
+        this.logo = logo;
+        this.horario = horario;
+        this.fundo = fundo;
+        this.local = local;
+    }
+
+    public Localizavel(String uuid, String nome, String descricao, String site, String facebook, String logo, Horarios horario, boolean fundo) {
+        this.uuid = uuid;
         this.nome = nome;
         this.descricao = descricao;
         this.site = site;
@@ -111,5 +136,13 @@ public class Localizavel {
 
     public void setFundo(boolean fundo) {
         this.fundo = fundo;
+    }
+
+    public Local getLocal() {
+        return local;
+    }
+
+    public void setLocal(Local local) {
+        this.local = local;
     }
 }

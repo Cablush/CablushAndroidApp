@@ -36,7 +36,7 @@ public class LocalDAOTest  extends AndroidTestCase {
     public void testAddEntry(){
         // Here i have my new database wich is not connected to the standard database of the App
         //int id, double latitude, double longitude, String logradouro, String numero, String complemento, String bairro, String cidade, String estado, String cep, String pais
-        Local l = new Local(1,0.0, 0.0, "lograoudor", "10", "complemento","bairro","cidade","estado","cep","pais");
+        Local l = new Local();
         long r = localDB.insert(l);
         assertEquals(1,l);
     }

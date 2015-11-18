@@ -8,27 +8,23 @@ import org.json.JSONObject;
  * Created by jonathan on 22/10/15.
  */
 public class Pista extends Localizavel {
-    @Expose
-    private Local local;
 
     public Pista() {
     }
 
-    public Pista(String uuid, String nome, String descricao, String site, String facebook, String logo, Horarios horario, boolean fundo, Local local) {
-        super(uuid, nome, descricao, site, facebook, logo, horario, fundo);
-        this.local = local;
+    public Pista(String nome, String descricao, String site, String facebook, String logo, Horarios horario, boolean fundo) {
+        super(nome, descricao, site, facebook, logo, horario, fundo);
     }
 
     public Pista(String nome, String descricao, String site, String facebook, String logo, Horarios horario, boolean fundo, Local local) {
-        super(nome, descricao, site, facebook, logo, horario, fundo);
-        this.local = local;
+        super(nome, descricao, site, facebook, logo, horario, fundo, local);
     }
 
-    public Local getLocal() {
-        return local;
+    public Pista(String uuid, String nome, String descricao, String site, String facebook, String logo, Horarios horario, boolean fundo, Local local) {
+        super(uuid, nome, descricao, site, facebook, logo, horario, fundo, local);
     }
 
-    public void setLocal(Local local) {
-        this.local = local;
+    public Pista(String uuid, String nome, String descricao, String site, String facebook, String logo, Horarios horario, boolean fundo) {
+        super(uuid, nome, descricao, site, facebook, logo, horario, fundo);
     }
 }

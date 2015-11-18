@@ -1,11 +1,19 @@
 package com.cablush.cablushandroidapp.services;
 
+import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
+import com.cablush.cablushandroidapp.Helpers.CustomInfoWindow;
 import com.cablush.cablushandroidapp.MainActivity;
+import com.cablush.cablushandroidapp.R;
+import com.cablush.cablushandroidapp.model.Localizavel;
 import com.cablush.cablushandroidapp.model.Pista;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.List;
 
@@ -19,22 +27,26 @@ import retrofit.client.Response;
  */
 public class SyncPistas {
     private static ApiPistas apiPistas;
-
-    public SyncPistas() {
+    public SyncPistas(GoogleMap googleMap, Context context) {
         RestAdapter restAdapter = new RestAdapter.Builder()
                 .setEndpoint(SyncLocalizavel.ROOT).build();
 
         apiPistas = restAdapter.create(ApiPistas.class);
     }
 
+    public SyncPistas() {
+        RestAdapter restAdapter = new RestAdapter.Builder()
+                .setEndpoint(SyncLocalizavel.ROOT).build();
+
+        apiPistas = restAdapter.create(ApiPistas.class);
+
+    }
+
     public void getPistas(String name,String estado, String esporte) {
         apiPistas.getPistas(name,estado,esporte, new Callback<List<Pista>>() {
             @Override
             public void success(List<Pista> pistas, Response response) {
-                LatLngBounds.Builder latBuilder = new LatLngBounds.Builder();
-
                 for(Pista pista: pistas) {
-                    MainActivity.setMarker(pista.getNome(), pista.getDescricao(), pista.getLocal().getLatitude(), pista.getLocal().getLongitude());
 
                 }
             }

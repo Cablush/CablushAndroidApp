@@ -30,7 +30,7 @@ public class PistaDAOTest extends AndroidTestCase {
     //@Test
     public void testAddEntry(){
         // Here i have my new database wich is not connected to the standard database of the App
-        Pista p = new Pista("nome", "descricao", "foto", new Local(), true);
+        Pista p = new Pista();
         long r = pistaDB.insert(p);
         assertEquals(1,r);
         }

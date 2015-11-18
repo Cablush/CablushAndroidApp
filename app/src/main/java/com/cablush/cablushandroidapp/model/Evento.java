@@ -15,30 +15,37 @@ public class Evento extends Localizavel {
     private Date data;
     @Expose
     private Date dataFim;
-    @Expose
-    private Local local;
+
 
     public Evento() {
     }
 
-    public Evento(String uuid, String nome, String descricao, String site, String facebook, String logo, Horarios horario, boolean fundo, Time hora, Date data, Date dataFim, Local local) {
+    public Evento(String nome, String descricao, String site, String facebook, String logo, Horarios horario, boolean fundo, Time hora, Date data, Date dataFim) {
+        super(nome, descricao, site, facebook, logo, horario, fundo);
+        this.hora = hora;
+        this.data = data;
+        this.dataFim = dataFim;
+    }
+
+    public Evento(String nome, String descricao, String site, String facebook, String logo, Horarios horario, boolean fundo, Local local, Time hora, Date data, Date dataFim) {
+        super(nome, descricao, site, facebook, logo, horario, fundo, local);
+        this.hora = hora;
+        this.data = data;
+        this.dataFim = dataFim;
+    }
+
+    public Evento(String uuid, String nome, String descricao, String site, String facebook, String logo, Horarios horario, boolean fundo, Local local, Time hora, Date data, Date dataFim) {
+        super(uuid, nome, descricao, site, facebook, logo, horario, fundo, local);
+        this.hora = hora;
+        this.data = data;
+        this.dataFim = dataFim;
+    }
+
+    public Evento(String uuid, String nome, String descricao, String site, String facebook, String logo, Horarios horario, boolean fundo, Time hora, Date data, Date dataFim) {
         super(uuid, nome, descricao, site, facebook, logo, horario, fundo);
         this.hora = hora;
         this.data = data;
         this.dataFim = dataFim;
-        this.local = local;
-    }
-
-    public Evento(String nome, String descricao, String site, String facebook, String logo, Horarios horario, boolean fundo, Time hora, Date data, Date dataFim, Local local) {
-        super(nome, descricao, site, facebook, logo, horario, fundo);
-        this.hora = hora;
-        this.data = data;
-        this.dataFim = dataFim;
-        this.local = local;
-    }
-
-    public Evento(String nome, String descricao, String site, String facebook, String logo, Horarios horario, boolean fundo) {
-        super(nome, descricao, site, facebook, logo, horario, fundo);
     }
 
     public Time getHora() {
@@ -63,13 +70,5 @@ public class Evento extends Localizavel {
 
     public void setDataFim(Date dataFim) {
         this.dataFim = dataFim;
-    }
-
-    public Local getLocal() {
-        return local;
-    }
-
-    public void setLocal(Local local) {
-        this.local = local;
     }
 }

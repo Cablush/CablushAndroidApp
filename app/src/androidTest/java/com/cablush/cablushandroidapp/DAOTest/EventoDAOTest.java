@@ -35,10 +35,9 @@ public class EventoDAOTest extends AndroidTestCase {
     //According to Zainodis annotation only for legacy and not valid with gradle>1.1:
     //@Test
     public void testAddEntry(){
-        // Here i have my new database wich is not connected to the standard database of the App
-        //String nome, String descricao, Time time, Date date, String cartaz,Local local,boolean fundo
         long l = Calendar.getInstance().getTimeInMillis();
-        Evento e = new Evento("nome", "descricao", new Time(l), new Date(l), "cartaz",new Local(),true);
+        ////String nome, String descricao, String site, String facebook, String logo, Horarios horario, boolean fundo, Time hora, Date data, Date dataFim
+        Evento e = new Evento();
         long r = eventoDB.insert(e);
         assertEquals(1,e);
     }

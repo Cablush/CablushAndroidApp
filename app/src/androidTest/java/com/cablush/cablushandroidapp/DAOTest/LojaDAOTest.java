@@ -4,8 +4,11 @@ import android.test.AndroidTestCase;
 import android.test.RenamingDelegatingContext;
 
 import com.cablush.cablushandroidapp.DAO.LojaDAO;
+import com.cablush.cablushandroidapp.model.Horarios;
 import com.cablush.cablushandroidapp.model.Local;
 import com.cablush.cablushandroidapp.model.Loja;
+
+import java.util.ArrayList;
 
 /**
  * Created by jonathan on 25/10/15.
@@ -30,8 +33,9 @@ public class LojaDAOTest extends AndroidTestCase {
     //@Test
     public void testAddEntry(){
         // Here i have my new database wich is not connected to the standard database of the App
-        Loja l = new Loja("nome", "descricao", "telefone", "email", "site", "facebook", "logo", new Local(), true);
+        Loja l = new Loja("nome",  "descricao", "site", "facebook", "logo", new Horarios(), false, "telefone", "email", new ArrayList<Local>() );
         long r = lojaDB.insert(l);
         assertEquals(1,l);
     }
+    //
 }

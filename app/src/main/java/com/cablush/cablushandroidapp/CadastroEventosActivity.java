@@ -37,6 +37,7 @@ public class CadastroEventosActivity extends CadastrosLocalizavel {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setTitle(getString(R.string.txt_cadastrar_params, getString(R.string.txt_evento)));
+        evento = new Evento();
     }
 
 
@@ -48,8 +49,12 @@ public class CadastroEventosActivity extends CadastrosLocalizavel {
     public void actionSalvar(View view){
         if(local != null && dataInicio!= null && horaInicio !=null) {
             getDefaultFields();
-
-            evento = new Evento(nome,descricao,site,facebook,"logo",null,false);
+            evento.setNome(nome);
+            evento.setDescricao(descricao);
+            evento.setSite(site);
+            evento.setFacebook(facebook);
+            evento.setLogo("logo");
+            evento.setFundo(false);
             evento.setLocal(local);
             evento.setData(dataInicio);
             evento.setDataFim(dataFim);

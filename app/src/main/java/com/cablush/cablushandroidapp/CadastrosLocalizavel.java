@@ -108,7 +108,6 @@ public abstract class CadastrosLocalizavel extends CablushActivity {
         Toast.makeText(CadastrosLocalizavel.this,msgError,Toast.LENGTH_SHORT).show();
     }
 
-
     public void showCadastroHorario(int layout){
         LayoutInflater inflater = (LayoutInflater)this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = inflater.inflate(layout, null);

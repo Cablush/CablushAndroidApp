@@ -7,6 +7,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.cablush.cablushandroidapp.R;
+import com.google.android.gms.maps.GoogleMap;
 
 /**
  * Created by jonathan on 04/11/15.

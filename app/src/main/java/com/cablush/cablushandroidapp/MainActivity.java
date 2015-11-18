@@ -1,29 +1,33 @@
 package com.cablush.cablushandroidapp;
 
-import android.app.Activity;
+import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 
+import android.content.pm.PackageManager;
 import android.content.res.TypedArray;
-import android.location.Criteria;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cablush.cablushandroidapp.Adapters.NavDrawerListAdapter;
 import com.cablush.cablushandroidapp.Helpers.CablushLocation;
+import com.cablush.cablushandroidapp.Helpers.CustomInfoWindow;
 import com.cablush.cablushandroidapp.Helpers.Locations;
 import com.cablush.cablushandroidapp.Helpers.SlideMenuClickListener;
+import com.cablush.cablushandroidapp.model.Local;
+import com.cablush.cablushandroidapp.model.Localizavel;
 import com.cablush.cablushandroidapp.model.NavDrawerItem;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -63,54 +67,6 @@ public class MainActivity extends CablushActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
-
-        mTitle = mDrawerTitle = getTitle();
-
-        navMenuTitles = getResources().getStringArray(R.array.tipo);
-        navMenuIcons = getResources().obtainTypedArray(R.array.icons);
-
-        mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
-        mDrawerList   = (ListView)findViewById(R.id.list_slidermenu);
-
-        navDrawerItens = new ArrayList<>();
-
-        navDrawerItens.add(new NavDrawerItem(navMenuTitles[0], navMenuIcons.getResourceId(0, -1)));
-        navDrawerItens.add(new NavDrawerItem(navMenuTitles[1], navMenuIcons.getResourceId(1, -1)));
-        navDrawerItens.add(new NavDrawerItem(navMenuTitles[2], navMenuIcons.getResourceId(2, -1)));
-        navDrawerItens.add(new NavDrawerItem(navMenuTitles[3], navMenuIcons.getResourceId(2, -1)));
-        navMenuIcons.recycle();
-
-        mDrawerList.setOnItemClickListener(new SlideMenuClickListener(MainActivity.this));
-        // setting the nav drawer list adapter
-        adapter = new NavDrawerListAdapter(getApplicationContext(),
-                navDrawerItens);
-        mDrawerList.setAdapter(adapter);
-        ImageView img = new ImageView(this);
-                img.setImageResource(R.drawable.logo_branca);
-        mDrawerList.addHeaderView(img);
-
-        getActionBar().setDisplayHomeAsUpEnabled(true);
-        getActionBar().setHomeButtonEnabled(true);
-
-        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
-                R.drawable.ic_drawer, //nav menu toggle icon
-                R.string.app_name, // nav drawer open - description for accessibility
-                R.string.app_name // nav drawer close - description for accessibility
-        ){
-            public void onDrawerClosed(View view) {
-                getActionBar().setTitle(mTitle);
-                invalidateOptionsMenu();
-            }
-
-            public void onDrawerOpened(View drawerView) {
-                getActionBar().setTitle(mDrawerTitle);
-                invalidateOptionsMenu();
-            }
-        };
-
-        mDrawerLayout.setDrawerListener(mDrawerToggle);
-
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         int checkGooglePlayServices = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
         if (checkGooglePlayServices != ConnectionResult.SUCCESS) {
@@ -126,6 +82,55 @@ public class MainActivity extends CablushActivity {
         }
         configGPS();
         createMapView();
+
+
+        mTitle = mDrawerTitle = getTitle();
+
+        navMenuTitles = getResources().getStringArray(R.array.tipo);
+        navMenuIcons = getResources().obtainTypedArray(R.array.icons);
+
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mDrawerList = (ListView) findViewById(R.id.list_slidermenu);
+
+        navDrawerItens = new ArrayList<>();
+
+        navDrawerItens.add(new NavDrawerItem(navMenuTitles[0], navMenuIcons.getResourceId(0, -1)));
+        navDrawerItens.add(new NavDrawerItem(navMenuTitles[1], navMenuIcons.getResourceId(1, -1)));
+        navDrawerItens.add(new NavDrawerItem(navMenuTitles[2], navMenuIcons.getResourceId(2, -1)));
+        navDrawerItens.add(new NavDrawerItem(navMenuTitles[3], navMenuIcons.getResourceId(2, -1)));
+        navMenuIcons.recycle();
+
+        mDrawerList.setOnItemClickListener(new SlideMenuClickListener(MainActivity.this));
+        // setting the nav drawer list adapter
+        adapter = new NavDrawerListAdapter(getApplicationContext(),
+                navDrawerItens);
+        mDrawerList.setAdapter(adapter);
+        ImageView img = new ImageView(this);
+        img.setImageResource(R.drawable.logo_branca);
+        mDrawerList.addHeaderView(img);
+
+        getActionBar().setDisplayHomeAsUpEnabled(true);
+        getActionBar().setHomeButtonEnabled(true);
+
+        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
+                R.drawable.ic_drawer, //nav menu toggle icon
+                R.string.app_name, // nav drawer open - description for accessibility
+                R.string.app_name // nav drawer close - description for accessibility
+        ) {
+            public void onDrawerClosed(View view) {
+                getActionBar().setTitle(mTitle);
+                invalidateOptionsMenu();
+            }
+
+            public void onDrawerOpened(View drawerView) {
+                getActionBar().setTitle(mDrawerTitle);
+                invalidateOptionsMenu();
+            }
+        };
+
+        mDrawerLayout.setDrawerListener(mDrawerToggle);
+
+
     }
 
 
@@ -141,17 +146,15 @@ public class MainActivity extends CablushActivity {
     }
 
     static LatLngBounds.Builder latBuilder;
-    public static void setMarker(String nome,String descricao, double lat, double lng) {
 
+    public void setMarker(Localizavel localizavel, Local local) {
 
         googleMap.addMarker(new MarkerOptions()
-                .position(new LatLng(lat, lng))
-                .title(nome)
-                .snippet(descricao)
+                .position(new LatLng(local.getLatitude(), local.getLongitude()))
                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.marker)));
-
+        googleMap.setInfoWindowAdapter(new CustomInfoWindow(localizavel, MainActivity.this));
         latBuilder = new LatLngBounds.Builder();
-        latBuilder.include(new LatLng(lat,lng));
+        latBuilder.include(new LatLng(local.getLatitude(), local.getLongitude()));
         int padding = 5; // offset from edges of the map in pixels
         CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(latBuilder.build(), padding);
         googleMap.animateCamera(cu);
@@ -173,13 +176,14 @@ public class MainActivity extends CablushActivity {
             Log.e("ERROR!! -- ", e.toString());
         }
         googleMap.setMyLocationEnabled(true);
+
     }
 
     private void configGPS() {
         String provider = Locations.getProvider(MainActivity.this);
         locationManager.requestLocationUpdates(provider, 60000, // 1min
-                    1000, // 1km
-                    mLocationListener);
+                1000, // 1km
+                mLocationListener);
 
     }
 

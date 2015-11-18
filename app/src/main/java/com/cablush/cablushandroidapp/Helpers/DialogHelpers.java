@@ -25,6 +25,7 @@ import com.cablush.cablushandroidapp.model.Local;
 import com.cablush.cablushandroidapp.services.SyncEventos;
 import com.cablush.cablushandroidapp.services.SyncLojas;
 import com.cablush.cablushandroidapp.services.SyncPistas;
+import com.google.android.gms.maps.GoogleMap;
 
 /**
  * Created by jonathan on 04/11/15.

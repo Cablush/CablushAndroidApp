@@ -1,11 +1,19 @@
 package com.cablush.cablushandroidapp.services;
 
+import android.content.Context;
 import android.util.Log;
 
+import com.cablush.cablushandroidapp.Helpers.CustomInfoWindow;
 import com.cablush.cablushandroidapp.MainActivity;
+import com.cablush.cablushandroidapp.R;
 import com.cablush.cablushandroidapp.model.Local;
+import com.cablush.cablushandroidapp.model.Localizavel;
 import com.cablush.cablushandroidapp.model.Loja;
 import com.cablush.cablushandroidapp.model.Pista;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.List;
 
@@ -19,8 +27,6 @@ import retrofit.client.Response;
  */
 public class SyncLojas {
     private static ApiLojas apiLojas;
-
-
     public SyncLojas() {
         RestAdapter restAdapter = new RestAdapter.Builder()
                 .setEndpoint(SyncLocalizavel.ROOT).build();
@@ -34,7 +40,7 @@ public class SyncLojas {
             public void success(List<Loja> lojas, Response response) {
                 for(Loja loja: lojas) {
                     for(Local local : loja.getLocais()) {
-                        MainActivity.setMarker(loja.getNome(), loja.getDescricao(), local.getLatitude(), local.getLongitude());
+                        //MainActivity.setMarker(loja, local);
                     }
                 }
             }
