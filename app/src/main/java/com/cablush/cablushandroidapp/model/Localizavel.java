@@ -1,6 +1,7 @@
 package com.cablush.cablushandroidapp.model;
 
 import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 
 /**
  * Created by jonathan on 09/11/15.
@@ -18,6 +19,7 @@ public class Localizavel {
     @Expose
     private String facebook;
     @Expose
+    @SerializedName("logo_file_name")
     private String logo;
 
     @Expose

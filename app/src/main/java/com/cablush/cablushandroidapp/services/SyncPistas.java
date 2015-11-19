@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.cablush.cablushandroidapp.DAO.PistaDAO;
 import com.cablush.cablushandroidapp.Helpers.CustomInfoWindow;
 import com.cablush.cablushandroidapp.MainActivity;
 import com.cablush.cablushandroidapp.R;
@@ -26,12 +27,14 @@ import retrofit.client.Response;
  * Created by jonathan on 26/10/15.
  */
 public class SyncPistas {
-    private static ApiPistas apiPistas;
-    public SyncPistas(GoogleMap googleMap, Context context) {
+    private ApiPistas apiPistas;
+    private Context context;
+    public SyncPistas(Context context) {
         RestAdapter restAdapter = new RestAdapter.Builder()
                 .setEndpoint(SyncLocalizavel.ROOT).build();
 
         apiPistas = restAdapter.create(ApiPistas.class);
+        this.context= context;
     }
 
     public SyncPistas() {
@@ -42,12 +45,15 @@ public class SyncPistas {
 
     }
 
+
     public void getPistas(String name,String estado, String esporte) {
         apiPistas.getPistas(name,estado,esporte, new Callback<List<Pista>>() {
             @Override
             public void success(List<Pista> pistas, Response response) {
+                PistaDAO pistaDAO = new PistaDAO(context);
                 for(Pista pista: pistas) {
-
+                    //MainActivity.setMarker(pista,pista.getLocal(),context);
+                    pistaDAO.insert(pista);
                 }
             }
 

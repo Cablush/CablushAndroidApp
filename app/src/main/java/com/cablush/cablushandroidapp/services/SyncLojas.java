@@ -3,6 +3,7 @@ package com.cablush.cablushandroidapp.services;
 import android.content.Context;
 import android.util.Log;
 
+import com.cablush.cablushandroidapp.DAO.LojaDAO;
 import com.cablush.cablushandroidapp.Helpers.CustomInfoWindow;
 import com.cablush.cablushandroidapp.MainActivity;
 import com.cablush.cablushandroidapp.R;
@@ -26,12 +27,14 @@ import retrofit.client.Response;
  * Created by jonathan on 26/10/15.
  */
 public class SyncLojas {
-    private static ApiLojas apiLojas;
-    public SyncLojas() {
+    private ApiLojas apiLojas;
+    private Context context;
+    public SyncLojas(Context context) {
         RestAdapter restAdapter = new RestAdapter.Builder()
                 .setEndpoint(SyncLocalizavel.ROOT).build();
 
         apiLojas = restAdapter.create(ApiLojas.class);
+        this.context = context;
     }
 
     public void getLojas(String name,String estado, String esporte){
@@ -39,8 +42,10 @@ public class SyncLojas {
             @Override
             public void success(List<Loja> lojas, Response response) {
                 for(Loja loja: lojas) {
+                    LojaDAO lojaDAO = new LojaDAO(context);
                     for(Local local : loja.getLocais()) {
-                        //MainActivity.setMarker(loja, local);
+                        MainActivity.setMarker(loja, local,context);
+                        lojaDAO.insert(loja);
                     }
                 }
             }

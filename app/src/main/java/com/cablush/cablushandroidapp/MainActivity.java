@@ -147,12 +147,12 @@ public class MainActivity extends CablushActivity {
 
     static LatLngBounds.Builder latBuilder;
 
-    public void setMarker(Localizavel localizavel, Local local) {
+    public static void setMarker(Localizavel localizavel, Local local, Context context) {
 
         googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(local.getLatitude(), local.getLongitude()))
                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.marker)));
-        googleMap.setInfoWindowAdapter(new CustomInfoWindow(localizavel, MainActivity.this));
+        googleMap.setInfoWindowAdapter(new CustomInfoWindow(localizavel, context));
         latBuilder = new LatLngBounds.Builder();
         latBuilder.include(new LatLng(local.getLatitude(), local.getLongitude()));
         int padding = 5; // offset from edges of the map in pixels

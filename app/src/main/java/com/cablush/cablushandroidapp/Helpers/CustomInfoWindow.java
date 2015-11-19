@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.cablush.cablushandroidapp.R;
 import com.cablush.cablushandroidapp.model.Localizavel;
+import com.cablush.cablushandroidapp.model.Loja;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.Marker;
 
@@ -48,10 +49,16 @@ public class CustomInfoWindow implements GoogleMap.InfoWindowAdapter {
         ImageView imageView = (ImageView)view.findViewById(R.id.imageView2);
         txtTitle.setText(localizavel.getNome());
         txtDescricao.setText(localizavel.getDescricao());
-        txtCEP.setText(localizavel.getLocal().getCep());
-        txtCidade.setText(localizavel.getLocal().getBairro()+"/"+localizavel.getLocal().getEstado());
-        txtLogradouro.setText(localizavel.getLocal().getLogradouro());
-
+        if(localizavel.getLocal() == null) {
+            Loja loja = (Loja)localizavel;
+            txtCEP.setText(loja.getLocais().get(0).getCep());
+            txtCidade.setText(loja.getLocais().get(0).getBairro() + "/" + loja.getLocais().get(0).getEstado());
+            txtLogradouro.setText(loja.getLocais().get(0).getLogradouro());
+        }else{
+            txtCEP.setText(localizavel.getLocal().getCep());
+            txtCidade.setText(localizavel.getLocal().getBairro() + "/" + localizavel.getLocal().getEstado());
+            txtLogradouro.setText(localizavel.getLocal().getLogradouro());
+        }
 
         URL url = null;
         Bitmap bmp = null;

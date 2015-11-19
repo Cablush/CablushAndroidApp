@@ -4,6 +4,7 @@ package com.cablush.cablushandroidapp.services;
 import android.content.Context;
 import android.util.Log;
 
+import com.cablush.cablushandroidapp.DAO.EventoDAO;
 import com.cablush.cablushandroidapp.Helpers.CustomInfoWindow;
 import com.cablush.cablushandroidapp.MainActivity;
 import com.cablush.cablushandroidapp.R;
@@ -25,14 +26,26 @@ import retrofit.client.Response;
  * Created by jonathan on 26/10/15.
  */
 public class SyncEventos {
-    private static ApiEventos apiEventos;
+    private ApiEventos apiEventos;
+    Context context;
+    public SyncEventos(Context context) {
+        RestAdapter restAdapter = new RestAdapter.Builder()
+                .setEndpoint(SyncLocalizavel.ROOT).build();
+
+        apiEventos = restAdapter.create(ApiEventos.class);
+        this.context = context;
+    }
+
+
 
     public void getEventos(String name,String estado, String esporte) {
         apiEventos.getEventos(name, estado, esporte, new Callback<List<Evento>>() {
             @Override
             public void success(List<Evento> eventos, Response response) {
-                for(Evento evento: eventos) {
+                EventoDAO eventoDAO = new EventoDAO(context);
 
+                for(Evento evento: eventos) {
+                    eventoDAO.insert(evento);
                 }
             }
 

@@ -182,15 +182,15 @@ public class DialogHelpers {
 
                 switch (op) {
                     case PISTA:
-                        SyncPistas syncPistas = new SyncPistas();
+                        SyncPistas syncPistas = new SyncPistas(context);
                         syncPistas.getPistas(nome, estado, esporte);
                         break;
                     case EVENTO:
-                        SyncEventos syncEventos = new SyncEventos();
+                        SyncEventos syncEventos = new SyncEventos(context);
                         syncEventos.getEventos(nome, estado, esporte);
                         break;
                     case LOJA:
-                        SyncLojas syncLojas = new SyncLojas();
+                        SyncLojas syncLojas = new SyncLojas(context);
                         syncLojas.getLojas(nome, estado, esporte);
                         break;
                     default:
