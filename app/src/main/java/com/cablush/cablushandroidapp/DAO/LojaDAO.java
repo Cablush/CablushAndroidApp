@@ -27,6 +27,9 @@ public class LojaDAO {
         if(r == -1 ){
             Log.e("LocalDAO ERROR", "Loja não inserida");
         }
+        sql.close();
+        sql =null;
+        close();
         return r;
     }
 

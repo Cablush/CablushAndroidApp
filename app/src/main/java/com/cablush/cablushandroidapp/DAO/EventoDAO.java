@@ -30,6 +30,10 @@ public class EventoDAO {
         if(r ==-1 ){
             Log.e("LocalDAO ERROR", "Evento não inserido");
         }
+        sql.close();
+        sql =null;
+        close();
+
         return r;
     }
 
@@ -46,6 +50,7 @@ public class EventoDAO {
         ctv.put("hora"     , sdfTime.format(evento.getHora()));
         ctv.put("data"     , sdfDate.format(evento.getData()));
         ctv.put("dataFim"  , sdfDate.format(evento.getDataFim()));
+
         return ctv;
     }
 

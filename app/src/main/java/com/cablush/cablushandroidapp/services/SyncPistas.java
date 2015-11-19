@@ -52,12 +52,12 @@ public class SyncPistas {
             public void success(List<Pista> pistas, Response response) {
                 PistaDAO pistaDAO = new PistaDAO(context);
                 for(Pista pista: pistas) {
-                    //MainActivity.setMarker(pista,pista.getLocal(),context);
+                    MainActivity.setMarker(pista,pista.getLocal(),context);
                     pistaDAO.insert(pista);
                 }
             }
 
-            @Override
+            @Override//
             public void failure(RetrofitError error) {
                 Log.e("Pista", "Falha ao carregar as pistas");
             }

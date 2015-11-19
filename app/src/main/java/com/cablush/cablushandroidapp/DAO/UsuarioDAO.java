@@ -28,6 +28,9 @@ public class UsuarioDAO {
         if(r == -1 ){
             Log.e("LocalDAO ERROR", "Pista não inserida");
         }
+        sql.close();
+        sql =null;
+        close();
         return r;
     }
 

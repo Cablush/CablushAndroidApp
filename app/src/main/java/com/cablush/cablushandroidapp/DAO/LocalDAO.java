@@ -26,6 +26,9 @@ public class LocalDAO {
         if(r == -1 ){
             Log.e("LocalDAO ERROR", "Local não inserido");
         }
+        sql.close();
+        sql =null;
+        close();
         return r;
     }
 

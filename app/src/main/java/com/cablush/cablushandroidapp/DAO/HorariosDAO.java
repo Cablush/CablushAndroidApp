@@ -28,6 +28,9 @@ public class HorariosDAO {
         if(r == -1 ){
             Log.e("LocalDAO ERROR", "Horarios não inseridos");
         }
+        sql.close();
+        sql =null;
+        close();
         return r;
     }
 
