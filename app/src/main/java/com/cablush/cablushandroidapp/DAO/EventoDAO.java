@@ -2,12 +2,15 @@ package com.cablush.cablushandroidapp.DAO;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import com.cablush.cablushandroidapp.model.Evento;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by jonathan on 24/10/15.
@@ -53,9 +56,30 @@ public class EventoDAO {
 
         return ctv;
     }
+    public List<Evento> getEventos(){
+        SQLiteDatabase sql = db.getWritableDatabase();
+        List<Evento> eventos = new ArrayList<>();
+        Cursor cursor =sql.rawQuery("Select * from loja", null);
+        while(cursor.isLast()) {
+            //String nome, String descricao, String site, String facebook, String logo, Horarios horario, boolean fundo
+            Evento evento = new Evento();
+            evento.setNome(cursor.getString(cursor.getColumnIndex("nome")));
+            evento.setDescricao(cursor.getString(cursor.getColumnIndex("descricao")));
+            evento.setLogo(cursor.getString(cursor.getColumnIndex("logo")));
+            evento.setFacebook(cursor.getString(cursor.getColumnIndex("facebook")));
+            evento.setSite(cursor.getString(cursor.getColumnIndex("site")));
+            evento.setUuid(cursor.getString(cursor.getColumnIndex("uuid")));
+            eventos.add(evento);
+        }
+        return eventos;
+    }
 
     public void close(){
         db.close();
+    }
+    public void truncateTable(){
+        SQLiteDatabase sql = db.getWritableDatabase();
+        sql.execSQL("Delete from loja");
     }
 
 }

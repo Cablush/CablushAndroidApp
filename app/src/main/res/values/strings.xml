@@ -144,6 +144,7 @@
     <string name="msg_local_missing">Favor preencher o local!</string>
     <string name="msg_dataInicio_missing">Favor preencher a data de inicio!</string>
     <string name="msg_horaInicio_missing">Favor preencher a hora de inicio!</string>
+    <string name="msg_login_ou_senha_missing">Favor preencher o email e senha!</string>
 
 </resources>
 

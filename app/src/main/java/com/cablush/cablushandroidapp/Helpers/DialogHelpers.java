@@ -23,6 +23,7 @@ import com.cablush.cablushandroidapp.DAO.LocalDAO;
 import com.cablush.cablushandroidapp.R;
 import com.cablush.cablushandroidapp.model.Local;
 import com.cablush.cablushandroidapp.services.SyncEventos;
+import com.cablush.cablushandroidapp.services.SyncLogin;
 import com.cablush.cablushandroidapp.services.SyncLojas;
 import com.cablush.cablushandroidapp.services.SyncPistas;
 import com.google.android.gms.maps.GoogleMap;
@@ -119,7 +120,7 @@ public class DialogHelpers {
         return builder;
     }
 
-    private AlertDialog.Builder getAlertBuilderLogin(Context context, View view) {
+    private AlertDialog.Builder getAlertBuilderLogin(final Context context, View view) {
 
         final EditText edtUsuario  = (EditText)view.findViewById(R.id.edtUsuario);
         final EditText edtSenha    = (EditText)view.findViewById(R.id.edtSenha);
@@ -138,7 +139,16 @@ public class DialogHelpers {
         btnLogar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                alerta.dismiss();
+                String user = edtUsuario.getText().toString();
+                String pass = edtSenha.getText().toString();
+                if(!user.isEmpty() && !pass.isEmpty()) {
+                    SyncLogin syncLogin = new SyncLogin(context);
+                    syncLogin.doLogin(user,pass);
+                    alerta.dismiss();
+                }else{
+                    Toast.makeText(context,R.string.msg_login_ou_senha_missing,Toast.LENGTH_SHORT).show();
+                }
+
             }
         });
         AlertDialog.Builder builder = new AlertDialog.Builder(context);

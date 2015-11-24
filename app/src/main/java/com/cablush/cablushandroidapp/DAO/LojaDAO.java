@@ -2,10 +2,14 @@ package com.cablush.cablushandroidapp.DAO;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import com.cablush.cablushandroidapp.model.Loja;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by jonathan on 24/10/15.
@@ -33,14 +37,30 @@ public class LojaDAO {
         return r;
     }
 
-    public Loja getLojas(){
+    public List<Loja> getLojas(){
         SQLiteDatabase sql = db.getWritableDatabase();
-
-        return new Loja();
+        List<Loja> lojas = new ArrayList<>();
+        Cursor cursor =sql.rawQuery("Select * from loja", null);
+        while(cursor.isLast()) {
+            //String nome, String descricao, String site, String facebook, String logo, Horarios horario, boolean fundo
+            Loja loja = new Loja();
+            loja.setNome(cursor.getString(cursor.getColumnIndex("nome")));
+            loja.setDescricao(cursor.getString(cursor.getColumnIndex("descricao")));
+            loja.setLogo(cursor.getString(cursor.getColumnIndex("logo")));
+            loja.setFacebook(cursor.getString(cursor.getColumnIndex("facebook")));
+            loja.setSite(cursor.getString(cursor.getColumnIndex("site")));
+            loja.setUuid(cursor.getString(cursor.getColumnIndex("uuid")));
+            lojas.add(loja);
+        }
+        return lojas;
     }
 
     public void close(){
         db.close();
+    }
+    public void truncateTable(){
+        SQLiteDatabase sql = db.getWritableDatabase();
+        sql.execSQL("Delete from loja");
     }
 
     private ContentValues getContentValues(Loja loja){

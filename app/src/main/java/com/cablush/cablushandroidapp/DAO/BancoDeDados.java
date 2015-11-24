@@ -26,6 +26,7 @@ public class BancoDeDados extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(LojaDAO.SQL_CREATE);
         sqLiteDatabase.execSQL(EventoDAO.SQL_CREATE);
         sqLiteDatabase.execSQL(HorariosDAO.SQL_CREATE);
+        sqLiteDatabase.execSQL(UsuarioDAO.SQL_CREATE);
     }   
 
     @Override

@@ -13,7 +13,7 @@ import retrofit.client.Response;
 public class SyncLocalizavel {
     private static ApiLocalizavel apiLocalizavel;
     public static final String ROOT ="http://www.cablush.com/api";
-    //public static final String ROOT= "http://10.0.2.2:3000/api";
+    //public static final String ROOT= "http://192.168.0.72:3000/api";
 
     public SyncLocalizavel() {
         RestAdapter restAdapter = new RestAdapter.Builder()
