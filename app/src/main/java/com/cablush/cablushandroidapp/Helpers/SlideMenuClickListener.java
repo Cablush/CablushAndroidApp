@@ -1,5 +1,6 @@
 package com.cablush.cablushandroidapp.Helpers;
 
+import android.app.Dialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.view.View;
@@ -7,6 +8,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.cablush.cablushandroidapp.R;
+import com.cablush.cablushandroidapp.model.Usuario;
 import com.google.android.gms.maps.GoogleMap;
 
 /**
@@ -37,7 +39,11 @@ public class SlideMenuClickListener implements ListView.OnItemClickListener {
             case DialogHelpers.LOJA:
             case DialogHelpers.PISTA:
             case DialogHelpers.EVENTO:
-                DialogHelpers.getInstance().showOptionsDialog(context,position);
+                if(Usuario.LOGGED_USER != null) {
+                    DialogHelpers.getInstance().showOptionsDialog(context, position);
+                }else{
+                    DialogHelpers.getInstance().showBuscarDialog(context,position);
+                }
                 break;
             default:
                 break;

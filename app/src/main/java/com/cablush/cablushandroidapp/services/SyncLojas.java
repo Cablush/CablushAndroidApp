@@ -11,6 +11,7 @@ import com.cablush.cablushandroidapp.model.Local;
 import com.cablush.cablushandroidapp.model.Localizavel;
 import com.cablush.cablushandroidapp.model.Loja;
 import com.cablush.cablushandroidapp.model.Pista;
+import com.cablush.cablushandroidapp.model.Usuario;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
@@ -19,6 +20,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.util.List;
 
 import retrofit.Callback;
+import retrofit.RequestInterceptor;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -30,8 +32,29 @@ public class SyncLojas {
     private ApiLojas apiLojas;
     private Context context;
     public SyncLojas(Context context) {
-        RestAdapter restAdapter = new RestAdapter.Builder()
-                .setEndpoint(SyncLocalizavel.ROOT).build();
+        RequestInterceptor requestInterceptor = null;
+        RestAdapter restAdapter;
+        if(Usuario.LOGGED_USER != null){
+            requestInterceptor = new RequestInterceptor() {
+                @Override
+                public void intercept(RequestFacade request) {
+                    request.addHeader(SyncLogin.ACCESS_TOKEN, Usuario.LOGGED_USER.getAccess_token());
+                    request.addHeader(SyncLogin.CLIENT      , Usuario.LOGGED_USER.getClient());
+                    request.addHeader(SyncLogin.EXPIRY      , ""+Usuario.LOGGED_USER.getExpiry());
+                    request.addHeader(SyncLogin.TOKEN_TYPE  , Usuario.LOGGED_USER.getToken_type());
+                    request.addHeader(SyncLogin.UID         , Usuario.LOGGED_USER.getUid());
+                }
+            };
+        }
+        if(requestInterceptor == null) {
+            restAdapter = new RestAdapter.Builder()
+                    .setEndpoint(SyncLocalizavel.ROOT).build();
+        }else{
+            restAdapter = new RestAdapter.Builder()
+                    .setEndpoint(SyncLocalizavel.ROOT)
+                    .setRequestInterceptor(requestInterceptor)
+                    .build();
+        }
 
         apiLojas = restAdapter.create(ApiLojas.class);
         this.context = context;

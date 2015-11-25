@@ -15,4 +15,5 @@ public interface ApiEsportes {
     @GET("/esportes")
     void getEsportes(Callback<List<String>> esportesCallback);
 
+
 }

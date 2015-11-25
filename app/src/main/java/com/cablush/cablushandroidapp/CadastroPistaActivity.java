@@ -29,7 +29,7 @@ public class CadastroPistaActivity extends CadastrosLocalizavel {
 
             PistaDAO pistaDAO = new PistaDAO(CadastroPistaActivity.this);
             pistaDAO.insert(p);
-            SyncPistas syncPistas = new SyncPistas();
+            SyncPistas syncPistas = new SyncPistas(CadastroPistaActivity.this);
             syncPistas.postPistas(p);
         }
     }

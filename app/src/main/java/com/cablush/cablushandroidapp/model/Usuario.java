@@ -29,6 +29,8 @@ public class Usuario {
     @Expose
     private double expiry;
 
+    public static Usuario LOGGED_USER;
+
     public Usuario() {
     }
 

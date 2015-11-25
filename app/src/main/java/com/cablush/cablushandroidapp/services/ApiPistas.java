@@ -19,7 +19,7 @@ public interface ApiPistas {
     void getPistas(@Query("name") String name,@Query("estado") String estado,@Query("esporte") String esporte, Callback<List<Pista>> pista);
 
     @POST("/pistas")
-    void postPistas(@Field("uuid")String userId, @Body Pista pista, Callback<Pista> savedPista);
+    void postPistas(@Body Pista pista, Callback<Pista> savedPista);
 
 
 

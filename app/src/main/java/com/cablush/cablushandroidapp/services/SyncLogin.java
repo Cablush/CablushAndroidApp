@@ -2,9 +2,11 @@ package com.cablush.cablushandroidapp.services;
 
 import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.cablush.cablushandroidapp.DAO.UsuarioDAO;
 import com.cablush.cablushandroidapp.MainActivity;
+import com.cablush.cablushandroidapp.R;
 import com.cablush.cablushandroidapp.model.Evento;
 import com.cablush.cablushandroidapp.model.Usuario;
 
@@ -21,11 +23,11 @@ import retrofit.client.Response;
  */
 public class SyncLogin {
     private static ApiLogin apiLogin;
-    private static final String ACCESS_TOKEN = "Access-Token";
-    private static final String TOKEN_TYPE = "Token-Type";
-    private static final String CLIENT = "Client";
-    private static final String EXPIRY = "expiry";
-    private static final String UID = "uid";
+    public static final String ACCESS_TOKEN = "Access-Token";
+    public static final String TOKEN_TYPE = "Token-Type";
+    public static final String CLIENT = "Client";
+    public static final String EXPIRY = "expiry";
+    public static final String UID = "uid";
     private Context context;
     public SyncLogin(Context context) {
         RestAdapter restAdapter = new RestAdapter.Builder()
@@ -61,12 +63,13 @@ public class SyncLogin {
                 }
                 UsuarioDAO usuarioDAO = new UsuarioDAO(context);
                 usuarioDAO.insert(usuario);
+                Usuario.LOGGED_USER = usuario;
 
             }
 
             @Override
             public void failure(RetrofitError error) {
-
+                Toast.makeText(context, R.string.msg_nao_login,Toast.LENGTH_SHORT).show();
                 Log.e("Usuario", "Falha ao fazer login");
             }
         });
