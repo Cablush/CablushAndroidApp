@@ -75,4 +75,25 @@ public class SyncLogin {
         });
 
     }
+
+    public void verificaLogin(){
+        UsuarioDAO usuarioDAO = new UsuarioDAO(context);
+        Usuario usuario = usuarioDAO.getUsuario();
+        if(usuario != null){
+            apiLogin.doValidateToken(usuario.getUid(),usuario.getAccess_token(),usuario.getClient(),new Callback<Usuario>(){
+                @Override
+                public void success(Usuario usuario, Response response) {
+                    Usuario.LOGGED_USER = usuario;
+                }
+
+                @Override
+                public void failure(RetrofitError error) {
+                    Log.i("LOGIN","LOGIN NÃO EFETUADO!");
+                }
+            });
+        }
+    }
+
+
+
 }

@@ -6,6 +6,8 @@ import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.Handler;
 
+import com.cablush.cablushandroidapp.services.SyncLogin;
+
 /**
  * Created by jonathan on 22/10/15.
  */
@@ -20,6 +22,9 @@ public class SplashScreen extends CablushActivity implements  Runnable{
         Handler handle = new Handler();
         handle.postDelayed(this, DELAY);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+        SyncLogin syncLogin = new SyncLogin(SplashScreen.this);
+        syncLogin.verificaLogin();
     }
 
 

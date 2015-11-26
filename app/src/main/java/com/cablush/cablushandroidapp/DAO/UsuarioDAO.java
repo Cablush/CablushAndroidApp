@@ -38,9 +38,10 @@ public class UsuarioDAO {
     }
 
     public Usuario getUsuario(){
+        Usuario usuario = null;
         SQLiteDatabase sql = db.getWritableDatabase();
 
-        return new Usuario();
+        return usuario;
     }
 
     private ContentValues getContentValues(Usuario usuario){
