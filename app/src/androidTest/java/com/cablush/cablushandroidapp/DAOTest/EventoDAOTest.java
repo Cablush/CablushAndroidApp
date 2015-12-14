@@ -3,14 +3,9 @@ package com.cablush.cablushandroidapp.DAOTest;
 import android.test.AndroidTestCase;
 import android.test.RenamingDelegatingContext;
 
-import com.cablush.cablushandroidapp.DAO.EventoDAO;
-import com.cablush.cablushandroidapp.DAO.LojaDAO;
-import com.cablush.cablushandroidapp.model.Evento;
-import com.cablush.cablushandroidapp.model.Local;
-import com.cablush.cablushandroidapp.model.Loja;
+import com.cablush.cablushandroidapp.model.persistence.EventoDAO;
+import com.cablush.cablushandroidapp.model.domain.Evento;
 
-import java.sql.Date;
-import java.sql.Time;
 import java.util.Calendar;
 
 /**
@@ -28,7 +23,7 @@ public class EventoDAOTest extends AndroidTestCase {
 
     @Override
     public void tearDown() throws Exception {
-        eventoDB.close();
+//        eventoDB.close();
         super.tearDown();
     }
 
@@ -36,9 +31,9 @@ public class EventoDAOTest extends AndroidTestCase {
     //@Test
     public void testAddEntry(){
         long l = Calendar.getInstance().getTimeInMillis();
-        ////String nome, String descricao, String site, String facebook, String logo, Horarios horario, boolean fundo, Time hora, Date data, Date dataFim
+        ////String nome, String descricao, String website, String facebook, String logo, Horario horario, boolean fundo, Time hora, Date data, Date dataFim
         Evento e = new Evento();
-        long r = eventoDB.insert(e);
+//        long r = eventoDB.insert(e);
         assertEquals(1,e);
     }
 }

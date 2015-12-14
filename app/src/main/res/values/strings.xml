@@ -27,8 +27,10 @@
     <string name="txt_nome">Nome</string>
     <string name="buscar">Buscar %s</string>
     <string name="tipo">Buscar por:</string>
+    <string name="txt_buscar">Buscar</string>
 
     <!--Cadastro localizavel -->
+    <string name="cadatrar">Cadastrar %s</string>
     <string name="txt_site">Site</string>
     <string name="txt_telefone">Telefone</string>
     <string name="txt_email">Email</string>
@@ -58,13 +60,20 @@
     <string name="txt_loja">Loja</string>
     <string name="txt_evento">Evento</string>
     <string name="txt_pista">Pista</string>
+
     <string-array name="options">
         <item>Buscar</item>
         <item>Cadastrar</item>
     </string-array>
 
-    <string-array name="tipo">
+    <string-array name="drawer_options">
         <item>Login</item>
+        <item>Loja</item>
+        <item>Evento</item>
+        <item>Pista</item>
+    </string-array>
+
+    <string-array name="search_types">
         <item>Loja</item>
         <item>Evento</item>
         <item>Pista</item>
@@ -79,12 +88,13 @@
 
     <string-array name="esportes">
         <item>Selecione...</item>
-        <item>Skate - Longboard</item>
-        <item>Skate - Street</item>
-        <item>Bike - BMX</item>
-        <item>Bike - MTB</item>
-        <item>Bike - Speed</item>
-        <item>Bike - Trike Bike</item>
+        <item>Atletismo</item>
+        <item>Automobilismo</item>
+        <item>Bike</item>
+        <item>Moto</item>
+        <item>Patins</item>
+        <item>Skate</item>
+        <item>Outros</item>
     </string-array>
 
     <string-array name="estados">
@@ -117,28 +127,37 @@
         <item>Tocantins</item>
     </string-array>
 
-    <string-array name="dias">
-        <item>Selecione...</item>
-        <item>Domingo</item>
-        <item>Segunda</item>
-        <item>Terça</item>
-        <item>Quarta</item>
-        <item>Quinta</item>
-        <item>Sexta</item>
-        <item>Sabado</item>
-        <item>Seg-Sex</item>
-        <item>Sab-Dom</item>
-        <item>Seg-Dom</item>
+    <string-array name="estados_values">
+        <item></item>
+        <item>AC</item>
+        <item>AL</item>
+        <item>AP</item>
+        <item>AM</item>
+        <item>BA</item>
+        <item>CE</item>
+        <item>DF</item>
+        <item>ES</item>
+        <item>GO</item>
+        <item>MA</item>
+        <item>MT</item>
+        <item>MS</item>
+        <item>MG</item>
+        <item>PA</item>
+        <item>PB</item>
+        <item>PN</item>
+        <item>PE</item>
+        <item>PI</item>
+        <item>RJ</item>
+        <item>RN</item>
+        <item>RS</item>
+        <item>RO</item>
+        <item>RR</item>
+        <item>SC</item>
+        <item>SP</item>
+        <item>TO</item>
     </string-array>
 
-    <string-array name="periodo">
-        <item>Selecione...</item>
-        <item>Todo</item>
-        <item>Manha</item>
-        <item>Tarde</item>
-        <item>Noite</item>
-    </string-array>
-    <!-- Mensagens de Error -->
+    <!-- Mensagens de erro -->
     <string name="msg_nome_missing">Favor preencher o nome!</string>
     <string name="msg_descrição_missing">Favor preencher a descrição!</string>
     <string name="msg_local_missing">Favor preencher o local!</string>

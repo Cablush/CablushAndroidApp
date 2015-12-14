@@ -20,8 +20,7 @@
         android:id="@+id/edtDataInicio"
         android:textColor="@android:color/black"
         android:layout_below="@+id/textView26"
-        android:layout_alignRight="@+id/btnCancelar"
-        android:layout_alignEnd="@+id/btnCancelar" />
+        />
 
     <TextView
         android:layout_width="wrap_content"
@@ -42,8 +41,7 @@
         android:layout_below="@+id/textView27"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_alignRight="@+id/btnCancelar"
-        android:layout_alignEnd="@+id/btnCancelar" />
+        />
 
     <TextView
         android:layout_width="wrap_content"
@@ -66,26 +64,5 @@
         android:layout_below="@+id/textView28"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/txt_cancelar"
-        android:id="@+id/btnCancelar"
-        style="@style/TextAppearance.FontPath"
-        android:layout_gravity="right"
-        android:layout_alignTop="@+id/btnCadastrar"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/txt_cadastrar"
-        android:id="@+id/btnCadastrar"
-        style="@style/TextAppearance.FontPath"
-        android:layout_below="@+id/edtHoraInicio"
-        android:layout_toLeftOf="@+id/btnCancelar"
-        android:layout_toStartOf="@+id/btnCancelar" />
 
 </RelativeLayout>

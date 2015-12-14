@@ -3,8 +3,8 @@ package com.cablush.cablushandroidapp.DAOTest;
 import android.test.AndroidTestCase;
 import android.test.RenamingDelegatingContext;
 
-import com.cablush.cablushandroidapp.DAO.UsuarioDAO;
-import com.cablush.cablushandroidapp.model.Usuario;
+import com.cablush.cablushandroidapp.model.persistence.UsuarioDAO;
+import com.cablush.cablushandroidapp.model.domain.Usuario;
 
 /**
  * Created by jonathan on 24/11/15.
@@ -21,12 +21,13 @@ public class UsuarioDAOTest extends AndroidTestCase {
 
     @Override
     public void tearDown() throws Exception {
-        usuarioDAO.close();
+//        usuarioDAO.close();
         super.tearDown();
     }
 
     private Usuario generateUsuario(){
-        return new Usuario("idSocial", "nome", "email",1, "uuid", "uid", "access_token", "token_type","client", 1.0);
+//        return new Usuario("idSocial", "nome", "email",1, "uuid", "uid", "access_token", "token_type","client", 1.0);
+        return null;
     }
 
     //@Test

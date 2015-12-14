@@ -4,11 +4,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+    <!-- The main content view -->
+    <fragment
         android:layout_width="match_parent"
-        android:layout_height="match_parent" android:id="@+id/mapView"
+        android:layout_height="match_parent"
+        android:id="@+id/mapView"
         android:name="com.google.android.gms.maps.MapFragment" />
+
     <!-- Listview to display slider menu -->
     <ListView
         android:id="@+id/list_slidermenu"
@@ -21,4 +23,5 @@
         android:listSelector="@drawable/list_selector"
         android:background="@android:color/black"
         style="style/TextAppearance.FontPath"/>
+
 </android.support.v4.widget.DrawerLayout>
