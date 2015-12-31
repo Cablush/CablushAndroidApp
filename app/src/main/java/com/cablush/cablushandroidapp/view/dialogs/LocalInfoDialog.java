@@ -19,9 +19,9 @@ import java.lang.ref.WeakReference;
 /**
  * Created by oscar on 29/12/15.
  */
-public class LocalDialog <L extends Localizavel> extends DialogFragment {
+public class LocalInfoDialog<L extends Localizavel> extends DialogFragment {
 
-    private static final String TAG = LocalDialog.class.getSimpleName();
+    private static final String TAG = LocalInfoDialog.class.getSimpleName();
 
     private WeakReference<L> localizavel;
 
@@ -30,8 +30,8 @@ public class LocalDialog <L extends Localizavel> extends DialogFragment {
      *
      * @param fragmentManager
      */
-    public static <L extends Localizavel> void showLocalDialog(FragmentManager fragmentManager, L localizavel) {
-        LocalDialog dialog = new LocalDialog();
+    public static <L extends Localizavel> void showDialog(FragmentManager fragmentManager, L localizavel) {
+        LocalInfoDialog dialog = new LocalInfoDialog();
         dialog.localizavel = new WeakReference<>(localizavel);
         dialog.show(fragmentManager, TAG);
     }
@@ -53,7 +53,7 @@ public class LocalDialog <L extends Localizavel> extends DialogFragment {
     private View initializeView() {
         // Get the layout inflater and inflate the dialog
         LayoutInflater inflater = getActivity().getLayoutInflater();
-        View view = inflater.inflate(R.layout.dialog_local, null);
+        View view = inflater.inflate(R.layout.dialog_local_info, null);
 
         TextView descricao = (TextView) view.findViewById(R.id.descricaoTextView);
         descricao.setText(localizavel.get().getDescricao());

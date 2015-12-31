@@ -48,7 +48,7 @@ public class RegisterDialog extends DialogFragment implements RegisterPresenter.
      *
      * @param fragmentManager
      */
-    public static void showRegisterDialog(FragmentManager fragmentManager) {
+    public static void showDialog(FragmentManager fragmentManager) {
         RegisterDialog dialog = new RegisterDialog();
         dialog.show(fragmentManager, TAG);
     }

@@ -11,7 +11,7 @@ import com.cablush.cablushandroidapp.R;
 import com.cablush.cablushandroidapp.model.domain.Localizavel;
 import com.cablush.cablushandroidapp.model.domain.Usuario;
 import com.cablush.cablushandroidapp.utils.ViewUtils;
-import com.cablush.cablushandroidapp.view.dialogs.LocalDialog;
+import com.cablush.cablushandroidapp.view.dialogs.LocalInfoDialog;
 import com.cablush.cablushandroidapp.view.dialogs.RegisterDialog;
 import com.cablush.cablushandroidapp.view.drawer.DrawerActivityConfiguration;
 import com.cablush.cablushandroidapp.view.drawer.DrawerAdapter;
@@ -110,17 +110,17 @@ public class MainActivity extends AbstractDrawerActivity implements OnMapReadyCa
         switch (id) {
             case 101:
                 if (Usuario.LOGGED_USER == null) {
-                    LoginDialog.showLoginDialog(getFragmentManager());
+                    LoginDialog.showDialog(getFragmentManager());
                 }
                 break;
             case 201:
-                SearchDialog.showSearchDialog(getFragmentManager(), SearchDialog.TYPE.LOJA);
+                SearchDialog.showDialog(getFragmentManager(), SearchDialog.TYPE.LOJA);
                 break;
             case 202:
-                SearchDialog.showSearchDialog(getFragmentManager(), SearchDialog.TYPE.EVENTO);
+                SearchDialog.showDialog(getFragmentManager(), SearchDialog.TYPE.EVENTO);
                 break;
             case 203:
-                SearchDialog.showSearchDialog(getFragmentManager(), SearchDialog.TYPE.PISTA);
+                SearchDialog.showDialog(getFragmentManager(), SearchDialog.TYPE.PISTA);
                 break;
             case 301:
                 if (ViewUtils.checkUserLoggedIn(this)) {
@@ -157,7 +157,7 @@ public class MainActivity extends AbstractDrawerActivity implements OnMapReadyCa
 
     @Override
     public void onRegisterButtonClicked() {
-        RegisterDialog.showRegisterDialog(getFragmentManager());
+        RegisterDialog.showDialog(getFragmentManager());
     }
 
     @Override
@@ -203,7 +203,7 @@ public class MainActivity extends AbstractDrawerActivity implements OnMapReadyCa
                     googleMap.moveCamera(CameraUpdateFactory.zoomIn());
                     return true;
                 }
-                LocalDialog.showLocalDialog(getFragmentManager(), localizavelMap.get(marker.getSnippet()));
+                LocalInfoDialog.showDialog(getFragmentManager(), localizavelMap.get(marker.getSnippet()));
                 return true;
             }
         });

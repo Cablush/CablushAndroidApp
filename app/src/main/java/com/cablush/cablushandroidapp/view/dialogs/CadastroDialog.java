@@ -39,12 +39,12 @@ public class CadastroDialog extends DialogFragment {
     private TYPE type;
 
     /**
-     * Show the Search Dialog.
+     * Show the Cadastro Dialog.
      *
      * @param fragmentManager
      * @param typeSearch
      */
-    public static void showSearchDialog(FragmentManager fragmentManager, TYPE typeSearch) {
+    public static void showDialog(FragmentManager fragmentManager, TYPE typeSearch) {
         CadastroDialog dialog = new CadastroDialog();
         dialog.type = typeSearch;
         dialog.show(fragmentManager, TAG);

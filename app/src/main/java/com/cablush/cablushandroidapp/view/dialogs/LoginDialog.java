@@ -47,7 +47,7 @@ public class LoginDialog extends DialogFragment implements LoginPresenter.LoginV
      *
      * @param fragmentManager
      */
-    public static void showLoginDialog(FragmentManager fragmentManager) {
+    public static void showDialog(FragmentManager fragmentManager) {
         LoginDialog dialog = new LoginDialog();
         dialog.show(fragmentManager, TAG);
     }

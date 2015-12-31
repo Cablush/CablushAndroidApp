@@ -62,7 +62,7 @@ public class SearchDialog extends DialogFragment {
      * @param fragmentManager
      * @param searchType
      */
-    public static void showSearchDialog(FragmentManager fragmentManager, TYPE searchType) {
+    public static void showDialog(FragmentManager fragmentManager, TYPE searchType) {
         SearchDialog dialog = new SearchDialog();
         dialog.searchType = searchType;
         dialog.show(fragmentManager, TAG);
