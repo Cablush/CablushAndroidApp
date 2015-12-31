@@ -1,11 +1,8 @@
 package com.cablush.cablushandroidapp.view;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 
 import android.content.Intent;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
@@ -22,16 +19,13 @@ import com.cablush.cablushandroidapp.view.drawer.DrawerItem;
 import com.cablush.cablushandroidapp.view.drawer.DrawerMenuHeader;
 import com.cablush.cablushandroidapp.view.drawer.DrawerMenuItem;
 import com.cablush.cablushandroidapp.view.drawer.DrawerMenuSection;
-import com.cablush.cablushandroidapp.view.maps.CablushLocation;
-import com.cablush.cablushandroidapp.view.maps.Locations;
 import com.cablush.cablushandroidapp.view.dialogs.LoginDialog;
 import com.cablush.cablushandroidapp.view.dialogs.SearchDialog;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
@@ -42,13 +36,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MainActivity extends AbstractDrawerActivity implements LoginDialog.LoginDialogListener,
-        RegisterDialog.RegisterDialogListener, SearchDialog.SearchDialogListener {
+public class MainActivity extends AbstractDrawerActivity implements OnMapReadyCallback,
+        LoginDialog.LoginDialogListener, RegisterDialog.RegisterDialogListener, SearchDialog.SearchDialogListener {
 
-    private GoogleMap googleMap; // Might be null if Google Play services APK is not available.
-    private LocationManager locationManager;
-    private CablushLocation mLocationListener = new CablushLocation();
+    private GoogleMap googleMap;
 
+    // Map to store the localizaveis by UUIDs
     private Map<String, Localizavel> localizavelMap = new HashMap<>();
 
     /**
@@ -65,20 +58,26 @@ public class MainActivity extends AbstractDrawerActivity implements LoginDialog.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-        int checkGooglePlayServices = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
-        if (checkGooglePlayServices != ConnectionResult.SUCCESS) {
-            AlertDialog.Builder alerta = new AlertDialog.Builder(this);
-            alerta.setMessage(String.valueOf(checkGooglePlayServices)); // TODO show correct message
-            alerta.setNegativeButton("Ok", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface arg0, int arg1) {
-                    return;
-                }
-            });
-            alerta.show();
+        // Check if google play services is available
+        isGooglePlayServicesAvailable();
+
+        // Init Map Async
+        MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.mapView);
+        mapFragment.getMapAsync(this);
+    }
+
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        Log.d(TAG, "GoogleMap loaded.");
+        this.googleMap = googleMap;
+
+        // Try to retrieve the current user location, and show it on map
+        LatLng latLng = getCurrentLocation();
+        if (latLng != null) {
+            this.googleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+            this.googleMap.animateCamera(CameraUpdateFactory.zoomTo(15));
         }
-        configGPS();
-        createMapView();
     }
 
     @Override
@@ -141,12 +140,6 @@ public class MainActivity extends AbstractDrawerActivity implements LoginDialog.
             default:
                 Toast.makeText(getApplicationContext(), R.string.erro_invalid_option, Toast.LENGTH_SHORT).show();
         }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        createMapView();
     }
 
     @Override
@@ -225,26 +218,5 @@ public class MainActivity extends AbstractDrawerActivity implements LoginDialog.
         int padding = 150; // offset from edges of the map in pixels
         CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngBounds(bounds, padding);
         googleMap.animateCamera(cameraUpdate);
-    }
-
-    private void createMapView() {
-        try {
-            if (null == googleMap) {
-                googleMap = ((MapFragment) getFragmentManager().findFragmentById(R.id.mapView)).getMap();
-                if (null == googleMap) {
-                    Toast.makeText(getApplicationContext(), R.string.error_create_map, Toast.LENGTH_SHORT).show();
-                }
-            }
-            googleMap.setMyLocationEnabled(true);
-        } catch (NullPointerException e) {
-            Log.e(TAG, "ERROR!! -- ", e);
-        }
-    }
-
-    private void configGPS() {
-        String provider = Locations.getProvider(MainActivity.this);
-        locationManager.requestLocationUpdates(provider, 60000, // 1min
-                1000, // 1km
-                mLocationListener);
     }
 }
