@@ -45,7 +45,7 @@ public class CadastroEventosActivity extends CadastrosLocalActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTitle(getString(R.string.txt_cadastrar_params, getString(R.string.txt_evento)));
+        setTitle(getString(R.string.title_cadastrar, getString(R.string.txt_evento)));
         evento = new Evento();
     }
 
@@ -77,10 +77,10 @@ public class CadastroEventosActivity extends CadastrosLocalActivity {
     public boolean validaCamposObrigatorios() {
         boolean valid = true;
         if(dataInicio == null){
-            showMsgErro(R.string.msg_dataInicio_missing);
+            showMsgErro(R.string.msg_startDate_missing);
             valid = false;
         }else if(horaInicio == null) {
-            showMsgErro(R.string.msg_horaInicio_missing);
+            showMsgErro(R.string.msg_startTime_missing);
             valid = false;
         }
         return valid && super.validaCamposObrigatorios();

@@ -14,6 +14,7 @@ import android.widget.ListView;
 
 import com.cablush.cablushandroidapp.R;
 import com.cablush.cablushandroidapp.view.drawer.DrawerActivityConfiguration;
+import com.cablush.cablushandroidapp.view.drawer.DrawerAdapter;
 import com.cablush.cablushandroidapp.view.drawer.DrawerItem;
 
 /**
@@ -48,7 +49,12 @@ public abstract class AbstractDrawerActivity extends CablushActivity {
         mDrawerLayout = (DrawerLayout) findViewById(navConf.getDrawerLayoutId());
         mDrawerList = (ListView) findViewById(navConf.getLeftDrawerId());
         mDrawerList.setAdapter(navConf.getBaseAdapter());
-        mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
+        mDrawerList.setOnItemClickListener(new ListView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView < ? > parent, View view,int position, long id){
+                selectItem(position);
+            }
+        });
 
 //        this.initDrawerShadow();
 
@@ -136,14 +142,7 @@ public abstract class AbstractDrawerActivity extends CablushActivity {
         return mDrawerToggle;
     }
 
-    private class DrawerItemClickListener implements ListView.OnItemClickListener {
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            selectItem(position);
-        }
-    }
-
-    public void selectItem(int position) {
+    protected void selectItem(int position) {
         DrawerItem selectedItem = navConf.getNavItems()[position];
 
         this.onNavItemSelected(selectedItem.getId());
@@ -156,6 +155,10 @@ public abstract class AbstractDrawerActivity extends CablushActivity {
         if (this.mDrawerLayout.isDrawerOpen(this.mDrawerList)) {
             mDrawerLayout.closeDrawer(mDrawerList);
         }
+    }
+
+    protected void updateDrawer() {
+        navConf.getBaseAdapter().notifyDataSetChanged();
     }
 
     @Override

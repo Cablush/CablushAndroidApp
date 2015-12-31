@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Breve descrição do Local..."
+        android:maxLength="500"
+        android:id="@+id/descricaoTextView"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="@dimen/dialog_margin"
+        android:layout_marginRight="@dimen/dialog_margin"
+        android:layout_below="@+id/txtTitle"
+        android:layout_marginTop="20dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="(31) 3131-0909"
+        android:id="@+id/telefoneTextView"
+        android:layout_marginTop="@dimen/vertical_spacing"
+        android:layout_below="@+id/descricaoTextView"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="@dimen/dialog_margin"
+        android:autoLink="phone"
+        android:layout_marginRight="@dimen/dialog_margin"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="email@local.com.br"
+        android:id="@+id/emailTextView"
+        android:layout_below="@+id/telefoneTextView"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="@dimen/dialog_margin"
+        android:layout_marginTop="@dimen/vertical_spacing"
+        android:autoLink="email"
+        android:layout_marginRight="@dimen/dialog_margin"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Rua Nome, 10, Bairro Nome"
+        android:id="@+id/enderecoTextView"
+        android:layout_below="@+id/emailTextView"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="@dimen/vertical_spacing"
+        android:layout_marginLeft="@dimen/dialog_margin"
+        android:layout_marginRight="@dimen/dialog_margin"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Nome Cidade / RG"
+        android:id="@+id/cidadeEstadoTextView"
+        android:layout_below="@+id/cepTextView"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="@dimen/dialog_margin"
+        android:layout_marginBottom="@dimen/dialog_margin"
+        android:layout_marginRight="@dimen/dialog_margin"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="30000-000"
+        android:id="@+id/cepTextView"
+        android:layout_below="@+id/enderecoTextView"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="@dimen/dialog_margin"
+        android:layout_marginRight="@dimen/dialog_margin"/>
+
+</RelativeLayout>

@@ -13,17 +13,17 @@ import com.cablush.cablushandroidapp.model.domain.Usuario;
  */
 public class UsuarioDAO extends AppBaseDAO {
 
-    private static final String TABLE = "usuario";
+    static final String TABLE = "usuario";
 
-    private static final String _UUID = "uuid";
-    private static final String _NOME = "nome";
-    private static final String _EMAIL = "email";
-    private static final String _ROLE = "role";
-    private static final String _UID = "uid";
-    private static final String _ACCESS_TOKEN = "access_token";
-    private static final String _TOKEN_TYPE = "token_type";
-    private static final String _CLIENT = "client";
-    private static final String _EXPIRITY = "expiry";
+    static final String _UUID = "uuid";
+    static final String _NOME = "nome";
+    static final String _EMAIL = "email";
+    static final String _ROLE = "role";
+    static final String _UID = "uid";
+    static final String _ACCESS_TOKEN = "access_token";
+    static final String _TOKEN_TYPE = "token_type";
+    static final String _CLIENT = "client";
+    static final String _EXPIRITY = "expiry";
 
     private static final String CREATE_TABLE = "CREATE TABLE " + TABLE + " ( "
             + _UUID + " TEXT PRIMARY KEY, "
@@ -64,7 +64,7 @@ public class UsuarioDAO extends AppBaseDAO {
         return values;
     }
 
-    private Usuario getUsuario(Cursor cursor) {
+    Usuario getUsuario(Cursor cursor) {
         Usuario evento = new Usuario();
         evento.setUuid(readCursor(cursor, _UUID, String.class));
         evento.setNome(readCursor(cursor, _NOME, String.class));
@@ -104,6 +104,7 @@ public class UsuarioDAO extends AppBaseDAO {
         if (cursor.moveToFirst()) {
             usuario = getUsuario(cursor);
         }
+        cursor.close();
         return usuario;
     }
 
@@ -114,6 +115,7 @@ public class UsuarioDAO extends AppBaseDAO {
         if (cursor.moveToFirst()) {
             usuario = getUsuario(cursor);
         }
+        cursor.close();
         dbHelper.close(db);
         return usuario;
     }

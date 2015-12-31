@@ -15,29 +15,32 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.cablush.cablushandroidapp.R;
-import com.cablush.cablushandroidapp.model.UsuariosMediator;
+import com.cablush.cablushandroidapp.presenter.LoginPresenter;
+import com.cablush.cablushandroidapp.utils.ViewUtils;
+
+import java.lang.ref.WeakReference;
 
 /**
  * Created by oscar on 13/12/15.
  */
-public class LoginDialog extends DialogFragment {
+public class LoginDialog extends DialogFragment implements LoginPresenter.LoginView {
 
     private static final String TAG = LoginDialog.class.getSimpleName();
 
-    private EditText edtUsuario;
-    private EditText edtSenha;
+    private EditText emailEdit;
+    private EditText passwordEdit;
 
-    /* The activity that creates an instance of this dialog fragment
-     * must implement this interface in order to receive event callbacks.
-     * Each method passes the DialogFragment in case the host needs to query it.
+    /**
+     * Interface to be implemented by this Dialog's client.
      */
     public interface LoginDialogListener {
         void onLoginDialogSuccess();
-        void onLoginDialogCancel();
+        void onLoginDialogError(String message);
+        void onRegisterButtonClicked();
     }
 
     // Use this instance of the interface to deliver action events
-    LoginDialogListener mListener;
+    private WeakReference<LoginDialogListener> mListener;
 
     /**
      * Show the Login Dialog.
@@ -56,7 +59,7 @@ public class LoginDialog extends DialogFragment {
         // Verify that the host activity implements the callback interface
         try {
             // Instantiate the LoginDialogListener so we can send events to the host
-            mListener = (LoginDialogListener) activity;
+            mListener = new WeakReference<>((LoginDialogListener) activity);
         } catch (ClassCastException e) {
             // The activity doesn't implement the interface, throw exception
             throw new ClassCastException(activity.toString() + " must implement LoginDialogListener");
@@ -69,27 +72,33 @@ public class LoginDialog extends DialogFragment {
         builder.setView(initializeView());
 
         // Set the dialog title
-        builder.setTitle(getActivity().getString(R.string.title_login));
+        builder.setCustomTitle(ViewUtils.getCustomTitleView(getActivity().getLayoutInflater(),
+                        getString(R.string.title_login),
+                        R.drawable.ic_account_circle_cablush_orange));
 
         // Add action buttons
-        builder.setPositiveButton(R.string.txt_login, new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(R.string.btn_login, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                String user = edtUsuario.getText().toString();
-                String pass = edtSenha.getText().toString();
+                String email = emailEdit.getText().toString();
+                String password = passwordEdit.getText().toString();
 
-                if (!user.isEmpty() && !pass.isEmpty()) {
-                    UsuariosMediator usuariosMediator = new UsuariosMediator(getActivity());
-                    if (usuariosMediator.doLogin(user,pass)) {
-                        mListener.onLoginDialogSuccess();
-                    }
+                if (!email.isEmpty() && !password.isEmpty()) {
+                    LoginPresenter loginPresenter = new LoginPresenter(LoginDialog.this, getActivity());
+                    loginPresenter.doLogin(email, password);
                 } else {
-                    Toast.makeText(getActivity(), R.string.msg_login_ou_senha_missing, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), R.string.msg_login_missing_data, Toast.LENGTH_SHORT).show();
                 }
             }
         });
-        builder.setNegativeButton(R.string.txt_cancelar, new DialogInterface.OnClickListener() {
+        builder.setNeutralButton(R.string.btn_register, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                mListener.get().onRegisterButtonClicked();
+            }
+        });
+        builder.setNegativeButton(R.string.btn_cancel, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                mListener.onLoginDialogCancel();
+                // nothing
             }
         });
 
@@ -102,12 +111,22 @@ public class LoginDialog extends DialogFragment {
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.dialog_login, null);
 
-        edtUsuario  = (EditText)view.findViewById(R.id.edtUsuario);
-        edtUsuario.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.SRC_ATOP);
+        emailEdit = (EditText)view.findViewById(R.id.emailEditText);
+        emailEdit.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.SRC_ATOP);
 
-        edtSenha    = (EditText)view.findViewById(R.id.edtSenha);
-        edtSenha.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.SRC_ATOP);
+        passwordEdit = (EditText)view.findViewById(R.id.passwordEditText);
+        passwordEdit.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.SRC_ATOP);
 
         return view;
+    }
+
+    @Override
+    public void onLoginSuccess() {
+        mListener.get().onLoginDialogSuccess();
+    }
+
+    @Override
+    public void onLoginError(String message) {
+        mListener.get().onLoginDialogError(message);
     }
 }

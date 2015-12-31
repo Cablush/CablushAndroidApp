@@ -84,23 +84,23 @@ public abstract class CadastrosLocalActivity extends CablushActivity {
 
        boolean valid = true;
         if(nome == null || nome.isEmpty()){
-            showMsgErro(R.string.msg_nome_missing);
+            showMsgErro(R.string.msg_name_missing);
             valid = false;
         }else if(descricao == null || descricao.isEmpty()){
-            showMsgErro(R.string.msg_descrição_missing);
+            showMsgErro(R.string.msg_description_missing);
             valid = false;
         }else if(local == null){
-            showMsgErro(R.string.msg_local_missing);
+            showMsgErro(R.string.msg_spot_missing);
             valid = false;
         }
         return valid;
     }
 
-    protected void showMsgErro(int msgError){
-        Toast.makeText(CadastrosLocalActivity.this,msgError,Toast.LENGTH_SHORT).show();
+    protected void showMsgErro(int msgError) {
+        Toast.makeText(CadastrosLocalActivity.this, msgError, Toast.LENGTH_SHORT).show();
     }
 
-    public void showCadastroHorario(int layout){
+    public void showCadastroHorario(int layout) {
         LayoutInflater inflater = (LayoutInflater)this.getSystemService(LAYOUT_INFLATER_SERVICE);
         View view = inflater.inflate(layout, null);
 

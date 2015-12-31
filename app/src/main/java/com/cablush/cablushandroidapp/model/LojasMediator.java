@@ -45,6 +45,6 @@ public class LojasMediator {
                 Log.e(TAG, "Error getting lojas. " + error.getMessage());
             }
         });
-        return lojaDAO.getLojas();  // TODO filter lojas search
+        return lojaDAO.getLojas(name, estado, esporte);
     }
 }

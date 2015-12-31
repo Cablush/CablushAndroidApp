@@ -39,7 +39,7 @@ public class CadastroLojaActivity extends CadastrosLocalActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTitle(getString(R.string.txt_cadastrar_params, getString(R.string.txt_loja)));
+        setTitle(getString(R.string.title_cadastrar, getString(R.string.txt_loja)));
         edtTelefone = (EditText)findViewById(R.id.edtTelefone);
         edtTelefone.setVisibility(View.VISIBLE);
         edtEmail= (EditText)findViewById(R.id.edtEmail);

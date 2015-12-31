@@ -3,6 +3,7 @@ package com.cablush.cablushandroidapp.model.domain;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -30,12 +31,13 @@ public class Loja implements Localizavel {
     @Expose
     private Boolean fundo;
     @Expose
-    private Local local;
+    private List<Local> locais;
     @Expose
     private List<Esporte> esportes;
     @Expose
     private Horario horario;
 
+    @Override
     public String getUuid() {
         return uuid;
     }
@@ -110,13 +112,24 @@ public class Loja implements Localizavel {
         this.fundo = fundo;
     }
 
+    public List<Local> getLocais() {
+        return locais;
+    }
+
+    public void setLocais(List<Local> locais) {
+        this.locais = locais;
+    }
+
     @Override
     public Local getLocal() {
-        return local;
+        return locais.get(0);
     }
 
     public void setLocal(Local local) {
-        this.local = local;
+        if (locais == null) {
+            locais = new ArrayList<>();
+        }
+        locais.add(local);
     }
 
     public List<Esporte> getEsportes() {

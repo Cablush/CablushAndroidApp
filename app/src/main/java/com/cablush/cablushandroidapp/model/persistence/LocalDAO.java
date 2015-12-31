@@ -14,19 +14,19 @@ import com.cablush.cablushandroidapp.model.domain.Local;
  */
 class LocalDAO extends AppBaseDAO {
 
-    private static final String TABLE = "local";
+    static final String TABLE = "local";
 
-    private static final String _UUID = "uuid";
-    private static final String _LATITUDE = "latitude";
-    private static final String _LONGITUDE = "longitude";
-    private static final String _LOGRADOURO = "logradouro";
-    private static final String _NUMERO = "numero";
-    private static final String _COMPLEMENTO = "complemento";
-    private static final String _BAIRRO = "bairro";
-    private static final String _CIDADE = "cidade";
-    private static final String _ESTADO = "estado";
-    private static final String _CEP = "cep";
-    private static final String _PAIS = "pais";
+    static final String _UUID = "uuid";
+    static final String _LATITUDE = "latitude";
+    static final String _LONGITUDE = "longitude";
+    static final String _LOGRADOURO = "logradouro";
+    static final String _NUMERO = "numero";
+    static final String _COMPLEMENTO = "complemento";
+    static final String _BAIRRO = "bairro";
+    static final String _CIDADE = "cidade";
+    static final String _ESTADO = "estado";
+    static final String _CEP = "cep";
+    static final String _PAIS = "pais";
 
     private static final String CREATE_TABLE = "CREATE TABLE " + TABLE + " ( "
             + _UUID + " TEXT PRIMARY KEY, "
@@ -71,19 +71,19 @@ class LocalDAO extends AppBaseDAO {
         return values;
     }
 
-    private Local getLocal(Cursor cursor) {
+    Local getLocal(Cursor cursor, boolean columnsWithTable) {
         Local local = new Local();
-        local.setUuidLocalizavel(readCursor(cursor, _UUID, String.class));
-        local.setLatitude(readCursor(cursor, _LATITUDE, Double.class));
-        local.setLongitude(readCursor(cursor, _LONGITUDE, Double.class));
-        local.setLogradouro(readCursor(cursor, _LOGRADOURO, String.class));
-        local.setNumero(readCursor(cursor, _NUMERO, String.class));
-        local.setComplemento(readCursor(cursor, _COMPLEMENTO, String.class));
-        local.setBairro(readCursor(cursor, _BAIRRO, String.class));
-        local.setCidade(readCursor(cursor, _CIDADE, String.class));
-        local.setEstado(readCursor(cursor, _ESTADO, String.class));
-        local.setCep(readCursor(cursor, _CEP, String.class));
-        local.setPais(readCursor(cursor, _PAIS, String.class));
+        local.setUuidLocalizavel(readCursor(cursor, columnsWithTable ? TABLE + "." + _UUID : _UUID, String.class));
+        local.setLatitude(readCursor(cursor, columnsWithTable ? TABLE + "." + _LATITUDE : _LATITUDE, Double.class));
+        local.setLongitude(readCursor(cursor, columnsWithTable ? TABLE + "." + _LONGITUDE : _LONGITUDE, Double.class));
+        local.setLogradouro(readCursor(cursor, columnsWithTable ? TABLE + "." + _LOGRADOURO : _LOGRADOURO, String.class));
+        local.setNumero(readCursor(cursor, columnsWithTable ? TABLE + "." + _NUMERO : _NUMERO, String.class));
+        local.setComplemento(readCursor(cursor, columnsWithTable ? TABLE + "." + _COMPLEMENTO : _COMPLEMENTO, String.class));
+        local.setBairro(readCursor(cursor, columnsWithTable ? TABLE + "." + _BAIRRO : _BAIRRO, String.class));
+        local.setCidade(readCursor(cursor, columnsWithTable ? TABLE + "." + _CIDADE : _CIDADE, String.class));
+        local.setEstado(readCursor(cursor, columnsWithTable ? TABLE + "." + _ESTADO : _ESTADO, String.class));
+        local.setCep(readCursor(cursor, columnsWithTable ? TABLE + "." + _CEP : _CEP, String.class));
+        local.setPais(readCursor(cursor, columnsWithTable ? TABLE + "." + _PAIS : _PAIS, String.class));
         return local;
     }
 
@@ -111,8 +111,9 @@ class LocalDAO extends AppBaseDAO {
         Cursor cursor = db.query(TABLE, null, _UUID + " = ? ", new String[]{uuid}, null, null, null);
         Local local = null;
         if (cursor.moveToFirst()) {
-            local = getLocal(cursor);
+            local = getLocal(cursor, false);
         }
+        cursor.close();
         return local;
     }
 }

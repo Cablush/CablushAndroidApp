@@ -1,39 +1,46 @@
 <resources>
-    <string name="app_name">Cablush</string>
+    <string name="app_name">CABLUSH</string>
 
-    <string name="action_search">Buscar</string>
-    <string name="error_create_map">Error a carregar o Mapa!</string>
-    <string name="desc_list_item_icon">Item Icon</string>
-    <string name="txt_cadastrar">Cadastrar</string>
-    <string name="txt_cadastrar_params">Cadastrar %s</string>
+    <!-- Drawer Menu -->
+    <string name="drawer_section_search">Buscar</string>
+    <string name="drawer_section_my_places">Meus Locais</string>
+    <string name="drawer_item_login_register">Login / Cadastro</string>
+    <string name="drawer_item_stores">Lojas</string>
+    <string name="drawer_item_events">Eventos</string>
+    <string name="drawer_item_spots">Pistas</string>
 
-    <string name="txt_salvar">Salvar</string>
-    <string name="gps_nao_funcionando">O seu gps aparenta esta desligado, favor conferir para cadastrar o local!</string>
+    <!-- Buttons / Actions -->
+    <string name="btn_cancel">Cancelar</string>
+    <string name="btn_register">Cadastrar</string>
+    <string name="btn_login">Logar</string>
+    <string name="btn_search">Buscar</string>
+    <string name="btn_save">Salvar</string>
 
-    <!--Dialog Login -->
-    <string name="txt_usuario">Email</string>
-    <string name="txt_senha">Senha</string>
-    <string name="txt_login">Logar</string>
+    <!--Dialog Login/Register -->
     <string name="title_login">Login</string>
-    <string name="title_endereco">Endereco</string>
-    <string name="title_horario_funcionamento">Horário de Funcionamento</string>
-    <string name="title_menu">Menu</string>
-    <string name="title_evento">Evento Data e Horário</string>
-    <string name="txt_cancelar">Cancelar</string>
+    <string name="title_register">Novo Cadastro</string>
+    <string name="txt_name">Nome</string>
+    <string name="txt_email">Email</string>
+    <string name="txt_password">Senha</string>
+    <string name="txt_shopkeeper">Sou Lojista</string>
 
     <!--Dialog Buscar -->
-    <string name="txt_estados">Estados</string>
-    <string name="txt_esportes">Esportes</string>
-    <string name="txt_nome">Nome</string>
-    <string name="buscar">Buscar %s</string>
-    <string name="tipo">Buscar por:</string>
-    <string name="txt_buscar">Buscar</string>
+    <string name="title_search">Buscar %s</string>
+    <string name="txt_by_sport">Por Esporte</string>
+    <string name="txt_by_state">Por Estado</string>
+    <string name="txt_by_name">Por Nome</string>
+
+    <!-- Dialog Cadastros -->
+    <string name="title_cadastrar">Cadastrar %s</string>
+    <string name="txt_cadastrar">Cadastrar</string>
+
+    <string name="title_endereco">Endereco</string>
+    <string name="title_horario_funcionamento">Horário de Funcionamento</string>
+    <string name="title_evento">Evento Data e Horário</string>
 
     <!--Cadastro localizavel -->
-    <string name="cadatrar">Cadastrar %s</string>
     <string name="txt_site">Site</string>
     <string name="txt_telefone">Telefone</string>
-    <string name="txt_email">Email</string>
     <string name="txt_facebook">Facebook</string>
     <string name="txt_descricao">Descrição</string>
     <string name="txt_endereco">Endereço</string>
@@ -61,33 +68,23 @@
     <string name="txt_evento">Evento</string>
     <string name="txt_pista">Pista</string>
 
-    <string-array name="options">
-        <item>Buscar</item>
-        <item>Cadastrar</item>
-    </string-array>
-
-    <string-array name="drawer_options">
-        <item>Login</item>
+    <string-array name="cadastro_options">
         <item>Loja</item>
         <item>Evento</item>
         <item>Pista</item>
     </string-array>
 
     <string-array name="search_types">
-        <item>Loja</item>
-        <item>Evento</item>
-        <item>Pista</item>
+        <item>Lojas</item>
+        <item>Eventos</item>
+        <item>Pistas</item>
     </string-array>
 
-    <array name="icons">
-        <item>@drawable/circle_login</item>
-        <item>@drawable/ic_launcher</item>
-        <item>@drawable/ic_launcher</item>
-        <item>@drawable/ic_launcher</item>
-    </array>
+    <string name="empty_selection">Selecione&#8230;</string>
 
-    <string-array name="esportes">
-        <item>Selecione...</item>
+    <!-- Sports selection -->
+    <string-array name="sports">
+        <item>Selecione&#8230;</item>
         <item>Atletismo</item>
         <item>Automobilismo</item>
         <item>Bike</item>
@@ -97,8 +94,9 @@
         <item>Outros</item>
     </string-array>
 
-    <string-array name="estados">
-        <item>Selecione...</item>
+    <!-- States selection -->
+    <string-array name="states">
+        <item>Selecione&#8230;</item>
         <item>Acre</item>
         <item>Alagoas</item>
         <item>Amapá</item>
@@ -127,7 +125,8 @@
         <item>Tocantins</item>
     </string-array>
 
-    <string-array name="estados_values">
+    <!-- States values -->
+    <string-array name="states_values">
         <item></item>
         <item>AC</item>
         <item>AL</item>
@@ -157,14 +156,28 @@
         <item>TO</item>
     </string-array>
 
+    <!-- Mensagens de sucesso -->
+    <string name="success_login">Olá %s! Agora você pode compartilhar seus locais favoritos!</string>
+    <string name="success_register">Cadastro realizado! Efetue login para compartilhar seus locais favoritos!</string>
+
     <!-- Mensagens de erro -->
-    <string name="msg_nome_missing">Favor preencher o nome!</string>
-    <string name="msg_descrição_missing">Favor preencher a descrição!</string>
-    <string name="msg_local_missing">Favor preencher o local!</string>
-    <string name="msg_dataInicio_missing">Favor preencher a data de inicio!</string>
-    <string name="msg_horaInicio_missing">Favor preencher a hora de inicio!</string>
-    <string name="msg_login_ou_senha_missing">Favor preencher o email e senha!</string>
-    <string name="msg_nao_login">Login não efetuado, tente novamente!</string>
+    <string name="error_create_map">Error a carregar o mapa!</string>
+    <string name="error_gps_not_working">Erro ao tentar obter local pelo GPS! Ligue-o e tente novamente.</string>
+    <string name="erro_invalid_search_type">Tipo de busca inválido!</string>
+    <string name="erro_invalid_entry_type">Tipo de cadastro inválido!</string>
+    <string name="erro_invalid_option">Opção inválida!</string>
+    <string name="msg_local_not_found">Nenhum local encontrado.</string>
+    <string name="msg_name_missing">Preencha o nome.</string>
+    <string name="msg_description_missing">Preencha a descrição.</string>
+    <string name="msg_spot_missing">Preencha o local.</string>
+    <string name="msg_startDate_missing">Preencha a data de inicio.</string>
+    <string name="msg_startTime_missing">Preencha a hora de inicio.</string>
+    <string name="msg_register_missing_data">Preencha todos os campos.</string>
+    <string name="msg_login_missing_data">Preencha email e senha.</string>
+    <string name="error_login">Erro ao realizar login! Tente novamente.</string>
+    <string name="error_register">Erro ao realizar cadastro! Tente novamente.</string>
+    <string name="msg_login_required">Faça login para continuar.</string>
+
 
 </resources>
 

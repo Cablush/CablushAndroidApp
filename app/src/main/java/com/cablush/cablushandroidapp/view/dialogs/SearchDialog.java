@@ -21,7 +21,9 @@ import com.cablush.cablushandroidapp.model.EventosMediator;
 import com.cablush.cablushandroidapp.model.LojasMediator;
 import com.cablush.cablushandroidapp.model.PistasMediator;
 import com.cablush.cablushandroidapp.model.domain.Localizavel;
+import com.cablush.cablushandroidapp.utils.ViewUtils;
 
+import java.lang.ref.WeakReference;
 import java.util.List;
 
 /**
@@ -35,37 +37,34 @@ public class SearchDialog extends DialogFragment {
         LOJA, EVENTO, PISTA;
     }
 
-    private String[] tipos;
-    private String[] estados;
-    private String[] esportes;
+    private String[] types;
+    private String[] states;
+    private String[] sports;
 
-    private TYPE type;
+    private TYPE searchType;
 
-    private Spinner spnEstados;
-    private Spinner spnEsportes;
-    private EditText edtName;
+    private Spinner statesSpinner;
+    private Spinner sportsSpinner;
+    private EditText nameEdit;
 
-    /* The activity that creates an instance of this dialog fragment
-     * must implement this interface in order to receive event callbacks.
-     * Each method passes the DialogFragment in case the host needs to query it.
+    /**
+     * Interface to be implemented by this Dialog's client.
      */
     public interface SearchDialogListener {
-        <L extends Localizavel> void onSearchDialogSuccess(List<L> localizaveis);
-        void onSearchDialogCancel();
+        void onSearchDialogSuccess(List<? extends Localizavel> searchablePlaces);
     }
 
-    // Use this instance of the interface to deliver action events
-    SearchDialogListener mListener;
+    private WeakReference<SearchDialogListener> mListener;
 
     /**
      * Show the Search Dialog.
      *
      * @param fragmentManager
-     * @param typeSearch
+     * @param searchType
      */
-    public static void showSearchDialog(FragmentManager fragmentManager, TYPE typeSearch) {
+    public static void showSearchDialog(FragmentManager fragmentManager, TYPE searchType) {
         SearchDialog dialog = new SearchDialog();
-        dialog.type = typeSearch;
+        dialog.searchType = searchType;
         dialog.show(fragmentManager, TAG);
     }
 
@@ -76,7 +75,7 @@ public class SearchDialog extends DialogFragment {
         // Verify that the host activity implements the callback interface
         try {
             // Instantiate the LoginDialogListener so we can send events to the host
-            mListener = (SearchDialogListener) activity;
+            mListener = new WeakReference<>((SearchDialogListener) activity);
         } catch (ClassCastException e) {
             // The activity doesn't implement the interface, throw exception
             throw new ClassCastException(activity.toString() + " must implement SearchDialogListener");
@@ -91,17 +90,19 @@ public class SearchDialog extends DialogFragment {
         builder.setView(initializeView());
 
         // Set the dialog title
-        builder.setTitle(getActivity().getString(R.string.buscar, tipos[type.ordinal()]));
+        builder.setCustomTitle(ViewUtils.getCustomTitleView(getActivity().getLayoutInflater(),
+                getString(R.string.title_search, types[searchType.ordinal()]),
+                R.drawable.ic_mark_cablush_orange));
 
         // Add action buttons
-        builder.setPositiveButton(R.string.txt_buscar, new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(R.string.btn_search, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                String nome = edtName.getText().toString();
-                String estado = getResources().getStringArray(R.array.estados_values)[spnEstados.getSelectedItemPosition()];
-                String esporte = spnEsportes.getSelectedItem().equals("Selecione...") ? "" : spnEsportes.getSelectedItem().toString().toLowerCase();
+                String nome = nameEdit.getText().toString();
+                String estado = getResources().getStringArray(R.array.states_values)[statesSpinner.getSelectedItemPosition()];
+                String esporte = ViewUtils.getSelectedItem(getActivity(), sportsSpinner);
 
                 List localizaveis = null;
-                switch (type) {
+                switch (searchType) {
                     case LOJA:
                         LojasMediator lojasMediator = new LojasMediator(getActivity());
                         localizaveis = lojasMediator.getLojas(nome, estado, esporte);
@@ -115,15 +116,14 @@ public class SearchDialog extends DialogFragment {
                         localizaveis = pistasMediator.getPistas(nome, estado, esporte);
                         break;
                     default:
-                        Toast.makeText(getActivity(), "Tipo de busca inválido", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), R.string.erro_invalid_search_type, Toast.LENGTH_SHORT).show();
                 }
 
-                mListener.onSearchDialogSuccess(localizaveis);
+                mListener.get().onSearchDialogSuccess(localizaveis);
             }
         });
-        builder.setNegativeButton(R.string.txt_cancelar, new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(R.string.btn_cancel, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                mListener.onSearchDialogCancel();
             }
         });
 
@@ -132,9 +132,9 @@ public class SearchDialog extends DialogFragment {
     }
 
     private void loadData() {
-        tipos = getResources().getStringArray(R.array.search_types);
-        estados = getResources().getStringArray(R.array.estados);
-        esportes = getResources().getStringArray(R.array.esportes);
+        types = getResources().getStringArray(R.array.search_types);
+        states = getResources().getStringArray(R.array.states);
+        sports = getResources().getStringArray(R.array.sports);
     }
 
     private View initializeView() {
@@ -142,14 +142,14 @@ public class SearchDialog extends DialogFragment {
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.dialog_search, null);
 
-        spnEstados = (Spinner)view.findViewById(R.id.spnEstados);
-        spnEstados.setAdapter(new ArrayAdapter<>(getActivity(), R.layout.simple_item, estados));
+        statesSpinner = (Spinner)view.findViewById(R.id.spnEstados);
+        statesSpinner.setAdapter(new ArrayAdapter<>(getActivity(), R.layout.simple_item, states));
 
-        spnEsportes = (Spinner)view.findViewById(R.id.spnEsportes);
-        spnEsportes.setAdapter(new ArrayAdapter<>(getActivity(), R.layout.simple_item, esportes));
+        sportsSpinner = (Spinner)view.findViewById(R.id.spnEsportes);
+        sportsSpinner.setAdapter(new ArrayAdapter<>(getActivity(), R.layout.simple_item, sports));
 
-        edtName = (EditText)view.findViewById(R.id.edtName);
-        edtName.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.SRC_ATOP);
+        nameEdit = (EditText)view.findViewById(R.id.edtName);
+        nameEdit.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.SRC_ATOP);
 
         return view;
     }

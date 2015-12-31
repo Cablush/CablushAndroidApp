@@ -15,19 +15,19 @@ import java.util.Date;
  */
 class HorarioDAO extends AppBaseDAO {
 
-    private static final String TABLE = "horario";
+    static final String TABLE = "horario";
 
-    private static final String _UUID = "uuid";
-    private static final String _INICIO = "inicio";
-    private static final String _FIM = "fim";
-    private static final String _SEG = "seg";
-    private static final String _TER = "ter";
-    private static final String _QUA = "qua";
-    private static final String _QUI = "qui";
-    private static final String _SEX = "sex";
-    private static final String _SAB = "sab";
-    private static final String _DOM = "dom";
-    private static final String _DETALHES = "detalhes";
+    static final String _UUID = "uuid";
+    static final String _INICIO = "inicio";
+    static final String _FIM = "fim";
+    static final String _SEG = "seg";
+    static final String _TER = "ter";
+    static final String _QUA = "qua";
+    static final String _QUI = "qui";
+    static final String _SEX = "sex";
+    static final String _SAB = "sab";
+    static final String _DOM = "dom";
+    static final String _DETALHES = "detalhes";
 
     private static final String CREATE_TABLE = "CREATE TABLE " + TABLE + " ( "
             + _UUID + " TEXT PRIMARY KEY, "
@@ -76,19 +76,19 @@ class HorarioDAO extends AppBaseDAO {
         return values;
     }
 
-    private Horario getHorario(Cursor cursor) {
+    Horario getHorario(Cursor cursor, boolean columnsWithTable) {
         Horario horario = new Horario();
-        horario.setUuidLocalizavel(readCursor(cursor, _UUID, String.class));
-        horario.setInicio(readCursor(cursor, _INICIO, Date.class));
-        horario.setFim(readCursor(cursor, _FIM, Date.class));
-        horario.setSeg(readCursor(cursor, _SEG, Boolean.class));
-        horario.setTer(readCursor(cursor, _TER, Boolean.class));
-        horario.setQua(readCursor(cursor, _QUA, Boolean.class));
-        horario.setQui(readCursor(cursor, _QUI, Boolean.class));
-        horario.setSex(readCursor(cursor, _SEX, Boolean.class));
-        horario.setSab(readCursor(cursor, _SAB, Boolean.class));
-        horario.setDom(readCursor(cursor, _DOM, Boolean.class));
-        horario.setDetalhes(readCursor(cursor, _DETALHES, String.class));
+        horario.setUuidLocalizavel(readCursor(cursor, columnsWithTable ? TABLE + "." + _UUID : _UUID, String.class));
+        horario.setInicio(readCursor(cursor, columnsWithTable ? TABLE + "." + _INICIO : _INICIO, Date.class));
+        horario.setFim(readCursor(cursor, columnsWithTable ? TABLE + "." + _FIM : _FIM, Date.class));
+        horario.setSeg(readCursor(cursor, columnsWithTable ? TABLE + "." + _SEG : _SEG, Boolean.class));
+        horario.setTer(readCursor(cursor, columnsWithTable ? TABLE + "." + _TER : _TER, Boolean.class));
+        horario.setQua(readCursor(cursor, columnsWithTable ? TABLE + "." + _QUA : _QUA, Boolean.class));
+        horario.setQui(readCursor(cursor, columnsWithTable ? TABLE + "." + _QUI : _QUI, Boolean.class));
+        horario.setSex(readCursor(cursor, columnsWithTable ? TABLE + "." + _SEX : _SEX, Boolean.class));
+        horario.setSab(readCursor(cursor, columnsWithTable ? TABLE + "." + _SAB : _SAB, Boolean.class));
+        horario.setDom(readCursor(cursor, columnsWithTable ? TABLE + "." + _DOM : _DOM, Boolean.class));
+        horario.setDetalhes(readCursor(cursor, columnsWithTable ? TABLE + "." + _DETALHES : _DETALHES, String.class));
         return horario;
     }
 
@@ -116,8 +116,9 @@ class HorarioDAO extends AppBaseDAO {
         Cursor cursor = db.query(TABLE, null, _UUID + " = ? ", new String[]{uuid}, null, null, null);
         Horario horario = null;
         if (cursor.moveToFirst()) {
-            horario = getHorario(cursor);
+            horario = getHorario(cursor, false);
         }
+        cursor.close();
         return horario;
     }
 }

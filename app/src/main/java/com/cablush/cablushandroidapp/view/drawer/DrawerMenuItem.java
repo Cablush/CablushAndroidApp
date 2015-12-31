@@ -7,12 +7,12 @@ import android.content.Context;
  */
 public class DrawerMenuItem implements DrawerItem {
 
-    public static final int ITEM_TYPE = 1 ;
+    public static final int ITEM_TYPE = 2;
 
-    private int id ;
-    private String title ;
-    private int icon ;
-    private boolean updateActionBarTitle ;
+    private int id;
+    private String title;
+    private int icon;
+    private boolean updateActionBarTitle;
 
     private DrawerMenuItem() {
     }

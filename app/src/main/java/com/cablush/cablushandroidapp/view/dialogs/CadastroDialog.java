@@ -58,10 +58,10 @@ public class CadastroDialog extends DialogFragment {
         builder.setView(initializeView());
 
         // Set the dialog title
-        builder.setTitle(getActivity().getString(R.string.cadatrar, tipos[type.ordinal()]));
+        builder.setTitle(getActivity().getString(R.string.title_cadastrar, tipos[type.ordinal()]));
 
         // Add action buttons
-        builder.setPositiveButton(R.string.txt_buscar, new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(R.string.btn_search, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 switch (type) {
                     case LOJA:
@@ -74,11 +74,11 @@ public class CadastroDialog extends DialogFragment {
 
                         break;
                     default:
-                        Toast.makeText(getActivity(), "Tipo de cadastro inválido.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), R.string.erro_invalid_entry_type, Toast.LENGTH_SHORT).show();
                 }
             }
         });
-        builder.setNegativeButton(R.string.txt_cancelar, new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(R.string.btn_cancel, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 // User cancelled the dialog
             }
@@ -90,7 +90,7 @@ public class CadastroDialog extends DialogFragment {
 
     public void showOptionsDialog(Context context, int op){
         LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View view = inflater.inflate(R.layout.dialog_options, null);
+        //View view = inflater.inflate(R.layout.dialog_options, null);
 //        switch (op) {
 //            case PISTA:
 //                alerta = getAlertBuilderOptions(context, view, op,CadastroPistaActivity.class).create();
@@ -163,13 +163,13 @@ public class CadastroDialog extends DialogFragment {
         Button btnSalvar                = (Button)view.findViewById(R.id.btnSalvar);
         Button btnCancelar              = (Button)view.findViewById(R.id.btnCancelar);
 
-        String[] estados    = context.getResources().getStringArray(R.array.estados);
+        String[] estados    = context.getResources().getStringArray(R.array.states);
         spnEstado.setAdapter(new ArrayAdapter<>(context, R.layout.simple_item, estados));
 
 
         double[] latlng = Locations.getLocationLatLng(context);
         if(latlng[0] == 0 && latlng[1] == 0){
-            Toast.makeText(context, R.string.gps_nao_funcionando,Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, R.string.error_gps_not_working, Toast.LENGTH_SHORT).show();
         }
         local.setLatitude(latlng[0]);
         local.setLongitude(latlng[1]);
@@ -216,9 +216,9 @@ public class CadastroDialog extends DialogFragment {
     }
 
     private void loadData() {
-        tipos = getResources().getStringArray(R.array.drawer_options);
-        estados = getResources().getStringArray(R.array.estados);
-        esportes = getResources().getStringArray(R.array.esportes);
+        tipos = getResources().getStringArray(R.array.cadastro_options);
+        estados = getResources().getStringArray(R.array.states);
+        esportes = getResources().getStringArray(R.array.sports);
     }
 
     private View initializeView() {

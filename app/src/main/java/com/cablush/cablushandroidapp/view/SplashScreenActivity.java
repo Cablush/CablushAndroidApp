@@ -5,12 +5,14 @@ import android.os.Bundle;
 import android.os.Handler;
 
 import com.cablush.cablushandroidapp.R;
-import com.cablush.cablushandroidapp.model.UsuariosMediator;
+import com.cablush.cablushandroidapp.presenter.LoginPresenter;
 
 /**
  * Created by jonathan on 22/10/15.
  */
-public class SplashScreenActivity extends CablushActivity implements Runnable {
+public class SplashScreenActivity extends CablushActivity implements Runnable, LoginPresenter.LoginView {
+
+    private static final String TAG = SplashScreenActivity.class.getSimpleName();
 
     private final int DELAY = 3000;
 
@@ -22,13 +24,21 @@ public class SplashScreenActivity extends CablushActivity implements Runnable {
         handle.postDelayed(this, DELAY);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-        UsuariosMediator usuariosMediator = new UsuariosMediator(this);
-        usuariosMediator.verificaLogin();
+        LoginPresenter loginPresenter = new LoginPresenter(this, this);
+        loginPresenter.checkLogin();
     }
 
     @Override
     public void run() {
         startActivity(MainActivity.makeIntent(this));
         finish();
+    }
+
+    @Override
+    public void onLoginSuccess() {
+    }
+
+    @Override
+    public void onLoginError(String message) {
     }
 }

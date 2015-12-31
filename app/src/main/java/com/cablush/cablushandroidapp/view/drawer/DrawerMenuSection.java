@@ -5,7 +5,7 @@ package com.cablush.cablushandroidapp.view.drawer;
  */
 public class DrawerMenuSection implements DrawerItem {
 
-    public static final int SECTION_TYPE = 0;
+    public static final int SECTION_TYPE = 1;
 
     private int id;
     private String title;
@@ -15,6 +15,7 @@ public class DrawerMenuSection implements DrawerItem {
 
     public static DrawerMenuSection create(int id, String title) {
         DrawerMenuSection section = new DrawerMenuSection();
+        section.setId(id);
         section.setTitle(title);
         return section;
     }

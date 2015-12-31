@@ -5,6 +5,8 @@ package com.cablush.cablushandroidapp.model.domain;
  */
 public interface Localizavel {
 
+    String getUuid();
+
     String getNome();
 
     String getDescricao();

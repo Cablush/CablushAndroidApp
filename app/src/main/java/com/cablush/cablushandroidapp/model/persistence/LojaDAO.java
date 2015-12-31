@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteQueryBuilder;
 import android.util.Log;
 
 import com.cablush.cablushandroidapp.model.domain.Loja;
@@ -17,17 +18,17 @@ import java.util.List;
  */
 public class LojaDAO extends AppBaseDAO {
 
-    private static final String TABLE = "loja";
+    static final String TABLE = "loja";
 
-    private static final String _UUID = "uuid";
-    private static final String _NOME = "nome";
-    private static final String _DESCRICAO = "descricao";
-    private static final String _TELEFONE = "telefone";
-    private static final String _EMAIL = "email";
-    private static final String _WEBSITE = "website";
-    private static final String _FACEBOOK = "facebook";
-    private static final String _LOGO = "logo";
-    private static final String _FUNDO = "fundo";
+    static final String _UUID = "uuid";
+    static final String _NOME = "nome";
+    static final String _DESCRICAO = "descricao";
+    static final String _TELEFONE = "telefone";
+    static final String _EMAIL = "email";
+    static final String _WEBSITE = "website";
+    static final String _FACEBOOK = "facebook";
+    static final String _LOGO = "logo";
+    static final String _FUNDO = "fundo";
 
     private static final String CREATE_TABLE = "CREATE TABLE " + TABLE + " ( "
             + _UUID + " TEXT PRIMARY KEY, "
@@ -73,17 +74,17 @@ public class LojaDAO extends AppBaseDAO {
         return values;
     }
 
-    private Loja getLoja(Cursor cursor) {
+    Loja getLoja(Cursor cursor, boolean columnsWithTable) {
         Loja loja = new Loja();
-        loja.setUuid(readCursor(cursor, _UUID, String.class));
-        loja.setNome(readCursor(cursor, _NOME, String.class));
-        loja.setDescricao(readCursor(cursor, _DESCRICAO, String.class));
-        loja.setTelefone(readCursor(cursor, _TELEFONE, String.class));
-        loja.setEmail(readCursor(cursor, _EMAIL, String.class));
-        loja.setWebsite(readCursor(cursor, _WEBSITE, String.class));
-        loja.setFacebook(readCursor(cursor, _FACEBOOK, String.class));
-        loja.setLogo(readCursor(cursor, _LOGO, String.class));
-        loja.setFundo(readCursor(cursor, _FUNDO, Boolean.class));
+        loja.setUuid(readCursor(cursor, columnsWithTable ? TABLE + "." + _UUID : _UUID, String.class));
+        loja.setNome(readCursor(cursor, columnsWithTable ? TABLE + "." + _NOME : _NOME, String.class));
+        loja.setDescricao(readCursor(cursor, columnsWithTable ? TABLE + "." + _DESCRICAO : _DESCRICAO, String.class));
+        loja.setTelefone(readCursor(cursor, columnsWithTable ? TABLE + "." + _TELEFONE : _TELEFONE, String.class));
+        loja.setEmail(readCursor(cursor, columnsWithTable ? TABLE + "." + _EMAIL : _EMAIL, String.class));
+        loja.setWebsite(readCursor(cursor, columnsWithTable ? TABLE + "." + _WEBSITE : _WEBSITE, String.class));
+        loja.setFacebook(readCursor(cursor, columnsWithTable ? TABLE + "." + _FACEBOOK : _FACEBOOK, String.class));
+        loja.setLogo(readCursor(cursor, columnsWithTable ? TABLE + "." + _LOGO : _LOGO, String.class));
+        loja.setFundo(readCursor(cursor, columnsWithTable ? TABLE + "." + _FUNDO : _FUNDO, Boolean.class));
         return loja;
     }
 
@@ -95,8 +96,10 @@ public class LojaDAO extends AppBaseDAO {
             loja.getLocal().setUuidLocalizavel(loja.getUuid());
             localDAO.saveLocal(db, loja.getLocal());
             // save horario
-            loja.getHorario().setUuidLocalizavel(loja.getUuid());
-            horarioDAO.saveHorario(db, loja.getHorario());
+            if (loja.getHorario() != null) {
+                loja.getHorario().setUuidLocalizavel(loja.getUuid());
+                horarioDAO.saveHorario(db, loja.getHorario());
+            }
             // TODO save esportes
             db.setTransactionSuccessful();
             return rowID;
@@ -114,8 +117,10 @@ public class LojaDAO extends AppBaseDAO {
         loja.getLocal().setUuidLocalizavel(loja.getUuid());
         localDAO.saveLocal(db, loja.getLocal());
         // save horario
-        loja.getHorario().setUuidLocalizavel(loja.getUuid());
-        horarioDAO.saveHorario(db, loja.getHorario());
+        if (loja.getHorario() != null) {
+            loja.getHorario().setUuidLocalizavel(loja.getUuid());
+            horarioDAO.saveHorario(db, loja.getHorario());
+        }
         // TODO save esportes
         return row;
     }
@@ -136,24 +141,46 @@ public class LojaDAO extends AppBaseDAO {
         Cursor cursor = db.query(TABLE, null, _UUID + " = ? ", new String[]{uuid}, null, null, null);
         Loja loja = null;
         if (cursor.moveToFirst()) {
-            loja = getLoja(cursor);
+            loja = getLoja(cursor, false);
         }
+        cursor.close();
         return loja;
     }
 
-    public List<Loja> getLojas() {
+    public List<Loja> getLojas(String name,String estado, String esporte) {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
+        queryBuilder.setTables(TABLE
+                + " INNER JOIN " + LocalDAO.TABLE + " ON " + TABLE + "." + _UUID + " = " + LocalDAO.TABLE + "." + LocalDAO._UUID
+                + " LEFT OUTER JOIN " + HorarioDAO.TABLE + " ON " + TABLE + "." + _UUID + " = " + HorarioDAO.TABLE + "." + HorarioDAO._UUID);
+
+        StringBuilder selection = new StringBuilder();
+        List<String> selectionArgs = new ArrayList<>();
+        if (name != null && !name.isEmpty()) {
+            selection.append(TABLE).append(".").append(_NOME).append(" LIKE ? ");
+            selectionArgs.add(name + "%");
+        }
+        if (estado != null && !estado.isEmpty()) {
+            selection.append(LocalDAO.TABLE).append(".").append(LocalDAO._ESTADO).append(" = ? ");
+            selectionArgs.add(estado);
+        }
+        if (esporte != null && !esporte.isEmpty()) {
+            // TODO
+        }
+
+        Cursor cursor = queryBuilder.query(db, null, selection.toString(), selectionArgs.toArray(new String[0]), null, null, null);
         List<Loja> lojas = new ArrayList<>();
-        Cursor cursor = db.query(TABLE, null, null, null, null, null, null);
         if (cursor.moveToFirst()) {
             do {
-                Loja loja = getLoja(cursor);
-                loja.setLocal(localDAO.getLocal(db, loja.getUuid()));
-                loja.setHorario(horarioDAO.getHorario(db, loja.getUuid()));
+                Loja loja = getLoja(cursor, true);
+                loja.setLocal(localDAO.getLocal(cursor, true));
+                loja.setHorario(horarioDAO.getHorario(cursor, true));
                 // TODO get esportes
                 lojas.add(loja);
             } while (cursor.moveToNext());
         }
+        cursor.close();
         dbHelper.close(db);
         return lojas;
     }

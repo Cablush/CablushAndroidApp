@@ -37,6 +37,7 @@ public class Evento implements Localizavel {
     @Expose
     private List<Esporte> esportes;
 
+    @Override
     public String getUuid() {
         return uuid;
     }

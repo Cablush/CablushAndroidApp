@@ -86,6 +86,7 @@ public class EsporteDAO  extends AppBaseDAO {
                 esportes.add(getEsporte(cursor));
             } while (cursor.moveToNext());
         }
+        cursor.close();
         dbHelper.close(db);
         return esportes;
     }

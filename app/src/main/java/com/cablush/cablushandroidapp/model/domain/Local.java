@@ -116,4 +116,15 @@ public class Local {
     public void setPais(String pais) {
         this.pais = pais;
     }
+
+    public String getEndereco() {
+        return logradouro
+                + (numero != null && !numero.isEmpty() ? ", " + numero : "")
+                + (complemento != null && !complemento.isEmpty() ? ", " + complemento : "")
+                + (bairro != null && !bairro.isEmpty() ? ", " + bairro : "");
+    }
+
+    public String getCidadeEstado() {
+        return cidade + " / " + estado;
+    }
 }

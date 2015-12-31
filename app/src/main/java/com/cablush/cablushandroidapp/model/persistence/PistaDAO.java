@@ -17,15 +17,15 @@ import java.util.List;
  */
 public class PistaDAO extends AppBaseDAO {
 
-    private static final String TABLE = "pista";
+    static final String TABLE = "pista";
 
-    private static final String _UUID = "uuid";
-    private static final String _NOME = "nome";
-    private static final String _DESCRICAO = "descricao";
-    private static final String _WEBSITE = "website";
-    private static final String _FACEBOOK = "facebook";
-    private static final String _FOTO = "foto";
-    private static final String _FUNDO = "fundo";
+    static final String _UUID = "uuid";
+    static final String _NOME = "nome";
+    static final String _DESCRICAO = "descricao";
+    static final String _WEBSITE = "website";
+    static final String _FACEBOOK = "facebook";
+    static final String _FOTO = "foto";
+    static final String _FUNDO = "fundo";
 
     private static final String CREATE_TABLE = "CREATE TABLE " + TABLE + " ( "
             + _UUID + " TEXT PRIMARY KEY, "
@@ -67,7 +67,7 @@ public class PistaDAO extends AppBaseDAO {
         return values;
     }
 
-    private Pista getPista(Cursor cursor) {
+    Pista getPista(Cursor cursor) {
         Pista pista = new Pista();
         pista.setUuid(readCursor(cursor, _UUID, String.class));
         pista.setNome(readCursor(cursor, _NOME, String.class));
@@ -130,6 +130,7 @@ public class PistaDAO extends AppBaseDAO {
         if (cursor.moveToFirst()) {
             pista = getPista(cursor);
         }
+        cursor.close();
         return pista;
     }
 
@@ -146,6 +147,7 @@ public class PistaDAO extends AppBaseDAO {
                 pistas.add(pista);
             } while (cursor.moveToNext());
         }
+        cursor.close();
         dbHelper.close(db);
         return pistas;
     }

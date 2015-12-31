@@ -9,8 +9,7 @@
         android:layout_height="wrap_content"
         android:text="@string/txt_data_inicio"
         android:id="@+id/textView26"
-        android:textColor="@android:color/black"
-        style="@style/TextAppearance.FontPath"/>
+        android:textColor="@android:color/black"/>
 
     <EditText
         android:layout_width="match_parent"
@@ -28,7 +27,6 @@
         android:text="@string/txt_data_fim"
         android:id="@+id/textView27"
         android:textColor="@android:color/black"
-        style="@style/TextAppearance.FontPath"
         android:layout_below="@+id/edtDataInicio"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
@@ -49,7 +47,6 @@
         android:text="@string/txt_hora_inicio"
         android:id="@+id/textView28"
         android:textColor="@android:color/black"
-        style="@style/TextAppearance.FontPath"
         android:layout_below="@+id/edtDataFim"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />

@@ -32,6 +32,7 @@ public class Pista implements Localizavel {
     @Expose
     private Horario horario;
 
+    @Override
     public String getUuid() {
         return uuid;
     }

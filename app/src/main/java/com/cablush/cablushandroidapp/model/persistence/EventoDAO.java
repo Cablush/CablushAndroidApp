@@ -141,6 +141,7 @@ public class EventoDAO extends AppBaseDAO {
         if (cursor.moveToFirst()) {
             evento = getEvento(cursor);
         }
+        cursor.close();
         return evento;
     }
 
@@ -156,6 +157,7 @@ public class EventoDAO extends AppBaseDAO {
                 eventos.add(evento);
             } while (cursor.moveToNext());
         }
+        cursor.close();
         dbHelper.close(db);
         return eventos;
     }

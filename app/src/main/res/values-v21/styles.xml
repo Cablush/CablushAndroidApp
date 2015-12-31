@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Cablush" parent="android:Theme.Material.Light">
+        <item name="android:colorPrimary">@color/primary_cablush_light</item>
+        <item name="android:colorPrimaryDark">@color/primary_dark_cablush_light</item>
+        <item name="android:colorAccent">@color/accent_cablush_light</item>
+
+        <item name="android:textColorPrimary">@color/primary_text_cablush_light</item>
+        <item name="android:textColorSecondary">@color/secondary_text_cablush_light</item>
+        <item name="android:textColorLink">@color/accent_cablush_light</item>
+
+        <item name="android:dialogTheme">@style/Cablush.Dialogs</item>
+        <item name="android:alertDialogTheme">@style/Cablush.Dialogs</item>
+        <item name="android:datePickerDialogTheme">@style/Cablush.Dialogs</item>
+        <item name="android:timePickerDialogTheme">@style/Cablush.Dialogs</item>
+
+        <item name="android:textAppearance">@style/CustomTextAppearance</item>
+    </style>
+
+    <style name="CustomTextAppearance">
+        <item name="android:typeface">normal</item>
+    </style>
+
+    <style name="Cablush.Dialogs" parent="android:Theme.Material.Light.Dialog">
+        <item name="android:colorPrimary">@color/primary_cablush_light</item>
+        <item name="android:colorPrimaryDark">@color/primary_dark_cablush_light</item>
+        <item name="android:colorAccent">@color/accent_cablush_light</item>
+
+        <item name="android:colorBackground">@color/primary_cablush_light</item>
+    </style>
+
+</resources>

@@ -28,7 +28,7 @@ public class CadastroPistaActivity extends CadastrosLocalActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTitle(getString(R.string.txt_cadastrar_params, getString(R.string.txt_pista)));
+        setTitle(getString(R.string.title_cadastrar, getString(R.string.txt_pista)));
     }
 
     public void actionSalvar(View view){

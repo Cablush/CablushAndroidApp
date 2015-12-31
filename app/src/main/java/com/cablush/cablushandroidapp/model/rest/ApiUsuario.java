@@ -15,14 +15,24 @@ import retrofit.http.Query;
 public interface ApiUsuario {
 
     @FormUrlEncoded
-    @POST("/auth/register")
-    void doRegister(@Field("nome") String nome, @Field("email") String email, @Field("password") String senha, Callback<Usuario> usuarioCallback);
+    @POST("/auth")
+    void doRegister(@Field("nome") String name,
+                    @Field("email") String email,
+                    @Field("password") String password,
+                    @Field("password_confirmation") String password_confirmation,
+                    @Field("lojista") Boolean shopkeeper,
+                    Callback<Usuario> usuarioCallback);
 
     @FormUrlEncoded
     @POST("/auth/sign_in")
-    void doLogin(@Field("email") String email, @Field("password") String senha, Callback<Usuario> usuarioCallback);
+    void doLogin(@Field("email") String email,
+                 @Field("password") String password,
+                 Callback<Usuario> usuarioCallback);
 
     @GET("/auth/validate_token")
-    void doValidateToken(@Query("uid") String uid, @Query("access_token") String accessToken, @Query("client") String client, Callback<Usuario> usuarioCallback);
+    void doValidateToken(@Query("uid") String uid,
+                         @Query("access_token") String accessToken,
+                         @Query("client") String client,
+                         Callback<Usuario> usuarioCallback);
 
 }
