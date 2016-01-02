@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/list_selector">
+    android:background="@drawable/list_selector"
+    android:id="@+id/header_view">
 
     <ImageView
         android:layout_width="match_parent"
@@ -16,47 +17,29 @@
         android:layout_marginLeft="@dimen/activity_horizontal_margin"
         android:layout_marginRight="@dimen/activity_horizontal_margin"/>
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:orientation="vertical"
-        android:id="@+id/relativeLayout"
+
+    <TextView
+        android:id="@+id/name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/drawer_item_login_register"
         android:layout_below="@+id/headerLogo"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
+        android:layout_marginTop="@dimen/vertical_spacing"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        style="@style/TextAppearance.DrawerItem_Primary"
+        />
 
-        <ImageView
-            android:id="@+id/icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_marginLeft="@dimen/activity_horizontal_margin"
-            android:layout_marginStart="@dimen/activity_horizontal_margin"
-            android:contentDescription="@string/drawer_item_login_register"
-            android:src="@drawable/ic_account_circle_cablush_orange"
-            android:layout_centerVertical="true" />
-
-        <TextView
-            android:id="@+id/name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="User Name "
-            android:layout_alignParentTop="true"
-            android:layout_marginTop="@dimen/vertical_spacing"
-            android:layout_marginLeft="@dimen/menu_text_margin"
-            android:layout_marginStart="@dimen/menu_text_margin"
-            style="@style/TextAppearance.DrawerItem_Primary"/>
-
-        <TextView
-            android:id="@+id/email"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="user_email@server.com.br"
-            android:layout_below="@+id/name"
-            android:layout_marginLeft="@dimen/menu_text_margin"
-            android:layout_marginStart="@dimen/menu_text_margin"
-            style="@style/TextAppearance.DrawerItem_Secondary"/>
-    </RelativeLayout>
+    <TextView
+        android:id="@+id/email"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="user_email@user_server.com.br"
+        style="@style/TextAppearance.DrawerItem_Secondary"
+        android:layout_below="@+id/name"
+        android:layout_alignLeft="@+id/name"
+        android:layout_alignStart="@+id/name"
+        android:visibility="invisible"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"/>
 
 </RelativeLayout>

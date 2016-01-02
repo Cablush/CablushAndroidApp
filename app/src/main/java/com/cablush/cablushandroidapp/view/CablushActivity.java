@@ -1,11 +1,11 @@
 package com.cablush.cablushandroidapp.view;
 
-import android.app.Activity;
 import android.graphics.Typeface;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -16,7 +16,7 @@ import com.google.android.gms.maps.model.LatLng;
 /**
  * Created by Jonathan on 11/11/2015.
  */
-public class CablushActivity extends Activity {
+public class CablushActivity extends AppCompatActivity {
 
     protected String TAG = getClass().getSimpleName();
 

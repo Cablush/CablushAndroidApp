@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cablush.cablushandroidapp.R;
@@ -14,11 +16,6 @@ import com.cablush.cablushandroidapp.utils.ViewUtils;
 import com.cablush.cablushandroidapp.view.dialogs.LocalInfoDialog;
 import com.cablush.cablushandroidapp.view.dialogs.RegisterDialog;
 import com.cablush.cablushandroidapp.view.drawer.DrawerActivityConfiguration;
-import com.cablush.cablushandroidapp.view.drawer.DrawerAdapter;
-import com.cablush.cablushandroidapp.view.drawer.DrawerItem;
-import com.cablush.cablushandroidapp.view.drawer.DrawerMenuHeader;
-import com.cablush.cablushandroidapp.view.drawer.DrawerMenuItem;
-import com.cablush.cablushandroidapp.view.drawer.DrawerMenuSection;
 import com.cablush.cablushandroidapp.view.dialogs.LoginDialog;
 import com.cablush.cablushandroidapp.view.dialogs.SearchDialog;
 import com.google.android.gms.maps.CameraUpdate;
@@ -82,63 +79,52 @@ public class MainActivity extends AbstractDrawerActivity implements OnMapReadyCa
 
     @Override
     protected DrawerActivityConfiguration getNavDrawerConfiguration() {
-        DrawerItem[] menu = new DrawerItem[] {
-                DrawerMenuHeader.create(101),
-                DrawerMenuSection.create(200, getString(R.string.drawer_section_search)),
-                DrawerMenuItem.create(201, getString(R.string.drawer_item_stores), "ic_launcher", false, this),
-                DrawerMenuItem.create(202, getString(R.string.drawer_item_events), "ic_launcher", false, this),
-                DrawerMenuItem.create(203, getString(R.string.drawer_item_spots), "ic_launcher", false, this),
-                DrawerMenuSection.create(300, getString(R.string.drawer_section_my_places)),
-                DrawerMenuItem.create(301, getString(R.string.drawer_item_stores), "ic_launcher", false, this),
-                DrawerMenuItem.create(302, getString(R.string.drawer_item_events), "ic_launcher", false, this),
-                DrawerMenuItem.create(303, getString(R.string.drawer_item_spots), "ic_launcher", false, this)};
-
         DrawerActivityConfiguration navConf = new DrawerActivityConfiguration();
         navConf.setMainLayout(R.layout.activity_main);
         navConf.setDrawerLayoutId(R.id.drawer_layout);
-        navConf.setLeftDrawerId(R.id.list_slidermenu);
-        navConf.setNavItems(menu);
-//        navConf.setDrawerShadow(R.drawable.drawer_shadow);
-//        navConf.setDrawerOpenDesc(R.string.drawer_open);
-//        navConf.setDrawerCloseDesc(R.string.drawer_close);
-        navConf.setBaseAdapter(new DrawerAdapter(this, R.layout.drawer_item, menu));
+        navConf.setToolbarId(R.id.toolbar);
+        navConf.setNavigationId(R.id.navigation_view);
+        navConf.setHeaderId(R.layout.drawer_header);
         return navConf;
     }
 
     @Override
-    protected void onNavItemSelected(int id) {
+    protected boolean onNavItemSelected(int id) {
         switch (id) {
-            case 101:
+            case R.id.header_view:
                 if (Usuario.LOGGED_USER == null) {
+                    drawerLayout.closeDrawers();
                     LoginDialog.showDialog(getFragmentManager());
+                    return true;
                 }
-                break;
-            case 201:
+                return false;
+            case R.id.drawer_search_lojas:
                 SearchDialog.showDialog(getFragmentManager(), SearchDialog.TYPE.LOJA);
-                break;
-            case 202:
+                return true;
+            case R.id.drawer_search_eventos:
                 SearchDialog.showDialog(getFragmentManager(), SearchDialog.TYPE.EVENTO);
-                break;
-            case 203:
+                return true;
+            case R.id.drawer_search_pistas:
                 SearchDialog.showDialog(getFragmentManager(), SearchDialog.TYPE.PISTA);
-                break;
-            case 301:
+                return true;
+            case R.id.drawer_my_lojas:
                 if (ViewUtils.checkUserLoggedIn(this)) {
-
+                    return true;
                 }
-                break;
-            case 302:
+                return false;
+            case R.id.drawer_my_eventos:
                 if (ViewUtils.checkUserLoggedIn(this)) {
-
+                    return true;
                 }
-                break;
-            case 303:
+                return false;
+            case R.id.drawer_my_pistas:
                 if (ViewUtils.checkUserLoggedIn(this)) {
-
+                    return true;
                 }
-                break;
+                return false;
             default:
                 Toast.makeText(getApplicationContext(), R.string.erro_invalid_option, Toast.LENGTH_SHORT).show();
+                return false;
         }
     }
 
@@ -147,7 +133,14 @@ public class MainActivity extends AbstractDrawerActivity implements OnMapReadyCa
         Toast.makeText(this,
                 getString(R.string.success_login, Usuario.LOGGED_USER.getNome()),
                 Toast.LENGTH_SHORT).show();
-        updateDrawer();
+//        View headerLayout = navigationView.findViewById(R.id.header_view);
+
+        TextView nameTextView = (TextView) navigationView.findViewById(R.id.name);
+        nameTextView.setText(Usuario.LOGGED_USER.getNome());
+
+        TextView emailTextView = (TextView) navigationView.findViewById(R.id.email);
+        emailTextView.setText(Usuario.LOGGED_USER.getEmail());
+        emailTextView.setVisibility(View.VISIBLE);
     }
 
     @Override

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Cablush" parent="Theme.AppCompat.Light">
+    <style name="Cablush" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="colorPrimary">@color/primary_cablush_light</item>
         <item name="colorPrimaryDark">@color/primary_dark_cablush_light</item>
         <item name="colorAccent">@color/accent_cablush_light</item>
@@ -10,8 +10,23 @@
         <item name="android:textColorSecondary">@color/secondary_text_cablush_light</item>
         <item name="android:textColorLink">@color/accent_cablush_light</item>
 
-        <item name="dialogTheme">@style/Cablush.Dialogs</item>
-        <item name="alertDialogTheme">@style/Cablush.Dialogs</item>
+        <item name="android:dialogTheme">@style/Cablush.Dialogs</item>
+        <item name="android:alertDialogTheme">@style/Cablush.Dialogs</item>
+    </style>
+
+    <style name="Cablush.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Cablush.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+        <item name="android:textColorPrimary">@color/primary_cablush_light</item>
+        <item name="android:windowBackground">@color/primary_dark_cablush_light</item>
+    </style>
+
+    <style name="Cablush.PopupOverlay" parent="ThemeOverlay.AppCompat.Light">
+        <item name="android:textColorPrimary">@color/primary_cablush_light</item>
+        <item name="android:windowBackground">@color/primary_dark_cablush_light</item>
     </style>
 
     <style name="Cablush.Dialogs" parent="Theme.AppCompat.Light.Dialog">

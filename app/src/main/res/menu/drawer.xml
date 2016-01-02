@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/section_search"
+            android:title="@string/drawer_section_search">
+            <menu>
+                <item
+                    android:id="@+id/drawer_search_lojas"
+                    android:icon="@drawable/ic_mark_cablush_orange"
+                    android:title="@string/drawer_item_stores"/>
+
+                <item
+                    android:id="@+id/drawer_search_eventos"
+                    android:icon="@drawable/ic_mark_cablush_orange"
+                    android:title="@string/drawer_item_events"/>
+
+                <item
+                    android:id="@+id/drawer_search_pistas"
+                    android:icon="@drawable/ic_mark_cablush_orange"
+                    android:title="@string/drawer_item_spots"/>
+            </menu>
+        </item>
+
+        <item
+            android:id="@+id/section_my_places"
+            android:title="@string/drawer_section_my_places">
+            <menu>
+                <item
+                    android:id="@+id/drawer_my_lojas"
+                    android:icon="@drawable/ic_mark_cablush_orange"
+                    android:title="@string/drawer_item_stores"/>
+
+                <item
+                    android:id="@+id/drawer_my_eventos"
+                    android:icon="@drawable/ic_mark_cablush_orange"
+                    android:title="@string/drawer_item_events"/>
+
+                <item
+                    android:id="@+id/drawer_my_pistas"
+                    android:icon="@drawable/ic_mark_cablush_orange"
+                    android:title="@string/drawer_item_spots"/>
+            </menu>
+        </item>
+
+    </group>
+</menu>

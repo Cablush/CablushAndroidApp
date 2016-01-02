@@ -1,5 +1,6 @@
 package com.cablush.cablushandroidapp.view;
 
+import android.app.Activity;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.Handler;
@@ -10,7 +11,7 @@ import com.cablush.cablushandroidapp.presenter.LoginPresenter;
 /**
  * Created by jonathan on 22/10/15.
  */
-public class SplashScreenActivity extends CablushActivity implements Runnable, LoginPresenter.LoginView {
+public class SplashScreenActivity extends Activity implements Runnable, LoginPresenter.LoginView {
 
     private static final String TAG = SplashScreenActivity.class.getSimpleName();
 
