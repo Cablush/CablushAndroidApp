@@ -4,6 +4,7 @@ import android.content.Context;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
@@ -61,6 +62,18 @@ public class MainActivity extends AbstractDrawerActivity implements OnMapReadyCa
         // Init Map Async
         MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.mapView);
         mapFragment.getMapAsync(this);
+
+        FloatingActionButton addFAB = (FloatingActionButton) findViewById(R.id.add_fab);
+        addFAB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (ViewUtils.checkUserLoggedIn(MainActivity.this)) {
+
+                }
+            }
+        });
+
+        checkLogin();
     }
 
 
@@ -128,19 +141,29 @@ public class MainActivity extends AbstractDrawerActivity implements OnMapReadyCa
         }
     }
 
+    private void checkLogin() {
+        TextView nameTextView = (TextView) navigationView.findViewById(R.id.name);
+        TextView emailTextView = (TextView) navigationView.findViewById(R.id.email);
+
+        if (Usuario.LOGGED_USER != null) {
+            nameTextView.setText(Usuario.LOGGED_USER.getNome());
+            emailTextView.setText(Usuario.LOGGED_USER.getEmail());
+            emailTextView.setVisibility(View.VISIBLE);
+        } else {
+            nameTextView.setText(R.string.drawer_item_login_register);
+            emailTextView.setText("");
+            emailTextView.setVisibility(View.INVISIBLE);
+        }
+    }
+
+
     @Override
     public void onLoginDialogSuccess() {
         Toast.makeText(this,
                 getString(R.string.success_login, Usuario.LOGGED_USER.getNome()),
                 Toast.LENGTH_SHORT).show();
-//        View headerLayout = navigationView.findViewById(R.id.header_view);
 
-        TextView nameTextView = (TextView) navigationView.findViewById(R.id.name);
-        nameTextView.setText(Usuario.LOGGED_USER.getNome());
-
-        TextView emailTextView = (TextView) navigationView.findViewById(R.id.email);
-        emailTextView.setText(Usuario.LOGGED_USER.getEmail());
-        emailTextView.setVisibility(View.VISIBLE);
+        checkLogin();
     }
 
     @Override
