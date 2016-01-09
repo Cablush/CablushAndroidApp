@@ -63,15 +63,15 @@ public class MainActivity extends AbstractDrawerActivity implements OnMapReadyCa
         MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.mapView);
         mapFragment.getMapAsync(this);
 
-        FloatingActionButton addFAB = (FloatingActionButton) findViewById(R.id.add_fab);
-        addFAB.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (ViewUtils.checkUserLoggedIn(MainActivity.this)) {
-
-                }
-            }
-        });
+//        FloatingActionButton addFAB = (FloatingActionButton) findViewById(R.id.add_fab);
+//        addFAB.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if (ViewUtils.checkUserLoggedIn(MainActivity.this)) {
+//
+//                }
+//            }
+//        });
 
         checkLogin();
     }
@@ -120,21 +120,21 @@ public class MainActivity extends AbstractDrawerActivity implements OnMapReadyCa
             case R.id.drawer_search_pistas:
                 SearchDialog.showDialog(getFragmentManager(), SearchDialog.TYPE.PISTA);
                 return true;
-            case R.id.drawer_my_lojas:
-                if (ViewUtils.checkUserLoggedIn(this)) {
-                    return true;
-                }
-                return false;
-            case R.id.drawer_my_eventos:
-                if (ViewUtils.checkUserLoggedIn(this)) {
-                    return true;
-                }
-                return false;
-            case R.id.drawer_my_pistas:
-                if (ViewUtils.checkUserLoggedIn(this)) {
-                    return true;
-                }
-                return false;
+//            case R.id.drawer_my_lojas:
+//                if (ViewUtils.checkUserLoggedIn(this)) {
+//                    return true;
+//                }
+//                return false;
+//            case R.id.drawer_my_eventos:
+//                if (ViewUtils.checkUserLoggedIn(this)) {
+//                    return true;
+//                }
+//                return false;
+//            case R.id.drawer_my_pistas:
+//                if (ViewUtils.checkUserLoggedIn(this)) {
+//                    return true;
+//                }
+//                return false;
             default:
                 Toast.makeText(getApplicationContext(), R.string.erro_invalid_option, Toast.LENGTH_SHORT).show();
                 return false;
