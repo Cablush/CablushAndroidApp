@@ -17,7 +17,7 @@
             android:theme="@style/Cablush.AppBarOverlay"
             android:popupTheme="@style/Cablush.PopupOverlay"
             android:elevation="4dp"
-            android:background="@color/primary_dark_cablush_light"/>
+            android:background="@color/cablush_blue"/>
 
         <!-- The main content view -->
         <fragment

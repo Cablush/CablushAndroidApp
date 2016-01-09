@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="cablush_light">#fafafa</color>
-    <color name="cablush_blue">#0d0d44</color>
+    <color name="cablush_light">#ffffff</color>
+    <color name="cablush_dark_blue">#0d0d44</color>
+    <color name="cablush_blue">#12125E</color>
     <color name="cablush_orange">#e84d23</color>
-
-    <color name="primary_cablush_light">#fafafa</color>
-    <color name="primary_dark_cablush_light">#0d0d44</color>
-    <color name="accent_cablush_light">#e84d23</color>
 
     <color name="primary_text_default_cablush_light">#de0d0d44</color>
     <color name="secondary_text_default_cablush_light">#8a0d0d44</color>

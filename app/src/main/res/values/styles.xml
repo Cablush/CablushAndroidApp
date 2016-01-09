@@ -2,13 +2,13 @@
 <resources>
 
     <style name="Cablush" parent="Theme.AppCompat.Light.DarkActionBar">
-        <item name="colorPrimary">@color/primary_cablush_light</item>
-        <item name="colorPrimaryDark">@color/primary_dark_cablush_light</item>
-        <item name="colorAccent">@color/accent_cablush_light</item>
+        <item name="colorPrimary">@color/cablush_light</item>
+        <item name="colorPrimaryDark">@color/cablush_dark_blue</item>
+        <item name="colorAccent">@color/cablush_orange</item>
 
         <item name="android:textColorPrimary">@color/primary_text_cablush_light</item>
         <item name="android:textColorSecondary">@color/secondary_text_cablush_light</item>
-        <item name="android:textColorLink">@color/accent_cablush_light</item>
+        <item name="android:textColorLink">@color/cablush_orange</item>
 
         <item name="android:dialogTheme">@style/Cablush.Dialogs</item>
         <item name="android:alertDialogTheme">@style/Cablush.Dialogs</item>
@@ -20,21 +20,21 @@
     </style>
 
     <style name="Cablush.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
-        <item name="android:textColorPrimary">@color/primary_cablush_light</item>
-        <item name="android:windowBackground">@color/primary_dark_cablush_light</item>
+        <item name="android:textColorPrimary">@color/cablush_light</item>
+        <item name="android:windowBackground">@color/cablush_dark_blue</item>
     </style>
 
     <style name="Cablush.PopupOverlay" parent="ThemeOverlay.AppCompat.Light">
-        <item name="android:textColorPrimary">@color/primary_cablush_light</item>
-        <item name="android:windowBackground">@color/primary_dark_cablush_light</item>
+        <item name="android:textColorPrimary">@color/cablush_light</item>
+        <item name="android:windowBackground">@color/cablush_dark_blue</item>
     </style>
 
     <style name="Cablush.Dialogs" parent="Theme.AppCompat.Light.Dialog">
-        <item name="colorPrimary">@color/primary_cablush_light</item>
-        <item name="colorPrimaryDark">@color/primary_dark_cablush_light</item>
-        <item name="colorAccent">@color/accent_cablush_light</item>
+        <item name="colorPrimary">@color/cablush_light</item>
+        <item name="colorPrimaryDark">@color/cablush_dark_blue</item>
+        <item name="colorAccent">@color/cablush_orange</item>
 
-        <item name="android:colorBackground">@color/primary_cablush_light</item>
+        <item name="android:colorBackground">@color/cablush_light</item>
     </style>
 
     <style name="TextAppearance" parent="android:TextAppearance">
