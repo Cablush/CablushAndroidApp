@@ -158,7 +158,7 @@
 
     <!-- Mensagens de sucesso -->
     <string name="success_login">Olá %s! Agora você pode compartilhar seus locais favoritos!</string>
-    <string name="success_register">Cadastro realizado! Efetue login para compartilhar seus locais favoritos!</string>
+    <string name="success_register">Cadastro realizado! Antes de fazer Login, confirme o cadastro no email que te enviamos!</string>
 
     <!-- Mensagens de erro -->
     <string name="error_create_map">Error a carregar o mapa!</string>
