@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,6 +35,8 @@ import java.util.Map;
 
 public class MainActivity extends AbstractDrawerActivity implements OnMapReadyCallback,
         LoginDialog.LoginDialogListener, RegisterDialog.RegisterDialogListener, SearchDialog.SearchDialogListener {
+
+    private ProgressBar spinner;
 
     private GoogleMap googleMap;
 
@@ -70,6 +73,9 @@ public class MainActivity extends AbstractDrawerActivity implements OnMapReadyCa
 //                }
 //            }
 //        });
+
+        spinner = (ProgressBar)findViewById(R.id.progressBar);
+        spinner.setVisibility(View.GONE);
 
         checkLogin();
     }
@@ -196,11 +202,13 @@ public class MainActivity extends AbstractDrawerActivity implements OnMapReadyCa
             }
             centerMap(localizaveis);
         }
+        spinner.setVisibility(View.GONE);
     }
 
     @Override
     public void onSearchDialogError(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+        spinner.setVisibility(View.GONE);
     }
 
     private void clearMarker() {

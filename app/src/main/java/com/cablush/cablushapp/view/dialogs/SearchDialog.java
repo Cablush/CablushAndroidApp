@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -117,6 +118,9 @@ public class SearchDialog extends DialogFragment implements SearchPresenter.Sear
                     default:
                         Toast.makeText(getActivity(), R.string.erro_invalid_search_type, Toast.LENGTH_SHORT).show();
                 }
+
+                ProgressBar spinner = (ProgressBar)getActivity().findViewById(R.id.progressBar);
+                spinner.setVisibility(View.VISIBLE);
             }
         });
         builder.setNegativeButton(R.string.btn_cancel, new DialogInterface.OnClickListener() {
