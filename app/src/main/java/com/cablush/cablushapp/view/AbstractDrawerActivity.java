@@ -19,9 +19,9 @@ import com.cablush.cablushapp.view.drawer.DrawerActivityConfiguration;
  */
 public abstract class AbstractDrawerActivity extends CablushActivity {
 
-    NavigationView navigationView;
-    DrawerLayout drawerLayout;
-    ActionBarDrawerToggle mDrawerToggle;
+    protected NavigationView navigationView;
+    protected DrawerLayout drawerLayout;
+    protected ActionBarDrawerToggle mDrawerToggle;
 
     protected abstract DrawerActivityConfiguration getNavDrawerConfiguration();
 
