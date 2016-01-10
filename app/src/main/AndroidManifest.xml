@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.cablush.cablushandroidapp" >
+    package="com.cablush.cablushapp" >
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -21,7 +21,7 @@
         <meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version" />
 
         <activity
-            android:name=".view.SplashScreenActivity"
+            android:name="com.cablush.cablushapp.view.SplashScreenActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
             <intent-filter>
@@ -29,7 +29,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".view.MainActivity"
+        <activity android:name="com.cablush.cablushapp.view.MainActivity"
                   android:configChanges="orientation|screenSize|keyboardHidden"
                   android:theme="@style/Cablush.NoActionBar"/>
         <!--<activity android:name=".view.CadastroPistaActivity"/>-->
