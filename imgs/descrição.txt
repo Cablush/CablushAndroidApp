@@ -1,0 +1,20 @@
+Titulo:
+ Cablush
+
+Breve descrição: 
+  Cablush é um site colaborativo, para encontrar onde fazer esportes.
+
+Descrição completa:
+Cablush é um site colaborativo, para te ajudar a encontrar lojas, eventos e lugares para praticar o seu esporte favorito.
+
+Tem uma loja do coração que vende materias esportivos? Vai participar de algum evento? Sabe onde praticar seu esporte preferido onde quer que esteja? Nos conte e ajude outras pessoas a ficarem por dentro do universo esportivo.
+
+
+Tipo de app:
+apps
+Categoria 
+Esporte
+Medio Nivel de Maturidade( to querendo colocar alto)
+
+Telefone:
+Vc decide eu coloquei o meu

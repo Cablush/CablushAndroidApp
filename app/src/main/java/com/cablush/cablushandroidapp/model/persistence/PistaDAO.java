@@ -88,7 +88,9 @@ public class PistaDAO extends AppBaseDAO {
             localDAO.saveLocal(db, pista.getLocal());
             // save horario
             pista.getHorario().setUuidLocalizavel(pista.getUuid());
-            horarioDAO.saveHorario(db, pista.getHorario());
+            if(pista.getHorario() != null) { //Validação de null pois estava quebrando o app
+                horarioDAO.saveHorario(db, pista.getHorario());
+            }
             // TODO save esportes
             db.setTransactionSuccessful();
             return rowID;

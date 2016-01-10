@@ -19,6 +19,7 @@ import com.cablush.cablushandroidapp.view.dialogs.RegisterDialog;
 import com.cablush.cablushandroidapp.view.drawer.DrawerActivityConfiguration;
 import com.cablush.cablushandroidapp.view.dialogs.LoginDialog;
 import com.cablush.cablushandroidapp.view.dialogs.SearchDialog;
+import com.cablush.cablushandroidapp.view.maps.CustomInfoWindow;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -211,7 +212,7 @@ public class MainActivity extends AbstractDrawerActivity implements OnMapReadyCa
                 .snippet(localizavel.getUuid())
                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_mark_cablush_orange)));
 
-        //googleMap.setInfoWindowAdapter(new CustomInfoWindow(localizavel, this));
+        googleMap.setInfoWindowAdapter(new CustomInfoWindow(localizavel, this));
         googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {

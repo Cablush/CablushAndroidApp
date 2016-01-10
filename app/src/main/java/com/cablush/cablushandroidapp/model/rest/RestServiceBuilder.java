@@ -37,8 +37,8 @@ public class RestServiceBuilder {
 
     private static final String SERVICE_KEY = "";
 
-    //private static final String SERVER_URL = "http://www.cablush.com/api";
-    private static final String SERVER_URL = "http://10.0.2.2:3000/api";
+    private static final String SERVER_URL = "http://www.cablush.com/api";
+    //private static final String SERVER_URL = "http://10.0.2.2:3000/api";
 
     public static final String ACCESS_TOKEN = "Access-Token";
     public static final String TOKEN_TYPE = "Token-Type";
