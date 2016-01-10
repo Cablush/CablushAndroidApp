@@ -17,38 +17,54 @@ class HorarioDAO extends AppBaseDAO {
 
     static final String TABLE = "horario";
 
-    static final String _UUID = "uuid";
-    static final String _INICIO = "inicio";
-    static final String _FIM = "fim";
-    static final String _SEG = "seg";
-    static final String _TER = "ter";
-    static final String _QUA = "qua";
-    static final String _QUI = "qui";
-    static final String _SEX = "sex";
-    static final String _SAB = "sab";
-    static final String _DOM = "dom";
-    static final String _DETALHES = "detalhes";
+    enum Columns implements IColumns<Columns> {
+        _UUID("uuid", "TEXT PRIMARY KEY"),
+        _INICIO("inicio", "INTEGER"),
+        _FIM("fim", "INTEGER"),
+        _SEG("seg", "INTEGER"),
+        _TER("ter", "INTEGER"),
+        _QUA("qua", "INTEGER"),
+        _QUI("qui", "INTEGER"),
+        _SEX("sex", "INTEGER"),
+        _SAB("sab", "INTEGER"),
+        _DOM("dom", "INTEGER"),
+        _DETALHES("detalhes", "TEXT");
 
-    private static final String CREATE_TABLE = "CREATE TABLE " + TABLE + " ( "
-            + _UUID + " TEXT PRIMARY KEY, "
-            + _INICIO + " INTEGER, "
-            + _FIM + " INTEGER, "
-            + _SEG + " INTEGER, "
-            + _TER + " INTEGER, "
-            + _QUA + " INTEGER, "
-            + _QUI + " INTEGER, "
-            + _SEX + " INTEGER, "
-            + _SAB + " INTEGER, "
-            + _DOM + " INTEGER, "
-            + _DETALHES + " TEXT "
-            + ");";
+        private String columnName;
+        private String columnType;
+
+        Columns(String columnName, String columnType) {
+            this.columnName = columnName;
+            this.columnType = columnType;
+        }
+
+        @Override
+        public String getColumnName() {
+            return columnName;
+        }
+
+        @Override
+        public String getColumnNameWithTable() {
+            return TABLE + "." + columnName;
+        }
+
+        @Override
+        public String getColumnAlias() {
+            return TABLE + "_" + columnName;
+        }
+
+        @Override
+        public String getColumnDefinition() {
+            return columnName + " " + columnType;
+        }
+    }
 
     HorarioDAO(Context context) {
         dbHelper = CablushDBHelper.getInstance(context);
     }
 
     static void onCreate(SQLiteDatabase db) throws SQLException {
-        db.execSQL(CREATE_TABLE);
+        db.execSQL(createTable(TABLE, Columns.class));
     }
 
     static void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) throws SQLException {
@@ -58,37 +74,59 @@ class HorarioDAO extends AppBaseDAO {
 
     private ContentValues getContentValues(Horario horario){
         ContentValues values = new ContentValues();
-        values.put(_UUID, horario.getUuidLocalizavel());
+        values.put(Columns._UUID.getColumnName(), horario.getUuidLocalizavel());
         if (horario.getInicio() != null) {
-            values.put(_INICIO, horario.getInicio().toString());
+            values.put(Columns._INICIO.getColumnName(), horario.getInicio().toString());
         }
         if (horario.getFim() != null) {
-            values.put(_FIM, horario.getFim().toString());
+            values.put(Columns._FIM.getColumnName(), horario.getFim().toString());
         }
-        values.put(_SEG, horario.getSeg());
-        values.put(_TER, horario.getTer());
-        values.put(_QUA, horario.getQua());
-        values.put(_QUI, horario.getQui());
-        values.put(_SEX, horario.getSex());
-        values.put(_SAB, horario.getSab());
-        values.put(_DOM, horario.getDom());
-        values.put(_DETALHES, horario.getDetalhes());
+        values.put(Columns._SEG.getColumnName(), horario.getSeg());
+        values.put(Columns._TER.getColumnName(), horario.getTer());
+        values.put(Columns._QUA.getColumnName(), horario.getQua());
+        values.put(Columns._QUI.getColumnName(), horario.getQui());
+        values.put(Columns._SEX.getColumnName(), horario.getSex());
+        values.put(Columns._SAB.getColumnName(), horario.getSab());
+        values.put(Columns._DOM.getColumnName(), horario.getDom());
+        values.put(Columns._DETALHES.getColumnName(), horario.getDetalhes());
         return values;
     }
 
-    Horario getHorario(Cursor cursor, boolean columnsWithTable) {
+    Horario getHorario(Cursor cursor, boolean byColumnAlias) {
         Horario horario = new Horario();
-        horario.setUuidLocalizavel(readCursor(cursor, columnsWithTable ? TABLE + "." + _UUID : _UUID, String.class));
-        horario.setInicio(readCursor(cursor, columnsWithTable ? TABLE + "." + _INICIO : _INICIO, Date.class));
-        horario.setFim(readCursor(cursor, columnsWithTable ? TABLE + "." + _FIM : _FIM, Date.class));
-        horario.setSeg(readCursor(cursor, columnsWithTable ? TABLE + "." + _SEG : _SEG, Boolean.class));
-        horario.setTer(readCursor(cursor, columnsWithTable ? TABLE + "." + _TER : _TER, Boolean.class));
-        horario.setQua(readCursor(cursor, columnsWithTable ? TABLE + "." + _QUA : _QUA, Boolean.class));
-        horario.setQui(readCursor(cursor, columnsWithTable ? TABLE + "." + _QUI : _QUI, Boolean.class));
-        horario.setSex(readCursor(cursor, columnsWithTable ? TABLE + "." + _SEX : _SEX, Boolean.class));
-        horario.setSab(readCursor(cursor, columnsWithTable ? TABLE + "." + _SAB : _SAB, Boolean.class));
-        horario.setDom(readCursor(cursor, columnsWithTable ? TABLE + "." + _DOM : _DOM, Boolean.class));
-        horario.setDetalhes(readCursor(cursor, columnsWithTable ? TABLE + "." + _DETALHES : _DETALHES, String.class));
+        horario.setUuidLocalizavel(readCursor(cursor,
+                byColumnAlias ? Columns._UUID.getColumnAlias() : Columns._UUID.getColumnName(),
+                String.class));
+        horario.setInicio(readCursor(cursor,
+                byColumnAlias ? Columns._INICIO.getColumnAlias() : Columns._INICIO.getColumnName(),
+                Date.class));
+        horario.setFim(readCursor(cursor,
+                byColumnAlias ? Columns._FIM.getColumnAlias() : Columns._FIM.getColumnName(),
+                Date.class));
+        horario.setSeg(readCursor(cursor,
+                byColumnAlias ? Columns._SEG.getColumnAlias() : Columns._SEG.getColumnName(),
+                Boolean.class));
+        horario.setTer(readCursor(cursor,
+                byColumnAlias ? Columns._TER.getColumnAlias() : Columns._TER.getColumnName(),
+                Boolean.class));
+        horario.setQua(readCursor(cursor,
+                byColumnAlias ? Columns._QUA.getColumnAlias() : Columns._QUA.getColumnName(),
+                Boolean.class));
+        horario.setQui(readCursor(cursor,
+                byColumnAlias ? Columns._QUI.getColumnAlias() : Columns._QUI.getColumnName(),
+                Boolean.class));
+        horario.setSex(readCursor(cursor,
+                byColumnAlias ? Columns._SEX.getColumnAlias() : Columns._SEX.getColumnName(),
+                Boolean.class));
+        horario.setSab(readCursor(cursor,
+                byColumnAlias ? Columns._SAB.getColumnAlias() : Columns._SAB.getColumnName(),
+                Boolean.class));
+        horario.setDom(readCursor(cursor,
+                byColumnAlias ? Columns._DOM.getColumnAlias() : Columns._DOM.getColumnName(),
+                Boolean.class));
+        horario.setDetalhes(readCursor(cursor,
+                byColumnAlias ? Columns._DETALHES.getColumnAlias() : Columns._DETALHES.getColumnName(),
+                String.class));
         return horario;
     }
 
@@ -97,11 +135,11 @@ class HorarioDAO extends AppBaseDAO {
     }
 
     private int update(SQLiteDatabase db, Horario horario) {
-        return db.update(TABLE, getContentValues(horario), _UUID + " = ? ", new String[]{horario.getUuidLocalizavel()});
+        return db.update(TABLE, getContentValues(horario), Columns._UUID.getColumnName() + " = ? ", new String[]{horario.getUuidLocalizavel()});
     }
 
     private int delete(SQLiteDatabase db, String uuid) {
-        return db.delete(TABLE, _UUID + " = ? ", new String[]{uuid});
+        return db.delete(TABLE, Columns._UUID.getColumnName() + " = ? ", new String[]{uuid});
     }
 
     void saveHorario(SQLiteDatabase db, Horario horario) {
@@ -113,7 +151,7 @@ class HorarioDAO extends AppBaseDAO {
     }
 
     Horario getHorario(SQLiteDatabase db, String uuid) {
-        Cursor cursor = db.query(TABLE, null, _UUID + " = ? ", new String[]{uuid}, null, null, null);
+        Cursor cursor = db.query(TABLE, null, Columns._UUID.getColumnName() + " = ? ", new String[]{uuid}, null, null, null);
         Horario horario = null;
         if (cursor.moveToFirst()) {
             horario = getHorario(cursor, false);

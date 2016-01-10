@@ -19,24 +19,47 @@ public class EsporteDAO  extends AppBaseDAO {
 
     private static final String TABLE = "esporte";
 
-    private static final String _ID = "id";
-    private static final String _NOME = "nome";
-    private static final String _CATEGORIA = "categoria";
-    private static final String _ICONE = "icone";
+    enum Columns implements IColumns<Columns> {
+        _ID("id", "INTEGER PRIMARY KEY"),
+        _NOME("nome", "TEXT"),
+        _CATEGORIA("categoria", "TEXT"),
+        _ICONE("icone", "INTEGER");
 
-    private static final String CREATE_TABLE = "CREATE TABLE " + TABLE + " ( "
-            + _ID + " INTEGER PRIMARY KEY, "
-            + _NOME + " TEXT, "
-            + _CATEGORIA + " TEXT, "
-            + _ICONE + " INTEGER "
-            + ");";
+        private String columnName;
+        private String columnType;
+
+        Columns(String columnName, String columnType) {
+            this.columnName = columnName;
+            this.columnType = columnType;
+        }
+
+        @Override
+        public String getColumnName() {
+            return columnName;
+        }
+
+        @Override
+        public String getColumnNameWithTable() {
+            return TABLE + "." + columnName;
+        }
+
+        @Override
+        public String getColumnAlias() {
+            return TABLE + "_" + columnName;
+        }
+
+        @Override
+        public String getColumnDefinition() {
+            return columnName + " " + columnType;
+        }
+    }
 
     public EsporteDAO(Context context) {
         dbHelper = CablushDBHelper.getInstance(context);
     }
 
     static void onCreate(SQLiteDatabase db) throws SQLException {
-        db.execSQL(CREATE_TABLE);
+        db.execSQL(createTable(TABLE, Columns.class));
     }
 
     static void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) throws SQLException {
@@ -46,19 +69,19 @@ public class EsporteDAO  extends AppBaseDAO {
 
     private ContentValues getContentValues(Esporte esporte){
         ContentValues values = new ContentValues();
-        values.put(_ID, esporte.getId());
-        values.put(_NOME, esporte.getNome());
-        values.put(_CATEGORIA, esporte.getCategoria());
-        values.put(_ICONE, esporte.getIcone());
+        values.put(Columns._ID.getColumnName(), esporte.getId());
+        values.put(Columns._NOME.getColumnName(), esporte.getNome());
+        values.put(Columns._CATEGORIA.getColumnName(), esporte.getCategoria());
+        values.put(Columns._ICONE.getColumnName(), esporte.getIcone());
         return values;
     }
 
     private Esporte getEsporte(Cursor cursor) {
         Esporte evento = new Esporte();
-        evento.setId(readCursor(cursor, _ID, Integer.class));
-        evento.setNome(readCursor(cursor, _NOME, String.class));
-        evento.setCategoria(readCursor(cursor, _CATEGORIA, String.class));
-        evento.setIcone(readCursor(cursor, _ICONE, String.class));
+        evento.setId(readCursor(cursor, Columns._ID.getColumnName(), Integer.class));
+        evento.setNome(readCursor(cursor, Columns._NOME.getColumnName(), String.class));
+        evento.setCategoria(readCursor(cursor, Columns._CATEGORIA.getColumnName(), String.class));
+        evento.setIcone(readCursor(cursor, Columns._ICONE.getColumnName(), String.class));
         return evento;
     }
 

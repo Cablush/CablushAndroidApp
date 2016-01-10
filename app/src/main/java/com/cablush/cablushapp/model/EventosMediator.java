@@ -31,8 +31,8 @@ public class EventosMediator {
         this.eventoDAO = new EventoDAO(context);
     }
 
-    public List<Evento> getEventos(String nome, String estado, String esporte) {
-        apiEventos.getEventos(nome, estado, esporte, new Callback<List<Evento>>() {
+    public List<Evento> getEventos(String name, String estado, String esporte) {
+        apiEventos.getEventos(name, estado, esporte, new Callback<List<Evento>>() {
             @Override
             public void success(List<Evento> eventos, Response response) {
                 if (!eventos.isEmpty()) {
@@ -45,6 +45,6 @@ public class EventosMediator {
                 Log.e(TAG, "Error getting eventos. " + error.getMessage());
             }
         });
-        return eventoDAO.getEventos(); // TODO filter eventos search
+        return eventoDAO.getEventos(name, estado, esporte);
     }
 }

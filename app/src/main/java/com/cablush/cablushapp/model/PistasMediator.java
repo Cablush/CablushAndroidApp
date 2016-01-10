@@ -31,7 +31,7 @@ public class PistasMediator {
         this.pistaDAO = new PistaDAO(context);
     }
 
-    public List<Pista> getPistas(String name,String estado, String esporte) {
+    public List<Pista> getPistas(String name, String estado, String esporte) {
         apiPistas.getPistas(name, estado, esporte, new Callback<List<Pista>>() {
             @Override
             public void success(List<Pista> pistas, Response response) {
@@ -45,6 +45,6 @@ public class PistasMediator {
                 Log.e(TAG, "Error getting pistas. " + error.getMessage());
             }
         });
-        return pistaDAO.getPistas();  // TODO filter pistas search
+        return pistaDAO.getPistas(name, estado, esporte);
     }
 }

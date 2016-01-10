@@ -16,38 +16,54 @@ class LocalDAO extends AppBaseDAO {
 
     static final String TABLE = "local";
 
-    static final String _UUID = "uuid";
-    static final String _LATITUDE = "latitude";
-    static final String _LONGITUDE = "longitude";
-    static final String _LOGRADOURO = "logradouro";
-    static final String _NUMERO = "numero";
-    static final String _COMPLEMENTO = "complemento";
-    static final String _BAIRRO = "bairro";
-    static final String _CIDADE = "cidade";
-    static final String _ESTADO = "estado";
-    static final String _CEP = "cep";
-    static final String _PAIS = "pais";
+    enum Columns implements IColumns<Columns> {
+        _UUID("uuid", "TEXT PRIMARY KEY"),
+        _LATITUDE("latitude", "REAL"),
+        _LONGITUDE("longitude", "REAL"),
+        _LOGRADOURO("logradouro", "TEXT"),
+        _NUMERO("numero", "TEXT"),
+        _COMPLEMENTO("complemento", "TEXT"),
+        _BAIRRO("bairro", "TEXT"),
+        _CIDADE("cidade", "TEXT"),
+        _ESTADO("estado", "TEXT"),
+        _CEP("cep", "TEXT"),
+        _PAIS("pais", "TEXT");
 
-    private static final String CREATE_TABLE = "CREATE TABLE " + TABLE + " ( "
-            + _UUID + " TEXT PRIMARY KEY, "
-            + _LATITUDE + " REAL, "
-            + _LONGITUDE + " REAL, "
-            + _LOGRADOURO + " TEXT, "
-            + _NUMERO + " TEXT, "
-            + _COMPLEMENTO + " TEXT, "
-            + _BAIRRO + " TEXT, "
-            + _CIDADE + " TEXT, "
-            + _ESTADO + " TEXT, "
-            + _CEP + " TEXT, "
-            + _PAIS + " TEXT "
-            + ");";
+        private String columnName;
+        private String columnType;
+
+        Columns(String columnName, String columnType) {
+            this.columnName = columnName;
+            this.columnType = columnType;
+        }
+
+        @Override
+        public String getColumnName() {
+            return columnName;
+        }
+
+        @Override
+        public String getColumnNameWithTable() {
+            return TABLE + "." + columnName;
+        }
+
+        @Override
+        public String getColumnAlias() {
+            return TABLE + "_" + columnName;
+        }
+
+        @Override
+        public String getColumnDefinition() {
+            return columnName + " " + columnType;
+        }
+    }
 
     LocalDAO(Context context) {
         dbHelper = CablushDBHelper.getInstance(context);
     }
 
     static void onCreate(SQLiteDatabase db) throws SQLException {
-        db.execSQL(CREATE_TABLE);
+        db.execSQL(createTable(TABLE, Columns.class));
     }
 
     static void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) throws SQLException {
@@ -57,33 +73,55 @@ class LocalDAO extends AppBaseDAO {
 
     private ContentValues getContentValues(Local local){
         ContentValues values = new ContentValues();
-        values.put(_UUID, local.getUuidLocalizavel());
-        values.put(_LATITUDE, local.getLatitude());
-        values.put(_LONGITUDE, local.getLongitude());
-        values.put(_LOGRADOURO, local.getLogradouro());
-        values.put(_NUMERO, local.getNumero());
-        values.put(_COMPLEMENTO, local.getComplemento());
-        values.put(_BAIRRO, local.getBairro());
-        values.put(_CIDADE, local.getCidade());
-        values.put(_ESTADO, local.getEstado());
-        values.put(_CEP, local.getCep());
-        values.put(_PAIS, local.getPais());
+        values.put(Columns._UUID.getColumnName(), local.getUuidLocalizavel());
+        values.put(Columns._LATITUDE.getColumnName(), local.getLatitude());
+        values.put(Columns._LONGITUDE.getColumnName(), local.getLongitude());
+        values.put(Columns._LOGRADOURO.getColumnName(), local.getLogradouro());
+        values.put(Columns._NUMERO.getColumnName(), local.getNumero());
+        values.put(Columns._COMPLEMENTO.getColumnName(), local.getComplemento());
+        values.put(Columns._BAIRRO.getColumnName(), local.getBairro());
+        values.put(Columns._CIDADE.getColumnName(), local.getCidade());
+        values.put(Columns._ESTADO.getColumnName(), local.getEstado());
+        values.put(Columns._CEP.getColumnName(), local.getCep());
+        values.put(Columns._PAIS.getColumnName(), local.getPais());
         return values;
     }
 
-    Local getLocal(Cursor cursor, boolean columnsWithTable) {
+    Local getLocal(Cursor cursor, boolean byColumnAlias) {
         Local local = new Local();
-        local.setUuidLocalizavel(readCursor(cursor, columnsWithTable ? TABLE + "." + _UUID : _UUID, String.class));
-        local.setLatitude(readCursor(cursor, columnsWithTable ? TABLE + "." + _LATITUDE : _LATITUDE, Double.class));
-        local.setLongitude(readCursor(cursor, columnsWithTable ? TABLE + "." + _LONGITUDE : _LONGITUDE, Double.class));
-        local.setLogradouro(readCursor(cursor, columnsWithTable ? TABLE + "." + _LOGRADOURO : _LOGRADOURO, String.class));
-        local.setNumero(readCursor(cursor, columnsWithTable ? TABLE + "." + _NUMERO : _NUMERO, String.class));
-        local.setComplemento(readCursor(cursor, columnsWithTable ? TABLE + "." + _COMPLEMENTO : _COMPLEMENTO, String.class));
-        local.setBairro(readCursor(cursor, columnsWithTable ? TABLE + "." + _BAIRRO : _BAIRRO, String.class));
-        local.setCidade(readCursor(cursor, columnsWithTable ? TABLE + "." + _CIDADE : _CIDADE, String.class));
-        local.setEstado(readCursor(cursor, columnsWithTable ? TABLE + "." + _ESTADO : _ESTADO, String.class));
-        local.setCep(readCursor(cursor, columnsWithTable ? TABLE + "." + _CEP : _CEP, String.class));
-        local.setPais(readCursor(cursor, columnsWithTable ? TABLE + "." + _PAIS : _PAIS, String.class));
+        local.setUuidLocalizavel(readCursor(cursor,
+                byColumnAlias ? Columns._UUID.getColumnAlias() : Columns._UUID.getColumnName(),
+                String.class));
+        local.setLatitude(readCursor(cursor,
+                byColumnAlias ? Columns._LATITUDE.getColumnAlias() : Columns._LATITUDE.getColumnName(),
+                Double.class));
+        local.setLongitude(readCursor(cursor,
+                byColumnAlias ? Columns._LONGITUDE.getColumnAlias() : Columns._LONGITUDE.getColumnName(),
+                Double.class));
+        local.setLogradouro(readCursor(cursor,
+                byColumnAlias ? Columns._LOGRADOURO.getColumnAlias() : Columns._LOGRADOURO.getColumnName(),
+                String.class));
+        local.setNumero(readCursor(cursor,
+                byColumnAlias ? Columns._NUMERO.getColumnAlias() : Columns._NUMERO.getColumnName(),
+                String.class));
+        local.setComplemento(readCursor(cursor,
+                byColumnAlias ? Columns._COMPLEMENTO.getColumnAlias() : Columns._COMPLEMENTO.getColumnName(),
+                String.class));
+        local.setBairro(readCursor(cursor,
+                byColumnAlias ? Columns._BAIRRO.getColumnAlias() : Columns._BAIRRO.getColumnName(),
+                String.class));
+        local.setCidade(readCursor(cursor,
+                byColumnAlias ? Columns._CIDADE.getColumnAlias() : Columns._CIDADE.getColumnName(),
+                String.class));
+        local.setEstado(readCursor(cursor,
+                byColumnAlias ? Columns._ESTADO.getColumnAlias() : Columns._ESTADO.getColumnName(),
+                String.class));
+        local.setCep(readCursor(cursor,
+                byColumnAlias ? Columns._CEP.getColumnAlias() : Columns._CEP.getColumnName(),
+                String.class));
+        local.setPais(readCursor(cursor,
+                byColumnAlias ? Columns._PAIS.getColumnAlias() : Columns._PAIS.getColumnName(),
+                String.class));
         return local;
     }
 
@@ -92,11 +130,11 @@ class LocalDAO extends AppBaseDAO {
     }
 
     private int update(SQLiteDatabase db, Local local) {
-        return db.update(TABLE, getContentValues(local), _UUID + " = ? ", new String[]{local.getUuidLocalizavel()});
+        return db.update(TABLE, getContentValues(local), Columns._UUID.getColumnName() + " = ? ", new String[]{local.getUuidLocalizavel()});
     }
 
     private int delete(SQLiteDatabase db, String uuid) {
-        return db.delete(TABLE, _UUID + " = ? ", new String[]{uuid});
+        return db.delete(TABLE, Columns._UUID.getColumnName() + " = ? ", new String[]{uuid});
     }
 
     void saveLocal(SQLiteDatabase db, Local local) {
@@ -108,7 +146,7 @@ class LocalDAO extends AppBaseDAO {
     }
 
     Local getLocal(SQLiteDatabase db, String uuid) {
-        Cursor cursor = db.query(TABLE, null, _UUID + " = ? ", new String[]{uuid}, null, null, null);
+        Cursor cursor = db.query(TABLE, null, Columns._UUID.getColumnName() + " = ? ", new String[]{uuid}, null, null, null);
         Local local = null;
         if (cursor.moveToFirst()) {
             local = getLocal(cursor, false);

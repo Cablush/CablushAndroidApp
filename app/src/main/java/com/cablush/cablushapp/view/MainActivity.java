@@ -140,8 +140,9 @@ public class MainActivity extends AbstractDrawerActivity implements OnMapReadyCa
     }
 
     private void checkLogin() {
-        TextView nameTextView = (TextView) navigationView.findViewById(R.id.name);
-        TextView emailTextView = (TextView) navigationView.findViewById(R.id.email);
+        View header = navigationView.getHeaderView(0);
+        TextView nameTextView = (TextView) header.findViewById(R.id.name);
+        TextView emailTextView = (TextView) header.findViewById(R.id.email);
 
         if (Usuario.LOGGED_USER != null) {
             nameTextView.setText(Usuario.LOGGED_USER.getNome());

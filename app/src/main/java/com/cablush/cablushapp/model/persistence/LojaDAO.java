@@ -20,27 +20,45 @@ public class LojaDAO extends AppBaseDAO {
 
     static final String TABLE = "loja";
 
-    static final String _UUID = "uuid";
-    static final String _NOME = "nome";
-    static final String _DESCRICAO = "descricao";
-    static final String _TELEFONE = "telefone";
-    static final String _EMAIL = "email";
-    static final String _WEBSITE = "website";
-    static final String _FACEBOOK = "facebook";
-    static final String _LOGO = "logo";
-    static final String _FUNDO = "fundo";
+    enum Columns implements IColumns<Columns> {
+        _UUID("uuid", "TEXT PRIMARY KEY"),
+        _NOME("nome", "TEXT"),
+        _DESCRICAO("descricao", "TEXT"),
+        _TELEFONE("telefone", "TEXT"),
+        _EMAIL("email", "TEXT"),
+        _WEBSITE("website", "TEXT"),
+        _FACEBOOK("facebook", "TEXT"),
+        _LOGO("logo", "TEXT"),
+        _FUNDO("fundo", "INTEGER");
 
-    private static final String CREATE_TABLE = "CREATE TABLE " + TABLE + " ( "
-            + _UUID + " TEXT PRIMARY KEY, "
-            + _NOME + " TEXT, "
-            + _DESCRICAO + " TEXT, "
-            + _TELEFONE+ " TEXT, "
-            + _EMAIL + " TEXT, "
-            + _WEBSITE + " TEXT, "
-            + _FACEBOOK + " TEXT, "
-            + _LOGO + " TEXT, "
-            + _FUNDO + " INTEGER "
-            + ");";
+        private String columnName;
+        private String columnType;
+
+        Columns(String columnName, String columnType) {
+            this.columnName = columnName;
+            this.columnType = columnType;
+        }
+
+        @Override
+        public String getColumnName() {
+            return columnName;
+        }
+
+        @Override
+        public String getColumnNameWithTable() {
+            return TABLE + "." + columnName;
+        }
+
+        @Override
+        public String getColumnAlias() {
+            return TABLE + "_" + columnName;
+        }
+
+        @Override
+        public String getColumnDefinition() {
+            return columnName + " " + columnType;
+        }
+    }
 
     private LocalDAO localDAO;
     private HorarioDAO horarioDAO;
@@ -52,7 +70,7 @@ public class LojaDAO extends AppBaseDAO {
     }
 
     static void onCreate(SQLiteDatabase db) throws SQLException {
-        db.execSQL(CREATE_TABLE);
+        db.execSQL(createTable(TABLE, Columns.class));
     }
 
     static void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) throws SQLException {
@@ -62,29 +80,47 @@ public class LojaDAO extends AppBaseDAO {
 
     private ContentValues getContentValues(Loja loja){
         ContentValues values = new ContentValues();
-        values.put(_UUID, loja.getUuid());
-        values.put(_NOME, loja.getNome());
-        values.put(_DESCRICAO, loja.getDescricao());
-        values.put(_TELEFONE, loja.getTelefone());
-        values.put(_EMAIL, loja.getEmail());
-        values.put(_WEBSITE, loja.getWebsite());
-        values.put(_FACEBOOK, loja.getFacebook());
-        values.put(_LOGO, loja.getLogo());
-        values.put(_FUNDO, loja.getFundo());
+        values.put(Columns._UUID.getColumnName(), loja.getUuid());
+        values.put(Columns._NOME.getColumnName(), loja.getNome());
+        values.put(Columns._DESCRICAO.getColumnName(), loja.getDescricao());
+        values.put(Columns._TELEFONE.getColumnName(), loja.getTelefone());
+        values.put(Columns._EMAIL.getColumnName(), loja.getEmail());
+        values.put(Columns._WEBSITE.getColumnName(), loja.getWebsite());
+        values.put(Columns._FACEBOOK.getColumnName(), loja.getFacebook());
+        values.put(Columns._LOGO.getColumnName(), loja.getLogo());
+        values.put(Columns._FUNDO.getColumnName(), loja.getFundo());
         return values;
     }
 
-    Loja getLoja(Cursor cursor, boolean columnsWithTable) {
+    Loja getLoja(Cursor cursor, boolean byColumnAlias) {
         Loja loja = new Loja();
-        loja.setUuid(readCursor(cursor, columnsWithTable ? TABLE + "." + _UUID : _UUID, String.class));
-        loja.setNome(readCursor(cursor, columnsWithTable ? TABLE + "." + _NOME : _NOME, String.class));
-        loja.setDescricao(readCursor(cursor, columnsWithTable ? TABLE + "." + _DESCRICAO : _DESCRICAO, String.class));
-        loja.setTelefone(readCursor(cursor, columnsWithTable ? TABLE + "." + _TELEFONE : _TELEFONE, String.class));
-        loja.setEmail(readCursor(cursor, columnsWithTable ? TABLE + "." + _EMAIL : _EMAIL, String.class));
-        loja.setWebsite(readCursor(cursor, columnsWithTable ? TABLE + "." + _WEBSITE : _WEBSITE, String.class));
-        loja.setFacebook(readCursor(cursor, columnsWithTable ? TABLE + "." + _FACEBOOK : _FACEBOOK, String.class));
-        loja.setLogo(readCursor(cursor, columnsWithTable ? TABLE + "." + _LOGO : _LOGO, String.class));
-        loja.setFundo(readCursor(cursor, columnsWithTable ? TABLE + "." + _FUNDO : _FUNDO, Boolean.class));
+        loja.setUuid(readCursor(cursor,
+                byColumnAlias ? Columns._UUID.getColumnAlias() : Columns._UUID.getColumnName(),
+                String.class));
+        loja.setNome(readCursor(cursor,
+                byColumnAlias ? Columns._NOME.getColumnAlias() : Columns._NOME.getColumnName(),
+                String.class));
+        loja.setDescricao(readCursor(cursor,
+                byColumnAlias ? Columns._DESCRICAO.getColumnAlias() : Columns._DESCRICAO.getColumnName(),
+                String.class));
+        loja.setTelefone(readCursor(cursor,
+                byColumnAlias ? Columns._TELEFONE.getColumnAlias() : Columns._TELEFONE.getColumnName(),
+                String.class));
+        loja.setEmail(readCursor(cursor,
+                byColumnAlias ? Columns._EMAIL.getColumnAlias() : Columns._EMAIL.getColumnName(),
+                String.class));
+        loja.setWebsite(readCursor(cursor,
+                byColumnAlias ? Columns._WEBSITE.getColumnAlias() : Columns._WEBSITE.getColumnName(),
+                String.class));
+        loja.setFacebook(readCursor(cursor,
+                byColumnAlias ? Columns._FACEBOOK.getColumnAlias() : Columns._FACEBOOK.getColumnName(),
+                String.class));
+        loja.setLogo(readCursor(cursor,
+                byColumnAlias ? Columns._LOGO.getColumnAlias() : Columns._LOGO.getColumnName(),
+                String.class));
+        loja.setFundo(readCursor(cursor,
+                byColumnAlias ? Columns._FUNDO.getColumnAlias() : Columns._FUNDO.getColumnName(),
+                Boolean.class));
         return loja;
     }
 
@@ -112,7 +148,7 @@ public class LojaDAO extends AppBaseDAO {
     }
 
     private long update(SQLiteDatabase db, Loja loja) {
-        int row = db.update(TABLE, getContentValues(loja), _UUID + " = ? ", new String[]{loja.getUuid()});
+        int row = db.update(TABLE, getContentValues(loja), Columns._UUID.getColumnName() + " = ? ", new String[]{loja.getUuid()});
         // save local
         loja.getLocal().setUuidLocalizavel(loja.getUuid());
         localDAO.saveLocal(db, loja.getLocal());
@@ -138,7 +174,7 @@ public class LojaDAO extends AppBaseDAO {
     }
 
     private Loja getLoja(SQLiteDatabase db, String uuid) {
-        Cursor cursor = db.query(TABLE, null, _UUID + " = ? ", new String[]{uuid}, null, null, null);
+        Cursor cursor = db.query(TABLE, null, Columns._UUID.getColumnName() + " = ? ", new String[]{uuid}, null, null, null);
         Loja loja = null;
         if (cursor.moveToFirst()) {
             loja = getLoja(cursor, false);
@@ -147,29 +183,33 @@ public class LojaDAO extends AppBaseDAO {
         return loja;
     }
 
-    public List<Loja> getLojas(String name,String estado, String esporte) {
+    public List<Loja> getLojas(String name, String estado, String esporte) {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
         SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
         queryBuilder.setTables(TABLE
-                + " INNER JOIN " + LocalDAO.TABLE + " ON " + TABLE + "." + _UUID + " = " + LocalDAO.TABLE + "." + LocalDAO._UUID
-                + " LEFT OUTER JOIN " + HorarioDAO.TABLE + " ON " + TABLE + "." + _UUID + " = " + HorarioDAO.TABLE + "." + HorarioDAO._UUID);
+                + " INNER JOIN " + LocalDAO.TABLE
+                + " ON " + Columns._UUID.getColumnNameWithTable() + " = " + LocalDAO.Columns._UUID.getColumnNameWithTable()
+                + " LEFT OUTER JOIN " + HorarioDAO.TABLE
+                + " ON " + Columns._UUID.getColumnNameWithTable() + " = " + HorarioDAO.Columns._UUID.getColumnNameWithTable());
 
         StringBuilder selection = new StringBuilder();
         List<String> selectionArgs = new ArrayList<>();
         if (name != null && !name.isEmpty()) {
-            selection.append(TABLE).append(".").append(_NOME).append(" LIKE ? ");
+            selection.append(Columns._NOME.getColumnNameWithTable()).append(" LIKE ? ");
             selectionArgs.add(name + "%");
         }
         if (estado != null && !estado.isEmpty()) {
-            selection.append(LocalDAO.TABLE).append(".").append(LocalDAO._ESTADO).append(" = ? ");
+            selection.append(LocalDAO.TABLE).append(".").append(LocalDAO.Columns._ESTADO.getColumnName()).append(" = ? ");
             selectionArgs.add(estado);
         }
         if (esporte != null && !esporte.isEmpty()) {
-            // TODO
+            // TODO filter by esportes
         }
 
-        Cursor cursor = queryBuilder.query(db, null, selection.toString(), selectionArgs.toArray(new String[0]), null, null, null);
+        Cursor cursor = queryBuilder.query(db,
+                getColumnsProjectionWithAlias(Columns.class, LocalDAO.Columns.class, HorarioDAO.Columns.class),
+                selection.toString(), selectionArgs.toArray(new String[0]), null, null, null);
         List<Loja> lojas = new ArrayList<>();
         if (cursor.moveToFirst()) {
             do {

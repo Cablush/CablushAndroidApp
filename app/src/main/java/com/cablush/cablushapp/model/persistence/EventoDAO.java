@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteQueryBuilder;
 import android.util.Log;
 
 import com.cablush.cablushapp.model.domain.Evento;
@@ -20,29 +21,46 @@ public class EventoDAO extends AppBaseDAO {
 
     private static final String TABLE = "evento";
 
-    private static final String _UUID = "uuid";
-    private static final String _NOME = "nome";
-    private static final String _DESCRICAO = "descricao";
-    private static final String _HORA = "hora";
-    private static final String _DATA = "data";
-    private static final String _DATA_FIM = "data_fim";
-    private static final String _WEBSITE = "website";
-    private static final String _FACEBOOK = "facebook";
-    private static final String _FLYER = "flyer";
-    private static final String _FUNDO = "fundo";
+    enum Columns implements IColumns<Columns> {
+        _UUID("uuid", "TEXT PRIMARY KEY"),
+        _NOME("nome", "TEXT"),
+        _DESCRICAO("descricao", "TEXT"),
+        _HORA("hora", "INTEGER"),
+        _DATA("data", "INTEGER"),
+        _DATA_FIM("data_fim", "INTEGER"),
+        _WEBSITE("website", "TEXT"),
+        _FACEBOOK("facebook", "TEXT"),
+        _FLYER("flyer", "TEXT"),
+        _FUNDO("fundo", "INTEGER");
 
-    private static final String CREATE_TABLE = "CREATE TABLE " + TABLE + " ( "
-            + _UUID + " TEXT PRIMARY KEY, "
-            + _NOME + " TEXT, "
-            + _DESCRICAO + " TEXT, "
-            + _HORA + " INTEGER, "
-            + _DATA + " INTEGER, "
-            + _DATA_FIM + " INTEGER, "
-            + _WEBSITE + " TEXT, "
-            + _FACEBOOK + " TEXT, "
-            + _FLYER + " TEXT, "
-            + _FUNDO + " INTEGER "
-            + ");";
+        private String columnName;
+        private String columnType;
+
+        Columns(String columnName, String columnType) {
+            this.columnName = columnName;
+            this.columnType = columnType;
+        }
+
+        @Override
+        public String getColumnName() {
+            return columnName;
+        }
+
+        @Override
+        public String getColumnNameWithTable() {
+            return TABLE + "." + columnName;
+        }
+
+        @Override
+        public String getColumnAlias() {
+            return TABLE + "_" + columnName;
+        }
+
+        @Override
+        public String getColumnDefinition() {
+            return columnName + " " + columnType;
+        }
+    }
 
     private LocalDAO localDAO;
 
@@ -52,7 +70,7 @@ public class EventoDAO extends AppBaseDAO {
     }
 
     static void onCreate(SQLiteDatabase db) throws SQLException {
-        db.execSQL(CREATE_TABLE);
+        db.execSQL(createTable(TABLE, Columns.class));
     }
 
     static void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) throws SQLException {
@@ -62,37 +80,57 @@ public class EventoDAO extends AppBaseDAO {
 
     private ContentValues getContentValues(Evento evento){
         ContentValues values = new ContentValues();
-        values.put(_UUID, evento.getUuid());
-        values.put(_NOME, evento.getNome());
-        values.put(_DESCRICAO, evento.getDescricao());
+        values.put(Columns._UUID.getColumnName(), evento.getUuid());
+        values.put(Columns._NOME.getColumnName(), evento.getNome());
+        values.put(Columns._DESCRICAO.getColumnName(), evento.getDescricao());
         if (evento.getHora() != null) {
-            values.put(_HORA, evento.getHora().getTime());
+            values.put(Columns._HORA.getColumnName(), evento.getHora().getTime());
         }
         if (evento.getData() != null) {
-            values.put(_DATA, evento.getData().getTime());
+            values.put(Columns._DATA.getColumnName(), evento.getData().getTime());
         }
         if (evento.getDataFim() != null) {
-            values.put(_DATA_FIM, evento.getDataFim().getTime());
+            values.put(Columns._DATA_FIM.getColumnName(), evento.getDataFim().getTime());
         }
-        values.put(_WEBSITE, evento.getWebsite());
-        values.put(_FACEBOOK, evento.getFacebook());
-        values.put(_FLYER, evento.getFlyer());
-        values.put(_FUNDO, evento.getFundo());
+        values.put(Columns._WEBSITE.getColumnName(), evento.getWebsite());
+        values.put(Columns._FACEBOOK.getColumnName(), evento.getFacebook());
+        values.put(Columns._FLYER.getColumnName(), evento.getFlyer());
+        values.put(Columns._FUNDO.getColumnName(), evento.getFundo());
         return values;
     }
 
-    private Evento getEvento(Cursor cursor) {
+    private Evento getEvento(Cursor cursor, boolean byColumnAlias) {
         Evento evento = new Evento();
-        evento.setUuid(readCursor(cursor, _UUID, String.class));
-        evento.setNome(readCursor(cursor, _NOME, String.class));
-        evento.setDescricao(readCursor(cursor, _DESCRICAO, String.class));
-        evento.setHora(readCursor(cursor, _HORA, Date.class));
-        evento.setData(readCursor(cursor, _DATA, Date.class));
-        evento.setDataFim(readCursor(cursor, _DATA_FIM, Date.class));
-        evento.setWebsite(readCursor(cursor, _WEBSITE, String.class));
-        evento.setFacebook(readCursor(cursor, _FACEBOOK, String.class));
-        evento.setFlyer(readCursor(cursor, _FLYER, String.class));
-        evento.setFundo(readCursor(cursor, _FUNDO, Boolean.class));
+        evento.setUuid(readCursor(cursor,
+                byColumnAlias ? Columns._UUID.getColumnAlias() : Columns._UUID.getColumnName(),
+                String.class));
+        evento.setNome(readCursor(cursor,
+                byColumnAlias ? Columns._NOME.getColumnAlias() : Columns._NOME.getColumnName(),
+                String.class));
+        evento.setDescricao(readCursor(cursor,
+                byColumnAlias ? Columns._DESCRICAO.getColumnAlias() : Columns._DESCRICAO.getColumnName(),
+                String.class));
+        evento.setHora(readCursor(cursor,
+                byColumnAlias ? Columns._HORA.getColumnAlias() : Columns._HORA.getColumnName(),
+                Date.class));
+        evento.setData(readCursor(cursor,
+                byColumnAlias ? Columns._DATA.getColumnAlias() : Columns._DATA.getColumnName(),
+                Date.class));
+        evento.setDataFim(readCursor(cursor,
+                byColumnAlias ? Columns._DATA_FIM.getColumnAlias() : Columns._DATA_FIM.getColumnName(),
+                Date.class));
+        evento.setWebsite(readCursor(cursor,
+                byColumnAlias ? Columns._WEBSITE.getColumnAlias() : Columns._WEBSITE.getColumnName(),
+                String.class));
+        evento.setFacebook(readCursor(cursor,
+                byColumnAlias ? Columns._FACEBOOK.getColumnAlias() : Columns._FACEBOOK.getColumnName(),
+                String.class));
+        evento.setFlyer(readCursor(cursor,
+                byColumnAlias ? Columns._FLYER.getColumnAlias() : Columns._FLYER.getColumnName(),
+                String.class));
+        evento.setFundo(readCursor(cursor,
+                byColumnAlias ? Columns._FUNDO.getColumnAlias() : Columns._FUNDO.getColumnName(),
+                Boolean.class));
         return evento;
     }
 
@@ -115,7 +153,7 @@ public class EventoDAO extends AppBaseDAO {
     }
 
     private long update(SQLiteDatabase db, Evento evento) {
-        int row = db.update(TABLE, getContentValues(evento), _UUID + " = ? ", new String[]{evento.getUuid()});
+        int row = db.update(TABLE, getContentValues(evento), Columns._UUID.getColumnName() + " = ? ", new String[]{evento.getUuid()});
         // save local
         evento.getLocal().setUuidLocalizavel(evento.getUuid());
         localDAO.saveLocal(db, evento.getLocal());
@@ -136,23 +174,45 @@ public class EventoDAO extends AppBaseDAO {
     }
 
     private Evento getEvento(SQLiteDatabase db, String uuid) {
-        Cursor cursor = db.query(TABLE, null, _UUID + " = ? ", new String[]{uuid}, null, null, null);
+        Cursor cursor = db.query(TABLE, null, Columns._UUID.getColumnName() + " = ? ", new String[]{uuid}, null, null, null);
         Evento evento = null;
         if (cursor.moveToFirst()) {
-            evento = getEvento(cursor);
+            evento = getEvento(cursor, false);
         }
         cursor.close();
         return evento;
     }
 
-    public List<Evento> getEventos() {
+    public List<Evento> getEventos(String name, String estado, String esporte) {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
+        queryBuilder.setTables(TABLE
+                + " INNER JOIN " + LocalDAO.TABLE
+                + " ON " + Columns._UUID.getColumnNameWithTable() + " = " + LocalDAO.Columns._UUID.getColumnNameWithTable());
+
+        StringBuilder selection = new StringBuilder();
+        List<String> selectionArgs = new ArrayList<>();
+        if (name != null && !name.isEmpty()) {
+            selection.append(Columns._NOME.getColumnNameWithTable()).append(" LIKE ? ");
+            selectionArgs.add(name + "%");
+        }
+        if (estado != null && !estado.isEmpty()) {
+            selection.append(LocalDAO.Columns._ESTADO.getColumnName()).append(" = ? ");
+            selectionArgs.add(estado);
+        }
+        if (esporte != null && !esporte.isEmpty()) {
+            // TODO filter by esportes
+        }
+
+        Cursor cursor = queryBuilder.query(db,
+                getColumnsProjectionWithAlias(Columns.class, LocalDAO.Columns.class),
+                selection.toString(), selectionArgs.toArray(new String[0]), null, null, null);
         List<Evento> eventos = new ArrayList<>();
-        Cursor cursor = db.query(TABLE, null, null, null, null, null, null);
         if (cursor.moveToFirst()) {
             do {
-                Evento evento = getEvento(cursor);
-                evento.setLocal(localDAO.getLocal(db, evento.getUuid()));
+                Evento evento = getEvento(cursor, true);
+                evento.setLocal(localDAO.getLocal(cursor, true));
                 // TODO get esportes
                 eventos.add(evento);
             } while (cursor.moveToNext());

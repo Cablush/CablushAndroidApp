@@ -15,34 +15,52 @@ public class UsuarioDAO extends AppBaseDAO {
 
     static final String TABLE = "usuario";
 
-    static final String _UUID = "uuid";
-    static final String _NOME = "nome";
-    static final String _EMAIL = "email";
-    static final String _ROLE = "role";
-    static final String _UID = "uid";
-    static final String _ACCESS_TOKEN = "access_token";
-    static final String _TOKEN_TYPE = "token_type";
-    static final String _CLIENT = "client";
-    static final String _EXPIRITY = "expiry";
+    enum Columns implements IColumns<Columns> {
+        _UUID("uuid", "TEXT PRIMARY KEY"),
+        _NOME("nome", "TEXT"),
+        _EMAIL("email", "TEXT"),
+        _ROLE("role", "TEXT"),
+        _UID("uid", "TEXT"),
+        _ACCESS_TOKEN("access_token", "TEXT"),
+        _TOKEN_TYPE("token_type", "TEXT"),
+        _CLIENT("client", "TEXT"),
+        _EXPIRITY("expiry", "INTEGER");
 
-    private static final String CREATE_TABLE = "CREATE TABLE " + TABLE + " ( "
-            + _UUID + " TEXT PRIMARY KEY, "
-            + _NOME + " TEXT, "
-            + _EMAIL + " TEXT, "
-            + _ROLE + " TEXT, "
-            + _UID + " TEXT, "
-            + _ACCESS_TOKEN + " TEXT, "
-            + _TOKEN_TYPE + " TEXT, "
-            + _CLIENT + " TEXT, "
-            + _EXPIRITY + " INTEGER "
-            + ");";
+        private String columnName;
+        private String columnType;
+
+        Columns(String columnName, String columnType) {
+            this.columnName = columnName;
+            this.columnType = columnType;
+        }
+
+        @Override
+        public String getColumnName() {
+            return columnName;
+        }
+
+        @Override
+        public String getColumnNameWithTable() {
+            return TABLE + "." + columnName;
+        }
+
+        @Override
+        public String getColumnAlias() {
+            return TABLE + "_" + columnName;
+        }
+
+        @Override
+        public String getColumnDefinition() {
+            return columnName + " " + columnType;
+        }
+    }
 
     public UsuarioDAO(Context context) {
         dbHelper = CablushDBHelper.getInstance(context);
     }
 
     static void onCreate(SQLiteDatabase db) throws SQLException {
-        db.execSQL(CREATE_TABLE);
+        db.execSQL(createTable(TABLE, Columns.class));
     }
 
     static void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) throws SQLException {
@@ -52,29 +70,29 @@ public class UsuarioDAO extends AppBaseDAO {
 
     private ContentValues getContentValues(Usuario usuario){
         ContentValues values = new ContentValues();
-        values.put(_UUID, usuario.getUuid());
-        values.put(_NOME, usuario.getNome());
-        values.put(_EMAIL, usuario.getEmail());
-        values.put(_ROLE, usuario.getRole());
-        values.put(_UID, usuario.getUid());
-        values.put(_ACCESS_TOKEN, usuario.getAccessToken());
-        values.put(_TOKEN_TYPE, usuario.getTokenType());
-        values.put(_CLIENT, usuario.getClient());
-        values.put(_EXPIRITY, usuario.getExpiry());
+        values.put(Columns._UUID.getColumnName(), usuario.getUuid());
+        values.put(Columns._NOME.getColumnName(), usuario.getNome());
+        values.put(Columns._EMAIL.getColumnName(), usuario.getEmail());
+        values.put(Columns._ROLE.getColumnName(), usuario.getRole());
+        values.put(Columns._UID.getColumnName(), usuario.getUid());
+        values.put(Columns._ACCESS_TOKEN.getColumnName(), usuario.getAccessToken());
+        values.put(Columns._TOKEN_TYPE.getColumnName(), usuario.getTokenType());
+        values.put(Columns._CLIENT.getColumnName(), usuario.getClient());
+        values.put(Columns._EXPIRITY.getColumnName(), usuario.getExpiry());
         return values;
     }
 
     Usuario getUsuario(Cursor cursor) {
         Usuario evento = new Usuario();
-        evento.setUuid(readCursor(cursor, _UUID, String.class));
-        evento.setNome(readCursor(cursor, _NOME, String.class));
-        evento.setEmail(readCursor(cursor, _EMAIL, String.class));
-        evento.setRole(readCursor(cursor, _ROLE, String.class));
-        evento.setUid(readCursor(cursor, _UID, String.class));
-        evento.setAccessToken(readCursor(cursor, _ACCESS_TOKEN, String.class));
-        evento.setTokenType(readCursor(cursor, _TOKEN_TYPE, String.class));
-        evento.setClient(readCursor(cursor, _CLIENT, String.class));
-        evento.setExpiry(readCursor(cursor, _EXPIRITY, Long.class));
+        evento.setUuid(readCursor(cursor, Columns._UUID.getColumnName(), String.class));
+        evento.setNome(readCursor(cursor, Columns._NOME.getColumnName(), String.class));
+        evento.setEmail(readCursor(cursor, Columns._EMAIL.getColumnName(), String.class));
+        evento.setRole(readCursor(cursor, Columns._ROLE.getColumnName(), String.class));
+        evento.setUid(readCursor(cursor, Columns._UID.getColumnName(), String.class));
+        evento.setAccessToken(readCursor(cursor, Columns._ACCESS_TOKEN.getColumnName(), String.class));
+        evento.setTokenType(readCursor(cursor, Columns._TOKEN_TYPE.getColumnName(), String.class));
+        evento.setClient(readCursor(cursor, Columns._CLIENT.getColumnName(), String.class));
+        evento.setExpiry(readCursor(cursor, Columns._EXPIRITY.getColumnName(), Long.class));
         return evento;
     }
 
@@ -84,7 +102,7 @@ public class UsuarioDAO extends AppBaseDAO {
     }
 
     private int update(SQLiteDatabase db, Usuario usuario) {
-        return db.update(TABLE, getContentValues(usuario), _UUID + " = ? ", new String[]{usuario.getUuid()});
+        return db.update(TABLE, getContentValues(usuario), Columns._UUID.getColumnName() + " = ? ", new String[]{usuario.getUuid()});
         // TODO save esportes
     }
 
@@ -99,7 +117,7 @@ public class UsuarioDAO extends AppBaseDAO {
     }
 
     private Usuario getUsuario(SQLiteDatabase db, String uuid) {
-        Cursor cursor = db.query(TABLE, null, _UUID + " = ? ", new String[]{uuid}, null, null, null);
+        Cursor cursor = db.query(TABLE, null, Columns._UUID.getColumnName() + " = ? ", new String[]{uuid}, null, null, null);
         Usuario usuario = null;
         if (cursor.moveToFirst()) {
             usuario = getUsuario(cursor);

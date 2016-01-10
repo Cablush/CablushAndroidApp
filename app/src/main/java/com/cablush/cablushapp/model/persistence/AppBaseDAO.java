@@ -3,7 +3,10 @@ package com.cablush.cablushapp.model.persistence;
 import android.database.Cursor;
 import android.util.Log;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by oscar on 12/12/15.
@@ -13,6 +16,33 @@ public abstract class AppBaseDAO {
     protected final String TAG = getClass().getName();
 
     protected CablushDBHelper dbHelper;
+
+    interface IColumns <T extends Enum<T>> {
+        String getColumnName();
+        String getColumnNameWithTable();
+        String getColumnAlias();
+        String getColumnDefinition();
+    }
+
+    static String createTable(String table, Class<? extends IColumns<?>> columnsClass) {
+        StringBuilder createTable = new StringBuilder();
+        createTable.append("CREATE TABLE ").append(table).append(" ( ");
+        for(IColumns column : columnsClass.getEnumConstants()) {
+            createTable.append(column.getColumnDefinition()).append(", ");
+        }
+        createTable.replace(createTable.lastIndexOf(","), createTable.length(), ");");
+        return createTable.toString();
+    }
+
+    static String[] getColumnsProjectionWithAlias(Class<? extends IColumns<?>>... columnsClasses) {
+        List<String> projColumns = new ArrayList<>();
+        for (Class<? extends IColumns<?>> iColumnClass : Arrays.asList(columnsClasses)) {
+            for (IColumns<?> column : iColumnClass.getEnumConstants()) {
+                projColumns.add(column.getColumnNameWithTable() + " AS " + column.getColumnAlias());
+            }
+        }
+        return projColumns.toArray(new String[0]);
+    }
 
     /**
      *
