@@ -198,6 +198,11 @@ public class MainActivity extends AbstractDrawerActivity implements OnMapReadyCa
         }
     }
 
+    @Override
+    public void onSearchDialogError(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+
     private void clearMarker() {
         googleMap.clear();
         localizavelMap.clear();

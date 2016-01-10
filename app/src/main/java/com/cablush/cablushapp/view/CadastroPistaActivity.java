@@ -38,7 +38,7 @@ public class CadastroPistaActivity extends CadastrosLocalActivity {
 
             PistaDAO pistaDAO = new PistaDAO(CadastroPistaActivity.this);
             //pistaDAO.insert(p);
-            PistasMediator pistasMediator = new PistasMediator(CadastroPistaActivity.this);
+//            PistasMediator pistasMediator = new PistasMediator(CadastroPistaActivity.this);
             //pistasMediator.postPistas(p);
         }
     }

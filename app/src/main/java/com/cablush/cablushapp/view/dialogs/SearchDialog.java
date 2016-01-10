@@ -17,10 +17,8 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.cablush.cablushapp.R;
-import com.cablush.cablushapp.model.EventosMediator;
-import com.cablush.cablushapp.model.LojasMediator;
-import com.cablush.cablushapp.model.PistasMediator;
 import com.cablush.cablushapp.model.domain.Localizavel;
+import com.cablush.cablushapp.presenter.SearchPresenter;
 import com.cablush.cablushapp.utils.ViewUtils;
 
 import java.lang.ref.WeakReference;
@@ -29,7 +27,7 @@ import java.util.List;
 /**
  * Created by oscar on 13/12/15.
  */
-public class SearchDialog extends DialogFragment {
+public class SearchDialog extends DialogFragment implements SearchPresenter.SearchView {
 
     private static final String TAG = SearchDialog.class.getSimpleName();
 
@@ -47,11 +45,14 @@ public class SearchDialog extends DialogFragment {
     private Spinner sportsSpinner;
     private EditText nameEdit;
 
+    private SearchPresenter presenter;
+
     /**
      * Interface to be implemented by this Dialog's client.
      */
     public interface SearchDialogListener {
         void onSearchDialogSuccess(List<? extends Localizavel> searchablePlaces);
+        void onSearchDialogError(String message);
     }
 
     private WeakReference<SearchDialogListener> mListener;
@@ -86,6 +87,8 @@ public class SearchDialog extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         loadData();
 
+        presenter = new SearchPresenter(this, getActivity());
+
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setView(initializeView());
 
@@ -101,25 +104,19 @@ public class SearchDialog extends DialogFragment {
                 String estado = getResources().getStringArray(R.array.states_values)[statesSpinner.getSelectedItemPosition()];
                 String esporte = ViewUtils.getSelectedItem(getActivity(), sportsSpinner);
 
-                List localizaveis = null;
                 switch (searchType) {
                     case LOJA:
-                        LojasMediator lojasMediator = new LojasMediator(getActivity());
-                        localizaveis = lojasMediator.getLojas(nome, estado, esporte);
+                        presenter.getLojas(nome, estado, esporte);
                         break;
                     case EVENTO:
-                        EventosMediator eventosMediator = new EventosMediator(getActivity());
-                        localizaveis = eventosMediator.getEventos(nome, estado, esporte);
+                        presenter.getEventos(nome, estado, esporte);
                         break;
                     case PISTA:
-                        PistasMediator pistasMediator = new PistasMediator(getActivity());
-                        localizaveis = pistasMediator.getPistas(nome, estado, esporte);
+                        presenter.getPistas(nome, estado, esporte);
                         break;
                     default:
                         Toast.makeText(getActivity(), R.string.erro_invalid_search_type, Toast.LENGTH_SHORT).show();
                 }
-
-                mListener.get().onSearchDialogSuccess(localizaveis);
             }
         });
         builder.setNegativeButton(R.string.btn_cancel, new DialogInterface.OnClickListener() {
@@ -129,6 +126,16 @@ public class SearchDialog extends DialogFragment {
 
         // Create the AlertDialog object and return it
         return builder.create();
+    }
+
+    @Override
+    public void onSearchSuccess(List<? extends Localizavel> locais) {
+        mListener.get().onSearchDialogSuccess(locais);
+    }
+
+    @Override
+    public void onSearchError(String message) {
+        mListener.get().onSearchDialogError(message);
     }
 
     private void loadData() {
