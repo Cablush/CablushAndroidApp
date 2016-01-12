@@ -29,7 +29,7 @@
         <item name="android:windowBackground">@color/cablush_dark_blue</item>
     </style>
 
-    <style name="Cablush.Dialogs" parent="Theme.AppCompat.Light.Dialog">
+    <style name="Cablush.Dialogs" parent="Theme.AppCompat.Light.Dialog.Alert">
         <item name="colorPrimary">@color/cablush_light</item>
         <item name="colorPrimaryDark">@color/cablush_dark_blue</item>
         <item name="colorAccent">@color/cablush_orange</item>

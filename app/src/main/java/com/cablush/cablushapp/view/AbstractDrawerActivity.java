@@ -43,12 +43,8 @@ public abstract class AbstractDrawerActivity extends CablushActivity {
 
             @Override
             public boolean onNavigationItemSelected(MenuItem menuItem) {
-                if (menuItem.isChecked()) {
-                    menuItem.setChecked(false);
-                } else {
-                    menuItem.setChecked(true);
-                }
-                drawerLayout.closeDrawers();
+                menuItem.setChecked(false); // Do not leave item checked
+                drawerLayout.closeDrawers(); // Always close the drawer
                 return onNavItemSelected(menuItem.getItemId());
             }
         });
@@ -65,6 +61,7 @@ public abstract class AbstractDrawerActivity extends CablushActivity {
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setHomeButtonEnabled(true);
+            actionBar.setTitle(getTitle());
         }
 
         // Initializing Drawer Layout and ActionBarToggle
