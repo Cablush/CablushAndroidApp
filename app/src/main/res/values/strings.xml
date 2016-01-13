@@ -127,7 +127,7 @@
 
     <!-- States values -->
     <string-array name="states_values">
-        <item></item>
+        <item/>
         <item>AC</item>
         <item>AL</item>
         <item>AP</item>
@@ -159,6 +159,10 @@
     <!-- Mensagens de sucesso -->
     <string name="success_login">Olá %s! Agora você pode compartilhar seus locais favoritos!</string>
     <string name="success_register">Cadastro realizado! Antes de fazer Login, confirme o cadastro no email que te enviamos!</string>
+
+    <!-- Mensagens de permissões -->
+    <string name="ask_permissions_location">O Cablush utiliza a sua localização para sugerir locais onde praticar esportes com mais precisão.</string>
+    <string name="ask_permissions_storage"></string>
 
     <!-- Mensagens de erro -->
     <string name="error_create_map">Error a carregar o mapa!</string>

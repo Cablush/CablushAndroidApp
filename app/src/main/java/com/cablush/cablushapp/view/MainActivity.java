@@ -3,6 +3,7 @@ package com.cablush.cablushapp.view;
 import android.content.Context;
 
 import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -86,8 +87,13 @@ public class MainActivity extends AbstractDrawerActivity implements OnMapReadyCa
         Log.d(TAG, "GoogleMap loaded.");
         this.googleMap = googleMap;
 
-        // Try to retrieve the current user location, and show it on map
-        LatLng latLng = getCurrentLocation();
+        // Try to retrieve the current user location
+        getUserLocation();
+    }
+
+    @Override
+    protected void onUserLocationReady(Location location) {
+        LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
         if (latLng != null) {
             this.googleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
             this.googleMap.animateCamera(CameraUpdateFactory.zoomTo(15));
