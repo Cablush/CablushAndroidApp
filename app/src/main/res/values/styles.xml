@@ -10,8 +10,8 @@
         <item name="android:textColorSecondary">@color/secondary_text_cablush_light</item>
         <item name="android:textColorLink">@color/cablush_orange</item>
 
-        <item name="android:dialogTheme">@style/Cablush.Dialogs</item>
-        <item name="android:alertDialogTheme">@style/Cablush.Dialogs</item>
+        <item name="dialogTheme">@style/Cablush.Dialogs</item>
+        <item name="alertDialogTheme">@style/Cablush.Dialogs</item>
     </style>
 
     <style name="Cablush.NoActionBar">
