@@ -13,7 +13,7 @@ public class CablushDBHelper extends SQLiteOpenHelper {
     private static final String TAG = CablushDBHelper.class.getSimpleName();
 
     private static final String DB_NAME = "CablushDB";
-    private static final int DB_VERSION = 2;
+    private static final int DB_VERSION = 3;
 
     private static CablushDBHelper instance;
 
@@ -43,6 +43,7 @@ public class CablushDBHelper extends SQLiteOpenHelper {
             HorarioDAO.onCreate(db);
             LocalDAO.onCreate(db);
             LojaDAO.onCreate(db);
+            LocalizavelEsporteDAO.onCreate(db);
             PistaDAO.onCreate(db);
             UsuarioDAO.onCreate(db);
         } catch (Exception ex) {
@@ -59,6 +60,7 @@ public class CablushDBHelper extends SQLiteOpenHelper {
             HorarioDAO.onUpgrade(db, oldVersion, newVersion);
             LocalDAO.onUpgrade(db, oldVersion, newVersion);
             LojaDAO.onUpgrade(db, oldVersion, newVersion);
+            LocalizavelEsporteDAO.onUpgrade(db, oldVersion, newVersion);
             PistaDAO.onUpgrade(db, oldVersion, newVersion);
             UsuarioDAO.onUpgrade(db, oldVersion, newVersion);
         } catch (Exception ex){

@@ -16,22 +16,24 @@ public class UsuarioDAO extends AppBaseDAO {
     static final String TABLE = "usuario";
 
     enum Columns implements IColumns<Columns> {
-        _UUID("uuid", "TEXT PRIMARY KEY"),
-        _NOME("nome", "TEXT"),
-        _EMAIL("email", "TEXT"),
-        _ROLE("role", "TEXT"),
-        _UID("uid", "TEXT"),
-        _ACCESS_TOKEN("access_token", "TEXT"),
-        _TOKEN_TYPE("token_type", "TEXT"),
-        _CLIENT("client", "TEXT"),
-        _EXPIRITY("expiry", "INTEGER");
+        _UUID("uuid", "TEXT", true),
+        _NOME("nome", "TEXT", false),
+        _EMAIL("email", "TEXT", false),
+        _ROLE("role", "TEXT", false),
+        _UID("uid", "TEXT", false),
+        _ACCESS_TOKEN("access_token", "TEXT", false),
+        _TOKEN_TYPE("token_type", "TEXT", false),
+        _CLIENT("client", "TEXT", false),
+        _EXPIRITY("expiry", "INTEGER", false);
 
         private String columnName;
         private String columnType;
+        private Boolean primaryKey;
 
-        Columns(String columnName, String columnType) {
+        Columns(String columnName, String columnType, Boolean primaryKey) {
             this.columnName = columnName;
             this.columnType = columnType;
+            this.primaryKey = primaryKey;
         }
 
         @Override
@@ -52,6 +54,11 @@ public class UsuarioDAO extends AppBaseDAO {
         @Override
         public String getColumnDefinition() {
             return columnName + " " + columnType;
+        }
+
+        @Override
+        public Boolean getPrimaryKey() {
+            return primaryKey;
         }
     }
 
@@ -102,7 +109,8 @@ public class UsuarioDAO extends AppBaseDAO {
     }
 
     private int update(SQLiteDatabase db, Usuario usuario) {
-        return db.update(TABLE, getContentValues(usuario), Columns._UUID.getColumnName() + " = ? ", new String[]{usuario.getUuid()});
+        return db.update(TABLE, getContentValues(usuario),
+                Columns._UUID.getColumnName() + " = ? ", new String[]{usuario.getUuid()});
         // TODO save esportes
     }
 
@@ -117,7 +125,8 @@ public class UsuarioDAO extends AppBaseDAO {
     }
 
     private Usuario getUsuario(SQLiteDatabase db, String uuid) {
-        Cursor cursor = db.query(TABLE, null, Columns._UUID.getColumnName() + " = ? ", new String[]{uuid}, null, null, null);
+        Cursor cursor = db.query(TABLE, null,
+                Columns._UUID.getColumnName() + " = ? ", new String[]{uuid}, null, null, null);
         Usuario usuario = null;
         if (cursor.moveToFirst()) {
             usuario = getUsuario(cursor);

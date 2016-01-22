@@ -55,6 +55,8 @@ public class LocalInfoDialog<L extends Localizavel> extends DialogFragment {
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.dialog_local_info, null);
 
+        // TODO logo/foto
+
         TextView descricao = (TextView) view.findViewById(R.id.descricaoTextView);
         descricao.setText(localizavel.get().getDescricao());
 
@@ -69,7 +71,7 @@ public class LocalInfoDialog<L extends Localizavel> extends DialogFragment {
             email.setVisibility(View.GONE);
         }
 
-        // TODO facebook & site & directions
+        // TODO facebook & site & directions && esportes
 
         TextView endereco = (TextView) view.findViewById(R.id.enderecoTextView);
         endereco.setText(localizavel.get().getLocal().getEndereco());
