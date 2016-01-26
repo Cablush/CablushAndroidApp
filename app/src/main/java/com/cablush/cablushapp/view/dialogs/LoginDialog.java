@@ -93,7 +93,10 @@ public class LoginDialog extends DialogFragment implements LoginPresenter.LoginV
         builder.setNeutralButton(R.string.btn_register, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                mListener.get().onRegisterButtonClicked();
+                LoginDialogListener listener = mListener.get();
+                if (listener != null) {
+                    listener.onRegisterButtonClicked();
+                }
             }
         });
         builder.setNegativeButton(R.string.btn_cancel, new DialogInterface.OnClickListener() {
@@ -122,11 +125,17 @@ public class LoginDialog extends DialogFragment implements LoginPresenter.LoginV
 
     @Override
     public void onLoginSuccess() {
-        mListener.get().onLoginDialogSuccess();
+        LoginDialogListener listener = mListener.get();
+        if (listener != null) {
+            listener.onLoginDialogSuccess();
+        }
     }
 
     @Override
     public void onLoginError(String message) {
-        mListener.get().onLoginDialogError(message);
+        LoginDialogListener listener = mListener.get();
+        if (listener != null) {
+            listener.onLoginDialogError(message);
+        }
     }
 }

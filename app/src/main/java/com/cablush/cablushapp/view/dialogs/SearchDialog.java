@@ -134,12 +134,18 @@ public class SearchDialog extends DialogFragment implements SearchPresenter.Sear
 
     @Override
     public void onSearchSuccess(List<? extends Localizavel> locais) {
-        mListener.get().onSearchDialogSuccess(locais);
+        SearchDialogListener listener = mListener.get();
+        if (listener != null) {
+            listener.onSearchDialogSuccess(locais);
+        }
     }
 
     @Override
     public void onSearchError(String message) {
-        mListener.get().onSearchDialogError(message);
+        SearchDialogListener listener = mListener.get();
+        if (listener != null) {
+            listener.onSearchDialogError(message);
+        }
     }
 
     private void loadData() {

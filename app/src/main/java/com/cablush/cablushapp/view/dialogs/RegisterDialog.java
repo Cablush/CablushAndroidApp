@@ -123,11 +123,17 @@ public class RegisterDialog extends DialogFragment implements RegisterPresenter.
 
     @Override
     public void onRegisterSuccess() {
-        mListener.get().onRegisterDialogSuccess();
+        RegisterDialogListener listener = mListener.get();
+        if (listener != null) {
+            listener.onRegisterDialogSuccess();
+        }
     }
 
     @Override
     public void onRegisterError(String message) {
-        mListener.get().onRegisterDialogError(message);
+        RegisterDialogListener listener = mListener.get();
+        if (listener != null) {
+            listener.onRegisterDialogError(message);
+        }
     }
 }

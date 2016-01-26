@@ -23,7 +23,7 @@ public class LocalInfoDialog<L extends Localizavel> extends DialogFragment {
 
     private static final String TAG = LocalInfoDialog.class.getSimpleName();
 
-    private WeakReference<L> localizavel;
+    private WeakReference<L> mLocalizavel;
 
     /**
      * Show the Login Dialog.
@@ -32,7 +32,7 @@ public class LocalInfoDialog<L extends Localizavel> extends DialogFragment {
      */
     public static <L extends Localizavel> void showDialog(FragmentManager fragmentManager, L localizavel) {
         LocalInfoDialog dialog = new LocalInfoDialog();
-        dialog.localizavel = new WeakReference<>(localizavel);
+        dialog.mLocalizavel = new WeakReference<>(localizavel);
         dialog.show(fragmentManager, TAG);
     }
 
@@ -43,7 +43,7 @@ public class LocalInfoDialog<L extends Localizavel> extends DialogFragment {
 
         // Set the dialog title
         builder.setCustomTitle(ViewUtils.getCustomTitleView(getActivity().getLayoutInflater(),
-                localizavel.get().getNome(),
+                mLocalizavel.get().getNome(),
                 R.drawable.ic_mark_cablush_orange));
 
         // Create the AlertDialog object and return it
@@ -58,12 +58,12 @@ public class LocalInfoDialog<L extends Localizavel> extends DialogFragment {
         // TODO logo/foto
 
         TextView descricao = (TextView) view.findViewById(R.id.descricaoTextView);
-        descricao.setText(localizavel.get().getDescricao());
+        descricao.setText(mLocalizavel.get().getDescricao());
 
         TextView telefone = (TextView) view.findViewById(R.id.telefoneTextView);
         TextView email = (TextView) view.findViewById(R.id.emailTextView);
-        if (localizavel.get() instanceof Loja) {
-            Loja loja = (Loja) localizavel.get();
+        if (mLocalizavel.get() instanceof Loja) {
+            Loja loja = (Loja) mLocalizavel.get();
             telefone.setText(loja.getTelefone());
             email.setText(loja.getEmail());
         } else {
@@ -74,13 +74,13 @@ public class LocalInfoDialog<L extends Localizavel> extends DialogFragment {
         // TODO facebook & site & directions && esportes
 
         TextView endereco = (TextView) view.findViewById(R.id.enderecoTextView);
-        endereco.setText(localizavel.get().getLocal().getEndereco());
+        endereco.setText(mLocalizavel.get().getLocal().getEndereco());
 
         TextView cidadeEstado = (TextView) view.findViewById(R.id.cidadeEstadoTextView);
-        cidadeEstado.setText(localizavel.get().getLocal().getCidadeEstado());
+        cidadeEstado.setText(mLocalizavel.get().getLocal().getCidadeEstado());
 
         TextView cep = (TextView) view.findViewById(R.id.cepTextView);
-        cep.setText(localizavel.get().getLocal().getCep());
+        cep.setText(mLocalizavel.get().getLocal().getCep());
 
         return  view;
     }
