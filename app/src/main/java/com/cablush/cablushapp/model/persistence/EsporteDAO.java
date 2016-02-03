@@ -17,20 +17,22 @@ import java.util.List;
  */
 public class EsporteDAO  extends AppBaseDAO {
 
-    private static final String TABLE = "esporte";
+    static final String TABLE = "esporte";
 
     enum Columns implements IColumns<Columns> {
-        _ID("id", "INTEGER PRIMARY KEY"),
-        _NOME("nome", "TEXT"),
-        _CATEGORIA("categoria", "TEXT"),
-        _ICONE("icone", "INTEGER");
+        _ID("id", "INTEGER", true),
+        _NOME("nome", "TEXT", false),
+        _CATEGORIA("categoria", "TEXT", false),
+        _ICONE("icone", "INTEGER", false);
 
         private String columnName;
         private String columnType;
+        private Boolean primaryKey;
 
-        Columns(String columnName, String columnType) {
+        Columns(String columnName, String columnType, Boolean primaryKey) {
             this.columnName = columnName;
             this.columnType = columnType;
+            this.primaryKey = primaryKey;
         }
 
         @Override
@@ -51,6 +53,11 @@ public class EsporteDAO  extends AppBaseDAO {
         @Override
         public String getColumnDefinition() {
             return columnName + " " + columnType;
+        }
+
+        @Override
+        public Boolean getPrimaryKey() {
+            return primaryKey;
         }
     }
 
@@ -76,13 +83,59 @@ public class EsporteDAO  extends AppBaseDAO {
         return values;
     }
 
-    private Esporte getEsporte(Cursor cursor) {
-        Esporte evento = new Esporte();
-        evento.setId(readCursor(cursor, Columns._ID.getColumnName(), Integer.class));
-        evento.setNome(readCursor(cursor, Columns._NOME.getColumnName(), String.class));
-        evento.setCategoria(readCursor(cursor, Columns._CATEGORIA.getColumnName(), String.class));
-        evento.setIcone(readCursor(cursor, Columns._ICONE.getColumnName(), String.class));
-        return evento;
+    Esporte getEsporte(Cursor cursor, boolean byColumnAlias) {
+        Esporte esporte = new Esporte();
+        esporte.setId(readCursor(cursor,
+                byColumnAlias ? Columns._ID.getColumnAlias() : Columns._ID.getColumnName(),
+                Integer.class));
+        esporte.setNome(readCursor(cursor,
+                byColumnAlias ? Columns._NOME.getColumnAlias() : Columns._NOME.getColumnName(),
+                String.class));
+        esporte.setCategoria(readCursor(cursor,
+                byColumnAlias ? Columns._CATEGORIA.getColumnAlias() : Columns._CATEGORIA.getColumnName(),
+                String.class));
+        esporte.setIcone(readCursor(cursor,
+                byColumnAlias ? Columns._ICONE.getColumnAlias() : Columns._ICONE.getColumnName(),
+                String.class));
+        return esporte;
+    }
+
+    private long insert(SQLiteDatabase db, Esporte esporte) throws SQLException {
+        return db.insertOrThrow(TABLE, null, getContentValues(esporte));
+    }
+
+    private int update(SQLiteDatabase db, Esporte esporte) {
+        return db.update(TABLE, getContentValues(esporte),
+                Columns._ID.getColumnName() + " = ? ",
+                new String[]{esporte.getId().toString()});
+    }
+
+    private int delete(SQLiteDatabase db, Integer id) {
+        return db.delete(TABLE, Columns._ID.getColumnName() + " = ? ", new String[]{id.toString()});
+    }
+
+    void saveEsporte(SQLiteDatabase db, Esporte esporte) {
+        if (getEsporte(db, esporte.getId()) == null) {
+            insert(db, esporte);
+        } else {
+            update(db, esporte);
+        }
+    }
+
+    Esporte getEsporte(SQLiteDatabase db, Integer id) {
+        Cursor cursor = db.query(TABLE,
+                null,
+                Columns._ID.getColumnName() + " = ? ",
+                new String[]{id.toString()},
+                null,
+                null,
+                null);
+        Esporte esporte = null;
+        if (cursor.moveToFirst()) {
+            esporte = getEsporte(cursor, false);
+        }
+        cursor.close();
+        return esporte;
     }
 
     public long saveEsportes(List<Esporte> esportes) {
@@ -106,7 +159,7 @@ public class EsporteDAO  extends AppBaseDAO {
         Cursor cursor = db.query(TABLE, null, null, null, null, null, null);
         if (cursor.moveToFirst()) {
             do {
-                esportes.add(getEsporte(cursor));
+                esportes.add(getEsporte(cursor, false));
             } while (cursor.moveToNext());
         }
         cursor.close();

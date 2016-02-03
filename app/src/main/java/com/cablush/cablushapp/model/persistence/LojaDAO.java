@@ -21,22 +21,24 @@ public class LojaDAO extends AppBaseDAO {
     static final String TABLE = "loja";
 
     enum Columns implements IColumns<Columns> {
-        _UUID("uuid", "TEXT PRIMARY KEY"),
-        _NOME("nome", "TEXT"),
-        _DESCRICAO("descricao", "TEXT"),
-        _TELEFONE("telefone", "TEXT"),
-        _EMAIL("email", "TEXT"),
-        _WEBSITE("website", "TEXT"),
-        _FACEBOOK("facebook", "TEXT"),
-        _LOGO("logo", "TEXT"),
-        _FUNDO("fundo", "INTEGER");
+        _UUID("uuid", "TEXT", true),
+        _NOME("nome", "TEXT", false),
+        _DESCRICAO("descricao", "TEXT", false),
+        _TELEFONE("telefone", "TEXT", false),
+        _EMAIL("email", "TEXT", false),
+        _WEBSITE("website", "TEXT", false),
+        _FACEBOOK("facebook", "TEXT", false),
+        _LOGO("logo", "TEXT", false),
+        _FUNDO("fundo", "INTEGER", false);
 
         private String columnName;
         private String columnType;
+        private Boolean primaryKey;
 
-        Columns(String columnName, String columnType) {
+        Columns(String columnName, String columnType, Boolean primaryKey) {
             this.columnName = columnName;
             this.columnType = columnType;
+            this.primaryKey = primaryKey;
         }
 
         @Override
@@ -58,15 +60,22 @@ public class LojaDAO extends AppBaseDAO {
         public String getColumnDefinition() {
             return columnName + " " + columnType;
         }
+
+        @Override
+        public Boolean getPrimaryKey() {
+            return primaryKey;
+        }
     }
 
     private LocalDAO localDAO;
     private HorarioDAO horarioDAO;
+    private LocalizavelEsporteDAO localizavelEsporteDAO;
 
     public LojaDAO(Context context) {
         dbHelper = CablushDBHelper.getInstance(context);
         localDAO = new LocalDAO(context);
         horarioDAO = new HorarioDAO(context);
+        localizavelEsporteDAO = new LocalizavelEsporteDAO(context);
     }
 
     static void onCreate(SQLiteDatabase db) throws SQLException {
@@ -136,7 +145,8 @@ public class LojaDAO extends AppBaseDAO {
                 loja.getHorario().setUuidLocalizavel(loja.getUuid());
                 horarioDAO.saveHorario(db, loja.getHorario());
             }
-            // TODO save esportes
+            // save esportes
+            localizavelEsporteDAO.saveEsportes(db, loja.getUuid(), loja.getEsportes());
             db.setTransactionSuccessful();
             return rowID;
         } catch (Exception ex) {
@@ -148,7 +158,8 @@ public class LojaDAO extends AppBaseDAO {
     }
 
     private long update(SQLiteDatabase db, Loja loja) {
-        int row = db.update(TABLE, getContentValues(loja), Columns._UUID.getColumnName() + " = ? ", new String[]{loja.getUuid()});
+        int row = db.update(TABLE, getContentValues(loja),
+                Columns._UUID.getColumnName() + " = ? ", new String[]{loja.getUuid()});
         // save local
         loja.getLocal().setUuidLocalizavel(loja.getUuid());
         localDAO.saveLocal(db, loja.getLocal());
@@ -157,7 +168,8 @@ public class LojaDAO extends AppBaseDAO {
             loja.getHorario().setUuidLocalizavel(loja.getUuid());
             horarioDAO.saveHorario(db, loja.getHorario());
         }
-        // TODO save esportes
+        // save esportes
+        localizavelEsporteDAO.saveEsportes(db, loja.getUuid(), loja.getEsportes());
         return row;
     }
 
@@ -174,7 +186,8 @@ public class LojaDAO extends AppBaseDAO {
     }
 
     private Loja getLoja(SQLiteDatabase db, String uuid) {
-        Cursor cursor = db.query(TABLE, null, Columns._UUID.getColumnName() + " = ? ", new String[]{uuid}, null, null, null);
+        Cursor cursor = db.query(TABLE, null,
+                Columns._UUID.getColumnName() + " = ? ", new String[]{uuid}, null, null, null);
         Loja loja = null;
         if (cursor.moveToFirst()) {
             loja = getLoja(cursor, false);
@@ -188,10 +201,14 @@ public class LojaDAO extends AppBaseDAO {
 
         SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
         queryBuilder.setTables(TABLE
-                + " INNER JOIN " + LocalDAO.TABLE
-                + " ON " + Columns._UUID.getColumnNameWithTable() + " = " + LocalDAO.Columns._UUID.getColumnNameWithTable()
-                + " LEFT OUTER JOIN " + HorarioDAO.TABLE
-                + " ON " + Columns._UUID.getColumnNameWithTable() + " = " + HorarioDAO.Columns._UUID.getColumnNameWithTable());
+                + " INNER JOIN " + LocalDAO.TABLE + " ON " + Columns._UUID.getColumnNameWithTable()
+                    + " = " + LocalDAO.Columns._UUID.getColumnNameWithTable()
+                + " LEFT OUTER JOIN " + HorarioDAO.TABLE + " ON " + Columns._UUID.getColumnNameWithTable()
+                    + " = " + HorarioDAO.Columns._UUID.getColumnNameWithTable()
+                + " LEFT OUTER JOIN " + LocalizavelEsporteDAO.TABLE + " ON " + Columns._UUID.getColumnNameWithTable()
+                    + " = " + LocalizavelEsporteDAO.Columns._UUID.getColumnNameWithTable()
+                + " INNER JOIN " + EsporteDAO.TABLE + " ON " + LocalizavelEsporteDAO.Columns._ESPORTE_ID.getColumnNameWithTable()
+                    + " = " + EsporteDAO.Columns._ID.getColumnNameWithTable());
 
         StringBuilder selection = new StringBuilder();
         List<String> selectionArgs = new ArrayList<>();
@@ -200,23 +217,25 @@ public class LojaDAO extends AppBaseDAO {
             selectionArgs.add(name + "%");
         }
         if (estado != null && !estado.isEmpty()) {
-            selection.append(LocalDAO.TABLE).append(".").append(LocalDAO.Columns._ESTADO.getColumnName()).append(" = ? ");
+            selection.append(LocalDAO.Columns._ESTADO.getColumnNameWithTable()).append(" = ? ");
             selectionArgs.add(estado);
         }
         if (esporte != null && !esporte.isEmpty()) {
-            // TODO filter by esportes
+            selection.append(EsporteDAO.Columns._CATEGORIA.getColumnNameWithTable()).append(" = ? ");
+            selectionArgs.add(esporte);
         }
 
         Cursor cursor = queryBuilder.query(db,
                 getColumnsProjectionWithAlias(Columns.class, LocalDAO.Columns.class, HorarioDAO.Columns.class),
-                selection.toString(), selectionArgs.toArray(new String[0]), null, null, null);
+                selection.toString(), selectionArgs.toArray(new String[selectionArgs.size()]),
+                getGroupBy(Columns.class, LocalDAO.Columns.class, HorarioDAO.Columns.class), null, null);
         List<Loja> lojas = new ArrayList<>();
         if (cursor.moveToFirst()) {
             do {
                 Loja loja = getLoja(cursor, true);
                 loja.setLocal(localDAO.getLocal(cursor, true));
                 loja.setHorario(horarioDAO.getHorario(cursor, true));
-                // TODO get esportes
+                loja.setEsportes(localizavelEsporteDAO.getEsportes(db, loja.getUuid()));
                 lojas.add(loja);
             } while (cursor.moveToNext());
         }

@@ -32,8 +32,8 @@ public class LoginPresenter {
         void onLoginError(String message);
     }
 
-    private WeakReference<LoginView> view;
-    private WeakReference<Context> context;
+    private WeakReference<LoginView> mView;
+    private WeakReference<Context> mContext;
     private ApiUsuario apiUsuario;
     private UsuarioDAO usuarioDAO;
 
@@ -44,8 +44,8 @@ public class LoginPresenter {
      * @param context
      */
     public LoginPresenter(LoginView view, Context context) {
-        this.view = new WeakReference<>(view);
-        this.context = new WeakReference<>(context);
+        this.mView = new WeakReference<>(view);
+        this.mContext = new WeakReference<>(context);
         this.apiUsuario = RestServiceBuilder.createService(ApiUsuario.class);
         this.usuarioDAO = new UsuarioDAO(context);
     }
@@ -57,13 +57,20 @@ public class LoginPresenter {
                 usuario = updateAuthData(usuario, response);
                 usuarioDAO.saveUsuario(usuario);
                 Usuario.LOGGED_USER = usuario;
-                view.get().onLoginSuccess();
+                LoginView view = mView.get();
+                if (view != null) {
+                    view.onLoginSuccess();
+                }
             }
 
             @Override
             public void failure(RetrofitError error) {
                 Log.e(TAG, "Error on user login. " + error.getMessage());
-                view.get().onLoginError(context.get().getString(R.string.error_login));
+                LoginView view = mView.get();
+                Context context = mContext.get();
+                if (view != null && context != null) {
+                    view.onLoginError(context.getString(R.string.error_login));
+                }
             }
         });
     }
@@ -77,13 +84,20 @@ public class LoginPresenter {
                     usuario = updateAuthData(usuario, response);
                     usuarioDAO.saveUsuario(usuario);
                     Usuario.LOGGED_USER = usuario;
-                    view.get().onLoginSuccess();
+                    LoginView view = mView.get();
+                    if (view != null) {
+                        view.onLoginSuccess();
+                    }
                 }
 
                 @Override
                 public void failure(RetrofitError error) {
                     Log.e(TAG, "Error on user check. " + error.getMessage());
-                    view.get().onLoginError(context.get().getString(R.string.error_login));
+                    LoginView view = mView.get();
+                    Context context = mContext.get();
+                    if (view != null && context != null) {
+                        view.onLoginError(context.getString(R.string.error_login));
+                    }
                 }
             });
         }

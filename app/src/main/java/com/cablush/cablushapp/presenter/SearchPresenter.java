@@ -29,7 +29,7 @@ public class SearchPresenter implements LojasMediator.LojasMediatorListener,
         void onSearchError(String message);
     }
 
-    private WeakReference<SearchView> view;
+    private WeakReference<SearchView> mView;
 
     private LojasMediator lojasMediator;
     private PistasMediator pistasMediator;
@@ -42,7 +42,7 @@ public class SearchPresenter implements LojasMediator.LojasMediatorListener,
      * @param context
      */
     public SearchPresenter(SearchView view, Context context) {
-        this.view = new WeakReference<>(view);
+        this.mView = new WeakReference<>(view);
         this.lojasMediator = new LojasMediator(this, context);
         this.pistasMediator = new PistasMediator(this, context);
         this.eventosMediator = new EventosMediator(this, context);
@@ -62,31 +62,49 @@ public class SearchPresenter implements LojasMediator.LojasMediatorListener,
 
     @Override
     public void onGetLojasSucess(List<Loja> lojas) {
-        view.get().onSearchSuccess(lojas);
+        SearchView view = mView.get();
+        if (view != null) {
+            view.onSearchSuccess(lojas);
+        }
     }
 
     @Override
     public void onGetLojasFail(String message) {
-        view.get().onSearchError(message);
+        SearchView view = mView.get();
+        if (view != null) {
+            view.onSearchError(message);
+        }
     }
 
     @Override
     public void onGetEventosSucess(List<Evento> eventos) {
-        view.get().onSearchSuccess(eventos);
+        SearchView view = mView.get();
+        if (view != null) {
+            view.onSearchSuccess(eventos);
+        }
     }
 
     @Override
     public void onGetEventosFail(String message) {
-        view.get().onSearchError(message);
+        SearchView view = mView.get();
+        if (view != null) {
+            view.onSearchError(message);
+        }
     }
 
     @Override
     public void onGetPistasSucess(List<Pista> pistas) {
-        view.get().onSearchSuccess(pistas);
+        SearchView view = mView.get();
+        if (view != null) {
+            view.onSearchSuccess(pistas);
+        }
     }
 
     @Override
     public void onGetPistasFail(String message) {
-        view.get().onSearchError(message);
+        SearchView view = mView.get();
+        if (view != null) {
+            view.onSearchError(message);
+        }
     }
 }

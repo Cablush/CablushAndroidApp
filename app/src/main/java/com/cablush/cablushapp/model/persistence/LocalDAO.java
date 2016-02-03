@@ -17,24 +17,26 @@ class LocalDAO extends AppBaseDAO {
     static final String TABLE = "local";
 
     enum Columns implements IColumns<Columns> {
-        _UUID("uuid", "TEXT PRIMARY KEY"),
-        _LATITUDE("latitude", "REAL"),
-        _LONGITUDE("longitude", "REAL"),
-        _LOGRADOURO("logradouro", "TEXT"),
-        _NUMERO("numero", "TEXT"),
-        _COMPLEMENTO("complemento", "TEXT"),
-        _BAIRRO("bairro", "TEXT"),
-        _CIDADE("cidade", "TEXT"),
-        _ESTADO("estado", "TEXT"),
-        _CEP("cep", "TEXT"),
-        _PAIS("pais", "TEXT");
+        _UUID("uuid", "TEXT", true),
+        _LATITUDE("latitude", "REAL", false),
+        _LONGITUDE("longitude", "REAL", false),
+        _LOGRADOURO("logradouro", "TEXT", false),
+        _NUMERO("numero", "TEXT", false),
+        _COMPLEMENTO("complemento", "TEXT", false),
+        _BAIRRO("bairro", "TEXT", false),
+        _CIDADE("cidade", "TEXT", false),
+        _ESTADO("estado", "TEXT", false),
+        _CEP("cep", "TEXT", false),
+        _PAIS("pais", "TEXT", false);
 
         private String columnName;
         private String columnType;
+        private Boolean primaryKey;
 
-        Columns(String columnName, String columnType) {
+        Columns(String columnName, String columnType, Boolean primaryKey) {
             this.columnName = columnName;
             this.columnType = columnType;
+            this.primaryKey = primaryKey;
         }
 
         @Override
@@ -55,6 +57,11 @@ class LocalDAO extends AppBaseDAO {
         @Override
         public String getColumnDefinition() {
             return columnName + " " + columnType;
+        }
+
+        @Override
+        public Boolean getPrimaryKey() {
+            return primaryKey;
         }
     }
 
@@ -130,7 +137,8 @@ class LocalDAO extends AppBaseDAO {
     }
 
     private int update(SQLiteDatabase db, Local local) {
-        return db.update(TABLE, getContentValues(local), Columns._UUID.getColumnName() + " = ? ", new String[]{local.getUuidLocalizavel()});
+        return db.update(TABLE, getContentValues(local),
+                Columns._UUID.getColumnName() + " = ? ", new String[]{local.getUuidLocalizavel()});
     }
 
     private int delete(SQLiteDatabase db, String uuid) {
@@ -146,7 +154,8 @@ class LocalDAO extends AppBaseDAO {
     }
 
     Local getLocal(SQLiteDatabase db, String uuid) {
-        Cursor cursor = db.query(TABLE, null, Columns._UUID.getColumnName() + " = ? ", new String[]{uuid}, null, null, null);
+        Cursor cursor = db.query(TABLE, null,
+                Columns._UUID.getColumnName() + " = ? ", new String[]{uuid}, null, null, null);
         Local local = null;
         if (cursor.moveToFirst()) {
             local = getLocal(cursor, false);

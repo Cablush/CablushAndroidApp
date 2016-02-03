@@ -28,14 +28,14 @@ public class PistasMediator {
         void onGetPistasFail(String message);
     }
 
-    private WeakReference<PistasMediatorListener> listener;
-    private WeakReference<Context> context;
+    private WeakReference<PistasMediatorListener> mListener;
+    private WeakReference<Context> mContext;
     private ApiPistas apiPistas;
     private PistaDAO pistaDAO;
 
     public PistasMediator(PistasMediatorListener listener, Context context) {
-        this.listener = new WeakReference<>(listener);
-        this.context = new WeakReference<>(context);
+        this.mListener = new WeakReference<>(listener);
+        this.mContext = new WeakReference<>(context);
         this.apiPistas = RestServiceBuilder.createService(ApiPistas.class);
         this.pistaDAO = new PistaDAO(context);
     }
@@ -47,13 +47,20 @@ public class PistasMediator {
                 if (!pistas.isEmpty()) {
                     pistaDAO.savePistas(pistas);
                 }
-                listener.get().onGetPistasSucess(pistaDAO.getPistas(name, estado, esporte));
+                PistasMediatorListener listener = mListener.get();
+                if (listener != null) {
+                    listener.onGetPistasSucess(pistaDAO.getPistas(name, estado, esporte));
+                }
             }
 
             @Override
             public void failure(RetrofitError error) {
                 Log.e(TAG, "Error getting pistas. " + error.getMessage());
-                listener.get().onGetPistasFail(context.get().getString(R.string.error_no_connection));
+                PistasMediatorListener listener = mListener.get();
+                Context context = mContext.get();
+                if (listener != null && context != null) {
+                    listener.onGetPistasFail(context.getString(R.string.error_no_connection));
+                }
             }
         });
 

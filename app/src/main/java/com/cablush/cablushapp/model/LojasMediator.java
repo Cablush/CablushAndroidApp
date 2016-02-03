@@ -28,14 +28,14 @@ public class LojasMediator {
         void onGetLojasFail(String message);
     }
 
-    private WeakReference<LojasMediatorListener> listener;
-    private WeakReference<Context> context;
+    private WeakReference<LojasMediatorListener> mListener;
+    private WeakReference<Context> mContext;
     private ApiLojas apiLojas;
     private LojaDAO lojaDAO;
 
     public LojasMediator(LojasMediatorListener listener, Context context) {
-        this.listener = new WeakReference<>(listener);
-        this.context = new WeakReference<>(context);
+        this.mListener = new WeakReference<>(listener);
+        this.mContext = new WeakReference<>(context);
         this.apiLojas = RestServiceBuilder.createService(ApiLojas.class);
         this.lojaDAO = new LojaDAO(context);
     }
@@ -47,13 +47,20 @@ public class LojasMediator {
                 if (!lojas.isEmpty()) {
                     lojaDAO.saveLojas(lojas);
                 }
-                listener.get().onGetLojasSucess(lojaDAO.getLojas(name, estado, esporte));
+                LojasMediatorListener listener = mListener.get();
+                if (listener != null) {
+                   listener.onGetLojasSucess(lojaDAO.getLojas(name, estado, esporte));
+                }
             }
 
             @Override
             public void failure(RetrofitError error) {
                 Log.e(TAG, "Error getting lojas. " + error.getMessage());
-                listener.get().onGetLojasFail(context.get().getString(R.string.error_no_connection));
+                LojasMediatorListener listener = mListener.get();
+                Context context = mContext.get();
+                if (listener != null && context != null) {
+                    listener.onGetLojasFail(context.getString(R.string.error_no_connection));
+                }
             }
         });
     }
