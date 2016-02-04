@@ -6,7 +6,7 @@
     <de.hdodenhof.circleimageview.CircleImageView
         android:layout_width="50dip"
         android:layout_height="50dip"
-        android:src=""
+        android:src="@drawable/logo_azul"
         android:id="@+id/logo_localizavel"
         android:layout_alignRight="@+id/telefoneTextView"
         android:layout_alignEnd="@+id/telefoneTextView"

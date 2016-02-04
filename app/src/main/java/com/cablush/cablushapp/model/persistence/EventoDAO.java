@@ -19,26 +19,28 @@ import java.util.List;
  */
 public class EventoDAO extends AppBaseDAO {
 
-    private static final String TABLE = "evento";
+    static final String TABLE = "evento";
 
     enum Columns implements IColumns<Columns> {
-        _UUID("uuid", "TEXT PRIMARY KEY"),
-        _NOME("nome", "TEXT"),
-        _DESCRICAO("descricao", "TEXT"),
-        _HORA("hora", "INTEGER"),
-        _DATA("data", "INTEGER"),
-        _DATA_FIM("data_fim", "INTEGER"),
-        _WEBSITE("website", "TEXT"),
-        _FACEBOOK("facebook", "TEXT"),
-        _FLYER("flyer", "TEXT"),
-        _FUNDO("fundo", "INTEGER");
+        _UUID("uuid", "TEXT", true),
+        _NOME("nome", "TEXT", false),
+        _DESCRICAO("descricao", "TEXT", false),
+        _HORA("hora", "INTEGER", false),
+        _DATA("data", "INTEGER", false),
+        _DATA_FIM("data_fim", "INTEGER", false),
+        _WEBSITE("website", "TEXT", false),
+        _FACEBOOK("facebook", "TEXT", false),
+        _FLYER("flyer", "TEXT", false),
+        _FUNDO("fundo", "INTEGER", false);
 
         private String columnName;
         private String columnType;
+        private Boolean primaryKey;
 
-        Columns(String columnName, String columnType) {
+        Columns(String columnName, String columnType, Boolean primaryKey) {
             this.columnName = columnName;
             this.columnType = columnType;
+            this.primaryKey = primaryKey;
         }
 
         @Override
@@ -60,13 +62,20 @@ public class EventoDAO extends AppBaseDAO {
         public String getColumnDefinition() {
             return columnName + " " + columnType;
         }
+
+        @Override
+        public Boolean getPrimaryKey() {
+            return primaryKey;
+        }
     }
 
     private LocalDAO localDAO;
+    private LocalizavelEsporteDAO localizavelEsporteDAO;
 
     public EventoDAO(Context context) {
         dbHelper = CablushDBHelper.getInstance(context);
         localDAO = new LocalDAO(context);
+        localizavelEsporteDAO = new LocalizavelEsporteDAO(context);
     }
 
     static void onCreate(SQLiteDatabase db) throws SQLException {
@@ -99,7 +108,7 @@ public class EventoDAO extends AppBaseDAO {
         return values;
     }
 
-    private Evento getEvento(Cursor cursor, boolean byColumnAlias) {
+    Evento getEvento(Cursor cursor, boolean byColumnAlias) {
         Evento evento = new Evento();
         evento.setUuid(readCursor(cursor,
                 byColumnAlias ? Columns._UUID.getColumnAlias() : Columns._UUID.getColumnName(),
@@ -141,7 +150,8 @@ public class EventoDAO extends AppBaseDAO {
             // save local
             evento.getLocal().setUuidLocalizavel(evento.getUuid());
             localDAO.saveLocal(db, evento.getLocal());
-            // TODO save esportes
+            // save esportes
+            localizavelEsporteDAO.saveEsportes(db, evento.getUuid(), evento.getEsportes());
             db.setTransactionSuccessful();
             return rowID;
         } catch (Exception ex) {
@@ -153,11 +163,13 @@ public class EventoDAO extends AppBaseDAO {
     }
 
     private long update(SQLiteDatabase db, Evento evento) {
-        int row = db.update(TABLE, getContentValues(evento), Columns._UUID.getColumnName() + " = ? ", new String[]{evento.getUuid()});
+        int row = db.update(TABLE, getContentValues(evento),
+                Columns._UUID.getColumnName() + " = ? ", new String[]{evento.getUuid()});
         // save local
         evento.getLocal().setUuidLocalizavel(evento.getUuid());
         localDAO.saveLocal(db, evento.getLocal());
-        // TODO save esportes
+        // save esportes
+        localizavelEsporteDAO.saveEsportes(db, evento.getUuid(), evento.getEsportes());
         return row;
     }
 
@@ -174,7 +186,8 @@ public class EventoDAO extends AppBaseDAO {
     }
 
     private Evento getEvento(SQLiteDatabase db, String uuid) {
-        Cursor cursor = db.query(TABLE, null, Columns._UUID.getColumnName() + " = ? ", new String[]{uuid}, null, null, null);
+        Cursor cursor = db.query(TABLE, null,
+                Columns._UUID.getColumnName() + " = ? ", new String[]{uuid}, null, null, null);
         Evento evento = null;
         if (cursor.moveToFirst()) {
             evento = getEvento(cursor, false);
@@ -188,8 +201,12 @@ public class EventoDAO extends AppBaseDAO {
 
         SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
         queryBuilder.setTables(TABLE
-                + " INNER JOIN " + LocalDAO.TABLE
-                + " ON " + Columns._UUID.getColumnNameWithTable() + " = " + LocalDAO.Columns._UUID.getColumnNameWithTable());
+                + " INNER JOIN " + LocalDAO.TABLE + " ON " + Columns._UUID.getColumnNameWithTable()
+                    + " = " + LocalDAO.Columns._UUID.getColumnNameWithTable()
+                + " LEFT OUTER JOIN " + LocalizavelEsporteDAO.TABLE + " ON " + Columns._UUID.getColumnNameWithTable()
+                    + " = " + LocalizavelEsporteDAO.Columns._UUID.getColumnNameWithTable()
+                + " INNER JOIN " + EsporteDAO.TABLE + " ON " + LocalizavelEsporteDAO.Columns._ESPORTE_ID.getColumnNameWithTable()
+                    + " = " + EsporteDAO.Columns._ID.getColumnNameWithTable());
 
         StringBuilder selection = new StringBuilder();
         List<String> selectionArgs = new ArrayList<>();
@@ -202,18 +219,20 @@ public class EventoDAO extends AppBaseDAO {
             selectionArgs.add(estado);
         }
         if (esporte != null && !esporte.isEmpty()) {
-            // TODO filter by esportes
+            selection.append(EsporteDAO.Columns._CATEGORIA.getColumnNameWithTable()).append(" = ? ");
+            selectionArgs.add(esporte);
         }
 
         Cursor cursor = queryBuilder.query(db,
                 getColumnsProjectionWithAlias(Columns.class, LocalDAO.Columns.class),
-                selection.toString(), selectionArgs.toArray(new String[0]), null, null, null);
+                selection.toString(), selectionArgs.toArray(new String[selectionArgs.size()]),
+                getGroupBy(Columns.class, LocalDAO.Columns.class), null, null);
         List<Evento> eventos = new ArrayList<>();
         if (cursor.moveToFirst()) {
             do {
                 Evento evento = getEvento(cursor, true);
                 evento.setLocal(localDAO.getLocal(cursor, true));
-                // TODO get esportes
+                evento.setEsportes(localizavelEsporteDAO.getEsportes(db, evento.getUuid()));
                 eventos.add(evento);
             } while (cursor.moveToNext());
         }

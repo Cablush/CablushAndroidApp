@@ -28,14 +28,14 @@ public class EventosMediator {
         void onGetEventosFail(String message);
     }
 
-    private WeakReference<EventosMediatorListener> listener;
-    private WeakReference<Context> context;
+    private WeakReference<EventosMediatorListener> mListener;
+    private WeakReference<Context> mContext;
     private ApiEventos apiEventos;
     private EventoDAO eventoDAO;
 
     public EventosMediator(EventosMediatorListener listener, Context context) {
-        this.listener = new WeakReference<>(listener);
-        this.context = new WeakReference<>(context);
+        this.mListener = new WeakReference<>(listener);
+        this.mContext = new WeakReference<>(context);
         this.apiEventos = RestServiceBuilder.createService(ApiEventos.class);
         this.eventoDAO = new EventoDAO(context);
     }
@@ -47,13 +47,20 @@ public class EventosMediator {
                 if (!eventos.isEmpty()) {
                     eventoDAO.saveEventos(eventos);
                 }
-                listener.get().onGetEventosSucess(eventoDAO.getEventos(name, estado, esporte));
+                EventosMediatorListener listener = mListener.get();
+                if (listener != null) {
+                    listener.onGetEventosSucess(eventoDAO.getEventos(name, estado, esporte));
+                }
             }
 
             @Override
             public void failure(RetrofitError error) {
                 Log.e(TAG, "Error getting eventos. " + error.getMessage());
-                listener.get().onGetEventosFail(context.get().getString(R.string.error_no_connection));
+                EventosMediatorListener listener = mListener.get();
+                Context context = mContext.get();
+                if (listener != null && context != null) {
+                    listener.onGetEventosFail(context.getString(R.string.error_no_connection));
+                }
             }
         });
     }

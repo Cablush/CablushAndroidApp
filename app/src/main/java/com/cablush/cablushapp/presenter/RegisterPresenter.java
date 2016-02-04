@@ -29,8 +29,8 @@ public class RegisterPresenter {
         void onRegisterError(String message);
     }
 
-    private WeakReference<RegisterView> view;
-    private WeakReference<Context> context;
+    private WeakReference<RegisterView> mView;
+    private WeakReference<Context> mContext;
     private ApiUsuario apiUsuario;
 
     /**
@@ -39,8 +39,8 @@ public class RegisterPresenter {
      * @param view
      */
     public RegisterPresenter(RegisterView view, Context context) {
-        this.view = new WeakReference<>(view);
-        this.context = new WeakReference<>(context);
+        this.mView = new WeakReference<>(view);
+        this.mContext = new WeakReference<>(context);
         this.apiUsuario = RestServiceBuilder.createService(ApiUsuario.class);
     }
 
@@ -48,13 +48,20 @@ public class RegisterPresenter {
         apiUsuario.doRegister(name, email, password, password, shopkeeper, new Callback<Usuario>() {
             @Override
             public void success(Usuario usuario, Response response) {
-                view.get().onRegisterSuccess();
+                RegisterView view = mView.get();
+                if (view != null) {
+                    view.onRegisterSuccess();
+                }
             }
 
             @Override
             public void failure(RetrofitError error) {
                 Log.e(TAG, "Error on user register. " + error.getMessage());
-                view.get().onRegisterError(context.get().getString(R.string.error_register));
+                RegisterView view = mView.get();
+                Context context = mContext.get();
+                if (view != null && context != null) {
+                    view.onRegisterError(context.getString(R.string.error_register));
+                }
             }
         });
     }

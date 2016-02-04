@@ -22,15 +22,22 @@ public abstract class AppBaseDAO {
         String getColumnNameWithTable();
         String getColumnAlias();
         String getColumnDefinition();
+        Boolean getPrimaryKey();
     }
 
     static String createTable(String table, Class<? extends IColumns<?>> columnsClass) {
+        StringBuilder primaryKey = new StringBuilder();
+        primaryKey.append(" PRIMARY KEY (");
         StringBuilder createTable = new StringBuilder();
-        createTable.append("CREATE TABLE ").append(table).append(" ( ");
+        createTable.append("CREATE TABLE ").append(table).append(" (");
         for(IColumns column : columnsClass.getEnumConstants()) {
+            if (column.getPrimaryKey()) {
+                primaryKey.append(column.getColumnName()).append(", ");
+            }
             createTable.append(column.getColumnDefinition()).append(", ");
         }
-        createTable.replace(createTable.lastIndexOf(","), createTable.length(), ");");
+        primaryKey.replace(primaryKey.lastIndexOf(","), primaryKey.length(), ")");
+        createTable.append(primaryKey.toString()).append(");");
         return createTable.toString();
     }
 
@@ -41,7 +48,18 @@ public abstract class AppBaseDAO {
                 projColumns.add(column.getColumnNameWithTable() + " AS " + column.getColumnAlias());
             }
         }
-        return projColumns.toArray(new String[0]);
+        return projColumns.toArray(new String[projColumns.size()]);
+    }
+
+    static String getGroupBy(Class<? extends IColumns<?>>... columnsClasses) {
+        StringBuilder groupBy = new StringBuilder();
+        for (Class<? extends IColumns<?>> iColumnClass : Arrays.asList(columnsClasses)) {
+            for (IColumns<?> column : iColumnClass.getEnumConstants()) {
+                groupBy.append(column.getColumnAlias()).append(", ");
+            }
+        }
+        groupBy.replace(groupBy.lastIndexOf(","), groupBy.length(), "");
+        return groupBy.toString();
     }
 
     /**

@@ -18,24 +18,26 @@ class HorarioDAO extends AppBaseDAO {
     static final String TABLE = "horario";
 
     enum Columns implements IColumns<Columns> {
-        _UUID("uuid", "TEXT PRIMARY KEY"),
-        _INICIO("inicio", "INTEGER"),
-        _FIM("fim", "INTEGER"),
-        _SEG("seg", "INTEGER"),
-        _TER("ter", "INTEGER"),
-        _QUA("qua", "INTEGER"),
-        _QUI("qui", "INTEGER"),
-        _SEX("sex", "INTEGER"),
-        _SAB("sab", "INTEGER"),
-        _DOM("dom", "INTEGER"),
-        _DETALHES("detalhes", "TEXT");
+        _UUID("uuid", "TEXT", true),
+        _INICIO("inicio", "INTEGER", false),
+        _FIM("fim", "INTEGER", false),
+        _SEG("seg", "INTEGER", false),
+        _TER("ter", "INTEGER", false),
+        _QUA("qua", "INTEGER", false),
+        _QUI("qui", "INTEGER", false),
+        _SEX("sex", "INTEGER", false),
+        _SAB("sab", "INTEGER", false),
+        _DOM("dom", "INTEGER", false),
+        _DETALHES("detalhes", "TEXT", false);
 
         private String columnName;
         private String columnType;
+        private Boolean primaryKey;
 
-        Columns(String columnName, String columnType) {
+        Columns(String columnName, String columnType, Boolean primaryKey) {
             this.columnName = columnName;
             this.columnType = columnType;
+            this.primaryKey = primaryKey;
         }
 
         @Override
@@ -56,6 +58,11 @@ class HorarioDAO extends AppBaseDAO {
         @Override
         public String getColumnDefinition() {
             return columnName + " " + columnType;
+        }
+
+        @Override
+        public Boolean getPrimaryKey() {
+            return primaryKey;
         }
     }
 
@@ -135,7 +142,9 @@ class HorarioDAO extends AppBaseDAO {
     }
 
     private int update(SQLiteDatabase db, Horario horario) {
-        return db.update(TABLE, getContentValues(horario), Columns._UUID.getColumnName() + " = ? ", new String[]{horario.getUuidLocalizavel()});
+        return db.update(TABLE, getContentValues(horario),
+                Columns._UUID.getColumnName() + " = ? ",
+                new String[]{horario.getUuidLocalizavel()});
     }
 
     private int delete(SQLiteDatabase db, String uuid) {
@@ -151,7 +160,13 @@ class HorarioDAO extends AppBaseDAO {
     }
 
     Horario getHorario(SQLiteDatabase db, String uuid) {
-        Cursor cursor = db.query(TABLE, null, Columns._UUID.getColumnName() + " = ? ", new String[]{uuid}, null, null, null);
+        Cursor cursor = db.query(TABLE,
+                null,
+                Columns._UUID.getColumnName() + " = ? ",
+                new String[]{uuid},
+                null,
+                null,
+                null);
         Horario horario = null;
         if (cursor.moveToFirst()) {
             horario = getHorario(cursor, false);
