@@ -10,11 +10,16 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.cablush.cablushapp.R;
+import com.cablush.cablushapp.model.domain.Evento;
 import com.cablush.cablushapp.model.domain.Localizavel;
 import com.cablush.cablushapp.model.domain.Loja;
+import com.cablush.cablushapp.model.domain.Pista;
 import com.cablush.cablushapp.utils.ViewUtils;
+import com.squareup.picasso.Picasso;
 
 import java.lang.ref.WeakReference;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Created by oscar on 29/12/15.
@@ -60,11 +65,20 @@ public class LocalInfoDialog<L extends Localizavel> extends DialogFragment {
 
         TextView telefone = (TextView) view.findViewById(R.id.telefoneTextView);
         TextView email = (TextView) view.findViewById(R.id.emailTextView);
+        CircleImageView logoCircleImgView = (CircleImageView) view.findViewById(R.id.logo_localizavel);
         if (localizavel.get() instanceof Loja) {
             Loja loja = (Loja) localizavel.get();
             telefone.setText(loja.getTelefone());
             email.setText(loja.getEmail());
+            Picasso.with(inflater.getContext()).load(loja.getLogo()).into(logoCircleImgView);
         } else {
+            if(localizavel.get() instanceof Evento){
+                Evento evento = (Evento)localizavel.get();
+                Picasso.with(inflater.getContext()).load(evento.getFlyer()).into(logoCircleImgView);
+            }else{
+                Pista pista = (Pista)localizavel.get();
+                Picasso.with(inflater.getContext()).load(pista.getFoto()).into(logoCircleImgView);
+            }
             telefone.setVisibility(View.GONE);
             email.setVisibility(View.GONE);
         }
@@ -79,6 +93,8 @@ public class LocalInfoDialog<L extends Localizavel> extends DialogFragment {
 
         TextView cep = (TextView) view.findViewById(R.id.cepTextView);
         cep.setText(localizavel.get().getLocal().getCep());
+
+
 
         return  view;
     }
