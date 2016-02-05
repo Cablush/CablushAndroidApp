@@ -15,6 +15,8 @@
     <string name="btn_login">Logar</string>
     <string name="btn_search">Buscar</string>
     <string name="btn_save">Salvar</string>
+    <string name="btn_gallery">Galeria</string>
+    <string name="btn_picture">Foto</string>
 
     <!--Dialog Login/Register -->
     <string name="title_login">Login</string>
@@ -34,36 +36,52 @@
     <string name="title_cadastrar">Cadastrar %s</string>
     <string name="txt_cadastrar">Cadastrar</string>
 
-    <string name="title_endereco">Endereco</string>
-    <string name="title_horario_funcionamento">Horário de Funcionamento</string>
-    <string name="title_evento">Evento Data e Horário</string>
-
-    <!--Cadastro localizavel -->
+    <!--Cadastros Local -->
     <string name="txt_site">Site</string>
     <string name="txt_telefone">Telefone</string>
     <string name="txt_facebook">Facebook</string>
+    <string name="txt_logo">Logo</string>
     <string name="txt_descricao">Descrição</string>
-    <string name="txt_endereco">Endereço</string>
-    <string name="txt_horario_funcionameto">Horário Funcionamento</string>
+    <string name="txt_logotipo">Logotipo</string>
+    <string name="txt_foto">Tirar Foto</string>
+    <string name="txt_galeria">Galeria de Fotos</string>
 
-    <!-- Horario Funcionamento Layout -->
-    <string name="txt_dias">Dias</string>
-    <string name="txt_periodo">Período</string>
-    <string name="txt_hora_inicio">Hora início</string>
-    <string name="txt_hora_fim">Hora fim</string>
-
-    <!-- Cadastro Horario Evento -->
+    <!-- Cadastros Evento -->
     <string name="txt_data_inicio">Data Inicio</string>
     <string name="txt_data_fim">Data Fim</string>
+    <string name="txt_hora">Hora</string>
+    <string name="txt_minuto">Minuto</string>
+    <string name="txt_tlyer">Flyer</string>
 
-    <!-- Endereco Layout -->
+    <!-- Cadastros Horario Funcionamento -->
+    <string name="txt_horario_funcionameto">Horário Funcionamento</string>
+    <string name="txt_dias">Dias</string>
+    <string name="txt_hora_inicio">Hora início</string>
+    <string name="txt_hora_fim">Hora fim</string>
+    <string name="txt_detalhes">Detalhes</string>
+
+    <string-array name="dias_options">
+        <item>Set</item>
+        <item>Ter</item>
+        <item>Qua</item>
+        <item>Qui</item>
+        <item>Sex</item>
+        <item>Sab</item>
+        <item>Dom</item>
+    </string-array>
+
+    <!-- Cadastros Endereco -->
+    <string name="txt_endereco">Endereço</string>
     <string name="txt_cep">CEP</string>
+    <string name="txt_estado">Estado</string>
     <string name="txt_cidade">Cidade</string>
     <string name="txt_bairro">Bairro</string>
     <string name="txt_logradouro">Logradouro</string>
-    <string name="txt_numero">Numero</string>
+    <string name="txt_numero">Número</string>
     <string name="txt_complemento">Complemento</string>
+    <string name="txt_localizacao">Localização</string>
 
+    <!-- Tipos Locais -->
     <string name="txt_loja">Loja</string>
     <string name="txt_evento">Evento</string>
     <string name="txt_pista">Pista</string>

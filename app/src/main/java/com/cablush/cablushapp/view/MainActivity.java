@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -14,6 +15,7 @@ import android.widget.Toast;
 import com.cablush.cablushapp.R;
 import com.cablush.cablushapp.model.domain.Localizavel;
 import com.cablush.cablushapp.model.domain.Usuario;
+import com.cablush.cablushapp.utils.ViewUtils;
 import com.cablush.cablushapp.view.dialogs.LocalInfoDialog;
 import com.cablush.cablushapp.view.dialogs.RegisterDialog;
 import com.cablush.cablushapp.view.drawer.DrawerActivityConfiguration;
@@ -65,15 +67,15 @@ public class MainActivity extends AbstractDrawerActivity implements OnMapReadyCa
         MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.mapView);
         mapFragment.getMapAsync(this);
 
-//        FloatingActionButton addFAB = (FloatingActionButton) findViewById(R.id.add_fab);
-//        addFAB.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if (ViewUtils.checkUserLoggedIn(MainActivity.this)) {
-//
-//                }
-//            }
-//        });
+        FloatingActionButton addFAB = (FloatingActionButton) findViewById(R.id.add_fab);
+        addFAB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (ViewUtils.checkUserLoggedIn(MainActivity.this)) {
+
+                }
+            }
+        });
 
         spinner = (ProgressBar)findViewById(R.id.progressBar);
         spinner.setVisibility(View.GONE);

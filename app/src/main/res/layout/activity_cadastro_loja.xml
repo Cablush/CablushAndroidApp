@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/scrollView2"
+    android:layout_alignParentTop="true"
+    android:layout_alignParentLeft="true"
+    android:layout_alignParentStart="true">
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:background="@android:color/white">
+
+        <TextView
+            style="@style/TextAppearance.Bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="@string/txt_name"
+            android:id="@+id/textViewNome"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="@dimen/dialog_margin"
+            android:layout_marginRight="@dimen/dialog_margin"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:hint="@string/txt_name"
+            android:ems="10"
+            android:id="@+id/editTextNome"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/textViewNome"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="@dimen/dialog_margin"
+            android:layout_marginRight="@dimen/dialog_margin"/>
+
+        <TextView
+            style="@style/TextAppearance.Bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="@string/txt_telefone"
+            android:id="@+id/textViewTelefone"
+            android:layout_below="@+id/editTextNome"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="@dimen/dialog_margin"
+            android:layout_marginRight="@dimen/dialog_margin"
+            android:layout_marginTop="@dimen/vertical_spacing"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="phone"
+            android:hint="@string/txt_telefone"
+            android:ems="10"
+            android:id="@+id/editTextTelefone"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/textViewTelefone"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="@dimen/dialog_margin"
+            android:layout_marginRight="@dimen/dialog_margin"/>
+
+        <TextView
+            style="@style/TextAppearance.Bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="@string/txt_email"
+            android:id="@+id/textViewEmail"
+            android:layout_below="@+id/editTextTelefone"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="@dimen/dialog_margin"
+            android:layout_marginRight="@dimen/dialog_margin"
+            android:layout_marginTop="@dimen/vertical_spacing"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textEmailAddress"
+            android:hint="@string/txt_email"
+            android:ems="10"
+            android:id="@+id/editTextEmail"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/textViewEmail"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="@dimen/dialog_margin"
+            android:layout_marginRight="@dimen/dialog_margin"/>
+
+        <TextView
+            style="@style/TextAppearance.Bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="@string/txt_site"
+            android:id="@+id/textViewSite"
+            android:layout_below="@+id/editTextEmail"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="@dimen/dialog_margin"
+            android:layout_marginRight="@dimen/dialog_margin"
+            android:layout_marginTop="@dimen/vertical_spacing"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/txt_site"
+            android:ems="10"
+            android:id="@+id/editTextSite"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/textViewSite"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="@dimen/dialog_margin"
+            android:layout_marginRight="@dimen/dialog_margin"
+            android:inputType="textUri"/>
+
+        <TextView
+            style="@style/TextAppearance.Bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="@string/txt_facebook"
+            android:id="@+id/textViewFacebook"
+            android:layout_below="@+id/editTextSite"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="@dimen/dialog_margin"
+            android:layout_marginRight="@dimen/dialog_margin"
+            android:layout_marginTop="@dimen/vertical_spacing"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/txt_facebook"
+            android:ems="10"
+            android:id="@+id/editTextFacebook"
+            android:layout_below="@+id/textViewFacebook"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginLeft="@dimen/dialog_margin"
+            android:layout_marginRight="@dimen/dialog_margin"
+            android:inputType="textUri"/>
+
+        <TextView
+            style="@style/TextAppearance.Bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="@string/txt_logo"
+            android:id="@+id/textViewLogo"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="@dimen/dialog_margin"
+            android:layout_marginRight="@dimen/dialog_margin"
+            android:layout_marginTop="@dimen/vertical_spacing"
+            android:layout_below="@+id/editTextFacebook"/>
+
+        <ImageButton
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/btn_gallery"
+            android:id="@+id/buttonGallery"
+            android:layout_below="@+id/textViewLogo"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="@dimen/dialog_margin"
+            android:src="@drawable/ic_action_ic_photo_blue"
+            android:contentDescription="@string/txt_galeria"/>
+
+        <ImageButton
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/btn_picture"
+            android:id="@+id/buttonFoto"
+            android:layout_below="@+id/buttonGallery"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_toLeftOf="@+id/imageViewLogo"
+            android:layout_toStartOf="@+id/imageViewLogo"
+            android:layout_marginLeft="@dimen/dialog_margin"
+            android:src="@drawable/ic_action_ic_camera_blue"
+            android:contentDescription="@string/txt_foto"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/imageViewLogo"
+            android:layout_toRightOf="@+id/buttonGallery"
+            android:layout_toEndOf="@+id/buttonGallery"
+            android:layout_marginLeft="@dimen/dialog_margin"
+            android:contentDescription="@string/txt_logotipo"
+            android:src="@drawable/missing"
+            android:layout_marginRight="@dimen/dialog_margin"
+            android:maxHeight="200dp"
+            android:maxWidth="200dp"
+            android:layout_alignTop="@+id/buttonGallery"/>
+
+        <TextView
+            style="@style/TextAppearance.Bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="@string/txt_descricao"
+            android:id="@+id/textViewDescricao"
+            android:layout_below="@+id/imageViewLogo"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="@dimen/dialog_margin"
+            android:layout_marginRight="@dimen/dialog_margin"
+            android:layout_marginTop="@dimen/vertical_spacing"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textMultiLine"
+            android:ems="10"
+            android:id="@+id/editTextDescricao"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:hint="@string/txt_descricao"
+            android:layout_below="@+id/textViewDescricao"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="@dimen/dialog_margin"
+            android:layout_marginRight="@dimen/dialog_margin"/>
+
+        <TextView
+            style="@style/TextAppearance.Bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Esportes"
+            android:id="@+id/textViewEsportes"
+            android:layout_alignParentBottom="false"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="@dimen/dialog_margin"
+            android:layout_marginRight="@dimen/dialog_margin"
+            android:layout_below="@+id/editTextDescricao"
+            android:layout_marginTop="@dimen/vertical_spacing"/>
+
+        <View style="@style/Divider"
+              android:layout_below="@+id/textViewEsportes"
+              android:layout_marginLeft="@dimen/dialog_margin"
+              android:layout_marginRight="@dimen/dialog_margin"/>
+
+        <MultiAutoCompleteTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="New MultiAutoCompleteTextView"
+            android:id="@+id/multiAutoCompleteEsportes"
+            android:layout_alignParentBottom="false"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/textViewEsportes"
+            android:layout_marginLeft="@dimen/dialog_margin"
+            android:layout_marginRight="@dimen/dialog_margin"/>
+
+        <include
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            layout="@layout/cadastro_layout_endereco"
+            android:layout_alignParentBottom="false"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/multiAutoCompleteEsportes"
+            android:layout_marginTop="@dimen/vertical_spacing"/>
+
+    </RelativeLayout>
+
+</ScrollView>
