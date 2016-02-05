@@ -14,45 +14,64 @@
         android:layout_alignParentStart="true"
         android:layout_marginLeft="@dimen/dialog_margin"
         android:layout_marginRight="@dimen/dialog_margin"
-        android:layout_below="@+id/txtTitle"
-        android:layout_marginTop="20dp"/>
+        />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageViewTelefone"
+        android:src="@drawable/ic_action_ic_phone_blue"
+        android:layout_below="@+id/descricaoTextView"
+        android:layout_marginLeft="@dimen/dialog_margin"/>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="(31) 3131-0909"
         android:id="@+id/telefoneTextView"
-        android:layout_marginTop="@dimen/vertical_spacing"
-        android:layout_below="@+id/descricaoTextView"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginLeft="@dimen/dialog_margin"
         android:autoLink="phone"
+        android:layout_toRightOf="@+id/imageViewTelefone"
+        android:layout_toEndOf="@+id/imageViewTelefone"
+        android:layout_marginTop="@dimen/vertical_spacing"
+        android:layout_alignTop="@+id/imageViewTelefone"
         android:layout_marginRight="@dimen/dialog_margin"/>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageViewEmail"
+        android:src="@drawable/ic_action_ic_mail_outline_blue"
+        android:layout_below="@+id/imageViewTelefone"
+        android:layout_marginLeft="@dimen/dialog_margin"/>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="email@local.com.br"
         android:id="@+id/emailTextView"
-        android:layout_below="@+id/telefoneTextView"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginLeft="@dimen/dialog_margin"
-        android:layout_marginTop="@dimen/vertical_spacing"
         android:autoLink="email"
+        android:layout_toRightOf="@+id/imageViewEmail"
+        android:layout_toEndOf="@+id/imageViewEmail"
+        android:layout_alignTop="@+id/imageViewEmail"
+        android:layout_marginTop="@dimen/vertical_spacing"
         android:layout_marginRight="@dimen/dialog_margin"/>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageViewEndereco"
+        android:src="@drawable/ic_action_ic_business_blue"
+        android:layout_below="@+id/imageViewEmail"
+        android:layout_marginLeft="@dimen/dialog_margin"/>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Rua Nome, 10, Bairro Nome"
         android:id="@+id/enderecoTextView"
-        android:layout_below="@+id/emailTextView"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="@dimen/vertical_spacing"
-        android:layout_marginLeft="@dimen/dialog_margin"
+        android:layout_toRightOf="@+id/imageViewEndereco"
+        android:layout_toEndOf="@+id/imageViewEndereco"
+        android:layout_alignTop="@+id/imageViewEndereco"
         android:layout_marginRight="@dimen/dialog_margin"/>
 
     <TextView
@@ -61,9 +80,8 @@
         android:text="Nome Cidade / RG"
         android:id="@+id/cidadeEstadoTextView"
         android:layout_below="@+id/cepTextView"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginLeft="@dimen/dialog_margin"
+        android:layout_alignLeft="@+id/cepTextView"
+        android:layout_alignStart="@+id/cepTextView"
         android:layout_marginBottom="@dimen/dialog_margin"
         android:layout_marginRight="@dimen/dialog_margin"/>
 
@@ -73,9 +91,8 @@
         android:text="30000-000"
         android:id="@+id/cepTextView"
         android:layout_below="@+id/enderecoTextView"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginLeft="@dimen/dialog_margin"
+        android:layout_toRightOf="@+id/imageViewEndereco"
+        android:layout_toEndOf="@+id/imageViewEndereco"
         android:layout_marginRight="@dimen/dialog_margin"/>
 
 </RelativeLayout>
