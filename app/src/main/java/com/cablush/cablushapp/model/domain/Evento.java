@@ -136,4 +136,9 @@ public class Evento implements Localizavel {
     public void setEsportes(List<Esporte> esportes) {
         this.esportes = esportes;
     }
+
+    @Override
+    public String getImagem() {
+        return flyer;
+    }
 }

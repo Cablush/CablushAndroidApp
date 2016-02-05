@@ -115,4 +115,9 @@ public class Pista implements Localizavel {
     public void setHorario(Horario horario) {
         this.horario = horario;
     }
+
+    @Override
+    public String getImagem() {
+        return foto;
+    }
 }

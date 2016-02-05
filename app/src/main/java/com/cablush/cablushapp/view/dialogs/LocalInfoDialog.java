@@ -14,8 +14,11 @@ import com.cablush.cablushapp.R;
 import com.cablush.cablushapp.model.domain.Localizavel;
 import com.cablush.cablushapp.model.domain.Loja;
 import com.cablush.cablushapp.utils.ViewUtils;
+import com.squareup.picasso.Picasso;
 
 import java.lang.ref.WeakReference;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Created by oscar on 29/12/15.
@@ -56,7 +59,12 @@ public class LocalInfoDialog<L extends Localizavel> extends DialogFragment {
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.dialog_local_info, null);
 
-        // TODO logo/foto
+        CircleImageView logoCircleImgView = (CircleImageView) view.findViewById(R.id.logo_localizavel);
+        if (mLocalizavel.get().getImagem() != null) {
+            Picasso.with(inflater.getContext()).load(mLocalizavel.get().getImagem()).into(logoCircleImgView);
+        } else {
+            logoCircleImgView.setVisibility(View.GONE);
+        }
 
         TextView descricao = (TextView) view.findViewById(R.id.descricaoTextView);
         descricao.setText(mLocalizavel.get().getDescricao());

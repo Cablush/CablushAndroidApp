@@ -147,4 +147,9 @@ public class Loja implements Localizavel {
     public void setHorario(Horario horario) {
         this.horario = horario;
     }
+
+    @Override
+    public String getImagem() {
+        return logo;
+    }
 }
