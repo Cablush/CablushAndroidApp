@@ -5,21 +5,18 @@ import android.app.DialogFragment;
 import android.app.FragmentManager;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.Target;
 import com.cablush.cablushapp.BuildConfig;
 import com.cablush.cablushapp.R;
 import com.cablush.cablushapp.model.domain.Localizavel;
 import com.cablush.cablushapp.model.domain.Loja;
 import com.cablush.cablushapp.utils.ViewUtils;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.Picasso;
 
 import java.lang.ref.WeakReference;
 
@@ -78,10 +75,18 @@ public class LocalInfoDialog<L extends Localizavel> extends DialogFragment {
             if (BuildConfig.DEBUG) {
                 imageURL = imageURL.replace("localhost", "10.0.2.2");
             }
-            Glide.with(this).load(imageURL)
-                    .listener(new LoggingListener<String, GlideDrawable>())
-                    .error(R.drawable.logo_azul)
-                    .crossFade().into(logo);
+            Picasso.with(getActivity()).load(imageURL).fit().into(logo, new Callback() {
+                @Override
+                public void onSuccess() {
+                }
+
+                @Override
+                public void onError() {
+                    logo.setVisibility(View.GONE);
+                }
+            });
+        } else {
+            logo.setVisibility(View.GONE);
         }
 
         // Initialize description
@@ -119,27 +124,5 @@ public class LocalInfoDialog<L extends Localizavel> extends DialogFragment {
         cep.setText(mLocalizavel.get().getLocal().getCep());
 
         return  view;
-    }
-
-    /**
-     * Glide RequestListener for debug purposes.
-     *
-     * @param <T>
-     * @param <R>
-     */
-    class LoggingListener<T, R> implements RequestListener<T, R> {
-        @Override
-        public boolean onException(Exception e, Object model, Target target, boolean isFirstResource) {
-            Log.d("GLIDE", String.format("onException(%s, %s, %s, %s)",
-                    e, model, target, isFirstResource), e);
-            return false;
-        }
-        @Override
-        public boolean onResourceReady(Object resource, Object model, Target target,
-                                                 boolean isFromMemoryCache, boolean isFirstResource) {
-            Log.d("GLIDE", String.format("onResourceReady(%s, %s, %s, %s, %s)",
-                    resource, model, target, isFromMemoryCache, isFirstResource));
-            return false;
-        }
     }
 }
