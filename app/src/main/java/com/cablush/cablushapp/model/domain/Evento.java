@@ -88,6 +88,7 @@ public class Evento implements Localizavel {
         this.dataFim = dataFim;
     }
 
+    @Override
     public String getWebsite() {
         return website;
     }
@@ -96,6 +97,7 @@ public class Evento implements Localizavel {
         this.website = website;
     }
 
+    @Override
     public String getFacebook() {
         return facebook;
     }

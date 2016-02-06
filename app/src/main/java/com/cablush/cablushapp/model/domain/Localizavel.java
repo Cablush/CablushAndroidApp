@@ -13,5 +13,9 @@ public interface Localizavel {
 
     Local getLocal();
 
+    String getWebsite();
+
+    String getFacebook();
+
     String getImagemURL();
 }

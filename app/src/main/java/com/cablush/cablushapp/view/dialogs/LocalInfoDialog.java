@@ -113,7 +113,27 @@ public class LocalInfoDialog<L extends Localizavel> extends DialogFragment {
             emailIcon.setVisibility(View.GONE);
         }
 
-        // TODO facebook & site & directions && esportes
+        // Initialize website
+        TextView webView = (TextView) view.findViewById(R.id.textViewWeb);
+        ImageView webIcon = (ImageView) view.findViewById(R.id.imageViewWeb);
+        String web = mLocalizavel.get().getWebsite();
+        if (web != null && web.length() > 0) {
+            webView.setText(web);
+        } else {
+            webView.setVisibility(View.GONE);
+            webIcon.setVisibility(View.GONE);
+        }
+
+        // Initialize facebook
+        TextView faceView = (TextView) view.findViewById(R.id.textViewFace);
+        ImageView faceIcon = (ImageView) view.findViewById(R.id.imageViewFace);
+        String face = mLocalizavel.get().getFacebook();
+        if (face != null && face.length() > 0) {
+            faceView.setText(face);
+        } else {
+            faceView.setVisibility(View.GONE);
+            faceIcon.setVisibility(View.GONE);
+        }
 
         // Initialize address
         TextView endereco = (TextView) view.findViewById(R.id.enderecoTextView);
@@ -122,6 +142,8 @@ public class LocalInfoDialog<L extends Localizavel> extends DialogFragment {
         cidadeEstado.setText(mLocalizavel.get().getLocal().getCidadeEstado());
         TextView cep = (TextView) view.findViewById(R.id.cepTextView);
         cep.setText(mLocalizavel.get().getLocal().getCep());
+
+        // TODO directions && esportes
 
         return  view;
     }

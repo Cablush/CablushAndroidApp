@@ -59,6 +59,7 @@ public class Pista implements Localizavel {
         this.descricao = descricao;
     }
 
+    @Override
     public String getWebsite() {
         return website;
     }
@@ -67,6 +68,7 @@ public class Pista implements Localizavel {
         this.website = website;
     }
 
+    @Override
     public String getFacebook() {
         return facebook;
     }

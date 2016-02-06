@@ -57,7 +57,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="email@local.com.br"
+        android:text="cablush@cablush.com"
         android:id="@+id/emailTextView"
         android:autoLink="email"
         android:layout_toRightOf="@+id/imageViewEmail"
@@ -69,10 +69,57 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:id="@+id/imageViewWeb"
+        android:src="@drawable/ic_action_ic_language_blue"
+        android:layout_below="@+id/imageViewEmail"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="false"
+        android:layout_marginLeft="@dimen/dialog_margin"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="www.cablush.com"
+        android:id="@+id/textViewWeb"
+        android:autoLink="web"
+        android:layout_toRightOf="@+id/imageViewEmail"
+        android:layout_toEndOf="@+id/imageViewEmail"
+        android:layout_alignTop="@+id/imageViewWeb"
+        android:layout_marginTop="@dimen/vertical_spacing"
+        android:layout_marginRight="@dimen/dialog_margin"/>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageViewFace"
+        android:src="@drawable/ic_action_facebook_blue"
+        android:layout_below="@+id/imageViewWeb"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="false"
+        android:layout_marginLeft="@dimen/dialog_margin"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="facebook.com/cablush"
+        android:id="@+id/textViewFace"
+        android:autoLink="web"
+        android:layout_alignTop="@+id/imageViewFace"
+        android:layout_toRightOf="@+id/imageViewFace"
+        android:layout_toEndOf="@+id/imageViewFace"
+        android:layout_marginTop="@dimen/vertical_spacing"
+        android:layout_marginRight="@dimen/dialog_margin"/>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:id="@+id/imageViewEndereco"
         android:src="@drawable/ic_action_ic_business_blue"
-        android:layout_below="@+id/imageViewEmail"
-        android:layout_marginLeft="@dimen/dialog_margin"/>
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="false"
+        android:layout_marginLeft="@dimen/dialog_margin"
+        android:layout_below="@+id/imageViewFace"/>
 
     <TextView
         android:layout_width="match_parent"

@@ -80,6 +80,7 @@ public class Loja implements Localizavel {
         this.email = email;
     }
 
+    @Override
     public String getWebsite() {
         return website;
     }
@@ -88,6 +89,7 @@ public class Loja implements Localizavel {
         this.website = website;
     }
 
+    @Override
     public String getFacebook() {
         return facebook;
     }
