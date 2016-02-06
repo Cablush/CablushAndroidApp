@@ -21,7 +21,7 @@ public class Pista implements Localizavel {
     @Expose
     private String facebook;
     @Expose
-    @SerializedName("foto_file_name")
+    @SerializedName("foto_url")
     private String foto;
     @Expose
     private Boolean fundo;
@@ -117,7 +117,7 @@ public class Pista implements Localizavel {
     }
 
     @Override
-    public String getImagem() {
+    public String getImagemURL() {
         return foto;
     }
 }

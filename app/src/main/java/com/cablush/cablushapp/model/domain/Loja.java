@@ -26,7 +26,7 @@ public class Loja implements Localizavel {
     @Expose
     private String facebook;
     @Expose
-    @SerializedName("logo_file_name")
+    @SerializedName("logo_url")
     private String logo;
     @Expose
     private Boolean fundo;
@@ -149,7 +149,7 @@ public class Loja implements Localizavel {
     }
 
     @Override
-    public String getImagem() {
+    public String getImagemURL() {
         return logo;
     }
 }

@@ -28,7 +28,7 @@ public class Evento implements Localizavel {
     @Expose
     private String facebook;
     @Expose
-    @SerializedName("flyer_file_name")
+    @SerializedName("flyer_url")
     private String flyer;
     @Expose
     private Boolean fundo;
@@ -138,7 +138,7 @@ public class Evento implements Localizavel {
     }
 
     @Override
-    public String getImagem() {
+    public String getImagemURL() {
         return flyer;
     }
 }
