@@ -10,9 +10,9 @@
         android:src="@drawable/logo_azul"
         android:layout_marginLeft="@dimen/dialog_margin"
         android:layout_marginRight="@dimen/dialog_margin"
+        android:adjustViewBounds="true"
         android:maxHeight="100dp"
-        android:minHeight="100dp"
-        android:adjustViewBounds="true"/>
+        android:minWidth="100dp"/>
 
     <TextView
         android:layout_width="match_parent"
@@ -24,7 +24,7 @@
         android:layout_below="@+id/imageViewLogo"
         android:layout_marginLeft="@dimen/dialog_margin"
         android:layout_marginRight="@dimen/dialog_margin"
-        />
+        android:layout_marginTop="@dimen/vertical_spacing"/>
 
     <ImageView
         android:layout_width="wrap_content"
