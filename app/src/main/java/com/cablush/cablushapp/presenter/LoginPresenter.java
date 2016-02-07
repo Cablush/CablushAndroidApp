@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.cablush.cablushapp.R;
+import com.cablush.cablushapp.model.EsportesMediator;
 import com.cablush.cablushapp.model.persistence.UsuarioDAO;
 import com.cablush.cablushapp.model.domain.Usuario;
 import com.cablush.cablushapp.model.rest.ApiUsuario;
@@ -37,6 +38,8 @@ public class LoginPresenter {
     private ApiUsuario apiUsuario;
     private UsuarioDAO usuarioDAO;
 
+    private EsportesMediator esportesMediator;
+
     /**
      * Constructor
      *
@@ -48,6 +51,7 @@ public class LoginPresenter {
         this.mContext = new WeakReference<>(context);
         this.apiUsuario = RestServiceBuilder.createService(ApiUsuario.class);
         this.usuarioDAO = new UsuarioDAO(context);
+        this.esportesMediator  = new EsportesMediator(context);
     }
 
     public void doLogin(String email, String senha) {
@@ -61,6 +65,7 @@ public class LoginPresenter {
                 if (view != null) {
                     view.onLoginSuccess();
                 }
+                esportesMediator.getEsportes();
             }
 
             @Override

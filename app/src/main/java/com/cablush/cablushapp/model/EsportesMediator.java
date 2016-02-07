@@ -8,6 +8,7 @@ import com.cablush.cablushapp.model.persistence.EsporteDAO;
 import com.cablush.cablushapp.model.rest.ApiEsportes;
 import com.cablush.cablushapp.model.rest.RestServiceBuilder;
 
+import java.lang.ref.WeakReference;
 import java.util.List;
 
 import retrofit.Callback;
@@ -21,12 +22,12 @@ public class EsportesMediator {
 
     private static final String TAG = EsportesMediator.class.getSimpleName();
 
-    private Context context;
-    private static ApiEsportes apiEsportes;
+    private WeakReference<Context> mContext;
+    private ApiEsportes apiEsportes;
     private EsporteDAO esporteDAO;
 
     public EsportesMediator(Context context) {
-        this.context = context;
+        this.mContext = new WeakReference<>(context);
         this.apiEsportes = RestServiceBuilder.createService(ApiEsportes.class);
         this.esporteDAO = new EsporteDAO(context);
     }
