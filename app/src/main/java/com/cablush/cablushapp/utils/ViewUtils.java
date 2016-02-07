@@ -62,14 +62,6 @@ public class ViewUtils {
         return true;
     }
 
-    public static String getVersionName(Context context) {
-        try {
-            return context.getPackageManager().getPackageInfo(context.getPackageName(),0).versionName;
-        } catch (PackageManager.NameNotFoundException e) {
-            return "Unknown";
-        }
-    }
-
     public static String readRawTextFile(Context context, int id) {
         InputStream inputStream = context.getResources().openRawResource(id);
 

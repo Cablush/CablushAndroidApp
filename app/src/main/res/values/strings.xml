@@ -8,6 +8,9 @@
     <string name="drawer_item_stores">Lojas</string>
     <string name="drawer_item_events">Eventos</string>
     <string name="drawer_item_spots">Pistas</string>
+    <string name="drawer_item_my_stores">Minhas Lojas</string>
+    <string name="drawer_item_my_events">Meus Eventos</string>
+    <string name="drawer_item_my_spots">Minhas Pistas</string>
 
     <!-- Buttons / Actions -->
     <string name="btn_cancel">Cancelar</string>

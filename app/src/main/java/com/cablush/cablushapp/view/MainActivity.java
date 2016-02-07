@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.cablush.cablushapp.R;
 import com.cablush.cablushapp.model.domain.Localizavel;
 import com.cablush.cablushapp.model.domain.Usuario;
+import com.cablush.cablushapp.presenter.SearchPresenter;
 import com.cablush.cablushapp.utils.ViewUtils;
 import com.cablush.cablushapp.view.dialogs.LocalInfoDialog;
 import com.cablush.cablushapp.view.dialogs.RegisterDialog;
@@ -37,7 +38,7 @@ import java.util.List;
 import java.util.Map;
 
 public class MainActivity extends AbstractDrawerActivity implements OnMapReadyCallback,
-        LoginDialog.LoginDialogListener, RegisterDialog.RegisterDialogListener, SearchDialog.SearchDialogListener {
+        LoginDialog.LoginDialogListener, RegisterDialog.RegisterDialogListener, SearchPresenter.SearchView {
 
     private ProgressBar spinner;
 
@@ -72,7 +73,7 @@ public class MainActivity extends AbstractDrawerActivity implements OnMapReadyCa
             @Override
             public void onClick(View v) {
                 if (ViewUtils.checkUserLoggedIn(MainActivity.this)) {
-
+                    startActivity(CadastroLojaActivity.makeIntent(MainActivity.this));
                 }
             }
         });
@@ -82,7 +83,6 @@ public class MainActivity extends AbstractDrawerActivity implements OnMapReadyCa
 
         checkLogin();
     }
-
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
@@ -96,10 +96,8 @@ public class MainActivity extends AbstractDrawerActivity implements OnMapReadyCa
     @Override
     protected void onUserLocationReady(Location location) {
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-        if (latLng != null) {
-            this.googleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-            this.googleMap.animateCamera(CameraUpdateFactory.zoomTo(15));
-        }
+        this.googleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+        this.googleMap.animateCamera(CameraUpdateFactory.zoomTo(15));
     }
 
     @Override
@@ -132,21 +130,27 @@ public class MainActivity extends AbstractDrawerActivity implements OnMapReadyCa
             case R.id.drawer_search_pistas:
                 SearchDialog.showDialog(getFragmentManager(), SearchDialog.TYPE.PISTA);
                 return true;
-//            case R.id.drawer_my_lojas:
-//                if (ViewUtils.checkUserLoggedIn(this)) {
-//                    return true;
-//                }
-//                return false;
-//            case R.id.drawer_my_eventos:
-//                if (ViewUtils.checkUserLoggedIn(this)) {
-//                    return true;
-//                }
-//                return false;
-//            case R.id.drawer_my_pistas:
-//                if (ViewUtils.checkUserLoggedIn(this)) {
-//                    return true;
-//                }
-//                return false;
+            case R.id.drawer_my_lojas:
+                if (ViewUtils.checkUserLoggedIn(this)) {
+                    SearchPresenter presenter = new SearchPresenter(this, this);
+                    presenter.getMyLojas();
+                    return true;
+                }
+                return false;
+            case R.id.drawer_my_eventos:
+                if (ViewUtils.checkUserLoggedIn(this)) {
+                    SearchPresenter presenter = new SearchPresenter(this, this);
+                    presenter.getMyEventos();
+                    return true;
+                }
+                return false;
+            case R.id.drawer_my_pistas:
+                if (ViewUtils.checkUserLoggedIn(this)) {
+                    SearchPresenter presenter = new SearchPresenter(this, this);
+                    presenter.getMyPistas();
+                    return true;
+                }
+                return false;
             default:
                 Toast.makeText(getApplicationContext(), R.string.erro_invalid_option, Toast.LENGTH_SHORT).show();
                 return false;
@@ -168,7 +172,6 @@ public class MainActivity extends AbstractDrawerActivity implements OnMapReadyCa
             emailTextView.setVisibility(View.INVISIBLE);
         }
     }
-
 
     @Override
     public void onLoginDialogSuccess() {
@@ -200,7 +203,7 @@ public class MainActivity extends AbstractDrawerActivity implements OnMapReadyCa
     }
 
     @Override
-    public void onSearchDialogSuccess(List<? extends Localizavel> localizaveis) {
+    public void onSearchSuccess(List<? extends Localizavel> localizaveis) {
         if (localizaveis == null || localizaveis.isEmpty()) {
             Toast.makeText(this, R.string.msg_local_not_found, Toast.LENGTH_SHORT).show();
         } else {
@@ -214,7 +217,7 @@ public class MainActivity extends AbstractDrawerActivity implements OnMapReadyCa
     }
 
     @Override
-    public void onSearchDialogError(String message) {
+    public void onSearchError(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
         spinner.setVisibility(View.GONE);
     }

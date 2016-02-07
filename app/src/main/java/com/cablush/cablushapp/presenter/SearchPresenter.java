@@ -25,7 +25,7 @@ public class SearchPresenter implements LojasMediator.LojasMediatorListener,
      * Interface to be implemented by this Presenter's client.
      */
     public interface SearchView {
-        void onSearchSuccess(List<? extends Localizavel> locais);
+        void onSearchSuccess(List<? extends Localizavel> localizaveis);
         void onSearchError(String message);
     }
 
@@ -48,16 +48,14 @@ public class SearchPresenter implements LojasMediator.LojasMediatorListener,
         this.eventosMediator = new EventosMediator(this, context);
     }
 
+    // Search for Lojas
+
     public void getLojas(String name, String estado, String esporte) {
         lojasMediator.getLojas(name, estado, esporte);
     }
 
-    public void getPistas(String name, String estado, String esporte) {
-        pistasMediator.getPistas(name, estado, esporte);
-    }
-
-    public void getEventos(String name, String estado, String esporte) {
-        eventosMediator.getEventos(name, estado, esporte);
+    public void getMyLojas() {
+        lojasMediator.getMyLojas();
     }
 
     @Override
@@ -76,6 +74,16 @@ public class SearchPresenter implements LojasMediator.LojasMediatorListener,
         }
     }
 
+    // Search for Eventos
+
+    public void getEventos(String name, String estado, String esporte) {
+        eventosMediator.getEventos(name, estado, esporte);
+    }
+
+    public void getMyEventos() {
+        eventosMediator.getMyEventos();
+    }
+
     @Override
     public void onGetEventosSucess(List<Evento> eventos) {
         SearchView view = mView.get();
@@ -90,6 +98,16 @@ public class SearchPresenter implements LojasMediator.LojasMediatorListener,
         if (view != null) {
             view.onSearchError(message);
         }
+    }
+
+    // Search for Pistas
+
+    public void getPistas(String name, String estado, String esporte) {
+        pistasMediator.getPistas(name, estado, esporte);
+    }
+
+    public void getMyPistas() {
+        pistasMediator.getMyPistas();
     }
 
     @Override

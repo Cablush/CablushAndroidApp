@@ -36,6 +36,9 @@ public class Evento implements Localizavel {
     private Local local;
     @Expose
     private List<Esporte> esportes;
+    @Expose
+    @SerializedName("responsavel_uuid")
+    private String responsavel;
 
     @Override
     public String getUuid() {
@@ -137,6 +140,14 @@ public class Evento implements Localizavel {
 
     public void setEsportes(List<Esporte> esportes) {
         this.esportes = esportes;
+    }
+
+    public String getResponsavel() {
+        return responsavel;
+    }
+
+    public void setResponsavel(String responsavel) {
+        this.responsavel = responsavel;
     }
 
     @Override

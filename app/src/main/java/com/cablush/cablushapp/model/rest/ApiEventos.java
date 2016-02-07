@@ -17,7 +17,13 @@ import retrofit.http.Query;
 public interface ApiEventos {
 
     @GET("/eventos")
-    void getEventos(@Query("name") String name, @Query("estado") String estado, @Query("esporte") String esporte, Callback<List<Evento>> listCallback);
+    void getEventos(@Query("name") String name,
+                    @Query("estado") String estado,
+                    @Query("esporte") String esporte,
+                    Callback<List<Evento>> listCallback);
+
+    @GET("/eventos/mine")
+    void getEventos(Callback<List<Evento>> listCallback);
 
     @POST("/eventos")
     void createEvento(@Body Evento evento, Callback<Evento> savedEvento);

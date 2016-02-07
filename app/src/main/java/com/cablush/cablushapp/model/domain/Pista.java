@@ -31,6 +31,9 @@ public class Pista implements Localizavel {
     private List<Esporte> esportes;
     @Expose
     private Horario horario;
+    @Expose
+    @SerializedName("responsavel_uuid")
+    private String responsavel;
 
     @Override
     public String getUuid() {
@@ -116,6 +119,14 @@ public class Pista implements Localizavel {
 
     public void setHorario(Horario horario) {
         this.horario = horario;
+    }
+
+    public String getResponsavel() {
+        return responsavel;
+    }
+
+    public void setResponsavel(String responsavel) {
+        this.responsavel = responsavel;
     }
 
     @Override
