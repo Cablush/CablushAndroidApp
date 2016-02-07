@@ -15,6 +15,8 @@ import android.widget.Toast;
 import com.cablush.cablushapp.R;
 import com.cablush.cablushapp.model.domain.Localizavel;
 import com.cablush.cablushapp.model.domain.Usuario;
+import com.cablush.cablushapp.presenter.LoginPresenter;
+import com.cablush.cablushapp.presenter.RegisterPresenter;
 import com.cablush.cablushapp.presenter.SearchPresenter;
 import com.cablush.cablushapp.utils.ViewUtils;
 import com.cablush.cablushapp.view.dialogs.LocalInfoDialog;
@@ -38,7 +40,8 @@ import java.util.List;
 import java.util.Map;
 
 public class MainActivity extends AbstractDrawerActivity implements OnMapReadyCallback,
-        LoginDialog.LoginDialogListener, RegisterDialog.RegisterDialogListener, SearchPresenter.SearchView {
+        LoginDialog.LoginDialogListener, LoginPresenter.LoginView,
+        RegisterPresenter.RegisterView, SearchPresenter.SearchView {
 
     private ProgressBar spinner;
 
@@ -174,7 +177,12 @@ public class MainActivity extends AbstractDrawerActivity implements OnMapReadyCa
     }
 
     @Override
-    public void onLoginDialogSuccess() {
+    public void onRegisterButtonClicked() {
+        RegisterDialog.showDialog(getFragmentManager());
+    }
+
+    @Override
+    public void onLoginSuccess() {
         Toast.makeText(this,
                 getString(R.string.success_login, Usuario.LOGGED_USER.getNome()),
                 Toast.LENGTH_SHORT).show();
@@ -183,22 +191,17 @@ public class MainActivity extends AbstractDrawerActivity implements OnMapReadyCa
     }
 
     @Override
-    public void onLoginDialogError(String message) {
+    public void onLoginError(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
     @Override
-    public void onRegisterButtonClicked() {
-        RegisterDialog.showDialog(getFragmentManager());
-    }
-
-    @Override
-    public void onRegisterDialogSuccess() {
+    public void onRegisterSuccess() {
         Toast.makeText(this, R.string.success_register, Toast.LENGTH_SHORT).show();
     }
 
     @Override
-    public void onRegisterDialogError(String message) {
+    public void onRegisterError(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 

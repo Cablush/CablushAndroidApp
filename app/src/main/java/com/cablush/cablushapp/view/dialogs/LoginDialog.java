@@ -23,7 +23,7 @@ import java.lang.ref.WeakReference;
 /**
  * Created by oscar on 13/12/15.
  */
-public class LoginDialog extends DialogFragment implements LoginPresenter.LoginView {
+public class LoginDialog extends DialogFragment {
 
     private static final String TAG = LoginDialog.class.getSimpleName();
 
@@ -34,12 +34,11 @@ public class LoginDialog extends DialogFragment implements LoginPresenter.LoginV
      * Interface to be implemented by this Dialog's client.
      */
     public interface LoginDialogListener {
-        void onLoginDialogSuccess();
-        void onLoginDialogError(String message);
         void onRegisterButtonClicked();
     }
 
     // Use this instance of the interface to deliver action events
+    private WeakReference<LoginPresenter.LoginView> mView;
     private WeakReference<LoginDialogListener> mListener;
 
     /**
@@ -52,17 +51,19 @@ public class LoginDialog extends DialogFragment implements LoginPresenter.LoginV
         dialog.show(fragmentManager, TAG);
     }
 
-    // Override the Fragment.onAttach() method to instantiate the LoginDialogListener
+    // Override the Fragment.onAttach() method to instantiate the LoginPresenter.LoginView
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        // Verify that the host activity implements the callback interface
         try {
-            // Instantiate the LoginDialogListener so we can send events to the host
+            mView = new WeakReference<>((LoginPresenter.LoginView) activity);
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString() + " must implement LoginPresenter.LoginView");
+        }
+        try {
             mListener = new WeakReference<>((LoginDialogListener) activity);
         } catch (ClassCastException e) {
-            // The activity doesn't implement the interface, throw exception
-            throw new ClassCastException(activity.toString() + " must implement LoginDialogListener");
+            throw new ClassCastException(activity.toString() + " must implement LoginDialog.LoginDialogListener");
         }
     }
 
@@ -83,7 +84,7 @@ public class LoginDialog extends DialogFragment implements LoginPresenter.LoginV
                 String password = passwordEdit.getText().toString();
 
                 if (!email.isEmpty() && !password.isEmpty()) {
-                    LoginPresenter loginPresenter = new LoginPresenter(LoginDialog.this, getActivity());
+                    LoginPresenter loginPresenter = new LoginPresenter(mView.get(), getActivity());
                     loginPresenter.doLogin(email, password);
                 } else {
                     Toast.makeText(getActivity(), R.string.msg_login_missing_data, Toast.LENGTH_SHORT).show();
@@ -121,21 +122,5 @@ public class LoginDialog extends DialogFragment implements LoginPresenter.LoginV
         passwordEdit.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.SRC_ATOP);
 
         return view;
-    }
-
-    @Override
-    public void onLoginSuccess() {
-        LoginDialogListener listener = mListener.get();
-        if (listener != null) {
-            listener.onLoginDialogSuccess();
-        }
-    }
-
-    @Override
-    public void onLoginError(String message) {
-        LoginDialogListener listener = mListener.get();
-        if (listener != null) {
-            listener.onLoginDialogError(message);
-        }
     }
 }
