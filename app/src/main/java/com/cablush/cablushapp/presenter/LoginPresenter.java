@@ -9,6 +9,7 @@ import com.cablush.cablushapp.model.persistence.UsuarioDAO;
 import com.cablush.cablushapp.model.domain.Usuario;
 import com.cablush.cablushapp.model.rest.ApiUsuario;
 import com.cablush.cablushapp.model.rest.RestServiceBuilder;
+import com.cablush.cablushapp.model.rest.dto.ResponseDTO;
 
 import java.lang.ref.WeakReference;
 import java.util.List;
@@ -55,10 +56,10 @@ public class LoginPresenter {
     }
 
     public void doLogin(String email, String senha) {
-        apiUsuario.doLogin(email, senha, new Callback<Usuario>() {
+        apiUsuario.doLogin(email, senha, new Callback<ResponseDTO<Usuario>>() {
             @Override
-            public void success(Usuario usuario, Response response) {
-                usuario = updateAuthData(usuario, response);
+            public void success(ResponseDTO<Usuario> dto, Response response) {
+                Usuario usuario = updateAuthData(dto.getData(), response);
                 usuarioDAO.saveUsuario(usuario);
                 Usuario.LOGGED_USER = usuario;
                 LoginView view = mView.get();
@@ -83,10 +84,11 @@ public class LoginPresenter {
     public void checkLogin() {
         Usuario usuario = usuarioDAO.getUsuario();
         if (usuario != null) {
-            apiUsuario.doValidateToken(usuario.getUid(), usuario.getAccessToken(), usuario.getClient(), new Callback<Usuario>() {
+            Usuario.LOGGED_USER = usuario;
+            apiUsuario.doValidateToken(new Callback<ResponseDTO<Usuario>>() {
                 @Override
-                public void success(Usuario usuario, Response response) {
-                    usuario = updateAuthData(usuario, response);
+                public void success(ResponseDTO<Usuario> dto, Response response) {
+                    Usuario usuario = updateAuthData(dto.getData(), response);
                     usuarioDAO.saveUsuario(usuario);
                     Usuario.LOGGED_USER = usuario;
                     LoginView view = mView.get();
@@ -98,6 +100,7 @@ public class LoginPresenter {
                 @Override
                 public void failure(RetrofitError error) {
                     Log.e(TAG, "Error on user check. " + error.getMessage());
+                    Usuario.LOGGED_USER = null;
                     LoginView view = mView.get();
                     Context context = mContext.get();
                     if (view != null && context != null) {

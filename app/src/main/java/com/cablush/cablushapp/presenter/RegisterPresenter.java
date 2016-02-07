@@ -7,6 +7,7 @@ import com.cablush.cablushapp.R;
 import com.cablush.cablushapp.model.domain.Usuario;
 import com.cablush.cablushapp.model.rest.ApiUsuario;
 import com.cablush.cablushapp.model.rest.RestServiceBuilder;
+import com.cablush.cablushapp.model.rest.dto.ResponseDTO;
 
 import java.lang.ref.WeakReference;
 
@@ -45,9 +46,9 @@ public class RegisterPresenter {
     }
 
     public void doRegister(String name, String email, String password, Boolean shopkeeper) {
-        apiUsuario.doRegister(name, email, password, password, shopkeeper, new Callback<Usuario>() {
+        apiUsuario.doRegister(name, email, password, password, shopkeeper, new Callback<ResponseDTO<Usuario>>() {
             @Override
-            public void success(Usuario usuario, Response response) {
+            public void success(ResponseDTO<Usuario> dto, Response response) {
                 RegisterView view = mView.get();
                 if (view != null) {
                     view.onRegisterSuccess();
