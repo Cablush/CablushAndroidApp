@@ -1,34 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/scrollView2"
+    android:id="@+id/scrollView"
     android:layout_alignParentTop="true"
     android:layout_alignParentLeft="true"
     android:layout_alignParentStart="true">
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                    android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:background="@android:color/white">
-
-        <TextView
-            style="@style/TextAppearance.Bold"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="@string/txt_endereco"
-            android:id="@+id/textViewEndereco"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_marginLeft="@dimen/dialog_margin"
-            android:layout_marginRight="@dimen/dialog_margin"/>
-
-        <View style="@style/Divider"
-              android:layout_below="@+id/textViewEndereco"
-              android:layout_marginLeft="@dimen/dialog_margin"
-              android:layout_marginRight="@dimen/dialog_margin"
-              android:layout_alignParentStart="true"/>
 
         <TextView
             style="@style/TextAppearance.Bold"
@@ -37,7 +20,6 @@
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="@string/txt_cep"
             android:id="@+id/textViewCep"
-            android:layout_below="@+id/textViewEndereco"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_marginLeft="@dimen/dialog_margin"
@@ -216,6 +198,7 @@
             android:layout_alignParentStart="true"
             android:layout_marginLeft="@dimen/dialog_margin"
             android:layout_marginRight="@dimen/dialog_margin"
+            android:layout_marginBottom="@dimen/dialog_margin"
             android:inputType="text"/>
 
     </RelativeLayout>

@@ -5,18 +5,17 @@ import android.app.DialogFragment;
 import android.app.FragmentManager;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.cablush.cablushapp.BuildConfig;
 import com.cablush.cablushapp.R;
 import com.cablush.cablushapp.model.domain.Localizavel;
 import com.cablush.cablushapp.model.domain.Loja;
+import com.cablush.cablushapp.utils.PictureUtils;
 import com.cablush.cablushapp.utils.ViewUtils;
-import com.squareup.picasso.Callback;
-import com.squareup.picasso.Picasso;
 
 import java.lang.ref.WeakReference;
 
@@ -42,6 +41,7 @@ public class LocalInfoDialog<L extends Localizavel> extends DialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
+        Log.d(TAG, "onCreateDialog()");
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setView(initializeView());
 
@@ -70,24 +70,7 @@ public class LocalInfoDialog<L extends Localizavel> extends DialogFragment {
 
         // Initialize logo
         final ImageView logo = (ImageView) view.findViewById(R.id.imageViewLogo);
-        String imageURL = mLocalizavel.get().getImagemURL();
-        if (imageURL != null) {
-            if (BuildConfig.DEBUG) {
-                imageURL = imageURL.replace("localhost", "10.0.2.2");
-            }
-            Picasso.with(getActivity()).load(imageURL).fit().into(logo, new Callback() {
-                @Override
-                public void onSuccess() {
-                }
-
-                @Override
-                public void onError() {
-                    logo.setVisibility(View.GONE);
-                }
-            });
-        } else {
-            logo.setVisibility(View.GONE);
-        }
+        PictureUtils.loadRemoteImage(getActivity(), mLocalizavel.get().getImagemURL(), logo, true);
 
         // Initialize description
         TextView descricaoView = (TextView) view.findViewById(R.id.descricaoTextView);

@@ -2,12 +2,17 @@ package com.cablush.cablushapp.model.domain;
 
 import com.google.gson.annotations.Expose;
 
+import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
  * Created by jonathan on 09/11/15.
  */
-public class Horario {
+public class Horario implements Serializable {
+
+    public static final DateFormat FORMAT_TIME = new SimpleDateFormat("HH:mm");
 
     private String uuidLocalizavel;
     @Expose

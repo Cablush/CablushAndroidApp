@@ -32,7 +32,10 @@ public class EsportesMediator {
         this.esporteDAO = new EsporteDAO(context);
     }
 
-    public void getEsportes() {
+    /**
+     * Load the Esportes from Webserver.
+     */
+    public void loadEsportes() {
         apiEsportes.getEsportes(new Callback<List<Esporte>>() {
             @Override
             public void success(List<Esporte> esportes, Response response) {
@@ -48,5 +51,14 @@ public class EsportesMediator {
             }
         });
 
+    }
+
+    /**
+     * Get the local stored Esportes.
+     *
+     * @return
+     */
+    public List<Esporte> getEsportes() {
+        return esporteDAO.getEsportes();
     }
 }

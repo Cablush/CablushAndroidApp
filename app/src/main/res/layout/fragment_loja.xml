@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/scrollView2"
+    android:id="@+id/scrollView"
     android:layout_alignParentTop="true"
     android:layout_alignParentLeft="true"
     android:layout_alignParentStart="true">
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                    android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:background="@android:color/white">
 
         <TextView
@@ -97,7 +99,7 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="@string/txt_site"
-            android:id="@+id/textViewSite"
+            android:id="@+id/textViewWeb"
             android:layout_below="@+id/editTextEmail"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
@@ -110,9 +112,9 @@
             android:layout_height="wrap_content"
             android:hint="@string/txt_site"
             android:ems="10"
-            android:id="@+id/editTextSite"
+            android:id="@+id/editTextWebsite"
             android:layout_alignParentStart="true"
-            android:layout_below="@+id/textViewSite"
+            android:layout_below="@+id/textViewWeb"
             android:layout_alignParentLeft="true"
             android:layout_marginLeft="@dimen/dialog_margin"
             android:layout_marginRight="@dimen/dialog_margin"
@@ -125,7 +127,7 @@
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="@string/txt_facebook"
             android:id="@+id/textViewFacebook"
-            android:layout_below="@+id/editTextSite"
+            android:layout_below="@+id/editTextWebsite"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_marginLeft="@dimen/dialog_margin"
@@ -177,7 +179,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/btn_picture"
-            android:id="@+id/buttonFoto"
+            android:id="@+id/buttonPicture"
             android:layout_below="@+id/buttonGallery"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
@@ -252,25 +254,15 @@
         <MultiAutoCompleteTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="New MultiAutoCompleteTextView"
             android:id="@+id/multiAutoCompleteEsportes"
             android:layout_alignParentBottom="false"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_below="@+id/textViewEsportes"
             android:layout_marginLeft="@dimen/dialog_margin"
-            android:layout_marginRight="@dimen/dialog_margin"/>
-
-        <include
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            layout="@layout/cadastro_layout_endereco"
-            android:layout_alignParentBottom="false"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_below="@+id/multiAutoCompleteEsportes"
-            android:layout_marginTop="@dimen/vertical_spacing"/>
+            android:layout_marginRight="@dimen/dialog_margin"
+            android:layout_marginBottom="@dimen/dialog_margin"
+            android:hint="@string/empty_selection"/>
 
     </RelativeLayout>
-
 </ScrollView>

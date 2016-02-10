@@ -66,7 +66,7 @@ public class LoginPresenter {
                 if (view != null) {
                     view.onLoginSuccess();
                 }
-                esportesMediator.getEsportes();
+                esportesMediator.loadEsportes();
             }
 
             @Override

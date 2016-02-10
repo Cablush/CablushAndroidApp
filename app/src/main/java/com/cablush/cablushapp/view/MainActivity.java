@@ -3,7 +3,6 @@ package com.cablush.cablushapp.view;
 import android.content.Context;
 
 import android.content.Intent;
-import android.location.Location;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.util.Log;
@@ -18,6 +17,7 @@ import com.cablush.cablushapp.model.domain.Usuario;
 import com.cablush.cablushapp.presenter.LoginPresenter;
 import com.cablush.cablushapp.presenter.RegisterPresenter;
 import com.cablush.cablushapp.presenter.SearchPresenter;
+import com.cablush.cablushapp.utils.MapUtils;
 import com.cablush.cablushapp.utils.ViewUtils;
 import com.cablush.cablushapp.view.dialogs.LocalInfoDialog;
 import com.cablush.cablushapp.view.dialogs.RegisterDialog;
@@ -30,7 +30,6 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -76,7 +75,7 @@ public class MainActivity extends AbstractDrawerActivity implements OnMapReadyCa
             @Override
             public void onClick(View v) {
                 if (ViewUtils.checkUserLoggedIn(MainActivity.this)) {
-                    startActivity(CadastroLojaActivity.makeIntent(MainActivity.this));
+                    startActivity(CadastroLojaActivity.makeIntent(MainActivity.this, null));
                 }
             }
         });
@@ -92,15 +91,17 @@ public class MainActivity extends AbstractDrawerActivity implements OnMapReadyCa
         Log.d(TAG, "GoogleMap loaded.");
         this.googleMap = googleMap;
 
-        // Try to retrieve the current user location
-        getUserLocation();
+        // Check the Location Permissions
+        checkLocationPermission();
     }
 
     @Override
-    protected void onUserLocationReady(Location location) {
-        LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-        this.googleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-        this.googleMap.animateCamera(CameraUpdateFactory.zoomTo(15));
+    public void onLocationPermissionGranted() {
+        // If Location Permissions are granted, set the user location on Map
+        if (googleMap != null) {
+            MapUtils.setUserLocation(this, googleMap);
+            MapUtils.enableUserLocation(this, googleMap);
+        }
     }
 
     @Override
@@ -155,7 +156,7 @@ public class MainActivity extends AbstractDrawerActivity implements OnMapReadyCa
                 }
                 return false;
             default:
-                Toast.makeText(getApplicationContext(), R.string.erro_invalid_option, Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.error_invalid_option, Toast.LENGTH_SHORT).show();
                 return false;
         }
     }
@@ -186,7 +187,6 @@ public class MainActivity extends AbstractDrawerActivity implements OnMapReadyCa
         Toast.makeText(this,
                 getString(R.string.success_login, Usuario.LOGGED_USER.getNome()),
                 Toast.LENGTH_SHORT).show();
-
         checkLogin();
     }
 
@@ -233,7 +233,7 @@ public class MainActivity extends AbstractDrawerActivity implements OnMapReadyCa
     private <L extends Localizavel> void setMarker(L localizavel) {
         localizavelMap.put(localizavel.getUuid(), localizavel);
         googleMap.addMarker(new MarkerOptions()
-                .position(new LatLng(localizavel.getLocal().getLatitude(), localizavel.getLocal().getLongitude()))
+                .position(localizavel.getLocal().getLatLng())
                 .snippet(localizavel.getUuid())
                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_mark_cablush_orange)));
 
@@ -253,7 +253,7 @@ public class MainActivity extends AbstractDrawerActivity implements OnMapReadyCa
     private void centerMap(List<? extends Localizavel> localizaveis) {
         LatLngBounds.Builder builder = new LatLngBounds.Builder();
         for (Localizavel localizavel : localizaveis) {
-            builder.include(new LatLng(localizavel.getLocal().getLatitude(), localizavel.getLocal().getLongitude()));
+            builder.include(localizavel.getLocal().getLatLng());
         }
         LatLngBounds bounds = builder.build();
         int padding = 150; // offset from edges of the map in pixels

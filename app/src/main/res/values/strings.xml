@@ -48,6 +48,8 @@
     <string name="txt_logotipo">Logotipo</string>
     <string name="txt_foto">Tirar Foto</string>
     <string name="txt_galeria">Galeria de Fotos</string>
+    <string name="txt_select_picture">Selecione uma foto</string>
+    <string name="txt_select_location">Selecione o local no mapa.</string>
 
     <!-- Cadastros Evento -->
     <string name="txt_data_inicio">Data Inicio</string>
@@ -57,14 +59,22 @@
     <string name="txt_tlyer">Flyer</string>
 
     <!-- Cadastros Horario Funcionamento -->
-    <string name="txt_horario_funcionameto">Horário Funcionamento</string>
+    <string name="txt_horarios">Horários</string>
     <string name="txt_dias">Dias</string>
-    <string name="txt_hora_inicio">Hora início</string>
-    <string name="txt_hora_fim">Hora fim</string>
+    <string name="txt_inicio">Início</string>
+    <string name="txt_fim">Fim</string>
     <string name="txt_detalhes">Detalhes</string>
 
+    <string name="seg">S</string>
+    <string name="ter">T</string>
+    <string name="qua">Q</string>
+    <string name="qui">Q</string>
+    <string name="sex">S</string>
+    <string name="sab">S</string>
+    <string name="dom">D</string>
+
     <string-array name="dias_options">
-        <item>Set</item>
+        <item>Seg</item>
         <item>Ter</item>
         <item>Qua</item>
         <item>Qui</item>
@@ -180,6 +190,7 @@
     <!-- Mensagens de sucesso -->
     <string name="success_login">Olá %s! Agora você pode compartilhar seus locais favoritos!</string>
     <string name="success_register">Cadastro realizado! Antes de fazer Login, confirme o cadastro no email que te enviamos!</string>
+    <string name="success_check_login">Bem vindo %s!</string>
 
     <!-- Mensagens de permissões -->
     <string name="ask_permissions_location">O Cablush utiliza a sua localização para sugerir locais onde praticar esportes com mais precisão.</string>
@@ -188,9 +199,9 @@
     <!-- Mensagens de erro -->
     <string name="error_create_map">Error a carregar o mapa!</string>
     <string name="error_gps_not_working">Erro ao tentar obter local pelo GPS! Ligue-o e tente novamente.</string>
-    <string name="erro_invalid_search_type">Tipo de busca inválido!</string>
-    <string name="erro_invalid_entry_type">Tipo de cadastro inválido!</string>
-    <string name="erro_invalid_option">Opção inválida!</string>
+    <string name="error_invalid_search_type">Tipo de busca inválido!</string>
+    <string name="error_invalid_entry_type">Tipo de cadastro inválido!</string>
+    <string name="error_invalid_option">Opção inválida!</string>
     <string name="msg_local_not_found">Nenhum local encontrado.</string>
     <string name="msg_name_missing">Preencha o nome.</string>
     <string name="msg_description_missing">Preencha a descrição.</string>
@@ -203,6 +214,14 @@
     <string name="error_register">Erro ao realizar cadastro! Tente novamente.</string>
     <string name="msg_login_required">Faça login para continuar.</string>
     <string name="error_no_connection">Erro ao comunicar com o servidor. Verifique sua conexão e tente novamente!</string>
+    <string name="error_getting_picture">Erro ao obter foto.</string>
+    <string name="error_no_location_data_provided">Localização não informada.</string>
+    <string name="error_service_not_available">Serviço de busca de endereço não disponível.</string>
+    <string name="error_invalid_lat_long_used">Localização inválida.</string>
+    <string name="error_no_address_found">Endereço não encontrado.</string>
+    <string name="msg_address_found">Endereço encontrado.</string>
+    <string name="msg_set_address_manually">Endereço não encontrado. Prencha os dados manualmente.</string>
+    <string name="msg_check_address">Endereço encontrado. Confira os dados preenchidos.</string>
 
 </resources>
 

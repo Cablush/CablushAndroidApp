@@ -3,12 +3,13 @@ package com.cablush.cablushapp.model.domain;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by jonathan on 22/10/15.
  */
-public class Pista implements Localizavel {
+public class Pista implements Localizavel, Serializable {
 
     @Expose
     private String uuid;

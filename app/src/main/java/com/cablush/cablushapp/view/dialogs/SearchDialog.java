@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -56,6 +57,10 @@ public class SearchDialog extends DialogFragment {
      */
     public static void showDialog(FragmentManager fragmentManager, TYPE searchType) {
         SearchDialog dialog = new SearchDialog();
+        if (searchType == null) {
+            Log.e(TAG, "No searchType!");
+            return;
+        }
         dialog.searchType = searchType;
         dialog.show(fragmentManager, TAG);
     }
@@ -64,6 +69,7 @@ public class SearchDialog extends DialogFragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
+        Log.d(TAG, "onAttach()");
         try {
             mView = new WeakReference<>((SearchPresenter.SearchView) activity);
         } catch (ClassCastException e) {
@@ -73,6 +79,7 @@ public class SearchDialog extends DialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
+        Log.d(TAG, "onCreateDialog()");
         loadData();
 
         presenter = new SearchPresenter(mView.get(), getActivity());
@@ -103,7 +110,7 @@ public class SearchDialog extends DialogFragment {
                         presenter.getPistas(nome, estado, esporte);
                         break;
                     default:
-                        Toast.makeText(getActivity(), R.string.erro_invalid_search_type, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), R.string.error_invalid_search_type, Toast.LENGTH_SHORT).show();
                 }
 
                 ProgressBar spinner = (ProgressBar)getActivity().findViewById(R.id.progressBar);

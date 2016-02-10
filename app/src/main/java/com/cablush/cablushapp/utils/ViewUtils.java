@@ -79,4 +79,11 @@ public class ViewUtils {
 
         return text.toString();
     }
+
+    /**
+     * Make ViewUtils a utility class by preventing instantiation.
+     */
+    private ViewUtils() {
+        throw new AssertionError();
+    }
 }
