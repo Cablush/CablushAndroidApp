@@ -26,6 +26,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
  */
 public class LocalInfoDialog<L extends Localizavel> extends DialogFragment {
 
+    private static final String S3STORAGE = "https://s3-us-west-2.amazonaws.com/cablushimg/";
     private static final String TAG = LocalInfoDialog.class.getSimpleName();
 
     private WeakReference<L> mLocalizavel;
@@ -72,14 +73,14 @@ public class LocalInfoDialog<L extends Localizavel> extends DialogFragment {
             Loja loja = (Loja) mLocalizavel.get();
             telefone.setText(loja.getTelefone());
             email.setText(loja.getEmail());
-            Picasso.with(inflater.getContext()).load(loja.getLogo()).into(logoCircleImgView);
+            Picasso.with(inflater.getContext()).load(S3STORAGE+""+loja.getUuid()+"/"+loja.getLogo()).into(logoCircleImgView);
         } else {
             if(mLocalizavel.get() instanceof Evento){
                 Evento evento = (Evento)mLocalizavel.get();
-                Picasso.with(inflater.getContext()).load(evento.getFlyer()).into(logoCircleImgView);
+                Picasso.with(inflater.getContext()).load(S3STORAGE+""+evento.getUuid()+"/"+evento.getFlyer()).into(logoCircleImgView);
             }else{
                 Pista pista = (Pista)mLocalizavel.get();
-                Picasso.with(inflater.getContext()).load(pista.getFoto()).into(logoCircleImgView);
+                Picasso.with(inflater.getContext()).load(S3STORAGE+""+pista.getUuid()+"/"+pista.getFoto()).into(logoCircleImgView);
             }
             telefone.setVisibility(View.GONE);
             email.setVisibility(View.GONE);
