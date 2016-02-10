@@ -3,12 +3,13 @@ package com.cablush.cablushapp.model.domain;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by jonathan on 04/11/15.
  */
-public class Usuario {
+public class Usuario implements Serializable {
 
     @Expose
     private String uuid;

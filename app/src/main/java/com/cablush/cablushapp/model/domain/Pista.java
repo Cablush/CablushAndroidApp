@@ -3,12 +3,13 @@ package com.cablush.cablushapp.model.domain;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by jonathan on 22/10/15.
  */
-public class Pista implements Localizavel {
+public class Pista implements Localizavel, Serializable {
 
     @Expose
     private String uuid;
@@ -21,7 +22,7 @@ public class Pista implements Localizavel {
     @Expose
     private String facebook;
     @Expose
-    @SerializedName("foto_file_name")
+    @SerializedName("foto_url")
     private String foto;
     @Expose
     private Boolean fundo;
@@ -31,6 +32,9 @@ public class Pista implements Localizavel {
     private List<Esporte> esportes;
     @Expose
     private Horario horario;
+    @Expose
+    @SerializedName("responsavel_uuid")
+    private String responsavel;
 
     @Override
     public String getUuid() {
@@ -59,6 +63,7 @@ public class Pista implements Localizavel {
         this.descricao = descricao;
     }
 
+    @Override
     public String getWebsite() {
         return website;
     }
@@ -67,6 +72,7 @@ public class Pista implements Localizavel {
         this.website = website;
     }
 
+    @Override
     public String getFacebook() {
         return facebook;
     }
@@ -114,5 +120,18 @@ public class Pista implements Localizavel {
 
     public void setHorario(Horario horario) {
         this.horario = horario;
+    }
+
+    public String getResponsavel() {
+        return responsavel;
+    }
+
+    public void setResponsavel(String responsavel) {
+        this.responsavel = responsavel;
+    }
+
+    @Override
+    public String getImagemURL() {
+        return foto;
     }
 }

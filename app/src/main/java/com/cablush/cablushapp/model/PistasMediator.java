@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.cablush.cablushapp.R;
+import com.cablush.cablushapp.model.domain.Usuario;
 import com.cablush.cablushapp.model.persistence.PistaDAO;
 import com.cablush.cablushapp.model.rest.ApiPistas;
 import com.cablush.cablushapp.model.rest.RestServiceBuilder;
@@ -63,6 +64,30 @@ public class PistasMediator {
                 }
             }
         });
+    }
 
+    public void getMyPistas() {
+        apiPistas.getPistas(new Callback<List<Pista>>() {
+            @Override
+            public void success(List<Pista> pistas, Response response) {
+                if (!pistas.isEmpty()) {
+                    pistaDAO.savePistas(pistas);
+                }
+                PistasMediatorListener listener = mListener.get();
+                if (listener != null) {
+                    listener.onGetPistasSucess(pistaDAO.getPistas(Usuario.LOGGED_USER.getUuid()));
+                }
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                Log.e(TAG, "Error getting my pistas. " + error.getMessage());
+                PistasMediatorListener listener = mListener.get();
+                Context context = mContext.get();
+                if (listener != null && context != null) {
+                    listener.onGetPistasFail(context.getString(R.string.error_no_connection));
+                }
+            }
+        });
     }
 }

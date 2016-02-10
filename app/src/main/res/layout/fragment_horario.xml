@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/scrollView"
+    android:layout_alignParentTop="true"
+    android:layout_alignParentLeft="true"
+    android:layout_alignParentStart="true">
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/white">
+
+        <TextView
+            style="@style/TextAppearance.Bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="@string/txt_dias"
+            android:id="@+id/textViewDias"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="@dimen/dialog_margin"
+            android:layout_marginRight="@dimen/dialog_margin"
+            android:layout_marginTop="@dimen/vertical_spacing"/>
+
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/seg"
+            android:id="@+id/checkBoxSeg"
+            android:checked="false"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="@dimen/dialog_margin"
+            android:layout_marginTop="@dimen/vertical_spacing"
+            android:layout_below="@+id/textViewDias"/>
+
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/ter"
+            android:id="@+id/checkBoxTer"
+            android:checked="false"
+            android:layout_marginLeft="@dimen/horizontal_spacing"
+            android:layout_alignTop="@+id/checkBoxSeg"
+            android:layout_toRightOf="@+id/checkBoxSeg"
+            android:layout_toEndOf="@+id/checkBoxSeg"/>
+
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/qua"
+            android:id="@+id/checkBoxQua"
+            android:checked="false"
+            android:layout_marginLeft="@dimen/horizontal_spacing"
+            android:layout_alignTop="@+id/checkBoxTer"
+            android:layout_toRightOf="@+id/checkBoxTer"
+            android:layout_toEndOf="@+id/checkBoxTer"/>
+
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/qui"
+            android:id="@+id/checkBoxQui"
+            android:checked="false"
+            android:layout_marginLeft="@dimen/horizontal_spacing"
+            android:layout_alignTop="@+id/checkBoxQua"
+            android:layout_toRightOf="@+id/checkBoxQua"
+            android:layout_toEndOf="@+id/checkBoxQua"/>
+
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/sex"
+            android:id="@+id/checkBoxSex"
+            android:checked="false"
+            android:layout_marginLeft="@dimen/horizontal_spacing"
+            android:layout_alignTop="@+id/checkBoxQui"
+            android:layout_toRightOf="@+id/checkBoxQui"
+            android:layout_toEndOf="@+id/checkBoxQui"/>
+
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/sab"
+            android:id="@+id/checkBoxSab"
+            android:checked="false"
+            android:layout_marginLeft="@dimen/horizontal_spacing"
+            android:layout_alignTop="@+id/checkBoxSex"
+            android:layout_toRightOf="@+id/checkBoxSex"
+            android:layout_toEndOf="@+id/checkBoxSex"/>
+
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/dom"
+            android:id="@+id/checkBoxDom"
+            android:checked="false"
+            android:layout_marginLeft="@dimen/horizontal_spacing"
+            android:layout_alignTop="@+id/checkBoxSab"
+            android:layout_toRightOf="@+id/checkBoxSab"
+            android:layout_toEndOf="@+id/checkBoxSab"/>
+
+        <TextView
+            style="@style/TextAppearance.Bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="@string/txt_inicio"
+            android:id="@+id/textViewHoraInicio"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="@dimen/dialog_margin"
+            android:layout_marginRight="@dimen/dialog_margin"
+            android:layout_marginTop="@dimen/vertical_spacing"
+            android:layout_below="@+id/checkBoxSeg"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/editTextInicio"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="@dimen/dialog_margin"
+            android:layout_marginRight="@dimen/dialog_margin"
+            android:layout_marginTop="@dimen/vertical_spacing"
+            android:layout_below="@+id/textViewHoraInicio"
+            android:hint="09:00"
+            android:inputType="time"/>
+
+        <TextView
+            style="@style/TextAppearance.Bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="@string/txt_fim"
+            android:id="@+id/textViewHoraFim"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="@dimen/dialog_margin"
+            android:layout_marginRight="@dimen/dialog_margin"
+            android:layout_marginTop="@dimen/vertical_spacing"
+            android:layout_below="@+id/editTextInicio"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/editTextFim"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="@dimen/dialog_margin"
+            android:layout_marginRight="@dimen/dialog_margin"
+            android:layout_marginTop="@dimen/vertical_spacing"
+            android:layout_below="@+id/textViewHoraFim"
+            android:hint="18:00"
+            android:inputType="time"/>
+
+        <TextView
+            style="@style/TextAppearance.Bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="@string/txt_detalhes"
+            android:id="@+id/textViewDetalhes"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="@dimen/dialog_margin"
+            android:layout_marginRight="@dimen/dialog_margin"
+            android:layout_marginTop="@dimen/vertical_spacing"
+            android:layout_below="@+id/editTextFim"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/txt_detalhes"
+            android:ems="10"
+            android:id="@+id/editTextDetalhes"
+            android:layout_below="@+id/textViewDetalhes"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="@dimen/dialog_margin"
+            android:layout_marginRight="@dimen/dialog_margin"
+            android:layout_marginBottom="@dimen/dialog_margin"
+            android:inputType="text"/>
+
+    </RelativeLayout>
+
+</ScrollView>

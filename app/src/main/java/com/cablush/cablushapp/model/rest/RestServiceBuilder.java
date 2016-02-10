@@ -1,5 +1,6 @@
 package com.cablush.cablushapp.model.rest;
 
+import com.cablush.cablushapp.BuildConfig;
 import com.cablush.cablushapp.model.domain.Usuario;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializationContext;
@@ -32,14 +33,6 @@ public class RestServiceBuilder {
 
     protected String TAG = getClass().getSimpleName();
 
-    private static final String APP_NAME = "CablushApp";
-    private static final String APP_VERSION = "1.0-beta";
-
-    private static final String SERVICE_KEY = "";
-
-    private static final String SERVER_URL = "http://www.cablush.com/api";
-    //private static final String SERVER_URL = "http://10.0.2.2:3000/api";
-
     public static final String ACCESS_TOKEN = "Access-Token";
     public static final String TOKEN_TYPE = "Token-Type";
     public static final String CLIENT = "Client";
@@ -53,17 +46,17 @@ public class RestServiceBuilder {
 
     public static <S> S createService(Class<S> serviceClass) {
         RestAdapter.Builder builder = new RestAdapter.Builder()
-                .setEndpoint(SERVER_URL)
+                .setEndpoint(BuildConfig.RETROFIT_END_POINT)
                 .setConverter(createDateConverter())
                 .setErrorHandler(new AppErrorHandler())
                 //.setClient(new OkClient(new OkHttpClient()))
-                .setLogLevel(RestAdapter.LogLevel.FULL); // TODO Only for debug!
+                .setLogLevel(BuildConfig.RETROFIT_LOG_LEVEL);
 
         builder.setRequestInterceptor(new RequestInterceptor() {
             @Override
             public void intercept(RequestFacade request) {
-                //request.addHeader("User-Agent", APP_NAME);
-                //request.addHeader("Service-Key", SERVICE_KEY);
+                //request.addHeader("User-Agent", BuildConfig.APPLICATION_ID);
+                //request.addHeader("Service-Key", "");
                 request.addHeader("Accept", "application/json");
                 request.addHeader("Request-Time", String.valueOf(System.currentTimeMillis()));
                 if (Usuario.LOGGED_USER != null) {

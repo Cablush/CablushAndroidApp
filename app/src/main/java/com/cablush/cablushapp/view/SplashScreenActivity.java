@@ -4,8 +4,11 @@ import android.app.Activity;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.cablush.cablushapp.R;
+import com.cablush.cablushapp.model.domain.Usuario;
 import com.cablush.cablushapp.presenter.LoginPresenter;
 
 /**
@@ -20,6 +23,7 @@ public class SplashScreenActivity extends Activity implements Runnable, LoginPre
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d(TAG, "onCreate()");
         setContentView(R.layout.activity_splashscreen);
         Handler handle = new Handler();
         handle.postDelayed(this, DELAY);
@@ -37,6 +41,9 @@ public class SplashScreenActivity extends Activity implements Runnable, LoginPre
 
     @Override
     public void onLoginSuccess() {
+        Toast.makeText(this,
+                getString(R.string.success_check_login, Usuario.LOGGED_USER.getNome()),
+                Toast.LENGTH_SHORT).show();
     }
 
     @Override

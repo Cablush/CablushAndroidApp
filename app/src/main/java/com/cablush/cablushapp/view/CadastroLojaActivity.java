@@ -2,70 +2,73 @@ package com.cablush.cablushapp.view;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.EditText;
-import android.widget.TextView;
-
+import android.support.v4.view.ViewPager;
 
 import com.cablush.cablushapp.R;
-import com.cablush.cablushapp.model.persistence.LojaDAO;
-import com.cablush.cablushapp.model.domain.Local;
 import com.cablush.cablushapp.model.domain.Loja;
-
-import java.util.ArrayList;
-import java.util.List;
-
+import com.cablush.cablushapp.view.cadastros.HorarioFragment;
+import com.cablush.cablushapp.view.cadastros.LocalFragment;
+import com.cablush.cablushapp.view.cadastros.LojaFragment;
+import com.cablush.cablushapp.view.cadastros.MapaFragment;
 
 /**
  * Created by jonathan on 07/11/15.
  */
-public class CadastroLojaActivity extends CadastrosLocalActivity {
+public class CadastroLojaActivity extends CadastroActivity<Loja> {
 
-    EditText edtTelefone;
-    EditText edtEmail;
-    TextView txtvEmail;
-    TextView txtvTelefone;
+    private static final String LOJA_EXTRA_KEY = "LOJA_EXTRA_KEY";
+
+    private LojaFragment lojaFragment;
+    private MapaFragment mapaFragment;
+    private LocalFragment localFragment;
+    private HorarioFragment horarioFragment;
 
     /**
+     * Make the intent of this activity.
      *
      * @param context
      * @return
      */
-    public static Intent makeIntent(Context context) {
-        return new Intent(context, CadastroLojaActivity.class);
+    public static Intent makeIntent(Context context, Loja loja) {
+        Intent intent = new Intent(context, CadastroLojaActivity.class);
+        if (loja != null) {
+            intent.putExtra(LOJA_EXTRA_KEY, loja);
+        }
+        return intent;
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setTitle(getString(R.string.title_cadastrar, getString(R.string.txt_loja)));
-        edtTelefone = (EditText)findViewById(R.id.edtTelefone);
-        edtTelefone.setVisibility(View.VISIBLE);
-        edtEmail= (EditText)findViewById(R.id.edtEmail);
-        edtEmail.setVisibility(View.VISIBLE);
-        txtvEmail= (TextView)findViewById(R.id.txtvEmail);
-        txtvEmail.setVisibility(View.VISIBLE);
-        txtvTelefone= (TextView)findViewById(R.id.txtvTelefone);
-        txtvTelefone.setVisibility(View.VISIBLE);
+    protected void setupViewPager(ViewPager viewPager) {
+        // Get the Loja object, if it was set
+        Loja loja = (Loja) getIntent().getSerializableExtra(LOJA_EXTRA_KEY);
+
+        // Initialize the fragments
+        lojaFragment = LojaFragment.newInstance(loja);
+        localFragment = LocalFragment.newInstance(loja != null ? loja.getLocal() : null);
+        mapaFragment = MapaFragment.newInstance(loja != null ? loja.getLocal().getLatLng() : null,
+                                                localFragment);
+        horarioFragment = HorarioFragment.newInstance(loja != null ? loja.getHorario() : null);
+
+        // Add the fragments into adapter
+        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+        adapter.addFragment(lojaFragment, getString(R.string.txt_loja));
+        adapter.addFragment(mapaFragment, getString(R.string.txt_localizacao));
+        adapter.addFragment(localFragment, getString(R.string.txt_endereco));
+        adapter.addFragment(horarioFragment, getString(R.string.txt_horarios));
+        viewPager.setAdapter(adapter);
     }
 
-
-    public void actionSalvar(View view){
-        if(validaCamposObrigatorios()) {
-            getDefaultFields();
-            String telefone  = edtTelefone.getText().toString();
-            String email = edtEmail.getText().toString();
-
-            List<Local> locais = new ArrayList<>();
-            locais.add(local);
-
-            Loja loja = new Loja();
-
-            LojaDAO lojaDAO = new LojaDAO(CadastroLojaActivity.this);
-//            lojaDAO.insert(loja);
-        }
+    @Override
+    protected boolean validate() {
+        return lojaFragment.doValidate() && localFragment.doValidate() && horarioFragment.doValidate();
     }
 
+    @Override
+    protected Loja save() {
+        Loja loja = lojaFragment.getLoja();
+        loja.setLocal(localFragment.getLocal());
+        loja.setHorario(horarioFragment.getHorario());
+        return loja;
+    }
 }
-//String nome, String descricao, String website, String facebook, String logo, Local local, Horario horario, boolean fundo, String telefone, String email, List<Local> locais
+

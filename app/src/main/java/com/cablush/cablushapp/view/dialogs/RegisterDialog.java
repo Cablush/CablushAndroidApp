@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.CheckBox;
@@ -24,7 +25,7 @@ import java.lang.ref.WeakReference;
 /**
  * Created by oscar on 26/12/15.
  */
-public class RegisterDialog extends DialogFragment implements RegisterPresenter.RegisterView {
+public class RegisterDialog extends DialogFragment {
 
     private static final String TAG = RegisterDialog.class.getSimpleName();
 
@@ -33,15 +34,7 @@ public class RegisterDialog extends DialogFragment implements RegisterPresenter.
     private EditText passwordEdit;
     private CheckBox shopkeeperCheck;
 
-    /**
-     * Interface to be implemented by this Dialog's client.
-     */
-    public interface RegisterDialogListener {
-        void onRegisterDialogSuccess();
-        void onRegisterDialogError(String message);
-    }
-
-    private WeakReference<RegisterDialogListener> mListener;
+    private WeakReference<RegisterPresenter.RegisterView> mView;
 
     /**
      * Show the Login Dialog.
@@ -57,18 +50,17 @@ public class RegisterDialog extends DialogFragment implements RegisterPresenter.
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        // Verify that the host activity implements the callback interface
+        Log.d(TAG, "onAttach()");
         try {
-            // Instantiate the LoginDialogListener so we can send events to the host
-            mListener = new WeakReference<>((RegisterDialogListener) activity);
+            mView = new WeakReference<>((RegisterPresenter.RegisterView) activity);
         } catch (ClassCastException e) {
-            // The activity doesn't implement the interface, throw exception
-            throw new ClassCastException(activity.toString() + " must implement RegisterDialogListener");
+            throw new ClassCastException(activity.toString() + " must implement RegisterPresenter.RegisterView");
         }
     }
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
+        Log.d(TAG, "onCreateDialog()");
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setView(initializeView());
 
@@ -86,7 +78,7 @@ public class RegisterDialog extends DialogFragment implements RegisterPresenter.
                 Boolean shopkeeper = shopkeeperCheck.isChecked();
 
                 if (!name.isEmpty() && !email.isEmpty() && !password.isEmpty()) {
-                    RegisterPresenter registerPresenter = new RegisterPresenter(RegisterDialog.this, getActivity());
+                    RegisterPresenter registerPresenter = new RegisterPresenter(mView.get(), getActivity());
                     registerPresenter.doRegister(name, email, password, shopkeeper);
                 } else {
                     Toast.makeText(getActivity(), R.string.msg_register_missing_data, Toast.LENGTH_SHORT).show();
@@ -119,21 +111,5 @@ public class RegisterDialog extends DialogFragment implements RegisterPresenter.
         shopkeeperCheck = (CheckBox) view.findViewById(R.id.shopkeeperCheckBox);
 
         return view;
-    }
-
-    @Override
-    public void onRegisterSuccess() {
-        RegisterDialogListener listener = mListener.get();
-        if (listener != null) {
-            listener.onRegisterDialogSuccess();
-        }
-    }
-
-    @Override
-    public void onRegisterError(String message) {
-        RegisterDialogListener listener = mListener.get();
-        if (listener != null) {
-            listener.onRegisterDialogError(message);
-        }
     }
 }

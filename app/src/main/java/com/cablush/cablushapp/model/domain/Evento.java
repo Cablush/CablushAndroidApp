@@ -3,13 +3,14 @@ package com.cablush.cablushapp.model.domain;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
 /**
  * Created by jonathan on 22/10/15.
  */
-public class Evento implements Localizavel {
+public class Evento implements Localizavel, Serializable {
 
     @Expose
     private String uuid;
@@ -28,7 +29,7 @@ public class Evento implements Localizavel {
     @Expose
     private String facebook;
     @Expose
-    @SerializedName("flyer_file_name")
+    @SerializedName("flyer_url")
     private String flyer;
     @Expose
     private Boolean fundo;
@@ -36,6 +37,9 @@ public class Evento implements Localizavel {
     private Local local;
     @Expose
     private List<Esporte> esportes;
+    @Expose
+    @SerializedName("responsavel_uuid")
+    private String responsavel;
 
     @Override
     public String getUuid() {
@@ -88,6 +92,7 @@ public class Evento implements Localizavel {
         this.dataFim = dataFim;
     }
 
+    @Override
     public String getWebsite() {
         return website;
     }
@@ -96,6 +101,7 @@ public class Evento implements Localizavel {
         this.website = website;
     }
 
+    @Override
     public String getFacebook() {
         return facebook;
     }
@@ -135,5 +141,18 @@ public class Evento implements Localizavel {
 
     public void setEsportes(List<Esporte> esportes) {
         this.esportes = esportes;
+    }
+
+    public String getResponsavel() {
+        return responsavel;
+    }
+
+    public void setResponsavel(String responsavel) {
+        this.responsavel = responsavel;
+    }
+
+    @Override
+    public String getImagemURL() {
+        return flyer;
     }
 }

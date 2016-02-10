@@ -31,7 +31,8 @@ public class EventoDAO extends AppBaseDAO {
         _WEBSITE("website", "TEXT", false),
         _FACEBOOK("facebook", "TEXT", false),
         _FLYER("flyer", "TEXT", false),
-        _FUNDO("fundo", "INTEGER", false);
+        _FUNDO("fundo", "INTEGER", false),
+        _RESPONSAVEL_UUID("responsavel_uuid", "TEXT", false);
 
         private String columnName;
         private String columnType;
@@ -105,6 +106,7 @@ public class EventoDAO extends AppBaseDAO {
         values.put(Columns._FACEBOOK.getColumnName(), evento.getFacebook());
         values.put(Columns._FLYER.getColumnName(), evento.getFlyer());
         values.put(Columns._FUNDO.getColumnName(), evento.getFundo());
+        values.put(Columns._RESPONSAVEL_UUID.getColumnName(), evento.getResponsavel());
         return values;
     }
 
@@ -140,6 +142,9 @@ public class EventoDAO extends AppBaseDAO {
         evento.setFundo(readCursor(cursor,
                 byColumnAlias ? Columns._FUNDO.getColumnAlias() : Columns._FUNDO.getColumnName(),
                 Boolean.class));
+        evento.setResponsavel(readCursor(cursor,
+                byColumnAlias ? Columns._RESPONSAVEL_UUID.getColumnAlias() : Columns._RESPONSAVEL_UUID.getColumnName(),
+                String.class));
         return evento;
     }
 
@@ -196,7 +201,15 @@ public class EventoDAO extends AppBaseDAO {
         return evento;
     }
 
+    public List<Evento> getEventos(String responsavelUuid) {
+        return getEventos(null, null, null, responsavelUuid);
+    }
+
     public List<Evento> getEventos(String name, String estado, String esporte) {
+        return getEventos(name, estado, esporte, null);
+    }
+
+    public List<Evento> getEventos(String name, String estado, String esporte, String responsavelUuid) {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
         SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
@@ -221,6 +234,10 @@ public class EventoDAO extends AppBaseDAO {
         if (esporte != null && !esporte.isEmpty()) {
             selection.append(EsporteDAO.Columns._CATEGORIA.getColumnNameWithTable()).append(" = ? ");
             selectionArgs.add(esporte);
+        }
+        if (responsavelUuid != null && !responsavelUuid.isEmpty()) {
+            selection.append(Columns._RESPONSAVEL_UUID.getColumnNameWithTable()).append(" = ? ");
+            selectionArgs.add(responsavelUuid);
         }
 
         Cursor cursor = queryBuilder.query(db,

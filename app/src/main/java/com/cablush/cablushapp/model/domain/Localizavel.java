@@ -12,4 +12,10 @@ public interface Localizavel {
     String getDescricao();
 
     Local getLocal();
+
+    String getWebsite();
+
+    String getFacebook();
+
+    String getImagemURL();
 }

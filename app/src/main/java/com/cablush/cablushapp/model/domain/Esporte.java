@@ -47,4 +47,8 @@ public class Esporte {
     public void setIcone(String icone) {
         this.icone = icone;
     }
+
+    public String getCategoriaNome() {
+        return categoria.equals("outros") ? nome : categoria + " - " + nome;
+    }
 }

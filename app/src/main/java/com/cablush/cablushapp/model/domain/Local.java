@@ -1,11 +1,14 @@
 package com.cablush.cablushapp.model.domain;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.annotations.Expose;
+
+import java.io.Serializable;
 
 /**
  * Created by jonathan on 22/10/15.
  */
-public class Local {
+public class Local implements Serializable {
 
     private String uuidLocalizavel;
     @Expose
@@ -115,6 +118,18 @@ public class Local {
 
     public void setPais(String pais) {
         this.pais = pais;
+    }
+
+    public LatLng getLatLng() {
+        if (latitude != null && longitude != null) {
+            return new LatLng(latitude, longitude);
+        }
+        return null;
+    }
+
+    public void setLatLng(LatLng latLng) {
+        latitude = latLng.latitude;
+        longitude = latLng.longitude;
     }
 
     public String getEndereco() {

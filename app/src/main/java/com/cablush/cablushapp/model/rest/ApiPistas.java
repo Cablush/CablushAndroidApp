@@ -17,7 +17,13 @@ import retrofit.http.Query;
 public interface ApiPistas {
 
     @GET("/pistas")
-    void getPistas(@Query("name") String name, @Query("estado") String estado, @Query("esporte") String esporte, Callback<List<Pista>> listCallback);
+    void getPistas(@Query("name") String name,
+                   @Query("estado") String estado,
+                   @Query("esporte") String esporte,
+                   Callback<List<Pista>> listCallback);
+
+    @GET("/pistas/mine")
+    void getPistas(Callback<List<Pista>> listCallback);
 
     @POST("/pistas")
     void createPista(@Body Pista pista, Callback<Pista> savedPista);

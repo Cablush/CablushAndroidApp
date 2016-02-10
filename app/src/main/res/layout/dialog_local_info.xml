@@ -3,15 +3,16 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:layout_width="50dip"
-        android:layout_height="50dip"
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageViewLogo"
         android:src="@drawable/logo_azul"
-        android:id="@+id/logo_localizavel"
-        android:layout_alignRight="@+id/telefoneTextView"
-        android:layout_alignEnd="@+id/telefoneTextView"
-        android:layout_alignLeft="@+id/descricaoTextView"
-        android:layout_alignStart="@+id/descricaoTextView" />
+        android:layout_marginLeft="@dimen/dialog_margin"
+        android:layout_marginRight="@dimen/dialog_margin"
+        android:adjustViewBounds="true"
+        android:maxHeight="100dp"
+        android:minWidth="100dp"/>
 
     <TextView
         android:layout_width="match_parent"
@@ -20,46 +21,114 @@
         android:text="Breve descrição do Local..."
         android:maxLength="500"
         android:id="@+id/descricaoTextView"
-        android:layout_below="@+id/logo_localizavel"
-        android:layout_alignLeft="@+id/telefoneTextView"
-        android:layout_alignStart="@+id/telefoneTextView" />
+        android:layout_below="@+id/imageViewLogo"
+        android:layout_marginLeft="@dimen/dialog_margin"
+        android:layout_marginRight="@dimen/dialog_margin"
+        android:layout_marginTop="@dimen/vertical_spacing"/>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageViewTelefone"
+        android:src="@drawable/ic_action_ic_phone_blue"
+        android:layout_below="@+id/descricaoTextView"
+        android:layout_marginLeft="@dimen/dialog_margin"/>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="(31) 3131-0909"
         android:id="@+id/telefoneTextView"
-        android:layout_marginTop="@dimen/vertical_spacing"
-        android:layout_below="@+id/descricaoTextView"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginLeft="@dimen/dialog_margin"
         android:autoLink="phone"
+        android:layout_toRightOf="@+id/imageViewTelefone"
+        android:layout_toEndOf="@+id/imageViewTelefone"
+        android:layout_marginTop="@dimen/vertical_spacing"
+        android:layout_alignTop="@+id/imageViewTelefone"
         android:layout_marginRight="@dimen/dialog_margin"/>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageViewEmail"
+        android:src="@drawable/ic_action_ic_mail_outline_blue"
+        android:layout_below="@+id/imageViewTelefone"
+        android:layout_marginLeft="@dimen/dialog_margin"/>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="email@local.com.br"
+        android:text="cablush@cablush.com"
         android:id="@+id/emailTextView"
-        android:layout_below="@+id/telefoneTextView"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginLeft="@dimen/dialog_margin"
-        android:layout_marginTop="@dimen/vertical_spacing"
         android:autoLink="email"
+        android:layout_toRightOf="@+id/imageViewEmail"
+        android:layout_toEndOf="@+id/imageViewEmail"
+        android:layout_alignTop="@+id/imageViewEmail"
+        android:layout_marginTop="@dimen/vertical_spacing"
         android:layout_marginRight="@dimen/dialog_margin"/>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageViewWeb"
+        android:src="@drawable/ic_action_ic_language_blue"
+        android:layout_below="@+id/imageViewEmail"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="false"
+        android:layout_marginLeft="@dimen/dialog_margin"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="www.cablush.com"
+        android:id="@+id/textViewWeb"
+        android:autoLink="web"
+        android:layout_toRightOf="@+id/imageViewEmail"
+        android:layout_toEndOf="@+id/imageViewEmail"
+        android:layout_alignTop="@+id/imageViewWeb"
+        android:layout_marginTop="@dimen/vertical_spacing"
+        android:layout_marginRight="@dimen/dialog_margin"/>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageViewFace"
+        android:src="@drawable/ic_action_facebook_blue"
+        android:layout_below="@+id/imageViewWeb"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="false"
+        android:layout_marginLeft="@dimen/dialog_margin"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="facebook.com/cablush"
+        android:id="@+id/textViewFace"
+        android:autoLink="web"
+        android:layout_alignTop="@+id/imageViewFace"
+        android:layout_toRightOf="@+id/imageViewFace"
+        android:layout_toEndOf="@+id/imageViewFace"
+        android:layout_marginTop="@dimen/vertical_spacing"
+        android:layout_marginRight="@dimen/dialog_margin"/>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageViewEndereco"
+        android:src="@drawable/ic_action_ic_business_blue"
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="false"
+        android:layout_marginLeft="@dimen/dialog_margin"
+        android:layout_below="@+id/imageViewFace"/>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Rua Nome, 10, Bairro Nome"
         android:id="@+id/enderecoTextView"
-        android:layout_below="@+id/emailTextView"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="@dimen/vertical_spacing"
-        android:layout_marginLeft="@dimen/dialog_margin"
+        android:layout_toRightOf="@+id/imageViewEndereco"
+        android:layout_toEndOf="@+id/imageViewEndereco"
+        android:layout_alignTop="@+id/imageViewEndereco"
         android:layout_marginRight="@dimen/dialog_margin"/>
 
     <TextView
@@ -68,9 +137,8 @@
         android:text="Nome Cidade / RG"
         android:id="@+id/cidadeEstadoTextView"
         android:layout_below="@+id/cepTextView"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginLeft="@dimen/dialog_margin"
+        android:layout_alignLeft="@+id/cepTextView"
+        android:layout_alignStart="@+id/cepTextView"
         android:layout_marginBottom="@dimen/dialog_margin"
         android:layout_marginRight="@dimen/dialog_margin"/>
 
@@ -80,9 +148,8 @@
         android:text="30000-000"
         android:id="@+id/cepTextView"
         android:layout_below="@+id/enderecoTextView"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginLeft="@dimen/dialog_margin"
+        android:layout_toRightOf="@+id/imageViewEndereco"
+        android:layout_toEndOf="@+id/imageViewEndereco"
         android:layout_marginRight="@dimen/dialog_margin"/>
 
 </RelativeLayout>
