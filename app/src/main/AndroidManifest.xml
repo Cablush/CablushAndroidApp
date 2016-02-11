@@ -53,6 +53,14 @@
                        android:value=".view.MainActivity" />
         </activity>
 
+        <activity android:name=".view.CadastroPistaActivity"
+            android:theme="@style/Cablush.NoActionBar"
+            android:parentActivityName=".view.MainActivity">
+            <!-- The meta-data element is needed for API versions lower than 16 -->
+            <meta-data android:name="android.support.PARENT_ACTIVITY"
+                android:value=".view.MainActivity" />
+        </activity>
+
         <service android:name=".model.services.FetchAddressIntentService" android:exported="false"/>
 
 

@@ -19,6 +19,7 @@ import android.widget.TextView;
 import com.cablush.cablushapp.R;
 import com.cablush.cablushapp.model.domain.Esporte;
 import com.cablush.cablushapp.model.domain.Loja;
+import com.cablush.cablushapp.model.domain.Pista;
 import com.cablush.cablushapp.utils.PictureUtils;
 
 import java.util.ArrayList;
@@ -26,13 +27,13 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Created by oscar on 06/02/16.
+ * Created by jonathan on 11/02/16.
  */
-public class LojaFragment extends CablushFragment {
+public class PistaFragment extends CablushFragment {
 
-    private static final String LOJA_BUNDLE_KEY = "LOJA_BUNDLE_KEY";
+    private static final String PISTA_BUNDLE_KEY = "PISTA_BUNDLE_KEY";
 
-    private Loja loja;
+    private Pista pista;
 
     List<String> esportes = new ArrayList<>();
     private ArrayAdapter<String> esportesAdapter;
@@ -44,24 +45,24 @@ public class LojaFragment extends CablushFragment {
     private EditText facebookEditText;
     private ImageButton galleryImageButton;
     private ImageButton pictureImageButton;
-    private ImageView logoImageView;
+    private ImageView fotoImageView;
     private EditText descricaoEditText;
     private MultiAutoCompleteTextView esportesMultiComplete;
 
-    public LojaFragment() {
+    public PistaFragment() {
         // Required empty public constructor
     }
 
     /**
      *
-     * @param loja
+     * @param pista
      * @return
      */
-    public static LojaFragment newInstance(Loja loja) {
-        LojaFragment fragment = new LojaFragment();
-        if (loja != null) {
+    public static PistaFragment newInstance(Pista pista) {
+        PistaFragment fragment = new PistaFragment();
+        if (pista != null) {
             Bundle args = new Bundle();
-            args.putSerializable(LOJA_BUNDLE_KEY, loja);
+            args.putSerializable(PISTA_BUNDLE_KEY, pista);
             fragment.setArguments(args);
         }
         return fragment;
@@ -73,10 +74,10 @@ public class LojaFragment extends CablushFragment {
                              @Nullable Bundle savedInstanceState) {
         Log.d(TAG, "onCreateView()");
         if (getArguments() != null) {
-            loja = (Loja) getArguments().getSerializable(LOJA_BUNDLE_KEY);
+            pista = (Pista) getArguments().getSerializable(PISTA_BUNDLE_KEY);
         }
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_loja, container, false);
+        return inflater.inflate(R.layout.fragment_pista, container, false);
     }
 
     @Override
@@ -90,7 +91,7 @@ public class LojaFragment extends CablushFragment {
 
     @Override
     public void onPictureLoaded(Uri pictureFileUri) {
-        logoImageView.setImageBitmap(PictureUtils.getBitmapFromUri(getContext(), pictureFileUri));
+        fotoImageView.setImageBitmap(PictureUtils.getBitmapFromUri(getContext(), pictureFileUri));
     }
 
     private void initializeData() {
@@ -101,8 +102,6 @@ public class LojaFragment extends CablushFragment {
 
     private void initializeView(FragmentActivity activity) {
         nomeEditText = (EditText) activity.findViewById(R.id.editTextNome);
-        telefoneEditText = (EditText) activity.findViewById(R.id.editTextTelefone);
-        emailEditText = (EditText) activity.findViewById(R.id.editTextEmail);
         websiteEditText = (EditText) activity.findViewById(R.id.editTextWebsite);
         facebookEditText = (EditText) activity.findViewById(R.id.editTextFacebook);
         // gallery button
@@ -121,7 +120,7 @@ public class LojaFragment extends CablushFragment {
                 dispatchTakePictureIntent();
             }
         });
-        logoImageView = (ImageView) activity.findViewById(R.id.imageViewLogo);
+        fotoImageView = (ImageView) activity.findViewById(R.id.imageViewLogo);
         descricaoEditText = (EditText) activity.findViewById(R.id.editTextDescricao);
         // esportes
         esportesMultiComplete = (MultiAutoCompleteTextView) activity
@@ -144,16 +143,14 @@ public class LojaFragment extends CablushFragment {
     }
 
     private void setViewValues() {
-        if (loja != null) {
-            nomeEditText.setText(loja.getNome());
-            telefoneEditText.setText(loja.getTelefone());
-            emailEditText.setText(loja.getEmail());
-            websiteEditText.setText(loja.getWebsite());
-            facebookEditText.setText(loja.getFacebook());
-            PictureUtils.loadRemoteImage(getActivity(), loja.getLogo(), logoImageView, false);
-            descricaoEditText.setText(loja.getDescricao());
+        if (pista != null) {
+            nomeEditText.setText(pista.getNome());
+            websiteEditText.setText(pista.getWebsite());
+            facebookEditText.setText(pista.getFacebook());
+            PictureUtils.loadRemoteImage(getActivity(), pista.getFoto(), fotoImageView, false);
+            descricaoEditText.setText(pista.getDescricao());
             // esportes
-            for (Esporte esporte : loja.getEsportes()) {
+            for (Esporte esporte : pista.getEsportes()) {
                 String text = esportesMultiComplete.getText().toString()
                         + esporte.getCategoriaNome() + ",";
                 esportesMultiComplete.setText(text);
@@ -166,11 +163,9 @@ public class LojaFragment extends CablushFragment {
      * @return
      */
     public boolean doValidate() {
-        if(loja == null){
+        if(pista == null){
             return false;
-        }else if(loja.getNome() == null || loja.getNome().isEmpty()){
-            return false;
-        }else if(loja.getDescricao() == null || loja.getDescricao().isEmpty()){
+        }else if(pista.getNome() == null || pista.getNome().isEmpty()){
             return false;
         }
         return true;
@@ -180,18 +175,16 @@ public class LojaFragment extends CablushFragment {
      *
      * @return
      */
-    public Loja getLoja() {
-        if (loja == null) {
-            loja = new Loja();
+    public Pista getPista() {
+        if (pista == null) {
+            pista = new Pista();
         }
-        loja.setNome(nomeEditText.getText().toString());
-        loja.setTelefone(telefoneEditText.getText().toString());
-        loja.setEmail(emailEditText.getText().toString());
-        loja.setWebsite(websiteEditText.getText().toString());
-        loja.setFacebook(facebookEditText.getText().toString());
-        // TODO loja.setLogo();
-        loja.setDescricao(descricaoEditText.getText().toString());
-        //TODO loja.setEsportes();
-        return loja;
+        pista.setNome(nomeEditText.getText().toString());
+        pista.setWebsite(websiteEditText.getText().toString());
+        pista.setFacebook(facebookEditText.getText().toString());
+        // TODO pista.setLogo();
+        pista.setDescricao(descricaoEditText.getText().toString());
+        //TODO pista.setEsportes();
+        return pista;
     }
 }

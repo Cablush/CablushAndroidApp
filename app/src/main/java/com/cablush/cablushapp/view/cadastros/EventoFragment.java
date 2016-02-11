@@ -1,5 +1,7 @@
 package com.cablush.cablushapp.view.cadastros;
 
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -10,21 +12,23 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.MultiAutoCompleteTextView;
 import android.widget.TextView;
+import android.widget.TimePicker;
 
 import com.cablush.cablushapp.R;
 import com.cablush.cablushapp.model.domain.Esporte;
 import com.cablush.cablushapp.model.domain.Evento;
 import com.cablush.cablushapp.model.domain.Horario;
 import com.cablush.cablushapp.utils.PictureUtils;
+import com.cablush.cablushapp.view.dialogs.DatePickerFragmentDialog;
+import com.cablush.cablushapp.view.dialogs.TimePickerFragmentDialog;
 
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -38,6 +42,9 @@ public class EventoFragment extends CablushFragment {
     private static final String EVENTO_BUNDLE_KEY = "EVENTO_BUNDLE_KEY";
 
     private Evento evento;
+
+    private Calendar beginCalendar;
+    private Calendar endCalendar;
 
     List<String> esportes = new ArrayList<>();
     private ArrayAdapter<String> esportesAdapter;
@@ -82,7 +89,7 @@ public class EventoFragment extends CablushFragment {
             evento = (Evento) getArguments().getSerializable(EVENTO_BUNDLE_KEY);
         }
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_loja, container, false);
+        return inflater.inflate(R.layout.fragment_evento, container, false);
     }
 
     @Override
@@ -103,14 +110,63 @@ public class EventoFragment extends CablushFragment {
         esportes = Arrays.asList(getResources().getStringArray(R.array.sports));
         esportesAdapter = new ArrayAdapter<>(getActivity(),
                 android.R.layout.simple_dropdown_item_1line, esportes);
+
+        beginCalendar = Calendar.getInstance();
+        endCalendar = Calendar.getInstance();
     }
 
     private void initializeView(FragmentActivity activity) {
+
         nomeEditText = (EditText) activity.findViewById(R.id.editTextNome);
-        dataInicioEditText = (EditText) activity.findViewById(R.id.editTextDataInicio);
-        dataFimEditText = (EditText) activity.findViewById(R.id.editTextDataFim);
-        horarioEditText = (EditText) activity.findViewById(R.id.editTextHorario);
         websiteEditText = (EditText) activity.findViewById(R.id.editTextWebsite);
+
+        dataInicioEditText = (EditText) activity.findViewById(R.id.editTextDataInicio);
+        dataInicioEditText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DatePickerFragmentDialog.showDialog(getActivity().getFragmentManager(), beginCalendar, new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                        beginCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                        beginCalendar.set(Calendar.MONTH,monthOfYear);
+                        beginCalendar.set(Calendar.YEAR,year);
+                        dataInicioEditText.setText(Horario.FORMAT_DATE.format(beginCalendar.getTime()));
+                    }
+                });
+            }
+        });
+
+        dataFimEditText = (EditText) activity.findViewById(R.id.editTextDataFim);
+        dataFimEditText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DatePickerFragmentDialog.showDialog(getActivity().getFragmentManager(), endCalendar, new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                        endCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                        endCalendar.set(Calendar.MONTH,monthOfYear);
+                        endCalendar.set(Calendar.YEAR,year);
+                        dataFimEditText.setText(Horario.FORMAT_DATE.format(endCalendar.getTime()));
+                    }
+                });
+            }
+        });
+        horarioEditText = (EditText) activity.findViewById(R.id.editTextHorario);
+        horarioEditText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TimePickerFragmentDialog.showDialog(getActivity().getFragmentManager(),
+                        beginCalendar, new TimePickerDialog.OnTimeSetListener() {
+                            @Override
+                            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                                beginCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                                beginCalendar.set(Calendar.MINUTE, minute);
+                                horarioEditText.setText(Horario.FORMAT_TIME.format(beginCalendar.getTime()));
+                            }
+                        });
+            }
+        });
+
         facebookEditText = (EditText) activity.findViewById(R.id.editTextFacebook);
         // gallery button
         galleryImageButton = (ImageButton) activity.findViewById(R.id.buttonGallery);
@@ -206,8 +262,8 @@ public class EventoFragment extends CablushFragment {
         //TODO evento.setEsportes();
 
         try {
-            evento.setData(Horario.FORMAT_DATE.parse(dataInicioEditText.getText().toString()));
-            evento.setDataFim(Horario.FORMAT_DATE.parse(dataInicioEditText.getText().toString()));
+            evento.setData(beginCalendar.getTime());
+            evento.setDataFim(endCalendar.getTime());
             evento.setHora(Horario.FORMAT_TIME.parse(horarioEditText.getText().toString()));
         } catch (ParseException e) {
             Log.e(EventoFragment.class.getSimpleName(), "Error parsing initial dates!");

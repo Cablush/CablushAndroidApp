@@ -57,7 +57,7 @@ public class ViewUtils {
     public static boolean checkUserLoggedIn(Context context) {
         if (Usuario.LOGGED_USER == null) {
             Toast.makeText(context, R.string.msg_login_required, Toast.LENGTH_SHORT).show();
-            return false;
+//            return false;
         }
         return true;
     }
