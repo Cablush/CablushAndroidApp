@@ -13,8 +13,10 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.cablush.cablushapp.BuildConfig;
+import com.cablush.cablushapp.R;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.RequestCreator;
 
 import java.io.File;
 import java.util.Locale;
@@ -31,7 +33,12 @@ public class PictureUtils {
             if (BuildConfig.DEBUG) {
                 imageURL = imageURL.replace("localhost", "10.0.2.2");
             }
-            Picasso.with(context).load(imageURL).fit().into(view, new Callback() {
+            RequestCreator rc = Picasso.with(context).load(imageURL);
+            if (!hideOnFail) {
+                rc.placeholder(R.drawable.missing);
+                rc.error(R.drawable.missing);
+            }
+            rc.fit().into(view, new Callback() {
                 @Override
                 public void onSuccess() {
                 }
