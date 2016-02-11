@@ -45,8 +45,6 @@ public class SearchDialog extends DialogFragment {
     private Spinner sportsSpinner;
     private EditText nameEdit;
 
-    private SearchPresenter presenter;
-
     private WeakReference<SearchPresenter.SearchView> mView;
 
     /**
@@ -82,8 +80,6 @@ public class SearchDialog extends DialogFragment {
         Log.d(TAG, "onCreateDialog()");
         loadData();
 
-        presenter = new SearchPresenter(mView.get(), getActivity());
-
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setView(initializeView());
 
@@ -101,13 +97,13 @@ public class SearchDialog extends DialogFragment {
 
                 switch (searchType) {
                     case LOJA:
-                        presenter.getLojas(nome, estado, esporte);
+                        mView.get().getSearchPresenter().getLojas(nome, estado, esporte);
                         break;
                     case EVENTO:
-                        presenter.getEventos(nome, estado, esporte);
+                        mView.get().getSearchPresenter().getEventos(nome, estado, esporte);
                         break;
                     case PISTA:
-                        presenter.getPistas(nome, estado, esporte);
+                        mView.get().getSearchPresenter().getPistas(nome, estado, esporte);
                         break;
                     default:
                         Toast.makeText(getActivity(), R.string.error_invalid_search_type, Toast.LENGTH_SHORT).show();

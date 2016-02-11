@@ -12,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cablush.cablushapp.R;
+import com.cablush.cablushapp.model.SearchResult;
 import com.cablush.cablushapp.model.domain.Localizavel;
 import com.cablush.cablushapp.model.domain.Usuario;
 import com.cablush.cablushapp.presenter.LoginPresenter;
@@ -51,6 +52,8 @@ public class MainActivity extends AbstractDrawerActivity implements OnMapReadyCa
 
     // Map to store the localizaveis by UUIDs
     private Map<String, Localizavel> localizavelMap = new HashMap<>();
+
+    private SearchPresenter searchPresenter;
 
     /**
      * Make the intent of this activity.
@@ -95,6 +98,8 @@ public class MainActivity extends AbstractDrawerActivity implements OnMapReadyCa
 
         spinner = (ProgressBar)findViewById(R.id.progressBar);
         spinner.setVisibility(View.GONE);
+
+        searchPresenter = new SearchPresenter(this, this);
 
         checkLogin();
     }
@@ -149,22 +154,22 @@ public class MainActivity extends AbstractDrawerActivity implements OnMapReadyCa
                 return true;
             case R.id.drawer_my_lojas:
                 if (ViewUtils.checkUserLoggedIn(this)) {
-                    SearchPresenter presenter = new SearchPresenter(this, this);
-                    presenter.getMyLojas();
+                    searchPresenter.getMyLojas();
+                    spinner.setVisibility(View.VISIBLE);
                     return true;
                 }
                 return false;
             case R.id.drawer_my_eventos:
                 if (ViewUtils.checkUserLoggedIn(this)) {
-                    SearchPresenter presenter = new SearchPresenter(this, this);
-                    presenter.getMyEventos();
+                    searchPresenter.getMyEventos();
+                    spinner.setVisibility(View.VISIBLE);
                     return true;
                 }
                 return false;
             case R.id.drawer_my_pistas:
                 if (ViewUtils.checkUserLoggedIn(this)) {
-                    SearchPresenter presenter = new SearchPresenter(this, this);
-                    presenter.getMyPistas();
+                    searchPresenter.getMyPistas();
+                    spinner.setVisibility(View.VISIBLE);
                     return true;
                 }
                 return false;
@@ -219,11 +224,17 @@ public class MainActivity extends AbstractDrawerActivity implements OnMapReadyCa
     }
 
     @Override
-    public void onSearchSuccess(List<? extends Localizavel> localizaveis) {
+    public SearchPresenter getSearchPresenter() {
+        return searchPresenter;
+    }
+
+    @Override
+    public void onSearchResult(SearchResult result, List<? extends Localizavel> localizaveis) {
+        // TODO warning offline and error searches (?)
+        clearMap();
         if (localizaveis == null || localizaveis.isEmpty()) {
             Toast.makeText(this, R.string.msg_local_not_found, Toast.LENGTH_SHORT).show();
         } else {
-            clearMarker();
             for (Localizavel localizavel : localizaveis) {
                 setMarker(localizavel);
             }
@@ -232,13 +243,7 @@ public class MainActivity extends AbstractDrawerActivity implements OnMapReadyCa
         spinner.setVisibility(View.GONE);
     }
 
-    @Override
-    public void onSearchError(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
-        spinner.setVisibility(View.GONE);
-    }
-
-    private void clearMarker() {
+    private void clearMap() {
         googleMap.clear();
         localizavelMap.clear();
     }

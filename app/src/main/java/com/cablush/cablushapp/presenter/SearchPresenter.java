@@ -5,6 +5,7 @@ import android.content.Context;
 import com.cablush.cablushapp.model.EventosMediator;
 import com.cablush.cablushapp.model.LojasMediator;
 import com.cablush.cablushapp.model.PistasMediator;
+import com.cablush.cablushapp.model.SearchResult;
 import com.cablush.cablushapp.model.domain.Evento;
 import com.cablush.cablushapp.model.domain.Localizavel;
 import com.cablush.cablushapp.model.domain.Loja;
@@ -25,8 +26,8 @@ public class SearchPresenter implements LojasMediator.LojasMediatorListener,
      * Interface to be implemented by this Presenter's client.
      */
     public interface SearchView {
-        void onSearchSuccess(List<? extends Localizavel> localizaveis);
-        void onSearchError(String message);
+        SearchPresenter getSearchPresenter();
+        void onSearchResult(SearchResult result, List<? extends Localizavel> localizaveis);
     }
 
     private WeakReference<SearchView> mView;
@@ -48,7 +49,7 @@ public class SearchPresenter implements LojasMediator.LojasMediatorListener,
         this.eventosMediator = new EventosMediator(this, context);
     }
 
-    // Search for Lojas
+    // Searches for Lojas
 
     public void getLojas(String name, String estado, String esporte) {
         lojasMediator.getLojas(name, estado, esporte);
@@ -59,22 +60,14 @@ public class SearchPresenter implements LojasMediator.LojasMediatorListener,
     }
 
     @Override
-    public void onGetLojasSucess(List<Loja> lojas) {
+    public void onGetLojasResult(SearchResult result, List<Loja> lojas) {
         SearchView view = mView.get();
         if (view != null) {
-            view.onSearchSuccess(lojas);
+            view.onSearchResult(result, lojas);
         }
     }
 
-    @Override
-    public void onGetLojasFail(String message) {
-        SearchView view = mView.get();
-        if (view != null) {
-            view.onSearchError(message);
-        }
-    }
-
-    // Search for Eventos
+    // Searches for Eventos
 
     public void getEventos(String name, String estado, String esporte) {
         eventosMediator.getEventos(name, estado, esporte);
@@ -85,22 +78,14 @@ public class SearchPresenter implements LojasMediator.LojasMediatorListener,
     }
 
     @Override
-    public void onGetEventosSucess(List<Evento> eventos) {
+    public void onGetEventosResult(SearchResult result, List<Evento> eventos) {
         SearchView view = mView.get();
         if (view != null) {
-            view.onSearchSuccess(eventos);
+            view.onSearchResult(result, eventos);
         }
     }
 
-    @Override
-    public void onGetEventosFail(String message) {
-        SearchView view = mView.get();
-        if (view != null) {
-            view.onSearchError(message);
-        }
-    }
-
-    // Search for Pistas
+    // Searches for Pistas
 
     public void getPistas(String name, String estado, String esporte) {
         pistasMediator.getPistas(name, estado, esporte);
@@ -111,18 +96,10 @@ public class SearchPresenter implements LojasMediator.LojasMediatorListener,
     }
 
     @Override
-    public void onGetPistasSucess(List<Pista> pistas) {
+    public void onGetPistasResult(SearchResult result, List<Pista> pistas) {
         SearchView view = mView.get();
         if (view != null) {
-            view.onSearchSuccess(pistas);
-        }
-    }
-
-    @Override
-    public void onGetPistasFail(String message) {
-        SearchView view = mView.get();
-        if (view != null) {
-            view.onSearchError(message);
+            view.onSearchResult(result, pistas);
         }
     }
 }
