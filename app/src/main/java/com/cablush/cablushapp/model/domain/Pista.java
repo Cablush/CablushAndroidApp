@@ -122,6 +122,7 @@ public class Pista implements Localizavel, Serializable {
         this.horario = horario;
     }
 
+    @Override
     public String getResponsavel() {
         return responsavel;
     }

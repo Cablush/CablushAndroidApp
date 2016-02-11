@@ -20,19 +20,19 @@ public class Horario implements Serializable {
     @Expose
     private Date fim;
     @Expose
-    private Boolean seg;
+    private Boolean seg = false;
     @Expose
-    private Boolean ter;
+    private Boolean ter = false;
     @Expose
-    private Boolean qua;
+    private Boolean qua = false;
     @Expose
-    private Boolean qui;
+    private Boolean qui = false;
     @Expose
-    private Boolean sex;
+    private Boolean sex = false;
     @Expose
-    private Boolean sab;
+    private Boolean sab = false;
     @Expose
-    private Boolean dom;
+    private Boolean dom = false;
     @Expose
     private String detalhes;
 

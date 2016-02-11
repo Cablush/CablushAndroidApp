@@ -154,6 +154,7 @@ public class Loja implements Localizavel, Serializable {
         this.horario = horario;
     }
 
+    @Override
     public String getResponsavel() {
         return responsavel;
     }

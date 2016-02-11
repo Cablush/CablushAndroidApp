@@ -8,14 +8,22 @@ import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.cablush.cablushapp.R;
+import com.cablush.cablushapp.model.domain.Evento;
 import com.cablush.cablushapp.model.domain.Localizavel;
 import com.cablush.cablushapp.model.domain.Loja;
+import com.cablush.cablushapp.model.domain.Pista;
+import com.cablush.cablushapp.model.domain.Usuario;
+import com.cablush.cablushapp.utils.MapUtils;
 import com.cablush.cablushapp.utils.PictureUtils;
 import com.cablush.cablushapp.utils.ViewUtils;
+import com.cablush.cablushapp.view.CadastroEventoActivity;
+import com.cablush.cablushapp.view.CadastroLojaActivity;
+import com.cablush.cablushapp.view.CadastroPistaActivity;
 
 import java.lang.ref.WeakReference;
 
@@ -24,7 +32,6 @@ import java.lang.ref.WeakReference;
  */
 public class LocalInfoDialog<L extends Localizavel> extends DialogFragment {
 
-    private static final String S3STORAGE = "https://s3-us-west-2.amazonaws.com/cablushimg/";
     private static final String TAG = LocalInfoDialog.class.getSimpleName();
 
     private WeakReference<L> mLocalizavel;
@@ -65,7 +72,6 @@ public class LocalInfoDialog<L extends Localizavel> extends DialogFragment {
         String email = null;
         if (mLocalizavel.get() instanceof Loja) {
             Loja loja = (Loja) mLocalizavel.get();
-
             telefone = loja.getTelefone();
             email  = loja.getEmail();
         }
@@ -128,7 +134,38 @@ public class LocalInfoDialog<L extends Localizavel> extends DialogFragment {
         TextView cep = (TextView) view.findViewById(R.id.cepTextView);
         cep.setText(mLocalizavel.get().getLocal().getCep());
 
-        // TODO directions && esportes
+        // Directions Button
+        ImageButton directionsButton = (ImageButton) view.findViewById(R.id.imageButtonDirections);
+        directionsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MapUtils.openMapsNavigation(getActivity(), mLocalizavel.get().getLocal().getLatLng());
+            }
+        });
+
+        // Edit Button
+        ImageButton editButton = (ImageButton) view.findViewById(R.id.imageButtonEdit);
+        if (Usuario.LOGGED_USER == null
+                || !Usuario.LOGGED_USER.getUuid().equals(mLocalizavel.get().getResponsavel())) {
+            editButton.setVisibility(View.GONE);
+        }
+        editButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mLocalizavel.get() instanceof Loja) {
+                    startActivity(CadastroLojaActivity
+                            .makeIntent(getActivity(), (Loja) mLocalizavel.get()));
+                } else if (mLocalizavel.get() instanceof Evento) {
+                    startActivity(CadastroEventoActivity
+                            .makeIntent(getActivity(), (Evento) mLocalizavel.get()));
+                } else if (mLocalizavel.get() instanceof Pista) {
+                    startActivity(CadastroPistaActivity
+                            .makeIntent(getActivity(), (Pista) mLocalizavel.get()));
+                }
+            }
+        });
+
+        // TODO show esportes icons (?)
 
         return  view;
     }

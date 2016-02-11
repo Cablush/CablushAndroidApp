@@ -143,6 +143,7 @@ public class Evento implements Localizavel, Serializable {
         this.esportes = esportes;
     }
 
+    @Override
     public String getResponsavel() {
         return responsavel;
     }

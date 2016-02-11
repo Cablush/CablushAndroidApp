@@ -134,22 +134,43 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Nome Cidade / RG"
-        android:id="@+id/cidadeEstadoTextView"
-        android:layout_below="@+id/cepTextView"
-        android:layout_alignLeft="@+id/cepTextView"
-        android:layout_alignStart="@+id/cepTextView"
-        android:layout_marginBottom="@dimen/dialog_margin"
-        android:layout_marginRight="@dimen/dialog_margin"/>
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:text="30000-000"
         android:id="@+id/cepTextView"
         android:layout_below="@+id/enderecoTextView"
         android:layout_toRightOf="@+id/imageViewEndereco"
         android:layout_toEndOf="@+id/imageViewEndereco"
         android:layout_marginRight="@dimen/dialog_margin"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Nome Cidade / RG"
+        android:id="@+id/cidadeEstadoTextView"
+        android:layout_below="@+id/cepTextView"
+        android:layout_alignLeft="@+id/cepTextView"
+        android:layout_alignStart="@+id/cepTextView"
+        android:layout_marginRight="@dimen/dialog_margin"/>
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageButtonDirections"
+        android:layout_below="@+id/cidadeEstadoTextView"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="@dimen/horizontal_spacing"
+        android:layout_marginLeft="@dimen/dialog_margin"
+        android:layout_marginBottom="@dimen/dialog_margin"
+        android:src="@drawable/ic_action_ic_directions_blue"/>
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageButtonEdit"
+        android:src="@drawable/ic_action_ic_mode_edit_blue"
+        android:layout_alignTop="@+id/imageButtonDirections"
+        android:layout_toRightOf="@+id/imageButtonDirections"
+        android:layout_toEndOf="@+id/imageButtonDirections"
+        android:layout_marginLeft="@dimen/vertical_spacing"/>
 
 </RelativeLayout>

@@ -2,10 +2,12 @@ package com.cablush.cablushapp.model.domain;
 
 import com.google.gson.annotations.Expose;
 
+import java.io.Serializable;
+
 /**
  * Created by oscar on 12/12/15.
  */
-public class Esporte {
+public class Esporte implements Serializable {
 
     @Expose
     private Integer id;

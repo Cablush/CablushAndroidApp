@@ -18,4 +18,6 @@ public interface Localizavel {
     String getFacebook();
 
     String getImagemURL();
+
+    String getResponsavel();
 }
