@@ -19,7 +19,7 @@ import java.sql.Time;
 /**
  * Created by jonathan on 07/11/15.
  */
-public class CadastroEventosActivity extends CadastroActivity<Evento> {
+public class CadastroEventoActivity extends CadastroActivity<Evento> {
 
     private static final String EVENTO_EXTRA_KEY = "EVENTO_EXTRA_KEY";
 
