@@ -2,9 +2,11 @@ package com.cablush.cablushapp.utils;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
+import android.net.Uri;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -46,6 +48,18 @@ public class MapUtils {
         if (PermissionUtils.checkLocationPermission(activity)) { // Sanity check
             googleMap.setMyLocationEnabled(true);
         }
+    }
+
+    /**
+     *
+     * @param activity
+     * @param latLng
+     */
+    public static void openMapsNavigation(Activity activity, LatLng latLng) {
+        Uri gmmIntentUri = Uri.parse("google.navigation:q=" + latLng.latitude + "," + latLng.longitude);
+        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+        mapIntent.setPackage("com.google.android.apps.maps");
+        activity.startActivity(mapIntent);
     }
 
 }
