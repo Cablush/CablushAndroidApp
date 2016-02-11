@@ -201,26 +201,24 @@ public class MainActivity extends AbstractDrawerActivity implements OnMapReadyCa
     }
 
     @Override
-    public void onLoginSuccess() {
-        Toast.makeText(this,
-                getString(R.string.success_login, Usuario.LOGGED_USER.getNome()),
-                Toast.LENGTH_SHORT).show();
-        checkLogin();
+    public void onLoginResponse(LoginPresenter.LoginResponse response) {
+        if (LoginPresenter.LoginResponse.SUCCESS.equals(response)) {
+            Toast.makeText(this,
+                    getString(R.string.success_login, Usuario.LOGGED_USER.getNome()),
+                    Toast.LENGTH_SHORT).show();
+            checkLogin();
+        } else {
+            Toast.makeText(this, getString(R.string.error_login), Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
-    public void onLoginError(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onRegisterSuccess() {
-        Toast.makeText(this, R.string.success_register, Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onRegisterError(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    public void onRegisterResponse(RegisterPresenter.RegisterResponse response) {
+        if (RegisterPresenter.RegisterResponse.SUCCESS.equals(response)) {
+            Toast.makeText(this, R.string.success_register, Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, getString(R.string.error_register), Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override

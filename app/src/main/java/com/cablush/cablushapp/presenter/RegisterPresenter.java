@@ -3,7 +3,6 @@ package com.cablush.cablushapp.presenter;
 import android.content.Context;
 import android.util.Log;
 
-import com.cablush.cablushapp.R;
 import com.cablush.cablushapp.model.domain.Usuario;
 import com.cablush.cablushapp.model.rest.ApiUsuario;
 import com.cablush.cablushapp.model.rest.RestServiceBuilder;
@@ -22,16 +21,18 @@ public class RegisterPresenter {
 
     private static final String TAG = RegisterPresenter.class.getSimpleName();
 
+    public enum RegisterResponse {
+        SUCCESS, ERROR
+    }
+
     /**
      * Interface to be implemented by this Presenter's client.
      */
     public interface RegisterView {
-        void onRegisterSuccess();
-        void onRegisterError(String message);
+        void onRegisterResponse(RegisterResponse response);
     }
 
     private WeakReference<RegisterView> mView;
-    private WeakReference<Context> mContext;
     private ApiUsuario apiUsuario;
 
     /**
@@ -39,9 +40,8 @@ public class RegisterPresenter {
      *
      * @param view
      */
-    public RegisterPresenter(RegisterView view, Context context) {
+    public RegisterPresenter(RegisterView view) {
         this.mView = new WeakReference<>(view);
-        this.mContext = new WeakReference<>(context);
         this.apiUsuario = RestServiceBuilder.createService(ApiUsuario.class);
     }
 
@@ -51,7 +51,7 @@ public class RegisterPresenter {
             public void success(ResponseDTO<Usuario> dto, Response response) {
                 RegisterView view = mView.get();
                 if (view != null) {
-                    view.onRegisterSuccess();
+                    view.onRegisterResponse(RegisterResponse.SUCCESS);
                 }
             }
 
@@ -59,9 +59,8 @@ public class RegisterPresenter {
             public void failure(RetrofitError error) {
                 Log.e(TAG, "Error on user register. " + error.getMessage());
                 RegisterView view = mView.get();
-                Context context = mContext.get();
-                if (view != null && context != null) {
-                    view.onRegisterError(context.getString(R.string.error_register));
+                if (view != null) {
+                    view.onRegisterResponse(RegisterResponse.ERROR);
                 }
             }
         });
