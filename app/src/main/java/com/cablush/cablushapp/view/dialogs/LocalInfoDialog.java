@@ -24,6 +24,7 @@ import java.lang.ref.WeakReference;
  */
 public class LocalInfoDialog<L extends Localizavel> extends DialogFragment {
 
+    private static final String S3STORAGE = "https://s3-us-west-2.amazonaws.com/cablushimg/";
     private static final String TAG = LocalInfoDialog.class.getSimpleName();
 
     private WeakReference<L> mLocalizavel;
@@ -64,6 +65,7 @@ public class LocalInfoDialog<L extends Localizavel> extends DialogFragment {
         String email = null;
         if (mLocalizavel.get() instanceof Loja) {
             Loja loja = (Loja) mLocalizavel.get();
+
             telefone = loja.getTelefone();
             email  = loja.getEmail();
         }
