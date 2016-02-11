@@ -4,7 +4,6 @@ import android.content.Context;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.internal.NavigationMenu;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -76,11 +75,6 @@ public class MainActivity extends AbstractDrawerActivity implements OnMapReadyCa
 
         FabSpeedDial fabSpeedDial = (FabSpeedDial) findViewById(R.id.add_fabDial);
         fabSpeedDial.setMenuListener(new SimpleMenuListenerAdapter() {
-            @Override
-            public boolean onPrepareMenu(NavigationMenu navigationMenu) {
-                // TODO: Do something with yout menu items, or return false if you don't want to show them
-                return super.onPrepareMenu(navigationMenu);
-            }
 
             @Override
             public boolean onMenuItemSelected(MenuItem menuItem) {
