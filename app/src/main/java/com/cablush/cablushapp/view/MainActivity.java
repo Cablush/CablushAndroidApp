@@ -4,8 +4,9 @@ import android.content.Context;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
+import android.support.design.internal.NavigationMenu;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -37,6 +38,9 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import io.github.yavski.fabspeeddial.FabSpeedDial;
+import io.github.yavski.fabspeeddial.SimpleMenuListenerAdapter;
 
 public class MainActivity extends AbstractDrawerActivity implements OnMapReadyCallback,
         LoginDialog.LoginDialogListener, LoginPresenter.LoginView,
@@ -70,13 +74,28 @@ public class MainActivity extends AbstractDrawerActivity implements OnMapReadyCa
         MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.mapView);
         mapFragment.getMapAsync(this);
 
-        FloatingActionButton addFAB = (FloatingActionButton) findViewById(R.id.add_fab);
-        addFAB.setOnClickListener(new View.OnClickListener() {
+        FabSpeedDial fabSpeedDial = (FabSpeedDial) findViewById(R.id.add_fabDial);
+        fabSpeedDial.setMenuListener(new SimpleMenuListenerAdapter() {
             @Override
-            public void onClick(View v) {
-                if (ViewUtils.checkUserLoggedIn(MainActivity.this)) {
-                    startActivity(CadastroLojaActivity.makeIntent(MainActivity.this, null));
+            public boolean onPrepareMenu(NavigationMenu navigationMenu) {
+                // TODO: Do something with yout menu items, or return false if you don't want to show them
+                return super.onPrepareMenu(navigationMenu);
+            }
+
+            @Override
+            public boolean onMenuItemSelected(MenuItem menuItem) {
+                switch (menuItem.getItemId()){
+                    case R.id.cadastro_loja:
+                        startActivity(CadastroLojaActivity.makeIntent(MainActivity.this, null));
+                        break;
+                    case R.id.cadastro_evento:
+                        startActivity(CadastroEventoActivity.makeIntent(MainActivity.this, null));
+                        break;
+                    case R.id.cadastro_pista:
+                        startActivity(CadastroPistaActivity.makeIntent(MainActivity.this, null));
+                        break;
                 }
+                return super.onMenuItemSelected(menuItem);
             }
         });
 

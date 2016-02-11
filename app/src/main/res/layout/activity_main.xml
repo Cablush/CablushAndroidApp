@@ -27,18 +27,34 @@
             android:name="com.google.android.gms.maps.MapFragment"
             android:layout_below="@+id/toolbar"/>
 
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/add_fab"
+        <!--<android.support.design.widget.FloatingActionButton-->
+            <!--android:id="@+id/add_fab"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:tint="@android:color/white"-->
+            <!--android:src="@android:drawable/ic_input_add"-->
+            <!--android:layout_alignParentBottom="true"-->
+            <!--android:layout_alignParentRight="true"-->
+            <!--android:layout_alignParentEnd="true"-->
+            <!--android:layout_margin="@dimen/fab_margin"-->
+            <!--android:elevation="@dimen/fab_elevation"-->
+            <!--android:stateListAnimator="@anim/fab_anim"/>-->
+
+        <io.github.yavski.fabspeeddial.FabSpeedDial
+            android:id="@+id/add_fabDial"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:tint="@android:color/white"
-            android:src="@android:drawable/ic_input_add"
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
             android:layout_margin="@dimen/fab_margin"
-            android:elevation="@dimen/fab_elevation"
-            android:stateListAnimator="@anim/fab_anim"/>
+            app:fabDrawable="@android:drawable/ic_input_add"
+            app:fabDrawableTint="@color/cablush_light"
+            app:fabGravity="bottom_end"
+            app:fabMenu="@menu/speed_dial"
+            app:miniFabTitleTextColor="@color/cablush_blue"
+            app:miniFabDrawableTint="@color/cablush_blue"
+            app:miniFabBackgroundTint="@android:color/white"/>
 
         <ProgressBar
             android:id="@+id/progressBar"

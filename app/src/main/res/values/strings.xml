@@ -35,9 +35,12 @@
     <string name="txt_by_state">Por Estado</string>
     <string name="txt_by_name">Por Nome</string>
 
-    <!-- Dialog Cadastros -->
+    <!-- Cadastros -->
     <string name="title_cadastrar">Cadastrar %s</string>
     <string name="txt_cadastrar">Cadastrar</string>
+    <string name="txt_new_loja">Nova Loja</string>
+    <string name="txt_new_evento">Novo Evento</string>
+    <string name="txt_new_pista">Nova Pista</string>
 
     <!--Cadastros Local -->
     <string name="txt_site">Site</string>
