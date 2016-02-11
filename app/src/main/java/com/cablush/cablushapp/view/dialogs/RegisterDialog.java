@@ -78,7 +78,7 @@ public class RegisterDialog extends DialogFragment {
                 Boolean shopkeeper = shopkeeperCheck.isChecked();
 
                 if (!name.isEmpty() && !email.isEmpty() && !password.isEmpty()) {
-                    RegisterPresenter registerPresenter = new RegisterPresenter(mView.get(), getActivity());
+                    RegisterPresenter registerPresenter = new RegisterPresenter(mView.get());
                     registerPresenter.doRegister(name, email, password, shopkeeper);
                 } else {
                     Toast.makeText(getActivity(), R.string.msg_register_missing_data, Toast.LENGTH_SHORT).show();

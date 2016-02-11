@@ -40,13 +40,12 @@ public class SplashScreenActivity extends Activity implements Runnable, LoginPre
     }
 
     @Override
-    public void onLoginSuccess() {
-        Toast.makeText(this,
-                getString(R.string.success_check_login, Usuario.LOGGED_USER.getNome()),
-                Toast.LENGTH_SHORT).show();
+    public void onLoginResponse(LoginPresenter.LoginResponse response) {
+        if (LoginPresenter.LoginResponse.SUCCESS.equals(response)) {
+            Toast.makeText(this,
+                    getString(R.string.success_check_login, Usuario.LOGGED_USER.getNome()),
+                    Toast.LENGTH_SHORT).show();
+        }
     }
 
-    @Override
-    public void onLoginError(String message) {
-    }
 }

@@ -3,7 +3,6 @@ package com.cablush.cablushapp.model;
 import android.content.Context;
 import android.util.Log;
 
-import com.cablush.cablushapp.R;
 import com.cablush.cablushapp.model.domain.Usuario;
 import com.cablush.cablushapp.model.persistence.EventoDAO;
 import com.cablush.cablushapp.model.domain.Evento;
@@ -20,74 +19,87 @@ import retrofit.client.Response;
 /**
  * Created by jonathan on 26/10/15.
  */
-public class EventosMediator {
-
-    private static final String TAG = EventosMediator.class.getSimpleName();
+public class EventosMediator extends CablushMediator {
 
     public interface EventosMediatorListener {
-        void onGetEventosSucess(List<Evento> eventos);
-        void onGetEventosFail(String message);
+        void onGetEventosResult(SearchResult result, List<Evento> eventos);
     }
 
     private WeakReference<EventosMediatorListener> mListener;
-    private WeakReference<Context> mContext;
     private ApiEventos apiEventos;
     private EventoDAO eventoDAO;
 
     public EventosMediator(EventosMediatorListener listener, Context context) {
+        super(context);
         this.mListener = new WeakReference<>(listener);
-        this.mContext = new WeakReference<>(context);
         this.apiEventos = RestServiceBuilder.createService(ApiEventos.class);
         this.eventoDAO = new EventoDAO(context);
     }
 
     public void getEventos(final String name, final String estado, final String esporte) {
+        if (isOnline) {
+            getEventosOnline(name, estado, esporte);
+        } else {
+            sendEventosResult(name, estado, esporte, SearchResult.SEARCH_OFF_LINE);
+        }
+    }
+
+    private void getEventosOnline(final String name, final String estado, final String esporte) {
         apiEventos.getEventos(name, estado, esporte, new Callback<List<Evento>>() {
             @Override
             public void success(List<Evento> eventos, Response response) {
                 if (!eventos.isEmpty()) {
                     eventoDAO.saveEventos(eventos);
                 }
-                EventosMediatorListener listener = mListener.get();
-                if (listener != null) {
-                    listener.onGetEventosSucess(eventoDAO.getEventos(name, estado, esporte));
-                }
+                sendEventosResult(name, estado, esporte, SearchResult.SEARCH_ON_LINE);
             }
 
             @Override
             public void failure(RetrofitError error) {
-                Log.e(TAG, "Error getting eventos. " + error.getMessage());
-                EventosMediatorListener listener = mListener.get();
-                Context context = mContext.get();
-                if (listener != null && context != null) {
-                    listener.onGetEventosFail(context.getString(R.string.error_no_connection));
-                }
+                Log.e(TAG, "Error getting eventos online: " + error.getMessage());
+                sendEventosResult(name, estado, esporte, SearchResult.SEARCH_ERROR);
             }
         });
     }
 
+    private void sendEventosResult(final String name, final String estado, final String esporte,
+                                   SearchResult result) {
+        EventosMediatorListener listener = mListener.get();
+        if (listener != null) {
+            listener.onGetEventosResult(result, eventoDAO.getEventos(name, estado, esporte));
+        }
+    }
+
     public void getMyEventos() {
+        if (isOnline) {
+            getMyEventosOnline();
+        } else {
+            sendEventosResult(SearchResult.SEARCH_OFF_LINE);
+        }
+    }
+
+    private void getMyEventosOnline() {
         apiEventos.getEventos(new Callback<List<Evento>>() {
             @Override
             public void success(List<Evento> eventos, Response response) {
                 if (!eventos.isEmpty()) {
                     eventoDAO.saveEventos(eventos);
                 }
-                EventosMediatorListener listener = mListener.get();
-                if (listener != null) {
-                    listener.onGetEventosSucess(eventoDAO.getEventos(Usuario.LOGGED_USER.getUuid()));
-                }
+                sendEventosResult(SearchResult.SEARCH_ON_LINE);
             }
 
             @Override
             public void failure(RetrofitError error) {
-                Log.e(TAG, "Error getting my eventos. " + error.getMessage());
-                EventosMediatorListener listener = mListener.get();
-                Context context = mContext.get();
-                if (listener != null && context != null) {
-                    listener.onGetEventosFail(context.getString(R.string.error_no_connection));
-                }
+                Log.e(TAG, "Error getting my eventos online: " + error.getMessage());
+                sendEventosResult(SearchResult.SEARCH_ERROR);
             }
         });
+    }
+
+    private void sendEventosResult(SearchResult result) {
+        EventosMediatorListener listener = mListener.get();
+        if (listener != null) {
+            listener.onGetEventosResult(result, eventoDAO.getEventos(Usuario.LOGGED_USER.getUuid()));
+        }
     }
 }

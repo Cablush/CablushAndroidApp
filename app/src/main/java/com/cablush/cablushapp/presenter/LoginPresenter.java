@@ -3,7 +3,6 @@ package com.cablush.cablushapp.presenter;
 import android.content.Context;
 import android.util.Log;
 
-import com.cablush.cablushapp.R;
 import com.cablush.cablushapp.model.EsportesMediator;
 import com.cablush.cablushapp.model.persistence.UsuarioDAO;
 import com.cablush.cablushapp.model.domain.Usuario;
@@ -26,16 +25,18 @@ public class LoginPresenter {
 
     private static final String TAG = LoginPresenter.class.getSimpleName();
 
+    public enum LoginResponse {
+        SUCCESS, ERROR
+    }
+
     /**
      * Interface to be implemented by this Presenter's client.
      */
     public interface LoginView {
-        void onLoginSuccess();
-        void onLoginError(String message);
+        void onLoginResponse(LoginResponse response);
     }
 
     private WeakReference<LoginView> mView;
-    private WeakReference<Context> mContext;
     private ApiUsuario apiUsuario;
     private UsuarioDAO usuarioDAO;
 
@@ -49,7 +50,6 @@ public class LoginPresenter {
      */
     public LoginPresenter(LoginView view, Context context) {
         this.mView = new WeakReference<>(view);
-        this.mContext = new WeakReference<>(context);
         this.apiUsuario = RestServiceBuilder.createService(ApiUsuario.class);
         this.usuarioDAO = new UsuarioDAO(context);
         this.esportesMediator  = new EsportesMediator(context);
@@ -64,7 +64,7 @@ public class LoginPresenter {
                 Usuario.LOGGED_USER = usuario;
                 LoginView view = mView.get();
                 if (view != null) {
-                    view.onLoginSuccess();
+                    view.onLoginResponse(LoginResponse.SUCCESS);
                 }
                 esportesMediator.loadEsportes();
             }
@@ -73,9 +73,8 @@ public class LoginPresenter {
             public void failure(RetrofitError error) {
                 Log.e(TAG, "Error on user login. " + error.getMessage());
                 LoginView view = mView.get();
-                Context context = mContext.get();
-                if (view != null && context != null) {
-                    view.onLoginError(context.getString(R.string.error_login));
+                if (view != null) {
+                    view.onLoginResponse(LoginResponse.ERROR);
                 }
             }
         });
@@ -93,7 +92,7 @@ public class LoginPresenter {
                     Usuario.LOGGED_USER = usuario;
                     LoginView view = mView.get();
                     if (view != null) {
-                        view.onLoginSuccess();
+                        view.onLoginResponse(LoginResponse.SUCCESS);
                     }
                 }
 
@@ -102,9 +101,8 @@ public class LoginPresenter {
                     Log.e(TAG, "Error on user check. " + error.getMessage());
                     Usuario.LOGGED_USER = null;
                     LoginView view = mView.get();
-                    Context context = mContext.get();
-                    if (view != null && context != null) {
-                        view.onLoginError(context.getString(R.string.error_login));
+                    if (view != null) {
+                        view.onLoginResponse(LoginResponse.ERROR);
                     }
                 }
             });
