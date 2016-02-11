@@ -101,8 +101,8 @@ public class LojaFragment extends CablushFragment {
 
     private void initializeView(FragmentActivity activity) {
         nomeEditText = (EditText) activity.findViewById(R.id.editTextNome);
-        telefoneEditText = (EditText) activity.findViewById(R.id.editTextDataInicio);
-        emailEditText = (EditText) activity.findViewById(R.id.editTextDataFim);
+        telefoneEditText = (EditText) activity.findViewById(R.id.editTextTelefone);
+        emailEditText = (EditText) activity.findViewById(R.id.editTextEmail);
         websiteEditText = (EditText) activity.findViewById(R.id.editTextWebsite);
         facebookEditText = (EditText) activity.findViewById(R.id.editTextFacebook);
         // gallery button
@@ -121,7 +121,7 @@ public class LojaFragment extends CablushFragment {
                 dispatchTakePictureIntent();
             }
         });
-        logoImageView = (ImageView) activity.findViewById(R.id.imageViewFlyer);
+        logoImageView = (ImageView) activity.findViewById(R.id.imageViewLogo);
         descricaoEditText = (EditText) activity.findViewById(R.id.editTextDescricao);
         // esportes
         esportesMultiComplete = (MultiAutoCompleteTextView) activity

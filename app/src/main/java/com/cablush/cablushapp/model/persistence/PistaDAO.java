@@ -16,7 +16,7 @@ import java.util.List;
 /**
  * Created by jonathan on 24/10/15.
  */
-public class    PistaDAO extends AppBaseDAO {
+public class PistaDAO extends AppBaseDAO {
 
     static final String TABLE = "pista";
 
