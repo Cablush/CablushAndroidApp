@@ -35,5 +35,4 @@ dependencies {
     compile 'com.squareup.retrofit:retrofit:1.9.0'
     compile 'com.google.code.gson:gson:2.4'
     compile 'com.squareup.picasso:picasso:2.5.2'
-    compile 'io.github.yavski:fab-speed-dial:1.0.2'
 }
