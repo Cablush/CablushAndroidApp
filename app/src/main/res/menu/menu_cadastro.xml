@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
         android:id="@+id/option_save"
-        android:icon="@drawable/ic_mark_cablush_orange"
-        android:title="@string/btn_save"/>
+        android:icon="@drawable/ic_action_ic_done_orange"
+        android:title="@string/btn_save"
+        app:showAsAction="always"/>
 
 </menu>
