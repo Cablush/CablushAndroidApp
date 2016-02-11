@@ -9,9 +9,9 @@
     android:layout_alignParentStart="true">
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@android:color/white">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white">
 
         <TextView
             style="@style/TextAppearance.Bold"
@@ -44,7 +44,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="@string/txt_telefone"
+            android:text="@string/txt_data_inicio"
             android:id="@+id/textViewDataInicio"
             android:layout_below="@+id/editTextNome"
             android:layout_alignParentLeft="true"
@@ -56,8 +56,8 @@
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="phone"
-            android:hint="@string/txt_telefone"
+            android:inputType="date"
+            android:hint="@string/txt_data_inicio"
             android:ems="10"
             android:id="@+id/editTextDataInicio"
             android:layout_alignParentStart="true"
@@ -66,13 +66,14 @@
             android:layout_marginLeft="@dimen/dialog_margin"
             android:layout_marginRight="@dimen/dialog_margin"/>
 
+        <!-- Inicio de horario-->
         <TextView
             style="@style/TextAppearance.Bold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="@string/txt_email"
-            android:id="@+id/textViewDataFim"
+            android:text="@string/txt_horario"
+            android:id="@+id/textViewHorario"
             android:layout_below="@+id/editTextDataInicio"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
@@ -83,8 +84,37 @@
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:inputType="time"
+            android:hint="@string/txt_horario"
+            android:ems="5"
+            android:id="@+id/editTextHorario"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/textViewHorario"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="@dimen/dialog_margin"
+            android:layout_marginRight="@dimen/dialog_margin"/>
+
+        <!--fim horario-->
+
+        <TextView
+            style="@style/TextAppearance.Bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="@string/txt_data_fim"
+            android:id="@+id/textViewDataFim"
+            android:layout_below="@+id/editTextHorario"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="@dimen/dialog_margin"
+            android:layout_marginRight="@dimen/dialog_margin"
+            android:layout_marginTop="@dimen/vertical_spacing"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:inputType="textEmailAddress"
-            android:hint="@string/txt_email"
+            android:hint="@string/txt_data_fim"
             android:ems="10"
             android:id="@+id/editTextDataFim"
             android:layout_alignParentStart="true"
@@ -152,7 +182,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="@string/txt_logo"
+            android:text="@string/txt_flyer"
             android:id="@+id/textViewFlyer"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
@@ -247,9 +277,11 @@
             android:layout_marginTop="@dimen/vertical_spacing"/>
 
         <View style="@style/Divider"
-              android:layout_below="@+id/textViewEsportes"
-              android:layout_marginLeft="@dimen/dialog_margin"
-              android:layout_marginRight="@dimen/dialog_margin"/>
+            android:layout_below="@+id/textViewEsportes"
+            android:layout_marginLeft="@dimen/dialog_margin"
+            android:layout_marginRight="@dimen/dialog_margin"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
         <MultiAutoCompleteTextView
             android:layout_width="match_parent"

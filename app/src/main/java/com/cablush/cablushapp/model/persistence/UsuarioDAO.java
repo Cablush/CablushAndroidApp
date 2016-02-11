@@ -90,17 +90,17 @@ public class UsuarioDAO extends AppBaseDAO {
     }
 
     Usuario getUsuario(Cursor cursor) {
-        Usuario evento = new Usuario();
-        evento.setUuid(readCursor(cursor, Columns._UUID.getColumnName(), String.class));
-        evento.setNome(readCursor(cursor, Columns._NOME.getColumnName(), String.class));
-        evento.setEmail(readCursor(cursor, Columns._EMAIL.getColumnName(), String.class));
-        evento.setRole(readCursor(cursor, Columns._ROLE.getColumnName(), String.class));
-        evento.setUid(readCursor(cursor, Columns._UID.getColumnName(), String.class));
-        evento.setAccessToken(readCursor(cursor, Columns._ACCESS_TOKEN.getColumnName(), String.class));
-        evento.setTokenType(readCursor(cursor, Columns._TOKEN_TYPE.getColumnName(), String.class));
-        evento.setClient(readCursor(cursor, Columns._CLIENT.getColumnName(), String.class));
-        evento.setExpiry(readCursor(cursor, Columns._EXPIRITY.getColumnName(), Long.class));
-        return evento;
+        Usuario usuario = new Usuario();
+        usuario.setUuid(readCursor(cursor, Columns._UUID.getColumnName(), String.class));
+        usuario.setNome(readCursor(cursor, Columns._NOME.getColumnName(), String.class));
+        usuario.setEmail(readCursor(cursor, Columns._EMAIL.getColumnName(), String.class));
+        usuario.setRole(readCursor(cursor, Columns._ROLE.getColumnName(), String.class));
+        usuario.setUid(readCursor(cursor, Columns._UID.getColumnName(), String.class));
+        usuario.setAccessToken(readCursor(cursor, Columns._ACCESS_TOKEN.getColumnName(), String.class));
+        usuario.setTokenType(readCursor(cursor, Columns._TOKEN_TYPE.getColumnName(), String.class));
+        usuario.setClient(readCursor(cursor, Columns._CLIENT.getColumnName(), String.class));
+        usuario.setExpiry(readCursor(cursor, Columns._EXPIRITY.getColumnName(), Long.class));
+        return usuario;
     }
 
     private long insert(SQLiteDatabase db, Usuario usuario) throws SQLException {
@@ -111,7 +111,8 @@ public class UsuarioDAO extends AppBaseDAO {
     private int update(SQLiteDatabase db, Usuario usuario) {
         return db.update(TABLE, getContentValues(usuario),
                 Columns._UUID.getColumnName() + " = ? ", new String[]{usuario.getUuid()});
-        // TODO save esportes
+        // TODO save usuario
+
     }
 
     public void saveUsuario(Usuario usuario) {

@@ -56,7 +56,8 @@
     <string name="txt_data_fim">Data Fim</string>
     <string name="txt_hora">Hora</string>
     <string name="txt_minuto">Minuto</string>
-    <string name="txt_tlyer">Flyer</string>
+    <string name="txt_flyer">Flyer</string>
+    <string name="txt_horario">Horário</string>
 
     <!-- Cadastros Horario Funcionamento -->
     <string name="txt_horarios">Horários</string>

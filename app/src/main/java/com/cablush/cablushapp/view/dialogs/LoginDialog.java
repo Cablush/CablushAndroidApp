@@ -108,7 +108,7 @@ public class LoginDialog extends DialogFragment {
                 // nothing
             }
         });
-
+        builder.setCancelable(false);
         // Create the AlertDialog object and return it
         return builder.create();
     }

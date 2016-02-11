@@ -71,7 +71,7 @@ public class LocalInfoDialog<L extends Localizavel> extends DialogFragment {
         }
 
         // Initialize logo
-        final ImageView logo = (ImageView) view.findViewById(R.id.imageViewLogo);
+        final ImageView logo = (ImageView) view.findViewById(R.id.imageViewFlyer);
         PictureUtils.loadRemoteImage(getActivity(), mLocalizavel.get().getImagemURL(), logo, true);
 
         // Initialize description

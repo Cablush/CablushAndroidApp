@@ -13,6 +13,7 @@ import java.util.Date;
 public class Horario implements Serializable {
 
     public static final DateFormat FORMAT_TIME = new SimpleDateFormat("HH:mm");
+    public static final DateFormat FORMAT_DATE = new SimpleDateFormat("dd/MM/yyyy");
 
     private String uuidLocalizavel;
     @Expose
@@ -122,5 +123,9 @@ public class Horario implements Serializable {
 
     public void setDetalhes(String detalhes) {
         this.detalhes = detalhes;
+    }
+
+    public boolean isOpenOneDay(){
+        return seg || ter || qua || qui || sex || sab || dom;
     }
 }
