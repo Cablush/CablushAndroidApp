@@ -65,17 +65,15 @@ public abstract class CablushFragment extends Fragment {
         if (resultCode == Activity.RESULT_OK) {
             switch (requestCode) {
                 case REQUEST_TAKE_PICTURE:
-                    // picture already loaded in file
+                    onPictureLoaded(pictureFileUri);
                     break;
                 case REQUEST_LOAD_PICTURE:
-                    pictureFileUri = data.getData();
+                    onPictureLoaded(data.getData());
                     break;
             }
-        }
-        if (pictureFileUri != null) {
-            onPictureLoaded(pictureFileUri);
         } else {
             Toast.makeText(getContext(), R.string.error_getting_picture, Toast.LENGTH_SHORT).show();
+            // TODO delete file!
         }
     }
 
