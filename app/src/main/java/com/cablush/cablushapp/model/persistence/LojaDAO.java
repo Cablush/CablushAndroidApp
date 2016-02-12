@@ -12,6 +12,7 @@ import com.cablush.cablushapp.model.domain.Loja;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Created by jonathan on 24/10/15.
@@ -30,7 +31,8 @@ public class LojaDAO extends AppBaseDAO {
         _FACEBOOK("facebook", "TEXT", false),
         _LOGO("logo", "TEXT", false),
         _FUNDO("fundo", "INTEGER", false),
-        _RESPONSAVEL_UUID("responsavel_uuid", "TEXT", false);
+        _RESPONSAVEL_UUID("responsavel_uuid", "TEXT", false),
+        _REMOTE("remote", "INTEGER", false);
 
         private String columnName;
         private String columnType;
@@ -100,6 +102,7 @@ public class LojaDAO extends AppBaseDAO {
         values.put(Columns._LOGO.getColumnName(), loja.getLogo());
         values.put(Columns._FUNDO.getColumnName(), loja.getFundo());
         values.put(Columns._RESPONSAVEL_UUID.getColumnName(), loja.getResponsavel());
+        values.put(Columns._REMOTE.getColumnName(), loja.isRemote());
         return values;
     }
 
@@ -135,6 +138,9 @@ public class LojaDAO extends AppBaseDAO {
         loja.setResponsavel(readCursor(cursor,
                 byColumnAlias ? Columns._RESPONSAVEL_UUID.getColumnAlias() : Columns._RESPONSAVEL_UUID.getColumnName(),
                 String.class));
+        loja.setRemote(readCursor(cursor,
+                byColumnAlias ? Columns._REMOTE.getColumnAlias() : Columns._REMOTE.getColumnName(),
+                Boolean.class));
         return loja;
     }
 
@@ -144,14 +150,14 @@ public class LojaDAO extends AppBaseDAO {
             long rowID = db.insertOrThrow(TABLE, null, getContentValues(loja));
             // save local
             loja.getLocal().setUuidLocalizavel(loja.getUuid());
-            localDAO.saveLocal(db, loja.getLocal());
+            localDAO.save(db, loja.getLocal());
             // save horario
             if (loja.getHorario() != null) {
                 loja.getHorario().setUuidLocalizavel(loja.getUuid());
-                horarioDAO.saveHorario(db, loja.getHorario());
+                horarioDAO.save(db, loja.getHorario());
             }
             // save esportes
-            localizavelEsporteDAO.saveEsportes(db, loja.getUuid(), loja.getEsportes());
+            localizavelEsporteDAO.save(db, loja.getUuid(), loja.getEsportes());
             db.setTransactionSuccessful();
             return rowID;
         } catch (Exception ex) {
@@ -163,24 +169,61 @@ public class LojaDAO extends AppBaseDAO {
     }
 
     private long update(SQLiteDatabase db, Loja loja) {
+        // save loja
         int row = db.update(TABLE, getContentValues(loja),
                 Columns._UUID.getColumnName() + " = ? ", new String[]{loja.getUuid()});
         // save local
         loja.getLocal().setUuidLocalizavel(loja.getUuid());
-        localDAO.saveLocal(db, loja.getLocal());
+        localDAO.save(db, loja.getLocal());
         // save horario
         if (loja.getHorario() != null) {
             loja.getHorario().setUuidLocalizavel(loja.getUuid());
-            horarioDAO.saveHorario(db, loja.getHorario());
+            horarioDAO.save(db, loja.getHorario());
         }
         // save esportes
-        localizavelEsporteDAO.saveEsportes(db, loja.getUuid(), loja.getEsportes());
+        localizavelEsporteDAO.save(db, loja.getUuid(), loja.getEsportes());
         return row;
     }
 
-    public void saveLojas(List<Loja> lojas) {
+    private long delete(SQLiteDatabase db, String uuid) {
+        // delete local
+        localDAO.delete(db, uuid);
+        // delete horario
+        horarioDAO.delete(db, uuid);
+        // delete esportes
+        localizavelEsporteDAO.delete(db, uuid);
+        // delete loja
+        return db.delete(TABLE, Columns._UUID.getColumnName() + " = ? ", new String[]{uuid});
+    }
+
+    public Loja save(Loja loja) {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        if (loja.getUuid() == null) {
+            loja.setUuid(UUID.randomUUID().toString());
+            loja.setRemote(false);
+            insert(db, loja);
+        } else {
+            update(db, loja);
+        }
+        dbHelper.close(db);
+        return loja;
+    }
+
+    public Loja merge(Loja loja, Loja lojaRemote) {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        // delete local loja
+        delete(db, loja.getUuid());
+        // insert remote loja
+        lojaRemote.setRemote(true);
+        insert(db, lojaRemote);
+        dbHelper.close(db);
+        return null;
+    }
+
+    public void bulkSave(List<Loja> lojas) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         for (Loja loja : lojas) {
+            loja.setRemote(true);
             if (getLoja(db, loja.getUuid()) == null) {
                 insert(db, loja);
             } else {

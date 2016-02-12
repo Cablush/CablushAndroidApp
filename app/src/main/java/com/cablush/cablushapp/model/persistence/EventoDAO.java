@@ -13,6 +13,7 @@ import com.cablush.cablushapp.model.domain.Evento;
 import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Created by jonathan on 24/10/15.
@@ -32,7 +33,8 @@ public class EventoDAO extends AppBaseDAO {
         _FACEBOOK("facebook", "TEXT", false),
         _FLYER("flyer", "TEXT", false),
         _FUNDO("fundo", "INTEGER", false),
-        _RESPONSAVEL_UUID("responsavel_uuid", "TEXT", false);
+        _RESPONSAVEL_UUID("responsavel_uuid", "TEXT", false),
+        _REMOTE("remote", "INTEGER", false);
 
         private String columnName;
         private String columnType;
@@ -107,6 +109,7 @@ public class EventoDAO extends AppBaseDAO {
         values.put(Columns._FLYER.getColumnName(), evento.getFlyer());
         values.put(Columns._FUNDO.getColumnName(), evento.getFundo());
         values.put(Columns._RESPONSAVEL_UUID.getColumnName(), evento.getResponsavel());
+        values.put(Columns._REMOTE.getColumnName(), evento.isRemote());
         return values;
     }
 
@@ -145,6 +148,9 @@ public class EventoDAO extends AppBaseDAO {
         evento.setResponsavel(readCursor(cursor,
                 byColumnAlias ? Columns._RESPONSAVEL_UUID.getColumnAlias() : Columns._RESPONSAVEL_UUID.getColumnName(),
                 String.class));
+        evento.setRemote(readCursor(cursor,
+                byColumnAlias ? Columns._REMOTE.getColumnAlias() : Columns._REMOTE.getColumnName(),
+                Boolean.class));
         return evento;
     }
 
@@ -154,9 +160,9 @@ public class EventoDAO extends AppBaseDAO {
             long rowID = db.insertOrThrow(TABLE, null, getContentValues(evento));
             // save local
             evento.getLocal().setUuidLocalizavel(evento.getUuid());
-            localDAO.saveLocal(db, evento.getLocal());
+            localDAO.save(db, evento.getLocal());
             // save esportes
-            localizavelEsporteDAO.saveEsportes(db, evento.getUuid(), evento.getEsportes());
+            localizavelEsporteDAO.save(db, evento.getUuid(), evento.getEsportes());
             db.setTransactionSuccessful();
             return rowID;
         } catch (Exception ex) {
@@ -168,19 +174,54 @@ public class EventoDAO extends AppBaseDAO {
     }
 
     private long update(SQLiteDatabase db, Evento evento) {
+        // save evento
         int row = db.update(TABLE, getContentValues(evento),
                 Columns._UUID.getColumnName() + " = ? ", new String[]{evento.getUuid()});
         // save local
         evento.getLocal().setUuidLocalizavel(evento.getUuid());
-        localDAO.saveLocal(db, evento.getLocal());
+        localDAO.save(db, evento.getLocal());
         // save esportes
-        localizavelEsporteDAO.saveEsportes(db, evento.getUuid(), evento.getEsportes());
+        localizavelEsporteDAO.save(db, evento.getUuid(), evento.getEsportes());
         return row;
     }
 
-    public void saveEventos(List<Evento> eventos) {
+    private long delete(SQLiteDatabase db, String uuid) {
+        // delete local
+        localDAO.delete(db, uuid);
+        // delete esportes
+        localizavelEsporteDAO.delete(db, uuid);
+        // delete pista
+        return db.delete(TABLE, Columns._UUID.getColumnName() + " = ? ", new String[]{uuid});
+    }
+
+    public Evento save(Evento evento) {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        if (evento.getUuid() == null) {
+            evento.setUuid(UUID.randomUUID().toString());
+            evento.setRemote(false);
+            insert(db, evento);
+        } else {
+            update(db, evento);
+        }
+        dbHelper.close(db);
+        return evento;
+    }
+
+    public Evento merge(Evento evento, Evento eventoRemote) {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        // delete local evento
+        delete(db, evento.getUuid());
+        // insert remote evento
+        eventoRemote.setRemote(true);
+        insert(db, eventoRemote);
+        dbHelper.close(db);
+        return null;
+    }
+
+    public void bulkSave(List<Evento> eventos) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         for (Evento evento : eventos) {
+            evento.setRemote(true);
             if (getEvento(db, evento.getUuid()) == null) {
                 insert(db, evento);
             } else {

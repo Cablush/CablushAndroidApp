@@ -12,6 +12,7 @@ import com.cablush.cablushapp.model.domain.Pista;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Created by jonathan on 24/10/15.
@@ -28,7 +29,8 @@ public class PistaDAO extends AppBaseDAO {
         _FACEBOOK("facebook", "TEXT", false),
         _FOTO("foto", "TEXT", false),
         _FUNDO("fundo", "INTEGER", false),
-        _RESPONSAVEL_UUID("responsavel_uuid", "TEXT", false);
+        _RESPONSAVEL_UUID("responsavel_uuid", "TEXT", false),
+        _REMOTE("remote", "INTEGER", false);
 
         private String columnName;
         private String columnType;
@@ -96,6 +98,7 @@ public class PistaDAO extends AppBaseDAO {
         values.put(Columns._FOTO.getColumnName(), pista.getFoto());
         values.put(Columns._FUNDO.getColumnName(), pista.getFundo());
         values.put(Columns._RESPONSAVEL_UUID.getColumnName(), pista.getResponsavel());
+        values.put(Columns._REMOTE.getColumnName(), pista.isRemote());
         return values;
     }
 
@@ -125,6 +128,9 @@ public class PistaDAO extends AppBaseDAO {
         pista.setResponsavel(readCursor(cursor,
                 byColumnAlias ? Columns._RESPONSAVEL_UUID.getColumnAlias() : Columns._RESPONSAVEL_UUID.getColumnName(),
                 String.class));
+        pista.setRemote(readCursor(cursor,
+                byColumnAlias ? Columns._REMOTE.getColumnAlias() : Columns._REMOTE.getColumnName(),
+                Boolean.class));
         return pista;
     }
 
@@ -134,14 +140,14 @@ public class PistaDAO extends AppBaseDAO {
             long rowID = db.insertOrThrow(TABLE, null, getContentValues(pista));
             // save local
             pista.getLocal().setUuidLocalizavel(pista.getUuid());
-            localDAO.saveLocal(db, pista.getLocal());
+            localDAO.save(db, pista.getLocal());
             // save horario
             if(pista.getHorario() != null) {
                 pista.getHorario().setUuidLocalizavel(pista.getUuid());
-                horarioDAO.saveHorario(db, pista.getHorario());
+                horarioDAO.save(db, pista.getHorario());
             }
             // save esportes
-            localizavelEsporteDAO.saveEsportes(db, pista.getUuid(), pista.getEsportes());
+            localizavelEsporteDAO.save(db, pista.getUuid(), pista.getEsportes());
             db.setTransactionSuccessful();
             return rowID;
         } catch (Exception ex) {
@@ -153,24 +159,61 @@ public class PistaDAO extends AppBaseDAO {
     }
 
     private long update(SQLiteDatabase db, Pista pista) {
+        // save pista
         int row = db.update(TABLE, getContentValues(pista),
                 Columns._UUID.getColumnName() + " = ? ", new String[]{pista.getUuid()});
         // save local
         pista.getLocal().setUuidLocalizavel(pista.getUuid());
-        localDAO.saveLocal(db, pista.getLocal());
+        localDAO.save(db, pista.getLocal());
         // save horario
         if (pista.getHorario() != null) {
             pista.getHorario().setUuidLocalizavel(pista.getUuid());
-            horarioDAO.saveHorario(db, pista.getHorario());
+            horarioDAO.save(db, pista.getHorario());
         }
         // save esportes
-        localizavelEsporteDAO.saveEsportes(db, pista.getUuid(), pista.getEsportes());
+        localizavelEsporteDAO.save(db, pista.getUuid(), pista.getEsportes());
         return row;
     }
 
-    public void savePistas(List<Pista> pistas) {
+    private long delete(SQLiteDatabase db, String uuid) {
+        // delete local
+        localDAO.delete(db, uuid);
+        // delete horario
+        horarioDAO.delete(db, uuid);
+        // delete esportes
+        localizavelEsporteDAO.delete(db, uuid);
+        // delete pista
+        return db.delete(TABLE, Columns._UUID.getColumnName() + " = ? ", new String[]{uuid});
+    }
+
+    public Pista save(Pista pista) {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        if (pista.getUuid() == null) {
+            pista.setUuid(UUID.randomUUID().toString());
+            pista.setRemote(false);
+            insert(db, pista);
+        } else {
+            update(db, pista);
+        }
+        dbHelper.close(db);
+        return pista;
+    }
+
+    public Pista merge(Pista pista, Pista pistaRemote) {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        // delete local pista
+        delete(db, pista.getUuid());
+        // insert remote pista
+        pistaRemote.setRemote(true);
+        insert(db, pistaRemote);
+        dbHelper.close(db);
+        return null;
+    }
+
+    public void bulkSave(List<Pista> pistas) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         for (Pista pista : pistas) {
+            pista.setRemote(true);
             if (getPista(db, pista.getUuid()) == null) {
                 insert(db, pista);
             } else {

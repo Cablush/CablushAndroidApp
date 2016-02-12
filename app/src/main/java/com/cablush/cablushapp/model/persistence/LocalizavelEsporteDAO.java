@@ -96,16 +96,16 @@ public class LocalizavelEsporteDAO extends AppBaseDAO {
         return db.insertOrThrow(TABLE, null, getContentValues(localizavelEsporte));
     }
 
-    private int delete(SQLiteDatabase db, String uuid) {
+    int delete(SQLiteDatabase db, String uuid) {
         return db.delete(TABLE, Columns._UUID.getColumnName() + " = ? ", new String[]{uuid});
     }
 
-    void saveEsportes(SQLiteDatabase db, String uuid, List<Esporte> esportes) {
+    void save(SQLiteDatabase db, String uuid, List<Esporte> esportes) {
         // delete the esportes relations with the localizavel
         delete(db, uuid);
         // recreate the needed relations
         for (Esporte esporte : esportes) {
-            esporteDAO.saveEsporte(db, esporte);
+            esporteDAO.save(db, esporte);
             insert(db, new LocalizavelEsporte(uuid, esporte.getId()));
         }
     }

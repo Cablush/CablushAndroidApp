@@ -20,4 +20,6 @@ public interface Localizavel {
     String getImagemURL();
 
     String getResponsavel();
+
+    Boolean isRemote();
 }

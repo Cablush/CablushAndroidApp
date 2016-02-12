@@ -147,11 +147,11 @@ class HorarioDAO extends AppBaseDAO {
                 new String[]{horario.getUuidLocalizavel()});
     }
 
-    private int delete(SQLiteDatabase db, String uuid) {
+    int delete(SQLiteDatabase db, String uuid) {
         return db.delete(TABLE, Columns._UUID.getColumnName() + " = ? ", new String[]{uuid});
     }
 
-    void saveHorario(SQLiteDatabase db, Horario horario) {
+    void save(SQLiteDatabase db, Horario horario) {
         if (getHorario(db, horario.getUuidLocalizavel()) == null) {
             insert(db, horario);
         } else {

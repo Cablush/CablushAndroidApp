@@ -10,9 +10,9 @@ import java.util.List;
 /**
  * Created by oscar on 06/02/16.
  */
-public class CadastroPresenter<T> {
+public abstract class CadastroPresenter<T> {
 
-    private static final String TAG = CadastroPresenter.class.getSimpleName();
+    private final String TAG = getClass().getSimpleName();
 
     private EsportesMediator esportesMediator;
 
@@ -20,11 +20,18 @@ public class CadastroPresenter<T> {
         this.esportesMediator = new EsportesMediator(context);
     }
 
+    /**
+     *
+     * @return
+     */
     public List<Esporte> getEsportes() {
         return esportesMediator.getEsportes();
     }
 
-    public void doSave(T save) {
-        // TODO save the object
-    }
+    /**
+     *
+     * @param t
+     */
+    public abstract void doSave(T t);
+
 }

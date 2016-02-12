@@ -40,6 +40,8 @@ public class Loja implements Localizavel, Serializable {
     @Expose
     @SerializedName("responsavel_uuid")
     private String responsavel;
+    /** Identify that the object is on server **/
+    private Boolean remote;
 
     @Override
     public String getUuid() {
@@ -161,6 +163,15 @@ public class Loja implements Localizavel, Serializable {
 
     public void setResponsavel(String responsavel) {
         this.responsavel = responsavel;
+    }
+
+    @Override
+    public Boolean isRemote() {
+        return remote;
+    }
+
+    public void setRemote(Boolean remote) {
+        this.remote = remote;
     }
 
     @Override

@@ -6,6 +6,8 @@ import android.support.v4.view.ViewPager;
 
 import com.cablush.cablushapp.R;
 import com.cablush.cablushapp.model.domain.Evento;
+import com.cablush.cablushapp.presenter.CadastroEventoPresenter;
+import com.cablush.cablushapp.presenter.CadastroPresenter;
 import com.cablush.cablushapp.view.cadastros.EventoFragment;
 import com.cablush.cablushapp.view.cadastros.LocalFragment;
 import com.cablush.cablushapp.view.cadastros.MapaFragment;
@@ -58,6 +60,11 @@ public class CadastroEventoActivity extends CadastroActivity<Evento> {
     }
 
     @Override
+    protected CadastroPresenter<Evento> setupPresenter() {
+        return new CadastroEventoPresenter(this);
+    }
+
+    @Override
     protected boolean validate() {
         return eventoFragment.doValidate() && localFragment.doValidate();
     }
@@ -66,7 +73,6 @@ public class CadastroEventoActivity extends CadastroActivity<Evento> {
     protected Evento save() {
         Evento evento = eventoFragment.getEvento();
         evento.setLocal(localFragment.getLocal());
-
         return evento;
     }
 

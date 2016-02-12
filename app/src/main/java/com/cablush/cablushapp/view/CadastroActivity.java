@@ -27,7 +27,7 @@ public abstract class CadastroActivity<T> extends CablushActivity {
     private TabLayout tabLayout;
     private ViewPager viewPager;
 
-    private CadastroPresenter<T> presenter;
+    protected CadastroPresenter<T> presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +51,7 @@ public abstract class CadastroActivity<T> extends CablushActivity {
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
 
-        presenter = new CadastroPresenter<>(this);
+        presenter = setupPresenter();
     }
 
     /**
@@ -67,6 +67,12 @@ public abstract class CadastroActivity<T> extends CablushActivity {
      * @param viewPager The configured ViewPager.
      */
     protected abstract void setupViewPager(ViewPager viewPager);
+
+    /**
+     *
+     * @return
+     */
+    protected abstract CadastroPresenter<T> setupPresenter();
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -89,6 +95,9 @@ public abstract class CadastroActivity<T> extends CablushActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Called by the save menu option.
+     */
     private void doSave() {
         if (validate()) {
             presenter.doSave(save());

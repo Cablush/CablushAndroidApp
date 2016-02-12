@@ -21,6 +21,9 @@ import retrofit.client.Response;
  */
 public class LojasMediator extends CablushMediator {
 
+    /**
+     *
+     */
     public interface LojasMediatorListener {
         void onGetLojasResult(SearchResult result, List<Loja> lojas);
     }
@@ -29,6 +32,11 @@ public class LojasMediator extends CablushMediator {
     private ApiLojas apiLojas;
     private LojaDAO lojaDAO;
 
+    /**
+     *
+     * @param listener
+     * @param context
+     */
     public LojasMediator(LojasMediatorListener listener, Context context) {
         super(context);
         this.mListener = new WeakReference<>(listener);
@@ -36,6 +44,55 @@ public class LojasMediator extends CablushMediator {
         this.lojaDAO = new LojaDAO(context);
     }
 
+    /**
+     *
+     * @param loja
+     */
+    public void saveLoja(Loja loja) {
+        loja = lojaDAO.save(loja);
+        if (isOnline) {
+            if (loja.isRemote()) {
+                updateLojaOnline(loja);
+            } else {
+                createLojaOnline(loja);
+            }
+        }
+    }
+
+    private void createLojaOnline(final Loja loja) {
+        apiLojas.createLoja(loja, new Callback<Loja>() {
+            @Override
+            public void success(Loja lojaRemote, Response response) {
+                lojaDAO.merge(loja, lojaRemote);
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                Log.e(TAG, "Error creating loja online: " + error.getMessage());
+            }
+        });
+    }
+
+    private void updateLojaOnline(final Loja loja) {
+        apiLojas.updateLoja(loja, new Callback<Loja>() {
+            @Override
+            public void success(Loja lojaRemote, Response response) {
+                lojaDAO.merge(loja, lojaRemote);
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                Log.e(TAG, "Error updating loja online: " + error.getMessage());
+            }
+        });
+    }
+
+    /**
+     *
+     * @param name
+     * @param estado
+     * @param esporte
+     */
     public void getLojas(final String name,final String estado, final String esporte) {
         if (isOnline) {
             getLojasOnline(name, estado, esporte);
@@ -49,7 +106,7 @@ public class LojasMediator extends CablushMediator {
             @Override
             public void success(List<Loja> lojas, Response response) {
                 if (!lojas.isEmpty()) {
-                    lojaDAO.saveLojas(lojas);
+                    lojaDAO.bulkSave(lojas);
                 }
                 sendLojasResult(name, estado, esporte, SearchResult.SEARCH_ON_LINE);
             }
@@ -70,6 +127,9 @@ public class LojasMediator extends CablushMediator {
         }
     }
 
+    /**
+     *
+     */
     public void getMyLojas() {
         if (isOnline) {
             getMyLojasOnline();
@@ -83,7 +143,7 @@ public class LojasMediator extends CablushMediator {
             @Override
             public void success(List<Loja> lojas, Response response) {
                 if (!lojas.isEmpty()) {
-                    lojaDAO.saveLojas(lojas);
+                    lojaDAO.bulkSave(lojas);
                 }
                 sendLojasResult(SearchResult.SEARCH_ON_LINE);
             }

@@ -6,11 +6,11 @@ import android.content.Intent;
 import android.support.v4.view.ViewPager;
 
 import com.cablush.cablushapp.R;
-import com.cablush.cablushapp.model.domain.Loja;
 import com.cablush.cablushapp.model.domain.Pista;
+import com.cablush.cablushapp.presenter.CadastroPistaPresenter;
+import com.cablush.cablushapp.presenter.CadastroPresenter;
 import com.cablush.cablushapp.view.cadastros.HorarioFragment;
 import com.cablush.cablushapp.view.cadastros.LocalFragment;
-import com.cablush.cablushapp.view.cadastros.LojaFragment;
 import com.cablush.cablushapp.view.cadastros.MapaFragment;
 import com.cablush.cablushapp.view.cadastros.PistaFragment;
 
@@ -57,7 +57,11 @@ public class CadastroPistaActivity extends CadastroActivity<Pista> {
         adapter.addFragment(localFragment, getString(R.string.txt_endereco));
         adapter.addFragment(horarioFragment, getString(R.string.txt_horarios));
         viewPager.setAdapter(adapter);
+    }
 
+    @Override
+    protected CadastroPresenter<Pista> setupPresenter() {
+        return new CadastroPistaPresenter(this);
     }
 
     @Override

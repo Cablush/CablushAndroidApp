@@ -6,6 +6,8 @@ import android.support.v4.view.ViewPager;
 
 import com.cablush.cablushapp.R;
 import com.cablush.cablushapp.model.domain.Loja;
+import com.cablush.cablushapp.presenter.CadastroLojaPresenter;
+import com.cablush.cablushapp.presenter.CadastroPresenter;
 import com.cablush.cablushapp.view.cadastros.HorarioFragment;
 import com.cablush.cablushapp.view.cadastros.LocalFragment;
 import com.cablush.cablushapp.view.cadastros.LojaFragment;
@@ -56,6 +58,11 @@ public class CadastroLojaActivity extends CadastroActivity<Loja> {
         adapter.addFragment(localFragment, getString(R.string.txt_endereco));
         adapter.addFragment(horarioFragment, getString(R.string.txt_horarios));
         viewPager.setAdapter(adapter);
+    }
+
+    @Override
+    protected CadastroPresenter<Loja> setupPresenter() {
+        return new CadastroLojaPresenter(this);
     }
 
     @Override

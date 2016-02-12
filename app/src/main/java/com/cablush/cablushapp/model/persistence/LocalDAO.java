@@ -141,11 +141,11 @@ class LocalDAO extends AppBaseDAO {
                 Columns._UUID.getColumnName() + " = ? ", new String[]{local.getUuidLocalizavel()});
     }
 
-    private int delete(SQLiteDatabase db, String uuid) {
+    int delete(SQLiteDatabase db, String uuid) {
         return db.delete(TABLE, Columns._UUID.getColumnName() + " = ? ", new String[]{uuid});
     }
 
-    void saveLocal(SQLiteDatabase db, Local local) {
+    void save(SQLiteDatabase db, Local local) {
         if (getLocal(db, local.getUuidLocalizavel()) == null) {
             insert(db, local);
         } else {

@@ -21,6 +21,9 @@ import retrofit.client.Response;
  */
 public class EventosMediator extends CablushMediator {
 
+    /**
+     *
+     */
     public interface EventosMediatorListener {
         void onGetEventosResult(SearchResult result, List<Evento> eventos);
     }
@@ -29,6 +32,11 @@ public class EventosMediator extends CablushMediator {
     private ApiEventos apiEventos;
     private EventoDAO eventoDAO;
 
+    /**
+     *
+     * @param listener
+     * @param context
+     */
     public EventosMediator(EventosMediatorListener listener, Context context) {
         super(context);
         this.mListener = new WeakReference<>(listener);
@@ -36,6 +44,55 @@ public class EventosMediator extends CablushMediator {
         this.eventoDAO = new EventoDAO(context);
     }
 
+    /**
+     *
+     * @param evento
+     */
+    public void saveEvento(Evento evento) {
+        evento = eventoDAO.save(evento);
+        if (isOnline) {
+            if (evento.isRemote()) {
+                updateEventoOnline(evento);
+            } else {
+                createEventoOnline(evento);
+            }
+        }
+    }
+
+    private void createEventoOnline(final Evento evento) {
+        apiEventos.createEvento(evento, new Callback<Evento>() {
+            @Override
+            public void success(Evento eventoRemote, Response response) {
+                eventoDAO.merge(evento, eventoRemote);
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                Log.e(TAG, "Error creating evento online: " + error.getMessage());
+            }
+        });
+    }
+
+    private void updateEventoOnline(final Evento evento) {
+        apiEventos.updateEvento(evento, new Callback<Evento>() {
+            @Override
+            public void success(Evento eventoRemote, Response response) {
+                eventoDAO.merge(evento, eventoRemote);
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                Log.e(TAG, "Error updating evento online: " + error.getMessage());
+            }
+        });
+    }
+
+    /**
+     *
+     * @param name
+     * @param estado
+     * @param esporte
+     */
     public void getEventos(final String name, final String estado, final String esporte) {
         if (isOnline) {
             getEventosOnline(name, estado, esporte);
@@ -49,7 +106,7 @@ public class EventosMediator extends CablushMediator {
             @Override
             public void success(List<Evento> eventos, Response response) {
                 if (!eventos.isEmpty()) {
-                    eventoDAO.saveEventos(eventos);
+                    eventoDAO.bulkSave(eventos);
                 }
                 sendEventosResult(name, estado, esporte, SearchResult.SEARCH_ON_LINE);
             }
@@ -70,6 +127,9 @@ public class EventosMediator extends CablushMediator {
         }
     }
 
+    /**
+     *
+     */
     public void getMyEventos() {
         if (isOnline) {
             getMyEventosOnline();
@@ -83,7 +143,7 @@ public class EventosMediator extends CablushMediator {
             @Override
             public void success(List<Evento> eventos, Response response) {
                 if (!eventos.isEmpty()) {
-                    eventoDAO.saveEventos(eventos);
+                    eventoDAO.bulkSave(eventos);
                 }
                 sendEventosResult(SearchResult.SEARCH_ON_LINE);
             }
