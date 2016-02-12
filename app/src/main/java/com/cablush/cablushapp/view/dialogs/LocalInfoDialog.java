@@ -67,22 +67,24 @@ public class LocalInfoDialog<L extends Localizavel> extends DialogFragment {
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.dialog_local_info, null);
 
+        final Localizavel localizavel = mLocalizavel.get();
+
         // Get specific values from concrete classes
         String telefone = null;
         String email = null;
-        if (mLocalizavel.get() instanceof Loja) {
-            Loja loja = (Loja) mLocalizavel.get();
+        if (localizavel instanceof Loja) {
+            Loja loja = (Loja) localizavel;
             telefone = loja.getTelefone();
-            email  = loja.getEmail();
+            email = loja.getEmail();
         }
 
         // Initialize logo
         final ImageView logo = (ImageView) view.findViewById(R.id.imageViewLogo);
-        PictureUtils.loadRemoteImage(getActivity(), mLocalizavel.get().getImagemURL(), logo, true);
+        PictureUtils.loadRemoteImage(getActivity(), localizavel.getImagemURL(), logo, true);
 
         // Initialize description
         TextView descricaoView = (TextView) view.findViewById(R.id.descricaoTextView);
-        descricaoView.setText(mLocalizavel.get().getDescricao());
+        descricaoView.setText(localizavel.getDescricao());
 
         // Initialize phone
         TextView telefoneView = (TextView) view.findViewById(R.id.telefoneTextView);
@@ -107,7 +109,7 @@ public class LocalInfoDialog<L extends Localizavel> extends DialogFragment {
         // Initialize website
         TextView webView = (TextView) view.findViewById(R.id.textViewWeb);
         ImageView webIcon = (ImageView) view.findViewById(R.id.imageViewWeb);
-        String web = mLocalizavel.get().getWebsite();
+        String web = localizavel.getWebsite();
         if (web != null && web.length() > 0) {
             webView.setText(web);
         } else {
@@ -118,7 +120,7 @@ public class LocalInfoDialog<L extends Localizavel> extends DialogFragment {
         // Initialize facebook
         TextView faceView = (TextView) view.findViewById(R.id.textViewFace);
         ImageView faceIcon = (ImageView) view.findViewById(R.id.imageViewFace);
-        String face = mLocalizavel.get().getFacebook();
+        String face = localizavel.getFacebook();
         if (face != null && face.length() > 0) {
             faceView.setText(face);
         } else {
@@ -128,42 +130,43 @@ public class LocalInfoDialog<L extends Localizavel> extends DialogFragment {
 
         // Initialize address
         TextView endereco = (TextView) view.findViewById(R.id.enderecoTextView);
-        endereco.setText(mLocalizavel.get().getLocal().getEndereco());
+        endereco.setText(localizavel.getLocal().getEndereco());
         TextView cidadeEstado = (TextView) view.findViewById(R.id.cidadeEstadoTextView);
-        cidadeEstado.setText(mLocalizavel.get().getLocal().getCidadeEstado());
+        cidadeEstado.setText(localizavel.getLocal().getCidadeEstado());
         TextView cep = (TextView) view.findViewById(R.id.cepTextView);
-        cep.setText(mLocalizavel.get().getLocal().getCep());
+        cep.setText(localizavel.getLocal().getCep());
 
         // Directions Button
         ImageButton directionsButton = (ImageButton) view.findViewById(R.id.imageButtonDirections);
         directionsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MapUtils.openMapsNavigation(getActivity(), mLocalizavel.get().getLocal().getLatLng());
+                MapUtils.openMapsNavigation(getActivity(), localizavel.getLocal().getLatLng());
             }
         });
 
         // Edit Button
         ImageButton editButton = (ImageButton) view.findViewById(R.id.imageButtonEdit);
         if (Usuario.LOGGED_USER == null
-                || !Usuario.LOGGED_USER.getUuid().equals(mLocalizavel.get().getResponsavel())) {
+                || !Usuario.LOGGED_USER.getUuid().equals(localizavel.getResponsavel())) {
             editButton.setVisibility(View.GONE);
-        }
-        editButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mLocalizavel.get() instanceof Loja) {
-                    startActivity(CadastroLojaActivity
-                            .makeIntent(getActivity(), (Loja) mLocalizavel.get()));
-                } else if (mLocalizavel.get() instanceof Evento) {
-                    startActivity(CadastroEventoActivity
-                            .makeIntent(getActivity(), (Evento) mLocalizavel.get()));
-                } else if (mLocalizavel.get() instanceof Pista) {
-                    startActivity(CadastroPistaActivity
-                            .makeIntent(getActivity(), (Pista) mLocalizavel.get()));
+        } else {
+            editButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (localizavel instanceof Loja) {
+                        startActivity(CadastroLojaActivity
+                                .makeIntent(getActivity(), (Loja) localizavel));
+                    } else if (localizavel instanceof Evento) {
+                        startActivity(CadastroEventoActivity
+                                .makeIntent(getActivity(), (Evento) localizavel));
+                    } else if (localizavel instanceof Pista) {
+                        startActivity(CadastroPistaActivity
+                                .makeIntent(getActivity(), (Pista) localizavel));
+                    }
                 }
-            }
-        });
+            });
+        }
 
         // TODO show esportes icons (?)
 
