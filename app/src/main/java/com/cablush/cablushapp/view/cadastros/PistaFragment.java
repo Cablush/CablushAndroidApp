@@ -18,7 +18,6 @@ import android.widget.TextView;
 
 import com.cablush.cablushapp.R;
 import com.cablush.cablushapp.model.domain.Esporte;
-import com.cablush.cablushapp.model.domain.Loja;
 import com.cablush.cablushapp.model.domain.Pista;
 import com.cablush.cablushapp.utils.PictureUtils;
 
@@ -163,6 +162,7 @@ public class PistaFragment extends CablushFragment {
      * @return
      */
     public boolean doValidate() {
+        // TODO validar views!
         if(pista == null){
             return false;
         }else if(pista.getNome() == null || pista.getNome().isEmpty()){
@@ -182,7 +182,7 @@ public class PistaFragment extends CablushFragment {
         pista.setNome(nomeEditText.getText().toString());
         pista.setWebsite(websiteEditText.getText().toString());
         pista.setFacebook(facebookEditText.getText().toString());
-        // TODO pista.setLogo();
+        // TODO pista.setFoto();
         pista.setDescricao(descricaoEditText.getText().toString());
         //TODO pista.setEsportes();
         return pista;

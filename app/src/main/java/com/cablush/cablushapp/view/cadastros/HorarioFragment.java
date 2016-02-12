@@ -156,7 +156,7 @@ public class HorarioFragment extends CablushFragment {
      * @return
      */
     public boolean doValidate() {
-
+        // TODO validar views!
         if(horario.isOpenOneDay() && horario.getInicio() != null && horario.getFim() !=null){
             return true;
         }

@@ -130,6 +130,7 @@ public class LocalFragment extends CablushFragment implements MapaFragment.Selec
      * @return
      */
     public boolean doValidate() {
+        // TODO validar views!
         if(local.getLatLng() == null){
             return false;
         }else if(local.getCep() == null || local.getCep().isEmpty() ){

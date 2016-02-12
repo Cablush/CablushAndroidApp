@@ -231,6 +231,7 @@ public class EventoFragment extends CablushFragment {
      * @return boolean
      */
     public boolean doValidate() {
+        // TODO validar views!
         if(evento == null) {
             return false;
         }else if(evento.getNome() == null ||evento.getNome().isEmpty() ){

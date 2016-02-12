@@ -166,6 +166,7 @@ public class LojaFragment extends CablushFragment {
      * @return
      */
     public boolean doValidate() {
+        // TODO validar views!
         if(loja == null){
             return false;
         }else if(loja.getNome() == null || loja.getNome().isEmpty()){
