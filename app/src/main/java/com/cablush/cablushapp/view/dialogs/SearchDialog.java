@@ -16,7 +16,6 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import com.cablush.cablushapp.R;
 import com.cablush.cablushapp.presenter.SearchPresenter;
@@ -106,7 +105,7 @@ public class SearchDialog extends DialogFragment {
                         mView.get().getSearchPresenter().getPistas(nome, estado, esporte);
                         break;
                     default:
-                        Toast.makeText(getActivity(), R.string.error_invalid_search_type, Toast.LENGTH_SHORT).show();
+                        Log.e(TAG, "Invalid search type!");
                 }
 
                 ProgressBar spinner = (ProgressBar)getActivity().findViewById(R.id.progressBar);

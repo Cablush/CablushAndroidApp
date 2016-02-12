@@ -20,6 +20,8 @@
     <string name="btn_save">Salvar</string>
     <string name="btn_gallery">Galeria</string>
     <string name="btn_picture">Foto</string>
+    <string name="btn_yes">Sim</string>
+    <string name="btn_no">Não</string>
 
     <!--Dialog Login/Register -->
     <string name="title_login">Login</string>
@@ -191,41 +193,51 @@
         <item>TO</item>
     </string-array>
 
-    <!-- Mensagens de sucesso -->
+    <!-- Mensagens de boas vindas -->
     <string name="success_login">Olá %s! Agora você pode compartilhar seus locais favoritos!</string>
-    <string name="success_register">Cadastro realizado! Antes de fazer Login, confirme o cadastro no email que te enviamos!</string>
     <string name="success_check_login">Bem vindo %s!</string>
 
     <!-- Mensagens de permissões -->
     <string name="ask_permissions_location">O Cablush utiliza a sua localização para sugerir locais onde praticar esportes com mais precisão.</string>
-    <string name="ask_permissions_storage"></string>
+    <!--<string name="ask_permissions_storage"></string>-->
 
-    <!-- Mensagens de erro -->
+    <!-- Mensagens de erro genéricas -->
     <string name="error_create_map">Error a carregar o mapa!</string>
     <string name="error_gps_not_working">Erro ao tentar obter local pelo GPS! Ligue-o e tente novamente.</string>
-    <string name="error_invalid_search_type">Tipo de busca inválido!</string>
-    <string name="error_invalid_entry_type">Tipo de cadastro inválido!</string>
-    <string name="error_invalid_option">Opção inválida!</string>
+    <string name="error_no_connection">Erro ao comunicar com o servidor. Verifique sua conexão e tente novamente!</string>
+
+    <!-- Mensagens de pesquisa -->
     <string name="msg_local_not_found">Nenhum local encontrado.</string>
+    <string name="msg_search_off_line">Sem conexão, retornando dados em cache.</string>
+    <string name="msg_search_error">Erro na pesquisa, retornando dados em cache.</string>
+
+    <!-- Mensagens de cadastros -->
     <string name="msg_name_missing">Preencha o nome.</string>
     <string name="msg_description_missing">Preencha a descrição.</string>
     <string name="msg_spot_missing">Preencha o local.</string>
     <string name="msg_startDate_missing">Preencha a data de inicio.</string>
     <string name="msg_startTime_missing">Preencha a hora de inicio.</string>
+    <string name="msg_set_address_manually">Endereço não encontrado. Prencha os dados manualmente.</string>
+    <string name="msg_check_address">Endereço encontrado. Confira os dados preenchidos.</string>
+    <string name="msg_confirm_no_save">Descartar alterações não salvas?</string>
+
+    <!-- Mensagens de login e registro -->
     <string name="msg_register_missing_data">Preencha todos os campos.</string>
     <string name="msg_login_missing_data">Preencha email e senha.</string>
     <string name="error_login">Erro ao realizar login! Tente novamente.</string>
     <string name="error_register">Erro ao realizar cadastro! Tente novamente.</string>
     <string name="msg_login_required">Faça login para continuar.</string>
-    <string name="error_no_connection">Erro ao comunicar com o servidor. Verifique sua conexão e tente novamente!</string>
+    <string name="success_register">Cadastro realizado! Antes de fazer Login, confirme o cadastro no email que te enviamos!</string>
+
+    <!-- Mensagens de fotos/galeria -->
     <string name="error_getting_picture">Erro ao obter foto.</string>
+
+    <!-- Mensagens do serviço de localização -->
     <string name="error_no_location_data_provided">Localização não informada.</string>
     <string name="error_service_not_available">Serviço de busca de endereço não disponível.</string>
     <string name="error_invalid_lat_long_used">Localização inválida.</string>
     <string name="error_no_address_found">Endereço não encontrado.</string>
     <string name="msg_address_found">Endereço encontrado.</string>
-    <string name="msg_set_address_manually">Endereço não encontrado. Prencha os dados manualmente.</string>
-    <string name="msg_check_address">Endereço encontrado. Confira os dados preenchidos.</string>
 
 </resources>
 
