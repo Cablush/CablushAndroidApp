@@ -20,6 +20,7 @@ import com.cablush.cablushapp.R;
 import com.cablush.cablushapp.model.domain.Esporte;
 import com.cablush.cablushapp.model.domain.Pista;
 import com.cablush.cablushapp.utils.PictureUtils;
+import com.cablush.cablushapp.utils.ViewUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -162,13 +163,18 @@ public class PistaFragment extends CablushFragment {
      * @return
      */
     public boolean doValidate() {
+        boolean valido = true;
+        if(!ViewUtils.checkNotEmpty(getContext(),nomeEditText)||
+                !ViewUtils.checkNotEmpty(getContext(), esportesMultiComplete)){
+            valido = false;
+        }
         // TODO validar views!
         if(pista == null){
-            return false;
+            valido = false;
         }else if(pista.getNome() == null || pista.getNome().isEmpty()){
-            return false;
+            valido =  false;
         }
-        return true;
+        return valido;
     }
 
     /**

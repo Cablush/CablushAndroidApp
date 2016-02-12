@@ -2,6 +2,7 @@ package com.cablush.cablushapp.view.cadastros;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -25,6 +26,7 @@ import com.cablush.cablushapp.model.domain.Esporte;
 import com.cablush.cablushapp.model.domain.Evento;
 import com.cablush.cablushapp.model.domain.Horario;
 import com.cablush.cablushapp.utils.PictureUtils;
+import com.cablush.cablushapp.utils.ViewUtils;
 import com.cablush.cablushapp.view.dialogs.DatePickerFragmentDialog;
 import com.cablush.cablushapp.view.dialogs.TimePickerFragmentDialog;
 
@@ -231,20 +233,30 @@ public class EventoFragment extends CablushFragment {
      * @return boolean
      */
     public boolean doValidate() {
-        // TODO validar views!
-        if(evento == null) {
-            return false;
-        }else if(evento.getNome() == null ||evento.getNome().isEmpty() ){
-            return false;
-        }else if(evento.getData() == null){
-            return  false;
-        }else if(evento.getHora() == null){
-            return false;
-        }else if(evento.getDescricao() == null || evento.getDescricao().isEmpty()){
-            return false;
+        boolean valido = true;
+        Context context = getContext();
+        if(!ViewUtils.checkNotEmpty(context, nomeEditText) ||
+            !ViewUtils.checkNotEmpty(context, descricaoEditText)||
+            !ViewUtils.checkNotEmpty(context, dataInicioEditText)||
+            !ViewUtils.checkNotEmpty(context, descricaoEditText)||
+            !ViewUtils.checkNotEmpty(context, esportesMultiComplete)){
+            valido = false;
         }
 
-        return true;
+        // TODO validar views!
+        if(evento == null) {
+            valido = false;
+        }else if(evento.getNome() == null ||evento.getNome().isEmpty() ){
+            valido = false;
+        }else if(evento.getData() == null){
+            valido =  false;
+        }else if(evento.getHora() == null){
+            valido = false;
+        }else if(evento.getDescricao() == null || evento.getDescricao().isEmpty()){
+            valido = false;
+        }
+
+        return valido;
     }
 
     /**

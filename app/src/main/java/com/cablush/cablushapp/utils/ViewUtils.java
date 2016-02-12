@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -64,6 +65,14 @@ public class ViewUtils {
         }
 
         return text.toString();
+    }
+
+    public static boolean checkNotEmpty(Context context, EditText editText){
+        if(editText.getText().toString().isEmpty()){
+            editText.setError(context.getString(R.string.favor_preencher));
+            return false;
+        }
+        return true;
     }
 
     /**

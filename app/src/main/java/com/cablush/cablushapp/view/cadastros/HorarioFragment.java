@@ -1,6 +1,7 @@
 package com.cablush.cablushapp.view.cadastros;
 
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
@@ -11,9 +12,11 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.cablush.cablushapp.R;
 import com.cablush.cablushapp.model.domain.Horario;
+import com.cablush.cablushapp.utils.ViewUtils;
 import com.cablush.cablushapp.view.dialogs.TimePickerFragmentDialog;
 
 import java.text.ParseException;
@@ -156,11 +159,22 @@ public class HorarioFragment extends CablushFragment {
      * @return
      */
     public boolean doValidate() {
-        // TODO validar views!
-        if(horario.isOpenOneDay() && horario.getInicio() != null && horario.getFim() !=null){
-            return true;
+        boolean valido = true;
+        Context context = getContext();
+        if(!ViewUtils.checkNotEmpty(context,editTextIni)){
+            valido = false;
+        }else if(!checkBoxDom.isChecked() || !checkBoxSeg.isChecked() ||
+                !checkBoxTer.isChecked()  || !checkBoxQua.isChecked() ||
+                !checkBoxQui.isChecked()  || !checkBoxSex.isChecked() |
+                !checkBoxSab.isChecked()){
+            valido = false;
+            Toast.makeText(context,R.string.favor_preencher_dia_funcionamento,Toast.LENGTH_SHORT).show();
         }
-        return false;
+        // TODO validar views!
+        if(!horario.isOpenOneDay() && horario.getInicio() == null && horario.getFim() ==null){
+            valido = false;
+        }
+        return valido;
     }
 
     /**

@@ -1,5 +1,6 @@
 package com.cablush.cablushapp.view.cadastros;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -18,6 +19,7 @@ import android.widget.Toast;
 import com.cablush.cablushapp.R;
 import com.cablush.cablushapp.model.domain.Local;
 import com.cablush.cablushapp.model.services.FetchAddressIntentService;
+import com.cablush.cablushapp.utils.ViewUtils;
 import com.google.android.gms.maps.model.LatLng;
 
 /**
@@ -130,13 +132,22 @@ public class LocalFragment extends CablushFragment implements MapaFragment.Selec
      * @return
      */
     public boolean doValidate() {
+        boolean valido = true;
+        Context context = getContext();
+        if(!ViewUtils.checkNotEmpty(context, cepEditText) ||
+                !ViewUtils.checkNotEmpty(context, cidadeEditText) ||
+                !ViewUtils.checkNotEmpty(context, bairroEditText) ||
+                !ViewUtils.checkNotEmpty(context, logradouroEditText)){
+            valido = false;
+        }
+
         // TODO validar views!
         if(local.getLatLng() == null){
-            return false;
+            valido = false;
         }else if(local.getCep() == null || local.getCep().isEmpty() ){
-            return false;
+            valido = false;
         }
-        return true;
+        return valido;
     }
 
     /**

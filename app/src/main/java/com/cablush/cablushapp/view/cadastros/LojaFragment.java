@@ -1,5 +1,6 @@
 package com.cablush.cablushapp.view.cadastros;
 
+import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -20,6 +21,7 @@ import com.cablush.cablushapp.R;
 import com.cablush.cablushapp.model.domain.Esporte;
 import com.cablush.cablushapp.model.domain.Loja;
 import com.cablush.cablushapp.utils.PictureUtils;
+import com.cablush.cablushapp.utils.ViewUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -166,15 +168,23 @@ public class LojaFragment extends CablushFragment {
      * @return
      */
     public boolean doValidate() {
+        boolean valido = true;
+        Context context = getContext();
+        if(!ViewUtils.checkNotEmpty(context, nomeEditText) ||
+                !ViewUtils.checkNotEmpty(context, descricaoEditText)||
+                !ViewUtils.checkNotEmpty(context, esportesMultiComplete)){
+            valido = false;
+        }
+
         // TODO validar views!
         if(loja == null){
-            return false;
+            valido = false;
         }else if(loja.getNome() == null || loja.getNome().isEmpty()){
-            return false;
+            valido = false;
         }else if(loja.getDescricao() == null || loja.getDescricao().isEmpty()){
-            return false;
+            valido = false;
         }
-        return true;
+        return valido;
     }
 
     /**

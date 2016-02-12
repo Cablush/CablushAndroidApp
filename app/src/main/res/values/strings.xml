@@ -199,6 +199,8 @@
 
     <!-- Mensagens de permissões -->
     <string name="ask_permissions_location">O Cablush utiliza a sua localização para sugerir locais onde praticar esportes com mais precisão.</string>
+    <string name="favor_preencher">Favor preencher os campos obrigatórios!</string>
+    <string name="favor_preencher_dia_funcionamento">Favor preencher os dias de funcionamento!</string>
     <!--<string name="ask_permissions_storage"></string>-->
 
     <!-- Mensagens de erro genéricas -->
