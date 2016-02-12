@@ -19,7 +19,6 @@ import com.cablush.cablushapp.presenter.LoginPresenter;
 import com.cablush.cablushapp.presenter.RegisterPresenter;
 import com.cablush.cablushapp.presenter.SearchPresenter;
 import com.cablush.cablushapp.utils.MapUtils;
-import com.cablush.cablushapp.utils.ViewUtils;
 import com.cablush.cablushapp.view.dialogs.LocalInfoDialog;
 import com.cablush.cablushapp.view.dialogs.RegisterDialog;
 import com.cablush.cablushapp.view.drawer.DrawerActivityConfiguration;
@@ -83,13 +82,19 @@ public class MainActivity extends AbstractDrawerActivity implements OnMapReadyCa
             public boolean onMenuItemSelected(MenuItem menuItem) {
                 switch (menuItem.getItemId()){
                     case R.id.cadastro_loja:
-                        startActivity(CadastroLojaActivity.makeIntent(MainActivity.this, null));
+                        if (checkUserLoggedIn()) {
+                            startActivity(CadastroLojaActivity.makeIntent(MainActivity.this, null));
+                        }
                         break;
                     case R.id.cadastro_evento:
-                        startActivity(CadastroEventoActivity.makeIntent(MainActivity.this, null));
+                        if (checkUserLoggedIn()) {
+                            startActivity(CadastroEventoActivity.makeIntent(MainActivity.this, null));
+                        }
                         break;
                     case R.id.cadastro_pista:
-                        startActivity(CadastroPistaActivity.makeIntent(MainActivity.this, null));
+                        if (checkUserLoggedIn()) {
+                            startActivity(CadastroPistaActivity.makeIntent(MainActivity.this, null));
+                        }
                         break;
                 }
                 return super.onMenuItemSelected(menuItem);
@@ -101,7 +106,7 @@ public class MainActivity extends AbstractDrawerActivity implements OnMapReadyCa
 
         searchPresenter = new SearchPresenter(this, this);
 
-        checkLogin();
+        configNavigationHead();
     }
 
     @Override
@@ -153,33 +158,33 @@ public class MainActivity extends AbstractDrawerActivity implements OnMapReadyCa
                 SearchDialog.showDialog(getFragmentManager(), SearchDialog.TYPE.PISTA);
                 return true;
             case R.id.drawer_my_lojas:
-                if (ViewUtils.checkUserLoggedIn(this)) {
+                if (checkUserLoggedIn()) {
                     searchPresenter.getMyLojas();
                     spinner.setVisibility(View.VISIBLE);
                     return true;
                 }
                 return false;
             case R.id.drawer_my_eventos:
-                if (ViewUtils.checkUserLoggedIn(this)) {
+                if (checkUserLoggedIn()) {
                     searchPresenter.getMyEventos();
                     spinner.setVisibility(View.VISIBLE);
                     return true;
                 }
                 return false;
             case R.id.drawer_my_pistas:
-                if (ViewUtils.checkUserLoggedIn(this)) {
+                if (checkUserLoggedIn()) {
                     searchPresenter.getMyPistas();
                     spinner.setVisibility(View.VISIBLE);
                     return true;
                 }
                 return false;
             default:
-                Toast.makeText(this, R.string.error_invalid_option, Toast.LENGTH_SHORT).show();
+                Log.e(TAG, "Invalid option!");
                 return false;
         }
     }
 
-    private void checkLogin() {
+    private void configNavigationHead() {
         View header = navigationView.getHeaderView(0);
         TextView nameTextView = (TextView) header.findViewById(R.id.name);
         TextView emailTextView = (TextView) header.findViewById(R.id.email);
@@ -195,6 +200,17 @@ public class MainActivity extends AbstractDrawerActivity implements OnMapReadyCa
         }
     }
 
+    /**
+     * Check if the user is logged in, showing a toast if not.
+     */
+    private boolean checkUserLoggedIn() {
+        if (Usuario.LOGGED_USER == null) {
+            Toast.makeText(this, R.string.msg_login_required, Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        return true;
+    }
+
     @Override
     public void onRegisterButtonClicked() {
         RegisterDialog.showDialog(getFragmentManager());
@@ -206,7 +222,7 @@ public class MainActivity extends AbstractDrawerActivity implements OnMapReadyCa
             Toast.makeText(this,
                     getString(R.string.success_login, Usuario.LOGGED_USER.getNome()),
                     Toast.LENGTH_SHORT).show();
-            checkLogin();
+            configNavigationHead();
         } else {
             Toast.makeText(this, getString(R.string.error_login), Toast.LENGTH_SHORT).show();
         }
@@ -228,9 +244,16 @@ public class MainActivity extends AbstractDrawerActivity implements OnMapReadyCa
 
     @Override
     public void onSearchResult(SearchResult result, List<? extends Localizavel> localizaveis) {
-        // TODO warning offline and error searches (?)
         clearMap();
-        if (localizaveis == null || localizaveis.isEmpty()) {
+        switch (result) {
+            case SEARCH_OFF_LINE:
+                Toast.makeText(this, R.string.msg_search_off_line, Toast.LENGTH_SHORT).show();
+                break;
+            case SEARCH_ERROR:
+                Toast.makeText(this, R.string.msg_search_error, Toast.LENGTH_SHORT).show();
+                break;
+        }
+        if (localizaveis.isEmpty()) {
             Toast.makeText(this, R.string.msg_local_not_found, Toast.LENGTH_SHORT).show();
         } else {
             for (Localizavel localizavel : localizaveis) {

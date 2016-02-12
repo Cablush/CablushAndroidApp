@@ -1,16 +1,13 @@
 package com.cablush.cablushapp.utils;
 
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.cablush.cablushapp.R;
-import com.cablush.cablushapp.model.domain.Usuario;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -49,17 +46,6 @@ public class ViewUtils {
         return adapter.getSelectedItem().equals(context.getString(R.string.empty_selection))
                 ? ""
                 : adapter.getSelectedItem().toString().toLowerCase();
-    }
-
-    /**
-     * Check if the user is logged inm showing a toast if not.
-     */
-    public static boolean checkUserLoggedIn(Context context) {
-        if (Usuario.LOGGED_USER == null) {
-            Toast.makeText(context, R.string.msg_login_required, Toast.LENGTH_SHORT).show();
-//            return false;
-        }
-        return true;
     }
 
     public static String readRawTextFile(Context context, int id) {
