@@ -60,7 +60,7 @@ public class LoginPresenter {
             @Override
             public void success(ResponseDTO<Usuario> dto, Response response) {
                 Usuario usuario = updateAuthData(dto.getData(), response);
-                usuarioDAO.saveUsuario(usuario);
+                usuarioDAO.save(usuario);
                 Usuario.LOGGED_USER = usuario;
                 LoginView view = mView.get();
                 if (view != null) {
@@ -88,7 +88,7 @@ public class LoginPresenter {
                 @Override
                 public void success(ResponseDTO<Usuario> dto, Response response) {
                     Usuario usuario = updateAuthData(dto.getData(), response);
-                    usuarioDAO.saveUsuario(usuario);
+                    usuarioDAO.save(usuario);
                     Usuario.LOGGED_USER = usuario;
                     LoginView view = mView.get();
                     if (view != null) {

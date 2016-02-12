@@ -115,7 +115,7 @@ public class UsuarioDAO extends AppBaseDAO {
 
     }
 
-    public void saveUsuario(Usuario usuario) {
+    public void save(Usuario usuario) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         if (getUsuario(db, usuario.getUuid()) == null) {
             insert(db, usuario);

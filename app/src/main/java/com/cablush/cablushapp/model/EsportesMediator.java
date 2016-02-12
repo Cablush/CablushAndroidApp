@@ -22,12 +22,14 @@ public class EsportesMediator {
 
     private static final String TAG = EsportesMediator.class.getSimpleName();
 
-    private WeakReference<Context> mContext;
     private ApiEsportes apiEsportes;
     private EsporteDAO esporteDAO;
 
+    /**
+     *
+     * @param context
+     */
     public EsportesMediator(Context context) {
-        this.mContext = new WeakReference<>(context);
         this.apiEsportes = RestServiceBuilder.createService(ApiEsportes.class);
         this.esporteDAO = new EsporteDAO(context);
     }
@@ -40,8 +42,8 @@ public class EsportesMediator {
             @Override
             public void success(List<Esporte> esportes, Response response) {
                 if (!esportes.isEmpty()) {
-                    esporteDAO.deleteEsportes();
-                    esporteDAO.saveEsportes(esportes);
+                    esporteDAO.deleteAll();
+                    esporteDAO.bulkSave(esportes);
                 }
             }
 

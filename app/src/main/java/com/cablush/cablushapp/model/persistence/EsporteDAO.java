@@ -114,7 +114,7 @@ public class EsporteDAO  extends AppBaseDAO {
         return db.delete(TABLE, Columns._ID.getColumnName() + " = ? ", new String[]{id.toString()});
     }
 
-    void saveEsporte(SQLiteDatabase db, Esporte esporte) {
+    void save(SQLiteDatabase db, Esporte esporte) {
         if (getEsporte(db, esporte.getId()) == null) {
             insert(db, esporte);
         } else {
@@ -138,7 +138,7 @@ public class EsporteDAO  extends AppBaseDAO {
         return esporte;
     }
 
-    public long saveEsportes(List<Esporte> esportes) {
+    public long bulkSave(List<Esporte> esportes) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         int count = 0;
         for (Esporte esporte : esportes) {
@@ -167,7 +167,7 @@ public class EsporteDAO  extends AppBaseDAO {
         return esportes;
     }
 
-    public void deleteEsportes() {
+    public void deleteAll() {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         db.delete(TABLE, "1", null);
         dbHelper.close(db);

@@ -16,8 +16,12 @@ public abstract class CablushMediator implements Observer {
 
     protected boolean isOnline;
 
+    /**
+     *
+     * @param context
+     */
     public CablushMediator(Context context) {
-        // Get actual connection status and register this to observes connections changes
+        // Get current connection status and register this class as observer to connections changes
         this.isOnline = ConnectivityChangeReceiver.isNetworkAvailable(context);
         ConnectivityChangeReceiver.getObservable().addObserver(this);
         // TODO call deleteObserver (?!)
