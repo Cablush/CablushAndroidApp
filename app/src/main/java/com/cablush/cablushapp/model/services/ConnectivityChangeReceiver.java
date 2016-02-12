@@ -20,12 +20,20 @@ public class ConnectivityChangeReceiver extends BroadcastReceiver {
         getObservable().connectionChanged(isNetworkAvailable(context));
     }
 
+    /**
+     *
+     * @param context
+     * @return
+     */
     public static boolean isNetworkAvailable(Context context) {
         ConnectivityManager manager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = manager.getActiveNetworkInfo();
         return networkInfo != null && networkInfo.isConnected();
     }
 
+    /**
+     *
+     */
     public static class NetworkObservable extends Observable {
 
         private static NetworkObservable instance = null;
@@ -47,6 +55,10 @@ public class ConnectivityChangeReceiver extends BroadcastReceiver {
         }
     }
 
+    /**
+     *
+     * @return
+     */
     public static NetworkObservable getObservable() {
         return NetworkObservable.getInstance();
     }

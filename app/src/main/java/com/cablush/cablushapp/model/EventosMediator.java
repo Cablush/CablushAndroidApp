@@ -50,7 +50,7 @@ public class EventosMediator extends CablushMediator {
      */
     public void saveEvento(Evento evento) {
         evento = eventoDAO.save(evento);
-        if (isOnline) {
+        if (isOnline()) {
             if (evento.isRemote()) {
                 updateEventoOnline(evento);
             } else {
@@ -94,7 +94,7 @@ public class EventosMediator extends CablushMediator {
      * @param esporte
      */
     public void getEventos(final String name, final String estado, final String esporte) {
-        if (isOnline) {
+        if (isOnline()) {
             getEventosOnline(name, estado, esporte);
         } else {
             sendEventosResult(name, estado, esporte, SearchResult.SEARCH_OFF_LINE);
@@ -131,7 +131,7 @@ public class EventosMediator extends CablushMediator {
      *
      */
     public void getMyEventos() {
-        if (isOnline) {
+        if (isOnline()) {
             getMyEventosOnline();
         } else {
             sendEventosResult(SearchResult.SEARCH_OFF_LINE);

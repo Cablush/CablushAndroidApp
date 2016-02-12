@@ -50,7 +50,7 @@ public class LojasMediator extends CablushMediator {
      */
     public void saveLoja(Loja loja) {
         loja = lojaDAO.save(loja);
-        if (isOnline) {
+        if (isOnline()) {
             if (loja.isRemote()) {
                 updateLojaOnline(loja);
             } else {
@@ -94,7 +94,7 @@ public class LojasMediator extends CablushMediator {
      * @param esporte
      */
     public void getLojas(final String name,final String estado, final String esporte) {
-        if (isOnline) {
+        if (isOnline()) {
             getLojasOnline(name, estado, esporte);
         } else {
             sendLojasResult(name, estado, esporte, SearchResult.SEARCH_OFF_LINE);
@@ -131,7 +131,7 @@ public class LojasMediator extends CablushMediator {
      *
      */
     public void getMyLojas() {
-        if (isOnline) {
+        if (isOnline()) {
             getMyLojasOnline();
         } else {
             sendLojasResult(SearchResult.SEARCH_OFF_LINE);

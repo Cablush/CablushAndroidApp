@@ -50,7 +50,7 @@ public class PistasMediator extends CablushMediator {
      */
     public void savePista(Pista pista) {
         pista = pistaDAO.save(pista);
-        if (isOnline) {
+        if (isOnline()) {
             if (pista.isRemote()) {
                 updatePistaOnline(pista);
             } else {
@@ -94,7 +94,7 @@ public class PistasMediator extends CablushMediator {
      * @param esporte
      */
     public void getPistas(final String name, final String estado, final String esporte) {
-        if (isOnline) {
+        if (isOnline()) {
             getPistasOnline(name, estado, esporte);
         } else {
             sendPistasResult(name, estado, esporte, SearchResult.SEARCH_OFF_LINE);
@@ -131,7 +131,7 @@ public class PistasMediator extends CablushMediator {
      *
      */
     public void getMyPistas() {
-        if (isOnline) {
+        if (isOnline()) {
             getMyPistasOnline();
         } else {
             sendPistasResult(SearchResult.SEARCH_OFF_LINE);
