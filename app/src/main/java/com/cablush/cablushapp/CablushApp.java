@@ -12,6 +12,6 @@ public class CablushApp extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        FontCache.overrideFont(this, "normal", "fonts/PassionOne-Bold.ttf");
+        //FontCache.overrideFont(this, "normal", "fonts/PassionOne-Bold.ttf");
     }
 }
