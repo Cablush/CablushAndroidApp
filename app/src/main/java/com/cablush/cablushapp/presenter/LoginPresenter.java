@@ -9,6 +9,7 @@ import com.cablush.cablushapp.model.domain.Usuario;
 import com.cablush.cablushapp.model.rest.ApiUsuario;
 import com.cablush.cablushapp.model.rest.RestServiceBuilder;
 import com.cablush.cablushapp.model.rest.dto.ResponseDTO;
+import com.cablush.cablushapp.model.services.ConnectivityChangeReceiver;
 
 import java.lang.ref.WeakReference;
 import java.util.List;
@@ -36,6 +37,7 @@ public class LoginPresenter {
         void onLoginResponse(LoginResponse response);
     }
 
+    private WeakReference<Context> mContext;
     private WeakReference<LoginView> mView;
     private ApiUsuario apiUsuario;
     private UsuarioDAO usuarioDAO;
@@ -49,6 +51,7 @@ public class LoginPresenter {
      * @param context
      */
     public LoginPresenter(LoginView view, Context context) {
+        this.mContext = new WeakReference<>(context);
         this.mView = new WeakReference<>(view);
         this.apiUsuario = RestServiceBuilder.createService(ApiUsuario.class);
         this.usuarioDAO = new UsuarioDAO(context);
@@ -84,28 +87,31 @@ public class LoginPresenter {
         Usuario usuario = usuarioDAO.getUsuario();
         if (usuario != null) {
             Usuario.LOGGED_USER = usuario;
-            apiUsuario.doValidateToken(new Callback<ResponseDTO<Usuario>>() {
-                @Override
-                public void success(ResponseDTO<Usuario> dto, Response response) {
-                    Usuario usuario = updateAuthData(dto.getData(), response);
-                    usuarioDAO.save(usuario);
-                    Usuario.LOGGED_USER = usuario;
-                    LoginView view = mView.get();
-                    if (view != null) {
-                        view.onLoginResponse(LoginResponse.SUCCESS);
+            // Only validate the token if there is connection, allowing offline registries
+            if (!ConnectivityChangeReceiver.isNetworkAvailable(mContext.get())) {
+                apiUsuario.doValidateToken(new Callback<ResponseDTO<Usuario>>() {
+                    @Override
+                    public void success(ResponseDTO<Usuario> dto, Response response) {
+                        Usuario usuario = updateAuthData(dto.getData(), response);
+                        usuarioDAO.save(usuario);
+                        Usuario.LOGGED_USER = usuario;
+                        LoginView view = mView.get();
+                        if (view != null) {
+                            view.onLoginResponse(LoginResponse.SUCCESS);
+                        }
                     }
-                }
 
-                @Override
-                public void failure(RetrofitError error) {
-                    Log.e(TAG, "Error on user check. " + error.getMessage());
-                    Usuario.LOGGED_USER = null;
-                    LoginView view = mView.get();
-                    if (view != null) {
-                        view.onLoginResponse(LoginResponse.ERROR);
+                    @Override
+                    public void failure(RetrofitError error) {
+                        Log.e(TAG, "Error on user check. " + error.getMessage());
+                        Usuario.LOGGED_USER = null; // FIXME force (re)login at any http error?
+                        LoginView view = mView.get();
+                        if (view != null) {
+                            view.onLoginResponse(LoginResponse.ERROR);
+                        }
                     }
-                }
-            });
+                });
+            }
         }
     }
 
