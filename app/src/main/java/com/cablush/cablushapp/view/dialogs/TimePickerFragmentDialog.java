@@ -33,7 +33,7 @@ public class TimePickerFragmentDialog extends DialogFragment {
         TimePickerFragmentDialog dialog = new TimePickerFragmentDialog();
         dialog.calendar = calendar;
         dialog.listener = listener;
-        dialog.show(fragmentManager, "timePicker");
+        dialog.show(fragmentManager, TAG);
     }
 
     @Override
