@@ -1,13 +1,16 @@
 package com.cablush.cablushapp.utils;
 
+import android.content.ContentUris;
 import android.content.Context;
-import android.content.CursorLoader;
+import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
+import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.view.View;
 import android.widget.ImageView;
@@ -27,6 +30,17 @@ import java.util.Random;
  */
 public class PictureUtils {
 
+    private static final String PICTURE_DIR = "Cablush";
+    private static final String PICTURE_FILE_NAME =  "Cablush_%9d.jpg";
+
+    /**
+     * Load a remote image by its url into a ImageView.
+     *
+     * @param context
+     * @param imageURL
+     * @param view
+     * @param hideOnFail
+     */
     public static void loadRemoteImage(Context context, String imageURL,
                                        final ImageView view, final boolean hideOnFail) {
         if (imageURL != null) {
@@ -57,34 +71,6 @@ public class PictureUtils {
         }
     }
 
-    public static Bitmap getBitmapFromUri(Context context, Uri pictureUri) {
-        String picturePath = getPicturePath(context, pictureUri);
-
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inJustDecodeBounds = true;
-        BitmapFactory.decodeFile(picturePath, options);
-        int scale = 1;
-        while (options.outHeight / scale / 2 >= 200 && options.outWidth / scale / 2 >= 200) {
-            scale *= 2;
-        }
-        options.inSampleSize = scale;
-        options.inJustDecodeBounds = false;
-        return BitmapFactory.decodeFile(picturePath, options);
-    }
-
-    private static String getPicturePath(Context context, Uri pictureUri) {
-        String[] projection = { MediaStore.MediaColumns.DATA };
-        CursorLoader cursorLoader = new CursorLoader(context, pictureUri, projection, null, null, null);
-        if(cursorLoader.getUri() != null) {
-            return cursorLoader.getUri().getPath(); //não sei se foi melhor solução
-        }
-        return "";
-        /*Cursor cursor = cursorLoader.loadInBackground();
-        int column_index = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA); //Fixme cursor == null (sugestao usar o )
-        cursor.moveToFirst();
-        return cursor.getString(column_index);*/
-    }
-
     /**
      * Create a file Uri for saving a picture.
      *
@@ -95,7 +81,7 @@ public class PictureUtils {
         if (isExternalStorageWritable()) {
             // Create a picture file name randomly
             final File pictureFile = getStorageDir(
-                    String.format(Locale.ROOT, "Cablush_%9d.jpg", getRadomInt()));
+                    String.format(Locale.ROOT, PICTURE_FILE_NAME, getRadomInt()));
 
             // Always notify the MediaScanners after storing the picture, so that it is immediately
             // available to the user.
@@ -121,7 +107,7 @@ public class PictureUtils {
             // Note that you should be careful about what you place here, since the user often
             // manages these files.
             final File path = new File(Environment.getExternalStoragePublicDirectory(
-                    Environment.DIRECTORY_DCIM), "Cablush");
+                    Environment.DIRECTORY_PICTURES), PICTURE_DIR);
             final File file = new File(path, pictureName);
             // Make sure the directory exists.
             path.mkdirs();
@@ -141,13 +127,19 @@ public class PictureUtils {
     }
 
     /**
-     * Notifies the MediaScanners after Downloading the Picture, so it is immediately available to
-     * the user.
+     * Notifies the MediaScanners after changes on a file, so it is immediately available to
+     * the user and other apps.
+     * <p>If the file is null, notify the change on the external storage directory.</p>
+     *
+     * @param context
+     * @param file
      */
     private static void notifyMediaScanners(Context context, File file) {
         // Tell the media scanner about the new file so that it is immediately available to the user.
         MediaScannerConnection.scanFile(context,
-                new String[]{file.toString()},
+                new String[]{file != null
+                        ? file.toString()
+                        : Environment.getExternalStorageDirectory().toString()},
                 null,
                 new MediaScannerConnection.OnScanCompletedListener() {
                     public void onScanCompleted(String path, Uri uri) {
@@ -155,9 +147,156 @@ public class PictureUtils {
                 });
     }
 
+    /**
+     * Generate a random int number between 100000000 and 999999999.
+     *
+     * @return
+     */
     private static int getRadomInt() {
         Random random = new Random(System.currentTimeMillis());
         return random.nextInt(999999999 - 100000000) + 100000000;
+    }
+
+    /**
+     * Add the Picture to a Gallery.
+     *
+     * @param context
+     * @param pictureUri
+     */
+    public static void galleryAddPicture(Context context, Uri pictureUri) {
+        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+        mediaScanIntent.setData(pictureUri);
+        context.sendBroadcast(mediaScanIntent);
+    }
+
+    /**
+     * Delete a file by its uri, notifying the MediaScanner if necessary.
+     *
+     * @param context
+     * @param fileUri
+     */
+    public static void deleteFile(Context context, Uri fileUri) {
+        if (fileUri != null) {
+            File file = new File(fileUri.getPath());
+            if (file.exists() && file.delete()) {
+                notifyMediaScanners(context, null);
+            }
+        }
+    }
+
+    /**
+     * Get the Scaled Bitmap.
+     *
+     * @param context
+     * @param pictureUri
+     * @param targetWidth
+     * @param targetHeight
+     * @return
+     */
+    public static Bitmap getBitmapFromUri(Context context, Uri pictureUri,
+                                          int targetWidth, int targetHeight) {
+        // Get picture path
+        String picturePath = getPath(context, pictureUri);
+
+        // Get the dimensions of the bitmap
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(picturePath, options);
+
+        // Determine how much to scale down the image
+        int scaleFactor = Math.min(options.outWidth/targetWidth, options.outHeight/targetHeight);
+
+        // Decode the image file into a Bitmap sized to fill the View
+        options.inJustDecodeBounds = false;
+        options.inSampleSize = scaleFactor;
+
+        return BitmapFactory.decodeFile(picturePath, options);
+    }
+
+    /**
+     * Get a file path from a Uri. This will get the the path for Storage Access Framework Documents,
+     * as well as the _data field for the MediaStore and other file-based ContentProviders.
+     *
+     * @param context
+     * @param uri
+     * @return
+     */
+    public static String getPath(Context context, Uri uri) {
+        // Check if the version of current device is greater than API 19 (KitKat).
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT
+                && DocumentsContract.isDocumentUri(context, uri)) {
+            if (isExternalStorageDocument(uri)) { // ExternalStorageProvider
+                final String[] split = DocumentsContract.getDocumentId(uri).split(":");
+                final String type = split[0];
+                if ("primary".equalsIgnoreCase(type)) {
+                    return Environment.getExternalStorageDirectory() + "/" + split[1];
+                }
+            } else if (isDownloadsDocument(uri)) { // DownloadsProvider
+                final String id = DocumentsContract.getDocumentId(uri);
+                final Uri contentUri = ContentUris
+                        .withAppendedId(Uri.parse("content://downloads/public_downloads"), Long.valueOf(id));
+                return getDataColumn(context, contentUri, null, null);
+            } else if (isMediaDocument(uri)) { // MediaProvider
+                final String[] split = DocumentsContract.getDocumentId(uri).split(":");
+                final Uri contentUri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
+                return getDataColumn(context, contentUri, "_id = ?", new String[] {split[1]});
+            }
+        } else if ("content".equalsIgnoreCase(uri.getScheme())) { // MediaStore (and general)
+            return getDataColumn(context, uri, null, null);
+        } else if ("file".equalsIgnoreCase(uri.getScheme())) { // File
+            return uri.getPath();
+        }
+        return null;
+    }
+
+    /**
+     * Get the value of the data column for this Uri. This is useful for MediaStore Uris,
+     * and other file-based ContentProviders.
+     *
+     * @param context The context.
+     * @param uri The Uri to query.
+     * @param selection (Optional) Filter used in the query.
+     * @param selectionArgs (Optional) Selection arguments used in the query.
+     * @return The value of the _data column, which is typically a file path.
+     */
+    private static String getDataColumn(Context context, Uri uri, String selection, String[] selectionArgs) {
+        Cursor cursor = null;
+        final String[] projection = {MediaStore.MediaColumns.DATA};
+        try {
+            cursor = context.getContentResolver().query(uri, projection, selection, selectionArgs, null);
+            if (cursor != null && cursor.moveToFirst()) {
+                return cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA));
+            }
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+        return null;
+    }
+
+    /**
+     * @param uri The Uri to check.
+     * @return Whether the Uri authority is ExternalStorageProvider.
+     */
+    private static boolean isExternalStorageDocument(Uri uri) {
+        return "com.android.externalstorage.documents".equals(uri.getAuthority());
+    }
+
+    /**
+     * @param uri The Uri to check.
+     * @return Whether the Uri authority is DownloadsProvider.
+     */
+    private static boolean isDownloadsDocument(Uri uri) {
+        return "com.android.providers.downloads.documents".equals(uri.getAuthority());
+    }
+
+    /**
+     * @param uri The Uri to check.
+     * @return Whether the Uri authority is MediaProvider.
+     */
+    private static boolean isMediaDocument(Uri uri) {
+        return "com.android.providers.media.documents".equals(uri.getAuthority());
     }
 
     /**

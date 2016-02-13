@@ -199,9 +199,8 @@
             android:contentDescription="@string/txt_logotipo"
             android:src="@drawable/missing"
             android:layout_marginRight="@dimen/dialog_margin"
-            android:maxHeight="200dp"
-            android:maxWidth="200dp"
-            android:layout_alignTop="@+id/buttonGallery"/>
+            android:layout_alignTop="@+id/buttonGallery"
+            />
 
         <TextView
             style="@style/TextAppearance.Bold"

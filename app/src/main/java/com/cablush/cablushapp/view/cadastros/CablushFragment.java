@@ -29,6 +29,18 @@ public abstract class CablushFragment extends Fragment {
     private Uri pictureFileUri;
 
     /**
+     * Get the picture path;
+     *
+     * @return
+     */
+    public String getPictureFilePath() {
+        if (pictureFileUri != null) {
+            return PictureUtils.getPath(getContext(), pictureFileUri);
+        }
+        return null;
+    }
+
+    /**
      * Callback called on the Picture is loaded.
      * <p>Implement "imageView.setImageBitmap(PictureUtils.getBitmapFromUri(this, pictureFileUri));"
      * to load the picture on a imageView. </p>
@@ -40,17 +52,23 @@ public abstract class CablushFragment extends Fragment {
     }
 
     /**
-     *
+     * Start the Android Camera Activity for result.
      */
     public void dispatchTakePictureIntent() {
-        pictureFileUri = PictureUtils.getPictureFileUri(getContext());
-        Intent imageCaptureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-                .putExtra(MediaStore.EXTRA_OUTPUT, pictureFileUri);
-        startActivityForResult(imageCaptureIntent, REQUEST_TAKE_PICTURE);
+        if (getActivity().getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
+            // Create file to store the picture.
+            pictureFileUri = PictureUtils.getPictureFileUri(getContext());
+            // Star the camera app, sending the file uri.
+            Intent imageCaptureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+                    .putExtra(MediaStore.EXTRA_OUTPUT, pictureFileUri);
+            startActivityForResult(imageCaptureIntent, REQUEST_TAKE_PICTURE);
+        } else {
+            Toast.makeText(getContext(), R.string.error_no_camera_found, Toast.LENGTH_SHORT).show();
+        }
     }
 
     /**
-     *
+     * Start the Android Gallery Activity for result.
      */
     public void dispatchLoadPictureIntent() {
         Intent galleryIntent = new Intent(Intent.ACTION_PICK,
@@ -65,16 +83,20 @@ public abstract class CablushFragment extends Fragment {
         if (resultCode == Activity.RESULT_OK) {
             switch (requestCode) {
                 case REQUEST_TAKE_PICTURE:
+                    PictureUtils.galleryAddPicture(getContext(), pictureFileUri);
                     onPictureLoaded(pictureFileUri);
                     break;
                 case REQUEST_LOAD_PICTURE:
-                    onPictureLoaded(data.getData());
+                    pictureFileUri = data.getData();
+                    onPictureLoaded(pictureFileUri);
                     break;
             }
         } else {
             Toast.makeText(getContext(), R.string.error_getting_picture, Toast.LENGTH_SHORT).show();
-            // TODO delete file!
-            //Não resolvi este to do, nao tem como deletar uma foto q deu erro, hehe
+            if (pictureFileUri != null) {
+                PictureUtils.deleteFile(getContext(), pictureFileUri);
+                pictureFileUri = null;
+            }
         }
     }
 
@@ -91,7 +113,7 @@ public abstract class CablushFragment extends Fragment {
      * And, call 'locationPermissionGranted()' on permissions granted.
      */
     public void checkLocationPermission() {
-        if (!PermissionUtils.checkLocationPermission(getActivity())) {
+        if (!PermissionUtils.checkLocationPermission(getContext())) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 requestPermissions(
                         new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION},
@@ -99,6 +121,30 @@ public abstract class CablushFragment extends Fragment {
             }
         } else {
             onLocationPermissionGranted();
+        }
+    }
+
+    /**
+     * Callback called if Storage Permission are granted.
+     * <p>To be implemented by concrete class that need Storage Permissions.</p>
+     */
+    public void onStoragePermissionGranted() {
+        /* callback - do nothing */
+    }
+
+    /**
+     * Check if the Storage Permissions are granted, requering the permissions to the user if necessary.
+     * And, call '
+     */
+    public void checkStoragePermission() {
+        if (!PermissionUtils.checkStoragePermission(getContext())) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                requestPermissions(
+                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        PermissionUtils.PERMISSIONS_STORAGE);
+            }
+        } else {
+            onStoragePermissionGranted();
         }
     }
 
@@ -117,6 +163,13 @@ public abstract class CablushFragment extends Fragment {
                 }
                 return;
             case PermissionUtils.PERMISSIONS_STORAGE:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    onStoragePermissionGranted();
+                } else {
+                    // TODO - Permission denied! Disable the functionality that depends on this permission. (?)
+                    //http://inthecheesefactory.com/blog/things-you-need-to-know-about-android-m-permission-developer-edition/en
+                    Toast.makeText(getActivity(), R.string.ask_permissions_storage, Toast.LENGTH_SHORT).show();
+                }
                 return;
         }
     }

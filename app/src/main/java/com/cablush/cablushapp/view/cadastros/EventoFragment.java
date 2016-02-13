@@ -64,7 +64,6 @@ public class EventoFragment extends CablushFragment {
     private ImageView flyerImageView;
     private EditText descricaoEditText;
     private MultiAutoCompleteTextView esportesMultiComplete;
-    private String fotoImagePath;
 
     public EventoFragment() {
         // Required empty public constructor
@@ -108,8 +107,8 @@ public class EventoFragment extends CablushFragment {
 
     @Override
     public void onPictureLoaded(Uri pictureFileUri) {
-        flyerImageView.setImageBitmap(PictureUtils.getBitmapFromUri(getContext(), pictureFileUri));
-        fotoImagePath = pictureFileUri.getPath();
+        flyerImageView.setImageBitmap(PictureUtils.getBitmapFromUri(getContext(), pictureFileUri,
+                flyerImageView.getWidth(), flyerImageView.getHeight()));
     }
 
     private void initializeData() {
@@ -130,7 +129,9 @@ public class EventoFragment extends CablushFragment {
         dataInicioEditText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DatePickerFragmentDialog.showDialog(getActivity().getFragmentManager(), beginCalendar, new DatePickerDialog.OnDateSetListener() {
+                DatePickerFragmentDialog.showDialog(getActivity().getFragmentManager(),
+                        beginCalendar,
+                        new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                         beginCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
@@ -146,7 +147,9 @@ public class EventoFragment extends CablushFragment {
         dataFimEditText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DatePickerFragmentDialog.showDialog(getActivity().getFragmentManager(), endCalendar, new DatePickerDialog.OnDateSetListener() {
+                DatePickerFragmentDialog.showDialog(getActivity().getFragmentManager(),
+                        endCalendar,
+                        new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                         endCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
@@ -157,6 +160,7 @@ public class EventoFragment extends CablushFragment {
                 });
             }
         });
+
         horarioEditText = (EditText) activity.findViewById(R.id.editTextHorario);
         horarioEditText.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -223,7 +227,6 @@ public class EventoFragment extends CablushFragment {
 
     private void setViewValues() {
         if (evento != null) {
-
             nomeEditText.setText(evento.getNome());
             dataInicioEditText.setText(Horario.FORMAT_DATE.format(evento.getData()));
             dataFimEditText.setText(Horario.FORMAT_DATE.format(evento.getDataFim()));
@@ -282,7 +285,7 @@ public class EventoFragment extends CablushFragment {
         evento.setNome(nomeEditText.getText().toString());
         evento.setWebsite(websiteEditText.getText().toString());
         evento.setFacebook(facebookEditText.getText().toString());
-        evento.setFlyer(fotoImagePath);
+        evento.setFlyer(getPictureFilePath());
         evento.setDescricao(descricaoEditText.getText().toString());
         evento.setEsportes(esportesSelecionados);
 

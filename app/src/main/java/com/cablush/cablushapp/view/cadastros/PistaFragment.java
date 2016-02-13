@@ -41,8 +41,6 @@ public class PistaFragment extends CablushFragment {
     private ArrayAdapter<String> esportesAdapter;
 
     private EditText nomeEditText;
-    private EditText telefoneEditText;
-    private EditText emailEditText;
     private EditText websiteEditText;
     private EditText facebookEditText;
     private ImageButton galleryImageButton;
@@ -50,7 +48,7 @@ public class PistaFragment extends CablushFragment {
     private ImageView fotoImageView;
     private EditText descricaoEditText;
     private MultiAutoCompleteTextView esportesMultiComplete;
-    private String fotoImagePath;
+
     public PistaFragment() {
         // Required empty public constructor
     }
@@ -93,8 +91,8 @@ public class PistaFragment extends CablushFragment {
 
     @Override
     public void onPictureLoaded(Uri pictureFileUri) {
-        fotoImageView.setImageBitmap(PictureUtils.getBitmapFromUri(getContext(), pictureFileUri));
-        fotoImagePath = pictureFileUri.getPath();
+        fotoImageView.setImageBitmap(PictureUtils.getBitmapFromUri(getContext(), pictureFileUri,
+                fotoImageView.getWidth(), fotoImageView.getHeight()));
     }
 
     private void initializeData() {
@@ -199,7 +197,7 @@ public class PistaFragment extends CablushFragment {
         pista.setNome(nomeEditText.getText().toString());
         pista.setWebsite(websiteEditText.getText().toString());
         pista.setFacebook(facebookEditText.getText().toString());
-        pista.setFoto(fotoImagePath);
+        pista.setFoto(getPictureFilePath());
         pista.setDescricao(descricaoEditText.getText().toString());
 
         pista.setEsportes(esportesSelecionados);
