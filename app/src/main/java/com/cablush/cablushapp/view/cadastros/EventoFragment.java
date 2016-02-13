@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.AppCompatTextView;
@@ -75,13 +76,11 @@ public class EventoFragment extends CablushFragment {
      * @param evento
      * @return
      */
-    public static EventoFragment newInstance(Evento evento) {
+    public static EventoFragment newInstance(@NonNull Evento evento) {
         EventoFragment fragment = new EventoFragment();
-        if (evento!= null) {
-            Bundle args = new Bundle();
-            args.putSerializable(EVENTO_BUNDLE_KEY, evento);
-            fragment.setArguments(args);
-        }
+        Bundle args = new Bundle();
+        args.putSerializable(EVENTO_BUNDLE_KEY, evento);
+        fragment.setArguments(args);
 
         return fragment;
     }

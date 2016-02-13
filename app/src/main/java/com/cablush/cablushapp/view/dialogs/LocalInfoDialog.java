@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.FragmentManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -41,7 +42,8 @@ public class LocalInfoDialog<L extends Localizavel> extends DialogFragment {
      *
      * @param fragmentManager
      */
-    public static <L extends Localizavel> void showDialog(FragmentManager fragmentManager, L localizavel) {
+    public static <L extends Localizavel> void showDialog(@NonNull FragmentManager fragmentManager,
+                                                          @NonNull L localizavel) {
         LocalInfoDialog dialog = new LocalInfoDialog();
         dialog.mLocalizavel = new WeakReference<>(localizavel);
         dialog.show(fragmentManager, TAG);

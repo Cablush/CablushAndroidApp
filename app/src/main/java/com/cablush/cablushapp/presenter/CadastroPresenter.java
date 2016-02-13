@@ -1,6 +1,7 @@
 package com.cablush.cablushapp.presenter;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 
 import com.cablush.cablushapp.model.EsportesMediator;
 import com.cablush.cablushapp.model.domain.Esporte;
@@ -16,7 +17,7 @@ public abstract class CadastroPresenter<T> {
 
     private EsportesMediator esportesMediator;
 
-    public CadastroPresenter(Context context) {
+    public CadastroPresenter(@NonNull Context context) {
         this.esportesMediator = new EsportesMediator(context);
     }
 

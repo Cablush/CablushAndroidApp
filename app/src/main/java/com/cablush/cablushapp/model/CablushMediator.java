@@ -1,6 +1,7 @@
 package com.cablush.cablushapp.model;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 
 import com.cablush.cablushapp.model.services.ConnectivityChangeReceiver;
 
@@ -19,7 +20,7 @@ public abstract class CablushMediator {
      *
      * @param context
      */
-    public CablushMediator(Context context) {
+    public CablushMediator(@NonNull Context context) {
         this.mContext = new WeakReference<>(context);
     }
 

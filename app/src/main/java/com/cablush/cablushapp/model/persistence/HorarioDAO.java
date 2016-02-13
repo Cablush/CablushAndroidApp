@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.support.annotation.NonNull;
 
 import com.cablush.cablushapp.model.domain.Horario;
 
@@ -66,7 +67,7 @@ class HorarioDAO extends AppBaseDAO {
         }
     }
 
-    HorarioDAO(Context context) {
+    HorarioDAO(@NonNull Context context) {
         dbHelper = CablushDBHelper.getInstance(context);
     }
 

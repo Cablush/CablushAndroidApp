@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.ResultReceiver;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
@@ -53,14 +54,11 @@ public class LocalFragment extends CablushFragment implements MapaFragment.Selec
      * @param local
      * @return
      */
-    public static LocalFragment newInstance(Local local) {
+    public static LocalFragment newInstance(@NonNull Local local) {
         LocalFragment fragment = new LocalFragment();
-        if (local != null) {
-            Bundle args = new Bundle();
-            args.putSerializable(LOCAL_BUNDLE_KEY, local);
-            fragment.setArguments(args);
-        }
-
+        Bundle args = new Bundle();
+        args.putSerializable(LOCAL_BUNDLE_KEY, local);
+        fragment.setArguments(args);
         return fragment;
     }
 

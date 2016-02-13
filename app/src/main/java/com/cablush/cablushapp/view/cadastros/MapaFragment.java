@@ -1,6 +1,7 @@
 package com.cablush.cablushapp.view.cadastros;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -49,16 +50,14 @@ public class MapaFragment extends CablushFragment implements OnMapReadyCallback,
      * @return
      */
     public static MapaFragment newInstance(LatLng latLng,
-                                           SelectLocationListener selectLocationListener) {
+                                           @NonNull SelectLocationListener selectLocationListener) {
         MapaFragment fragment = new MapaFragment();
         if (latLng != null) {
             Bundle args = new Bundle();
             args.putParcelable(LOCATION_BUNDLE_KEY, latLng);
             fragment.setArguments(args);
         }
-        if (selectLocationListener != null) {
-            fragment.selectLocationListener = new WeakReference<>(selectLocationListener);
-        }
+        fragment.selectLocationListener = new WeakReference<>(selectLocationListener);
         return fragment;
     }
 

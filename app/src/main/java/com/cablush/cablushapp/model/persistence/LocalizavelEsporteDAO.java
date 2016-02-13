@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
+import android.support.annotation.NonNull;
 
 import com.cablush.cablushapp.model.domain.Esporte;
 
@@ -71,7 +72,7 @@ public class LocalizavelEsporteDAO extends AppBaseDAO {
 
     private EsporteDAO esporteDAO;
 
-    public LocalizavelEsporteDAO(Context context) {
+    LocalizavelEsporteDAO(@NonNull Context context) {
         dbHelper = CablushDBHelper.getInstance(context);
         esporteDAO = new EsporteDAO(context);
     }

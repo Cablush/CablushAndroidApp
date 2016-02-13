@@ -2,6 +2,7 @@ package com.cablush.cablushapp.view.cadastros;
 
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.AppCompatTextView;
@@ -60,13 +61,11 @@ public class PistaFragment extends CablushFragment {
      * @param pista
      * @return
      */
-    public static PistaFragment newInstance(Pista pista) {
+    public static PistaFragment newInstance(@NonNull Pista pista) {
         PistaFragment fragment = new PistaFragment();
-        if (pista != null) {
-            Bundle args = new Bundle();
-            args.putSerializable(PISTA_BUNDLE_KEY, pista);
-            fragment.setArguments(args);
-        }
+        Bundle args = new Bundle();
+        args.putSerializable(PISTA_BUNDLE_KEY, pista);
+        fragment.setArguments(args);
         return fragment;
     }
 
@@ -193,9 +192,6 @@ public class PistaFragment extends CablushFragment {
      * @return
      */
     public Pista getPista() {
-        if (pista == null) {
-            pista = new Pista();
-        }
         pista.setNome(nomeEditText.getText().toString());
         pista.setWebsite(websiteEditText.getText().toString());
         pista.setFacebook(facebookEditText.getText().toString());

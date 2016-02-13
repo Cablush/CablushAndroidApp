@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.support.annotation.NonNull;
 
 import com.cablush.cablushapp.model.domain.Usuario;
 
@@ -62,7 +63,7 @@ public class UsuarioDAO extends AppBaseDAO {
         }
     }
 
-    public UsuarioDAO(Context context) {
+    public UsuarioDAO(@NonNull Context context) {
         dbHelper = CablushDBHelper.getInstance(context);
     }
 

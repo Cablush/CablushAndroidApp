@@ -45,12 +45,12 @@ public abstract class CablushActivity extends AppCompatActivity {
      * @return
      */
     public boolean isGooglePlayServicesAvailable() {
-        int status = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
+        int status = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this); // TODO check deprecated
         if (ConnectionResult.SUCCESS == status) {
             Log.d(TAG, "Google Play Services is available.");
             return true;
         } else {
-            GooglePlayServicesUtil.getErrorDialog(status, this, 0).show();
+            GooglePlayServicesUtil.getErrorDialog(status, this, 0).show(); // TODO check deprecated
             return false;
         }
     }
@@ -104,7 +104,9 @@ public abstract class CablushActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode,
+                                           @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         Log.d(TAG, "onRequestPermissionsResult()");
         switch (requestCode) {

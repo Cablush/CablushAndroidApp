@@ -7,6 +7,7 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
 import android.os.ResultReceiver;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -44,7 +45,9 @@ public class FetchAddressIntentService extends IntentService {
      * @param latLng
      * @return
      */
-    public static Intent makeIntent(Context context, ResultReceiver receiver, LatLng latLng) {
+    public static Intent makeIntent(@NonNull Context context,
+                                    @NonNull ResultReceiver receiver,
+                                    @NonNull LatLng latLng) {
         Intent intent = new Intent(context, FetchAddressIntentService.class);
         intent.putExtra(RECEIVER, receiver);
         intent.putExtra(LOCATION_DATA_EXTRA, latLng);
@@ -62,7 +65,7 @@ public class FetchAddressIntentService extends IntentService {
         mReceiver = intent.getParcelableExtra(RECEIVER);
         // Check if receiver was properly registered.
         if (mReceiver == null) {
-            Log.e(TAG, "No receiver received. There is nowhere to send the results.");
+            Log.wtf(TAG, "No receiver received. There is nowhere to send the results.");
             return;
         }
 
@@ -137,7 +140,6 @@ public class FetchAddressIntentService extends IntentService {
             local.setLatitude(address.getLatitude());
             local.setLongitude(address.getLongitude());
 
-            Log.i(TAG, getString(R.string.msg_address_found));
             deliverResultToReceiver(SUCCESS_RESULT,
                     TextUtils.join(System.getProperty("line.separator"), addressFragments),
                     local);

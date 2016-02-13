@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -52,12 +53,9 @@ public class SearchDialog extends DialogFragment {
      * @param fragmentManager
      * @param searchType
      */
-    public static void showDialog(FragmentManager fragmentManager, TYPE searchType) {
+    public static void showDialog(@NonNull FragmentManager fragmentManager,
+                                  @NonNull TYPE searchType) {
         SearchDialog dialog = new SearchDialog();
-        if (searchType == null) {
-            Log.e(TAG, "No searchType!");
-            return;
-        }
         dialog.searchType = searchType;
         dialog.show(fragmentManager, TAG);
     }
@@ -106,6 +104,7 @@ public class SearchDialog extends DialogFragment {
                         break;
                     default:
                         Log.e(TAG, "Invalid search type!");
+                        return;
                 }
 
                 ProgressBar spinner = (ProgressBar)getActivity().findViewById(R.id.progressBar);

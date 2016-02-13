@@ -2,6 +2,7 @@ package com.cablush.cablushapp.view.cadastros;
 
 import android.app.TimePickerDialog;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
@@ -53,13 +54,11 @@ public class HorarioFragment extends CablushFragment {
      * @param horario
      * @return
      */
-    public static HorarioFragment newInstance(Horario horario) {
+    public static HorarioFragment newInstance(@NonNull Horario horario) {
         HorarioFragment fragment = new HorarioFragment();
-        if (horario != null) {
-            Bundle args = new Bundle();
-            args.putSerializable(HORARIO_BUNDLE_KEY, horario);
-            fragment.setArguments(args);
-        }
+        Bundle args = new Bundle();
+        args.putSerializable(HORARIO_BUNDLE_KEY, horario);
+        fragment.setArguments(args);
         return fragment;
     }
 

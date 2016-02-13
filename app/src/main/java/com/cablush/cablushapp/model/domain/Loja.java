@@ -32,9 +32,9 @@ public class Loja implements Localizavel, Serializable {
     @Expose
     private Boolean fundo;
     @Expose
-    private List<Local> locais;
+    private List<Local> locais = new ArrayList<>();
     @Expose
-    private List<Esporte> esportes;
+    private List<Esporte> esportes = new ArrayList<>();
     @Expose
     private Horario horario;
     @Expose
@@ -42,6 +42,14 @@ public class Loja implements Localizavel, Serializable {
     private String responsavel;
     /** Identify that the object is on server **/
     private Boolean remote;
+
+    /**
+     * Default constructor;
+     */
+    public Loja() {
+        setLocal(new Local());
+        horario = new Horario();
+    }
 
     @Override
     public String getUuid() {
@@ -128,16 +136,18 @@ public class Loja implements Localizavel, Serializable {
         this.locais = locais;
     }
 
+    // TODO remove when a 'loja' may have many 'locais'
     @Override
     public Local getLocal() {
         return locais.get(0);
     }
 
+    // TODO remove when a 'loja' may have many 'locais'
     public void setLocal(Local local) {
-        if (locais == null) {
-            locais = new ArrayList<>();
+        if (!locais.isEmpty()) {
+            locais.clear();
         }
-        locais.add(local);
+        locais.add(0, local);
     }
 
     public List<Esporte> getEsportes() {

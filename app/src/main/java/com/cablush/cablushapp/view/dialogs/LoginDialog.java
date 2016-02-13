@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -47,7 +48,7 @@ public class LoginDialog extends DialogFragment {
      *
      * @param fragmentManager
      */
-    public static void showDialog(FragmentManager fragmentManager) {
+    public static void showDialog(@NonNull FragmentManager fragmentManager) {
         LoginDialog dialog = new LoginDialog();
         dialog.show(fragmentManager, TAG);
     }

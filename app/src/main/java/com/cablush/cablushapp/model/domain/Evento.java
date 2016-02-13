@@ -4,6 +4,7 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -36,12 +37,19 @@ public class Evento implements Localizavel, Serializable {
     @Expose
     private Local local;
     @Expose
-    private List<Esporte> esportes;
+    private List<Esporte> esportes = new ArrayList<>();
     @Expose
     @SerializedName("responsavel_uuid")
     private String responsavel;
     /** Identify that the object is on server **/
     private Boolean remote;
+
+    /**
+     * Default constructor;
+     */
+    public Evento() {
+        local = new Local();
+    }
 
     @Override
     public String getUuid() {

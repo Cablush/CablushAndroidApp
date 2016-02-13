@@ -1,6 +1,7 @@
 package com.cablush.cablushapp.presenter;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.cablush.cablushapp.model.EsportesMediator;
@@ -50,7 +51,7 @@ public class LoginPresenter {
      * @param view
      * @param context
      */
-    public LoginPresenter(LoginView view, Context context) {
+    public LoginPresenter(@NonNull LoginView view, @NonNull Context context) {
         this.mContext = new WeakReference<>(context);
         this.mView = new WeakReference<>(view);
         this.apiUsuario = RestServiceBuilder.createService(ApiUsuario.class);

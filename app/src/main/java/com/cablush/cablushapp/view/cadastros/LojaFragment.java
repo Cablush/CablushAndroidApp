@@ -2,11 +2,11 @@ package com.cablush.cablushapp.view.cadastros;
 
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.AppCompatTextView;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +16,6 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.MultiAutoCompleteTextView;
-import android.widget.TextView;
 
 import com.cablush.cablushapp.R;
 import com.cablush.cablushapp.model.EsportesMediator;
@@ -62,13 +61,11 @@ public class LojaFragment extends CablushFragment {
      * @param loja
      * @return
      */
-    public static LojaFragment newInstance(Loja loja) {
+    public static LojaFragment newInstance(@NonNull Loja loja) {
         LojaFragment fragment = new LojaFragment();
-        if (loja != null) {
-            Bundle args = new Bundle();
-            args.putSerializable(LOJA_BUNDLE_KEY, loja);
-            fragment.setArguments(args);
-        }
+        Bundle args = new Bundle();
+        args.putSerializable(LOJA_BUNDLE_KEY, loja);
+        fragment.setArguments(args);
         return fragment;
     }
 

@@ -1,6 +1,7 @@
 package com.cablush.cablushapp.presenter;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 
 import com.cablush.cablushapp.model.PistasMediator;
 import com.cablush.cablushapp.model.SearchResult;
@@ -16,7 +17,7 @@ public class CadastroPistaPresenter extends CadastroPresenter<Pista>
 
     private PistasMediator pistasMediator;
 
-    public CadastroPistaPresenter(Context context) {
+    public CadastroPistaPresenter(@NonNull Context context) {
         super(context);
         pistasMediator = new PistasMediator(this, context);
     }

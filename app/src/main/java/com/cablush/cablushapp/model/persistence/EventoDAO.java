@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.cablush.cablushapp.model.domain.Evento;
@@ -75,7 +76,7 @@ public class EventoDAO extends AppBaseDAO {
     private LocalDAO localDAO;
     private LocalizavelEsporteDAO localizavelEsporteDAO;
 
-    public EventoDAO(Context context) {
+    public EventoDAO(@NonNull Context context) {
         dbHelper = CablushDBHelper.getInstance(context);
         localDAO = new LocalDAO(context);
         localizavelEsporteDAO = new LocalizavelEsporteDAO(context);
@@ -174,15 +175,23 @@ public class EventoDAO extends AppBaseDAO {
     }
 
     private long update(SQLiteDatabase db, Evento evento) {
-        // save evento
-        int row = db.update(TABLE, getContentValues(evento),
-                Columns._UUID.getColumnName() + " = ? ", new String[]{evento.getUuid()});
-        // save local
-        evento.getLocal().setUuidLocalizavel(evento.getUuid());
-        localDAO.save(db, evento.getLocal());
-        // save esportes
-        localizavelEsporteDAO.save(db, evento.getUuid(), evento.getEsportes());
-        return row;
+        db.beginTransaction();
+        try {
+            // save evento
+            int row = db.update(TABLE, getContentValues(evento),
+                    Columns._UUID.getColumnName() + " = ? ", new String[]{evento.getUuid()});
+            // save local
+            evento.getLocal().setUuidLocalizavel(evento.getUuid());
+            localDAO.save(db, evento.getLocal());
+            // save esportes
+            localizavelEsporteDAO.save(db, evento.getUuid(), evento.getEsportes());
+            return row;
+        } catch (Exception ex) {
+            Log.e(TAG, "Error updating evento.", ex);
+        } finally {
+            db.endTransaction();
+        }
+        return -1;
     }
 
     private long delete(SQLiteDatabase db, String uuid) {

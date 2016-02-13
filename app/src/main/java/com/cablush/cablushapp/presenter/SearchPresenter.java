@@ -1,6 +1,7 @@
 package com.cablush.cablushapp.presenter;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 
 import com.cablush.cablushapp.model.EventosMediator;
 import com.cablush.cablushapp.model.LojasMediator;
@@ -42,7 +43,7 @@ public class SearchPresenter implements LojasMediator.LojasMediatorListener,
      * @param view
      * @param context
      */
-    public SearchPresenter(SearchView view, Context context) {
+    public SearchPresenter(@NonNull SearchView view, @NonNull Context context) {
         this.mView = new WeakReference<>(view);
         this.lojasMediator = new LojasMediator(this, context);
         this.pistasMediator = new PistasMediator(this, context);

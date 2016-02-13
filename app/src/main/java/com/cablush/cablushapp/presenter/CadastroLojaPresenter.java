@@ -1,6 +1,7 @@
 package com.cablush.cablushapp.presenter;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 
 import com.cablush.cablushapp.model.LojasMediator;
 import com.cablush.cablushapp.model.SearchResult;
@@ -16,7 +17,7 @@ public class CadastroLojaPresenter extends CadastroPresenter<Loja>
 
     private LojasMediator lojasMediator;
 
-    public CadastroLojaPresenter(Context context) {
+    public CadastroLojaPresenter(@NonNull Context context) {
         super(context);
         lojasMediator = new LojasMediator(this, context);
     }

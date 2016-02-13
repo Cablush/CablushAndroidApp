@@ -1,5 +1,7 @@
 package com.cablush.cablushapp.model.rest;
 
+import android.support.annotation.NonNull;
+
 import com.cablush.cablushapp.BuildConfig;
 import com.cablush.cablushapp.model.domain.Usuario;
 import com.google.gson.GsonBuilder;
@@ -44,7 +46,7 @@ public class RestServiceBuilder {
         new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
     };
 
-    public static <S> S createService(Class<S> serviceClass) {
+    public static <S> S createService(@NonNull Class<S> serviceClass) {
         RestAdapter.Builder builder = new RestAdapter.Builder()
                 .setEndpoint(BuildConfig.RETROFIT_END_POINT)
                 .setConverter(createDateConverter())

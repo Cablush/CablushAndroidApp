@@ -3,6 +3,7 @@ package com.cablush.cablushapp.view;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v4.view.ViewPager;
 import android.widget.Toast;
 
@@ -31,11 +32,9 @@ public class CadastroPistaActivity extends CadastroActivity<Pista> {
      * @param context
      * @return
      */
-    public static Intent makeIntent(Context context, Pista pista) {
+    public static Intent makeIntent(@NonNull Context context, @NonNull Pista pista) {
         Intent intent = new Intent(context, CadastroPistaActivity.class);
-        if (pista != null) {
-            intent.putExtra(PISTA_EXTRA_KEY, pista);
-        }
+        intent.putExtra(PISTA_EXTRA_KEY, pista);
         return intent;
     }
 
@@ -46,10 +45,9 @@ public class CadastroPistaActivity extends CadastroActivity<Pista> {
 
         // Initialize the fragments
         pistaFragment = PistaFragment.newInstance(pista);
-        localFragment = LocalFragment.newInstance(pista != null ? pista.getLocal() : null);
-        mapaFragment = MapaFragment.newInstance(pista != null ? pista.getLocal().getLatLng() : null,
-                localFragment);
-        horarioFragment = HorarioFragment.newInstance(pista != null ? pista.getHorario() : null);
+        localFragment = LocalFragment.newInstance(pista.getLocal());
+        mapaFragment = MapaFragment.newInstance(pista.getLocal().getLatLng(), localFragment);
+        horarioFragment = HorarioFragment.newInstance(pista.getHorario());
 
         // Add the fragments into adapter
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());

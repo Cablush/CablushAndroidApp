@@ -4,6 +4,7 @@ import android.content.Context;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,7 +14,10 @@ import android.widget.Toast;
 
 import com.cablush.cablushapp.R;
 import com.cablush.cablushapp.model.SearchResult;
+import com.cablush.cablushapp.model.domain.Evento;
 import com.cablush.cablushapp.model.domain.Localizavel;
+import com.cablush.cablushapp.model.domain.Loja;
+import com.cablush.cablushapp.model.domain.Pista;
 import com.cablush.cablushapp.model.domain.Usuario;
 import com.cablush.cablushapp.presenter.LoginPresenter;
 import com.cablush.cablushapp.presenter.RegisterPresenter;
@@ -60,7 +64,7 @@ public class MainActivity extends AbstractDrawerActivity implements OnMapReadyCa
      * @param context
      * @return
      */
-    public static Intent makeIntent(Context context) {
+    public static Intent makeIntent(@NonNull Context context) {
         return new Intent(context, MainActivity.class);
     }
 
@@ -83,17 +87,20 @@ public class MainActivity extends AbstractDrawerActivity implements OnMapReadyCa
                 switch (menuItem.getItemId()){
                     case R.id.cadastro_loja:
                         if (checkUserLoggedIn()) {
-                            startActivity(CadastroLojaActivity.makeIntent(MainActivity.this, null));
+                            startActivity(CadastroLojaActivity
+                                    .makeIntent(MainActivity.this, new Loja()));
                         }
                         break;
                     case R.id.cadastro_evento:
                         if (checkUserLoggedIn()) {
-                            startActivity(CadastroEventoActivity.makeIntent(MainActivity.this, null));
+                            startActivity(CadastroEventoActivity
+                                    .makeIntent(MainActivity.this, new Evento()));
                         }
                         break;
                     case R.id.cadastro_pista:
                         if (checkUserLoggedIn()) {
-                            startActivity(CadastroPistaActivity.makeIntent(MainActivity.this, null));
+                            startActivity(CadastroPistaActivity
+                                    .makeIntent(MainActivity.this, new Pista()));
                         }
                         break;
                 }
@@ -178,10 +185,8 @@ public class MainActivity extends AbstractDrawerActivity implements OnMapReadyCa
                     return true;
                 }
                 return false;
-            default:
-                Log.e(TAG, "Invalid option!");
-                return false;
         }
+        return false;
     }
 
     private void configNavigationHead() {

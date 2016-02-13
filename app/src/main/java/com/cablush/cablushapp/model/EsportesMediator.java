@@ -1,6 +1,7 @@
 package com.cablush.cablushapp.model;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.cablush.cablushapp.model.domain.Esporte;
@@ -29,7 +30,7 @@ public class EsportesMediator {
      *
      * @param context
      */
-    public EsportesMediator(Context context) {
+    public EsportesMediator(@NonNull Context context) {
         this.apiEsportes = RestServiceBuilder.createService(ApiEsportes.class);
         this.esporteDAO = new EsporteDAO(context);
     }

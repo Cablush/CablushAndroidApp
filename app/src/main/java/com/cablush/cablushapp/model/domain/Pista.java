@@ -4,6 +4,7 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -29,7 +30,7 @@ public class Pista implements Localizavel, Serializable {
     @Expose
     private Local local;
     @Expose
-    private List<Esporte> esportes;
+    private List<Esporte> esportes = new ArrayList<>();
     @Expose
     private Horario horario;
     @Expose
@@ -37,6 +38,14 @@ public class Pista implements Localizavel, Serializable {
     private String responsavel;
     /** Identify that the object is on server **/
     private Boolean remote;
+
+    /**
+     * Default constructor;
+     */
+    public Pista() {
+        local = new Local();
+        horario = new Horario();
+    }
 
     @Override
     public String getUuid() {

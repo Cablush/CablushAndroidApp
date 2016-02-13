@@ -6,6 +6,7 @@ import android.app.DialogFragment;
 import android.app.FragmentManager;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.text.format.DateFormat;
 import android.util.Log;
 
@@ -28,8 +29,9 @@ public class DatePickerFragmentDialog extends DialogFragment {
      * @param calendar
      * @param listener
      */
-    public static void showDialog(FragmentManager fragmentManager, Calendar calendar,
-                                  DatePickerDialog.OnDateSetListener listener) {
+    public static void showDialog(@NonNull FragmentManager fragmentManager,
+                                  @NonNull Calendar calendar,
+                                  @NonNull DatePickerDialog.OnDateSetListener listener) {
         DatePickerFragmentDialog dialog = new DatePickerFragmentDialog();
         dialog.calendar = calendar;
         dialog.listener = listener;

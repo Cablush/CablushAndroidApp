@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.cablush.cablushapp.model.domain.Loja;
@@ -74,7 +75,7 @@ public class LojaDAO extends AppBaseDAO {
     private HorarioDAO horarioDAO;
     private LocalizavelEsporteDAO localizavelEsporteDAO;
 
-    public LojaDAO(Context context) {
+    public LojaDAO(@NonNull Context context) {
         dbHelper = CablushDBHelper.getInstance(context);
         localDAO = new LocalDAO(context);
         horarioDAO = new HorarioDAO(context);
@@ -152,10 +153,8 @@ public class LojaDAO extends AppBaseDAO {
             loja.getLocal().setUuidLocalizavel(loja.getUuid());
             localDAO.save(db, loja.getLocal());
             // save horario
-            if (loja.getHorario() != null) {
-                loja.getHorario().setUuidLocalizavel(loja.getUuid());
-                horarioDAO.save(db, loja.getHorario());
-            }
+            loja.getHorario().setUuidLocalizavel(loja.getUuid());
+            horarioDAO.save(db, loja.getHorario());
             // save esportes
             localizavelEsporteDAO.save(db, loja.getUuid(), loja.getEsportes());
             db.setTransactionSuccessful();
@@ -169,20 +168,26 @@ public class LojaDAO extends AppBaseDAO {
     }
 
     private long update(SQLiteDatabase db, Loja loja) {
-        // save loja
-        int row = db.update(TABLE, getContentValues(loja),
-                Columns._UUID.getColumnName() + " = ? ", new String[]{loja.getUuid()});
-        // save local
-        loja.getLocal().setUuidLocalizavel(loja.getUuid());
-        localDAO.save(db, loja.getLocal());
-        // save horario
-        if (loja.getHorario() != null) {
+        db.beginTransaction();
+        try {
+            // save loja
+            int row = db.update(TABLE, getContentValues(loja),
+                    Columns._UUID.getColumnName() + " = ? ", new String[]{loja.getUuid()});
+            // save local
+            loja.getLocal().setUuidLocalizavel(loja.getUuid());
+            localDAO.save(db, loja.getLocal());
+            // save horario
             loja.getHorario().setUuidLocalizavel(loja.getUuid());
             horarioDAO.save(db, loja.getHorario());
+            // save esportes
+            localizavelEsporteDAO.save(db, loja.getUuid(), loja.getEsportes());
+            return row;
+        } catch (Exception ex) {
+            Log.e(TAG, "Error updating loja.", ex);
+        } finally {
+            db.endTransaction();
         }
-        // save esportes
-        localizavelEsporteDAO.save(db, loja.getUuid(), loja.getEsportes());
-        return row;
+        return -1;
     }
 
     private long delete(SQLiteDatabase db, String uuid) {

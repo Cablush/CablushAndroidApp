@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.cablush.cablushapp.model.domain.Pista;
@@ -72,7 +73,7 @@ public class PistaDAO extends AppBaseDAO {
     private HorarioDAO horarioDAO;
     private LocalizavelEsporteDAO localizavelEsporteDAO;
 
-    public PistaDAO(Context context) {
+    public PistaDAO(@NonNull Context context) {
         dbHelper = CablushDBHelper.getInstance(context);
         localDAO = new LocalDAO(context);
         horarioDAO = new HorarioDAO(context);
@@ -142,10 +143,8 @@ public class PistaDAO extends AppBaseDAO {
             pista.getLocal().setUuidLocalizavel(pista.getUuid());
             localDAO.save(db, pista.getLocal());
             // save horario
-            if(pista.getHorario() != null) {
-                pista.getHorario().setUuidLocalizavel(pista.getUuid());
-                horarioDAO.save(db, pista.getHorario());
-            }
+            pista.getHorario().setUuidLocalizavel(pista.getUuid());
+            horarioDAO.save(db, pista.getHorario());
             // save esportes
             localizavelEsporteDAO.save(db, pista.getUuid(), pista.getEsportes());
             db.setTransactionSuccessful();
@@ -159,20 +158,26 @@ public class PistaDAO extends AppBaseDAO {
     }
 
     private long update(SQLiteDatabase db, Pista pista) {
-        // save pista
-        int row = db.update(TABLE, getContentValues(pista),
-                Columns._UUID.getColumnName() + " = ? ", new String[]{pista.getUuid()});
-        // save local
-        pista.getLocal().setUuidLocalizavel(pista.getUuid());
-        localDAO.save(db, pista.getLocal());
-        // save horario
-        if (pista.getHorario() != null) {
+        db.beginTransaction();
+        try {
+            // save pista
+            int row = db.update(TABLE, getContentValues(pista),
+                    Columns._UUID.getColumnName() + " = ? ", new String[]{pista.getUuid()});
+            // save local
+            pista.getLocal().setUuidLocalizavel(pista.getUuid());
+            localDAO.save(db, pista.getLocal());
+            // save horario
             pista.getHorario().setUuidLocalizavel(pista.getUuid());
             horarioDAO.save(db, pista.getHorario());
+            // save esportes
+            localizavelEsporteDAO.save(db, pista.getUuid(), pista.getEsportes());
+            return row;
+        } catch (Exception ex) {
+            Log.e(TAG, "Error updating pista.", ex);
+        } finally {
+            db.endTransaction();
         }
-        // save esportes
-        localizavelEsporteDAO.save(db, pista.getUuid(), pista.getEsportes());
-        return row;
+        return -1;
     }
 
     private long delete(SQLiteDatabase db, String uuid) {

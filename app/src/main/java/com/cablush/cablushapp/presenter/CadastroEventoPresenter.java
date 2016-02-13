@@ -1,9 +1,9 @@
 package com.cablush.cablushapp.presenter;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 
 import com.cablush.cablushapp.model.EventosMediator;
-import com.cablush.cablushapp.model.LojasMediator;
 import com.cablush.cablushapp.model.SearchResult;
 import com.cablush.cablushapp.model.domain.Evento;
 
@@ -17,7 +17,7 @@ public class CadastroEventoPresenter extends CadastroPresenter<Evento>
 
     private EventosMediator eventosMediator;
 
-    public CadastroEventoPresenter(Context context) {
+    public CadastroEventoPresenter(@NonNull Context context) {
         super(context);
         eventosMediator = new EventosMediator(this, context);
     }

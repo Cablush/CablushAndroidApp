@@ -1,6 +1,7 @@
 package com.cablush.cablushapp.model;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.cablush.cablushapp.model.domain.Usuario;
@@ -37,7 +38,7 @@ public class EventosMediator extends CablushMediator {
      * @param listener
      * @param context
      */
-    public EventosMediator(EventosMediatorListener listener, Context context) {
+    public EventosMediator(@NonNull EventosMediatorListener listener, @NonNull Context context) {
         super(context);
         this.mListener = new WeakReference<>(listener);
         this.apiEventos = RestServiceBuilder.createService(ApiEventos.class);

@@ -1,6 +1,6 @@
 package com.cablush.cablushapp.presenter;
 
-import android.content.Context;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.cablush.cablushapp.model.domain.Usuario;
@@ -40,7 +40,7 @@ public class RegisterPresenter {
      *
      * @param view
      */
-    public RegisterPresenter(RegisterView view) {
+    public RegisterPresenter(@NonNull RegisterView view) {
         this.mView = new WeakReference<>(view);
         this.apiUsuario = RestServiceBuilder.createService(ApiUsuario.class);
     }

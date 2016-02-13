@@ -1,6 +1,8 @@
 package com.cablush.cablushapp.model;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.cablush.cablushapp.model.domain.Usuario;
@@ -37,7 +39,7 @@ public class PistasMediator extends CablushMediator {
      * @param listener
      * @param context
      */
-    public PistasMediator(PistasMediatorListener listener, Context context) {
+    public PistasMediator(@NonNull PistasMediatorListener listener, @NonNull Context context) {
         super(context);
         this.mListener = new WeakReference<>(listener);
         this.apiPistas = RestServiceBuilder.createService(ApiPistas.class);
