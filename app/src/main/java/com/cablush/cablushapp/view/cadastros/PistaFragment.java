@@ -4,6 +4,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.widget.AppCompatTextView;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -18,6 +19,7 @@ import android.widget.MultiAutoCompleteTextView;
 import android.widget.TextView;
 
 import com.cablush.cablushapp.R;
+import com.cablush.cablushapp.model.EsportesMediator;
 import com.cablush.cablushapp.model.domain.Esporte;
 import com.cablush.cablushapp.model.domain.Pista;
 import com.cablush.cablushapp.utils.PictureUtils;
@@ -36,9 +38,9 @@ public class PistaFragment extends CablushFragment {
 
     private Pista pista;
 
-    List<String> esportes = new ArrayList<>();
+    List<Esporte> esportes = new ArrayList<>();
     List<Esporte> esportesSelecionados = new ArrayList<>();
-    private ArrayAdapter<String> esportesAdapter;
+    private ArrayAdapter<Esporte> esportesAdapter;
 
     private EditText nomeEditText;
     private EditText telefoneEditText;
@@ -98,7 +100,9 @@ public class PistaFragment extends CablushFragment {
     }
 
     private void initializeData() {
-        esportes = Arrays.asList(getResources().getStringArray(R.array.sports));
+        EsportesMediator esportesMediator = new EsportesMediator(getContext());
+        esportes = esportesMediator.getEsportes();
+        //esportes = Arrays.asList(getResources().getStringArray(R.array.sports));
         esportesAdapter = new ArrayAdapter<>(getActivity(),
                 android.R.layout.simple_dropdown_item_1line, esportes);
     }
@@ -132,7 +136,7 @@ public class PistaFragment extends CablushFragment {
             esportesMultiComplete.setAdapter(esportesAdapter);
         }
         esportesMultiComplete.setTokenizer(new MultiAutoCompleteTextView.CommaTokenizer());
-        esportesMultiComplete.setOnEditorActionListener(new MultiAutoCompleteTextView.OnEditorActionListener(){
+        /*esportesMultiComplete.setOnEditorActionListener(new MultiAutoCompleteTextView.OnEditorActionListener(){
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (event.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
@@ -143,12 +147,15 @@ public class PistaFragment extends CablushFragment {
                 return false;
             }
         });
+        */
         esportesMultiComplete.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-               Esporte esporte = new Esporte();
-                esporte.setNome(((EditText) view).getText().toString());
-                esportesSelecionados.add(esporte);
+                for(Esporte esporte : esportes){
+                    if(esporte.getNome().equals(((AppCompatTextView) view).getText().toString())){
+                        esportesSelecionados.add(esporte);
+                    }
+                }
             }
         });
     }
