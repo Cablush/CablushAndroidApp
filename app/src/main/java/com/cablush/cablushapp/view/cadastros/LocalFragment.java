@@ -1,6 +1,6 @@
 package com.cablush.cablushapp.view.cadastros;
 
-import android.content.Context;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cablush.cablushapp.R;
@@ -30,7 +31,6 @@ public class LocalFragment extends CablushFragment implements MapaFragment.Selec
     private static final String LOCAL_BUNDLE_KEY = "LOCAL_BUNDLE_KEY";
 
     private Local local;
-    private LatLng latLng;
 
     private ArrayAdapter<String> estadosAdapter;
 
@@ -88,7 +88,6 @@ public class LocalFragment extends CablushFragment implements MapaFragment.Selec
 
     @Override
     public void onLocationSelected(LatLng latLng) {
-        this.latLng = latLng;
         Intent intent = FetchAddressIntentService.makeIntent(getActivity(), mResultReceiver, latLng);
         getActivity().startService(intent);
     }
@@ -133,19 +132,16 @@ public class LocalFragment extends CablushFragment implements MapaFragment.Selec
      */
     public boolean doValidate() {
         boolean valido = true;
-        Context context = getContext();
-        if(!ViewUtils.checkNotEmpty(context, cepEditText) ||
-                !ViewUtils.checkNotEmpty(context, cidadeEditText) ||
-                !ViewUtils.checkNotEmpty(context, bairroEditText) ||
-                !ViewUtils.checkNotEmpty(context, logradouroEditText)){
-            valido = false;
-        }
 
-        if(local.getLatLng() == null){
-            valido = false;
-        }else if(local.getCep() == null || local.getCep().isEmpty() ){
-            valido = false;
-        }
+        valido = ViewUtils.checkNotEmpty(getContext(), cepEditText) && valido;
+        valido = ViewUtils.checkSelected(getContext(),
+                    (TextView)getActivity().findViewById(R.id.textViewEstado),
+                    estadoSpinner)
+                && valido;
+        valido = ViewUtils.checkNotEmpty(getContext(), cidadeEditText) && valido;
+        valido = ViewUtils.checkNotEmpty(getContext(), bairroEditText) && valido;
+        valido = ViewUtils.checkNotEmpty(getContext(), logradouroEditText) && valido;
+
         return valido;
     }
 
@@ -164,15 +160,13 @@ public class LocalFragment extends CablushFragment implements MapaFragment.Selec
         local.setLogradouro(logradouroEditText.getText().toString());
         local.setNumero(numeroEditText.getText().toString());
         local.setComplemento(complementoEditText.getText().toString());
-        if (local.getLatLng() == null && latLng != null) {
-            local.setLatLng(latLng); // Selected in map, but not found by address service
-        }
         return local;
     }
 
     /**
      * Receiver for data sent from FetchAddressIntentService.
      */
+    @SuppressLint("ParcelCreator")
     class AddressResultReceiver extends ResultReceiver {
 
         public final String TAG = AddressResultReceiver.class.getSimpleName();

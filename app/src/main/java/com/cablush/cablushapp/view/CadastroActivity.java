@@ -138,7 +138,6 @@ public abstract class CadastroActivity<T> extends CablushActivity {
 
     /**
      * Save the registry.
-     * <p>Called by save button.</p>
      *
      * @return The registry to be saved.
      */

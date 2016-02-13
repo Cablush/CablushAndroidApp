@@ -31,7 +31,7 @@ public abstract class CablushFragment extends Fragment {
     /**
      * Get the picture path;
      *
-     * @return
+     * @return The path of picture if this was loaded by camera or gallery, false otherwise.
      */
     public String getPictureFilePath() {
         if (pictureFileUri != null) {
@@ -45,7 +45,7 @@ public abstract class CablushFragment extends Fragment {
      * <p>Implement "imageView.setImageBitmap(PictureUtils.getBitmapFromUri(this, pictureFileUri));"
      * to load the picture on a imageView. </p>
      *
-     * @param pictureFileUri
+     * @param pictureFileUri The uri of the loaded picture.
      */
     public void onPictureLoaded(Uri pictureFileUri) {
         /* callback - no nothing */

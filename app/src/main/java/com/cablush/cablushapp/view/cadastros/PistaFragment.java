@@ -173,16 +173,11 @@ public class PistaFragment extends CablushFragment {
      */
     public boolean doValidate() {
         boolean valido = true;
-        getPista();
-        if(!ViewUtils.checkNotEmpty(getContext(),nomeEditText)||
-                !ViewUtils.checkNotEmpty(getContext(), esportesMultiComplete)){
-            valido = false;
-        }
-        if(pista == null){
-            valido = false;
-        }else if(pista.getNome() == null || pista.getNome().isEmpty()){
-            valido =  false;
-        }
+
+        valido = ViewUtils.checkNotEmpty(getContext(), nomeEditText) && valido;
+        valido = ViewUtils.checkNotEmpty(getContext(), descricaoEditText) && valido;
+        valido = ViewUtils.checkNotEmpty(getContext(), esportesMultiComplete) && valido;
+
         return valido;
     }
 
@@ -199,7 +194,6 @@ public class PistaFragment extends CablushFragment {
         pista.setFacebook(facebookEditText.getText().toString());
         pista.setFoto(getPictureFilePath());
         pista.setDescricao(descricaoEditText.getText().toString());
-
         pista.setEsportes(esportesSelecionados);
         return pista;
     }

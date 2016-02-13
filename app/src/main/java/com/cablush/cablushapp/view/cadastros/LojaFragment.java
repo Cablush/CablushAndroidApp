@@ -1,6 +1,5 @@
 package com.cablush.cablushapp.view.cadastros;
 
-import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -186,20 +185,13 @@ public class LojaFragment extends CablushFragment {
      */
     public boolean doValidate() {
         boolean valido = true;
-        Context context = getContext();
-        if(!ViewUtils.checkNotEmpty(context, nomeEditText) ||
-                !ViewUtils.checkNotEmpty(context, descricaoEditText)||
-                !ViewUtils.checkNotEmpty(context, esportesMultiComplete)){
-            valido = false;
+
+        if (isAdded()) {
+            valido = ViewUtils.checkNotEmpty(getContext(), nomeEditText) && valido;
+            valido = ViewUtils.checkNotEmpty(getContext(), descricaoEditText) && valido;
+            valido = ViewUtils.checkNotEmpty(getContext(), esportesMultiComplete) && valido;
         }
 
-        if(loja == null){
-            valido = false;
-        }else if(loja.getNome() == null || loja.getNome().isEmpty()){
-            valido = false;
-        }else if(loja.getDescricao() == null || loja.getDescricao().isEmpty()){
-            valido = false;
-        }
         return valido;
     }
 
@@ -211,14 +203,16 @@ public class LojaFragment extends CablushFragment {
         if (loja == null) {
             loja = new Loja();
         }
-        loja.setNome(nomeEditText.getText().toString());
-        loja.setTelefone(telefoneEditText.getText().toString());
-        loja.setEmail(emailEditText.getText().toString());
-        loja.setWebsite(websiteEditText.getText().toString());
-        loja.setFacebook(facebookEditText.getText().toString());
-        loja.setLogo(getPictureFilePath());
-        loja.setDescricao(descricaoEditText.getText().toString());
-        loja.setEsportes(esportesSelecionados);
+        if (isAdded()) {
+            loja.setNome(nomeEditText.getText().toString());
+            loja.setTelefone(telefoneEditText.getText().toString());
+            loja.setEmail(emailEditText.getText().toString());
+            loja.setWebsite(websiteEditText.getText().toString());
+            loja.setFacebook(facebookEditText.getText().toString());
+            loja.setLogo(getPictureFilePath());
+            loja.setDescricao(descricaoEditText.getText().toString());
+            loja.setEsportes(esportesSelecionados);
+        }
         return loja;
     }
 }

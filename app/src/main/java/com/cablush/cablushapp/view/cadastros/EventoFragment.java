@@ -2,7 +2,6 @@ package com.cablush.cablushapp.view.cadastros;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
-import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -250,26 +249,12 @@ public class EventoFragment extends CablushFragment {
      */
     public boolean doValidate() {
         boolean valido = true;
-        Context context = getContext();
-        if(!ViewUtils.checkNotEmpty(context, nomeEditText) ||
-            !ViewUtils.checkNotEmpty(context, descricaoEditText)||
-            !ViewUtils.checkNotEmpty(context, dataInicioEditText)||
-            !ViewUtils.checkNotEmpty(context, descricaoEditText)||
-            !ViewUtils.checkNotEmpty(context, esportesMultiComplete)){
-            valido = false;
-        }
 
-        if(evento == null) {
-            valido = false;
-        }else if(evento.getNome() == null ||evento.getNome().isEmpty() ){
-            valido = false;
-        }else if(evento.getData() == null){
-            valido =  false;
-        }else if(evento.getHora() == null){
-            valido = false;
-        }else if(evento.getDescricao() == null || evento.getDescricao().isEmpty()){
-            valido = false;
-        }
+        valido = ViewUtils.checkNotEmpty(getContext(), nomeEditText) && valido;
+        valido = ViewUtils.checkNotEmpty(getContext(), dataInicioEditText) && valido;
+        valido = ViewUtils.checkNotEmpty(getContext(), horarioEditText) && valido;
+        valido = ViewUtils.checkNotEmpty(getContext(), descricaoEditText) && valido;
+        valido = ViewUtils.checkNotEmpty(getContext(), esportesMultiComplete) && valido;
 
         return valido;
     }
@@ -288,7 +273,6 @@ public class EventoFragment extends CablushFragment {
         evento.setFlyer(getPictureFilePath());
         evento.setDescricao(descricaoEditText.getText().toString());
         evento.setEsportes(esportesSelecionados);
-
         try {
             evento.setData(beginCalendar.getTime());
             evento.setDataFim(endCalendar.getTime());

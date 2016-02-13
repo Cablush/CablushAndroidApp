@@ -1,7 +1,6 @@
 package com.cablush.cablushapp.view.cadastros;
 
 import android.app.TimePickerDialog;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
@@ -11,8 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.TimePicker;
-import android.widget.Toast;
 
 import com.cablush.cablushapp.R;
 import com.cablush.cablushapp.model.domain.Horario;
@@ -160,19 +159,14 @@ public class HorarioFragment extends CablushFragment {
      */
     public boolean doValidate() {
         boolean valido = true;
-        Context context = getContext();
-        if(!ViewUtils.checkNotEmpty(context,editTextIni)){
-            valido = false;
-        }else if(!checkBoxDom.isChecked() || !checkBoxSeg.isChecked() ||
-                !checkBoxTer.isChecked()  || !checkBoxQua.isChecked() ||
-                !checkBoxQui.isChecked()  || !checkBoxSex.isChecked() |
-                !checkBoxSab.isChecked()){
-            valido = false;
-            Toast.makeText(context,R.string.favor_preencher_dia_funcionamento,Toast.LENGTH_SHORT).show();
-        }
-        if(!horario.isOpenOneDay() && horario.getInicio() == null && horario.getFim() ==null){
-            valido = false;
-        }
+
+        valido = ViewUtils.checkNotEmpty(getContext(), editTextIni) && valido;
+        valido = ViewUtils.checkOneChecked(getContext(),
+                    (TextView)getActivity().findViewById(R.id.textViewDias),
+                    checkBoxSeg, checkBoxTer, checkBoxQua, checkBoxQui,
+                    checkBoxSex, checkBoxSab, checkBoxDom)
+                && valido;
+
         return valido;
     }
 

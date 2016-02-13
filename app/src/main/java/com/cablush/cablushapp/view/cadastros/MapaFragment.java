@@ -152,14 +152,6 @@ public class MapaFragment extends CablushFragment implements OnMapReadyCallback,
         fethLocation();
     }
 
-    public boolean doValidate() {
-        boolean valido = true;
-        if(latLng == null){
-            valido = false;
-        }
-        return valido;
-    }
-
     private void setMarker() {
         if (googleMap != null && this.latLng != null) {
             // Clear Map
@@ -181,5 +173,14 @@ public class MapaFragment extends CablushFragment implements OnMapReadyCallback,
                 listener.onLocationSelected(this.latLng);
             }
         }
+    }
+
+    /**
+     * Get the selected LatLng.
+     *
+     * @return
+     */
+    public LatLng getLatLng() {
+        return latLng;
     }
 }

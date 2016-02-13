@@ -212,16 +212,17 @@
     <string name="msg_search_error">Erro na pesquisa, retornando dados em cache.</string>
 
     <!-- Mensagens de cadastros -->
-    <string name="msg_name_missing">Preencha o nome.</string>
-    <string name="msg_description_missing">Preencha a descrição.</string>
-    <string name="msg_spot_missing">Preencha o local.</string>
-    <string name="msg_startDate_missing">Preencha a data de inicio.</string>
-    <string name="msg_startTime_missing">Preencha a hora de inicio.</string>
-    <string name="msg_set_address_manually">Endereço não encontrado. Prencha os dados manualmente.</string>
-    <string name="msg_check_address">Endereço encontrado. Confira os dados preenchidos.</string>
+    <string name="msg_set_address_manually">Endereço não encontrado, prencha os dados manualmente.</string>
+    <string name="msg_check_address">Endereço encontrado, confira os dados retornados.</string>
     <string name="msg_confirm_no_save">Descartar alterações não salvas?</string>
-    <string name="favor_preencher">Favor preencher os campos obrigatórios!</string>
-    <string name="favor_preencher_dia_funcionamento">Favor preencher os dias de funcionamento!</string>
+    <string name="msg_required">Campo obrigatório!</string>
+    <string name="msg_select_one">Selecione pelo menos uma opção.</string>
+    <string name="msg_invalid_loja">Verifique os dados na aba loja!</string>
+    <string name="msg_invalid_pista">Verifique os dados na aba pista!</string>
+    <string name="msg_invalid_evnto">Verifique os dados na aba evento!</string>
+    <string name="msg_invalid_mapa">Verifique os dados na aba localização!</string>
+    <string name="msg_invalid_local">Verifique os dados na aba endereço!</string>
+    <string name="msg_invalid_horario">Verifique os dados na aba horários!</string>
 
     <!-- Mensagens de login e registro -->
     <string name="msg_register_missing_data">Preencha todos os campos.</string>

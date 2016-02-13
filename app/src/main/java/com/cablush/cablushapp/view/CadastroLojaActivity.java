@@ -3,6 +3,7 @@ package com.cablush.cablushapp.view;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.view.ViewPager;
+import android.widget.Toast;
 
 import com.cablush.cablushapp.R;
 import com.cablush.cablushapp.model.domain.Loja;
@@ -67,7 +68,14 @@ public class CadastroLojaActivity extends CadastroActivity<Loja> {
 
     @Override
     protected boolean validate() {
-        return lojaFragment.doValidate() && localFragment.doValidate() && horarioFragment.doValidate();
+        boolean valido = lojaFragment.doValidate()
+                & localFragment.doValidate()
+                & horarioFragment.doValidate();
+
+        if (!valido) {
+            Toast.makeText(this, R.string.msg_check_errors_before_save, Toast.LENGTH_SHORT).show();
+        }
+        return valido;
     }
 
     @Override

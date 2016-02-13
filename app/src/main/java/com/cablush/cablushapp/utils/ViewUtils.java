@@ -4,16 +4,12 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.cablush.cablushapp.R;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 
 /**
  * Created by oscar on 26/12/15.
@@ -31,6 +27,9 @@ public class ViewUtils {
         return context.getString(resId, args);
     }
 
+    /**
+     * Inflate the "custom_title" layout.
+     */
     public static View getCustomTitleView(LayoutInflater inflater, String title, int iconId) {
         View view = inflater.inflate(R.layout.custom_title, null);
         ImageView iconImageView = (ImageView) view.findViewById(R.id.icon);
@@ -49,27 +48,37 @@ public class ViewUtils {
                 : adapter.getSelectedItem().toString().toLowerCase();
     }
 
-    public static String readRawTextFile(Context context, int id) {
-        InputStream inputStream = context.getResources().openRawResource(id);
-
-        InputStreamReader in = new InputStreamReader(inputStream);
-        BufferedReader buf = new BufferedReader(in);
-
-        String line;
-
-        StringBuilder text = new StringBuilder();
-        try {
-            while (( line = buf.readLine()) != null) text.append(line);
-        } catch (IOException e) {
-            return null;
+    /**
+     * Check if the editText is not empty, and "mark" if it is empty.
+     */
+    public static boolean checkNotEmpty(Context context, EditText editText) {
+        if (editText.getText().toString().isEmpty()) {
+            editText.setError(context.getString(R.string.msg_required));
+            return false;
         }
-
-        return text.toString();
+        return true;
     }
 
-    public static boolean checkNotEmpty(Context context, EditText editText){
-        if(editText.getText().toString().isEmpty()){
-            editText.setError(context.getString(R.string.favor_preencher));
+    /**
+     * Check if at least one checkbox is checked, and "mark" the textView if not.
+     */
+    public static boolean checkOneChecked(Context context, TextView textView,
+                                          CheckBox... checkBoxes) {
+        for (CheckBox checkBox : checkBoxes) {
+            if (!checkBox.isChecked()) {
+                textView.setError(context.getString(R.string.msg_select_one));
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Check if a valid option is selected, and 'mark' the textView if not.
+     */
+    public static boolean checkSelected(Context context, TextView textView, AdapterView adapter) {
+        if (getSelectedItem(context, adapter).isEmpty()) {
+            textView.setError(context.getString(R.string.msg_select_one));
             return false;
         }
         return true;
