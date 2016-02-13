@@ -53,4 +53,9 @@ public class Esporte implements Serializable {
     public String getCategoriaNome() {
         return categoria.equals("outros") ? nome : categoria + " - " + nome;
     }
+
+    @Override
+    public String toString() {
+        return nome;
+    }
 }
