@@ -73,7 +73,7 @@ public class CadastroLojaActivity extends CadastroActivity<Loja> {
                 & horarioFragment.doValidate();
 
         if (!valido) {
-            Toast.makeText(this, R.string.msg_check_errors_before_save, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.msg_invalid_loja, Toast.LENGTH_SHORT).show();
         }
         return valido;
     }

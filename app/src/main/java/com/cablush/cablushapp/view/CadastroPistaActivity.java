@@ -72,7 +72,7 @@ public class CadastroPistaActivity extends CadastroActivity<Pista> {
                 && horarioFragment.doValidate();
 
         if (!valido) {
-            Toast.makeText(this, R.string.msg_check_errors_before_save, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.msg_invalid_pista, Toast.LENGTH_SHORT).show();
         }
         return valido;
     }

@@ -219,7 +219,7 @@
     <string name="msg_select_one">Selecione pelo menos uma opção.</string>
     <string name="msg_invalid_loja">Verifique os dados na aba loja!</string>
     <string name="msg_invalid_pista">Verifique os dados na aba pista!</string>
-    <string name="msg_invalid_evnto">Verifique os dados na aba evento!</string>
+    <string name="msg_invalid_evento">Verifique os dados na aba evento!</string>
     <string name="msg_invalid_mapa">Verifique os dados na aba localização!</string>
     <string name="msg_invalid_local">Verifique os dados na aba endereço!</string>
     <string name="msg_invalid_horario">Verifique os dados na aba horários!</string>

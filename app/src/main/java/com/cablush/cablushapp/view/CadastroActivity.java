@@ -71,8 +71,9 @@ public abstract class CadastroActivity<T> extends CablushActivity {
     protected abstract void setupViewPager(ViewPager viewPager);
 
     /**
+     * Setup the "Presenter" responsible for this Activity.
      *
-     * @return
+     * @return The Presenter responsible for this Activity.
      */
     protected abstract CadastroPresenter<T> setupPresenter();
 

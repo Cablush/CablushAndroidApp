@@ -70,7 +70,7 @@ public class CadastroEventoActivity extends CadastroActivity<Evento> {
         boolean valido = eventoFragment.doValidate() && localFragment.doValidate();
 
         if (!valido) {
-            Toast.makeText(this, R.string.msg_check_errors_before_save, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.msg_invalid_evento, Toast.LENGTH_SHORT).show();
         }
         return valido;
     }
