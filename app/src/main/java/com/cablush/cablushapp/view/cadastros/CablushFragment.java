@@ -74,6 +74,7 @@ public abstract class CablushFragment extends Fragment {
         } else {
             Toast.makeText(getContext(), R.string.error_getting_picture, Toast.LENGTH_SHORT).show();
             // TODO delete file!
+            //Não resolvi este to do, nao tem como deletar uma foto q deu erro, hehe
         }
     }
 
@@ -111,6 +112,7 @@ public abstract class CablushFragment extends Fragment {
                     onLocationPermissionGranted();
                 } else {
                     // TODO - Permission denied! Disable the functionality that depends on this permission. (?)
+                    //http://inthecheesefactory.com/blog/things-you-need-to-know-about-android-m-permission-developer-edition/en
                     Toast.makeText(getActivity(), R.string.ask_permissions_location, Toast.LENGTH_SHORT).show();
                 }
                 return;

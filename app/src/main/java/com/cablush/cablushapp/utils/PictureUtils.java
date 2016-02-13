@@ -75,10 +75,14 @@ public class PictureUtils {
     private static String getPicturePath(Context context, Uri pictureUri) {
         String[] projection = { MediaStore.MediaColumns.DATA };
         CursorLoader cursorLoader = new CursorLoader(context, pictureUri, projection, null, null, null);
-        Cursor cursor = cursorLoader.loadInBackground();
-        int column_index = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA);
+        if(cursorLoader.getUri() != null) {
+            return cursorLoader.getUri().getPath(); //não sei se foi melhor solução
+        }
+        return "";
+        /*Cursor cursor = cursorLoader.loadInBackground();
+        int column_index = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA); //Fixme cursor == null (sugestao usar o )
         cursor.moveToFirst();
-        return cursor.getString(column_index);
+        return cursor.getString(column_index);*/
     }
 
     /**

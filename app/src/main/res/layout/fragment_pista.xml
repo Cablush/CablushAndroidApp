@@ -210,16 +210,5 @@
             android:layout_marginRight="@dimen/dialog_margin"
             android:layout_marginBottom="@dimen/dialog_margin"
             android:hint="@string/empty_selection"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Large Text"
-            android:id="@+id/textView5"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
-
     </RelativeLayout>
 </ScrollView>

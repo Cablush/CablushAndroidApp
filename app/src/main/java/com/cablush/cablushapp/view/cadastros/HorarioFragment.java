@@ -170,7 +170,6 @@ public class HorarioFragment extends CablushFragment {
             valido = false;
             Toast.makeText(context,R.string.favor_preencher_dia_funcionamento,Toast.LENGTH_SHORT).show();
         }
-        // TODO validar views!
         if(!horario.isOpenOneDay() && horario.getInicio() == null && horario.getFim() ==null){
             valido = false;
         }

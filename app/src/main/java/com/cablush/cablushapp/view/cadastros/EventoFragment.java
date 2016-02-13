@@ -12,6 +12,7 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -49,6 +50,7 @@ public class EventoFragment extends CablushFragment {
     private Calendar endCalendar;
 
     List<String> esportes = new ArrayList<>();
+    List<Esporte> esportesSelecionados = new ArrayList<>();
     private ArrayAdapter<String> esportesAdapter;
 
     private EditText nomeEditText;
@@ -62,6 +64,7 @@ public class EventoFragment extends CablushFragment {
     private ImageView flyerImageView;
     private EditText descricaoEditText;
     private MultiAutoCompleteTextView esportesMultiComplete;
+    private String fotoImagePath;
 
     public EventoFragment() {
         // Required empty public constructor
@@ -106,6 +109,7 @@ public class EventoFragment extends CablushFragment {
     @Override
     public void onPictureLoaded(Uri pictureFileUri) {
         flyerImageView.setImageBitmap(PictureUtils.getBitmapFromUri(getContext(), pictureFileUri));
+        fotoImagePath = pictureFileUri.getPath();
     }
 
     private void initializeData() {
@@ -206,6 +210,15 @@ public class EventoFragment extends CablushFragment {
                 return false;
             }
         });
+
+        esportesMultiComplete.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Esporte esporte = new Esporte();
+                esporte.setNome(((EditText) view).getText().toString());
+                esportesSelecionados.add(esporte);
+            }
+        });
     }
 
     private void setViewValues() {
@@ -243,7 +256,6 @@ public class EventoFragment extends CablushFragment {
             valido = false;
         }
 
-        // TODO validar views!
         if(evento == null) {
             valido = false;
         }else if(evento.getNome() == null ||evento.getNome().isEmpty() ){
@@ -270,9 +282,9 @@ public class EventoFragment extends CablushFragment {
         evento.setNome(nomeEditText.getText().toString());
         evento.setWebsite(websiteEditText.getText().toString());
         evento.setFacebook(facebookEditText.getText().toString());
-        // TODO evento.setFlyer();
+        evento.setFlyer(fotoImagePath);
         evento.setDescricao(descricaoEditText.getText().toString());
-        //TODO evento.setEsportes();
+        evento.setEsportes(esportesSelecionados);
 
         try {
             evento.setData(beginCalendar.getTime());

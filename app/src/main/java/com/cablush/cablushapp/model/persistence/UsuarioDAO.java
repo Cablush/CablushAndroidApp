@@ -106,12 +106,14 @@ public class UsuarioDAO extends AppBaseDAO {
     private long insert(SQLiteDatabase db, Usuario usuario) throws SQLException {
         return db.insertOrThrow("usuario", null, getContentValues(usuario));
         // TODO save relacionamento de esportes
+        //pode ser feito para a proxima versão, não dei foco
     }
 
     private int update(SQLiteDatabase db, Usuario usuario) {
         return db.update(TABLE, getContentValues(usuario),
                 Columns._UUID.getColumnName() + " = ? ", new String[]{usuario.getUuid()});
         // TODO save relacionamento de esportes
+        //pode ser feito para a proxima versão, não dei foco
 
     }
 

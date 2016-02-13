@@ -9,6 +9,7 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -36,6 +37,7 @@ public class PistaFragment extends CablushFragment {
     private Pista pista;
 
     List<String> esportes = new ArrayList<>();
+    List<Esporte> esportesSelecionados = new ArrayList<>();
     private ArrayAdapter<String> esportesAdapter;
 
     private EditText nomeEditText;
@@ -48,7 +50,7 @@ public class PistaFragment extends CablushFragment {
     private ImageView fotoImageView;
     private EditText descricaoEditText;
     private MultiAutoCompleteTextView esportesMultiComplete;
-
+    private String fotoImagePath;
     public PistaFragment() {
         // Required empty public constructor
     }
@@ -92,6 +94,7 @@ public class PistaFragment extends CablushFragment {
     @Override
     public void onPictureLoaded(Uri pictureFileUri) {
         fotoImageView.setImageBitmap(PictureUtils.getBitmapFromUri(getContext(), pictureFileUri));
+        fotoImagePath = pictureFileUri.getPath();
     }
 
     private void initializeData() {
@@ -140,6 +143,14 @@ public class PistaFragment extends CablushFragment {
                 return false;
             }
         });
+        esportesMultiComplete.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+               Esporte esporte = new Esporte();
+                esporte.setNome(((EditText) view).getText().toString());
+                esportesSelecionados.add(esporte);
+            }
+        });
     }
 
     private void setViewValues() {
@@ -164,11 +175,11 @@ public class PistaFragment extends CablushFragment {
      */
     public boolean doValidate() {
         boolean valido = true;
+        getPista();
         if(!ViewUtils.checkNotEmpty(getContext(),nomeEditText)||
                 !ViewUtils.checkNotEmpty(getContext(), esportesMultiComplete)){
             valido = false;
         }
-        // TODO validar views!
         if(pista == null){
             valido = false;
         }else if(pista.getNome() == null || pista.getNome().isEmpty()){
@@ -188,9 +199,10 @@ public class PistaFragment extends CablushFragment {
         pista.setNome(nomeEditText.getText().toString());
         pista.setWebsite(websiteEditText.getText().toString());
         pista.setFacebook(facebookEditText.getText().toString());
-        // TODO pista.setFoto();
+        pista.setFoto(fotoImagePath);
         pista.setDescricao(descricaoEditText.getText().toString());
-        //TODO pista.setEsportes();
+
+        pista.setEsportes(esportesSelecionados);
         return pista;
     }
 }

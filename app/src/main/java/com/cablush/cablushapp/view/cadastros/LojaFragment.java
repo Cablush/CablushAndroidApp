@@ -10,6 +10,7 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -37,6 +38,7 @@ public class LojaFragment extends CablushFragment {
     private Loja loja;
 
     List<String> esportes = new ArrayList<>();
+    List<Esporte> esportesSelecionados = new ArrayList<>();
     private ArrayAdapter<String> esportesAdapter;
 
     private EditText nomeEditText;
@@ -49,7 +51,7 @@ public class LojaFragment extends CablushFragment {
     private ImageView logoImageView;
     private EditText descricaoEditText;
     private MultiAutoCompleteTextView esportesMultiComplete;
-
+    private String fotoImagePath;
     public LojaFragment() {
         // Required empty public constructor
     }
@@ -93,6 +95,7 @@ public class LojaFragment extends CablushFragment {
     @Override
     public void onPictureLoaded(Uri pictureFileUri) {
         logoImageView.setImageBitmap(PictureUtils.getBitmapFromUri(getContext(), pictureFileUri));
+        fotoImagePath = pictureFileUri.getPath();
     }
 
     private void initializeData() {
@@ -143,6 +146,14 @@ public class LojaFragment extends CablushFragment {
                 return false;
             }
         });
+        esportesMultiComplete.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Esporte esporte = new Esporte();
+                esporte.setNome(((EditText) view).getText().toString());
+                esportesSelecionados.add(esporte);
+            }
+        });
     }
 
     private void setViewValues() {
@@ -176,7 +187,6 @@ public class LojaFragment extends CablushFragment {
             valido = false;
         }
 
-        // TODO validar views!
         if(loja == null){
             valido = false;
         }else if(loja.getNome() == null || loja.getNome().isEmpty()){
@@ -200,9 +210,9 @@ public class LojaFragment extends CablushFragment {
         loja.setEmail(emailEditText.getText().toString());
         loja.setWebsite(websiteEditText.getText().toString());
         loja.setFacebook(facebookEditText.getText().toString());
-        // TODO loja.setLogo();
+        loja.setLogo(fotoImagePath);
         loja.setDescricao(descricaoEditText.getText().toString());
-        //TODO loja.setEsportes();
+        loja.setEsportes(esportesSelecionados);
         return loja;
     }
 }
