@@ -79,6 +79,30 @@ public abstract class CablushActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Callback called if Storage Permission are granted.
+     * <p>To be implemented by concrete class that need Storage Permissions.</p>
+     */
+    public void onStoragePermissionGranted() {
+        /* callback - do nothing */
+    }
+
+    /**
+     * Check if the Storage Permissions are granted, requering the permissions to the user if necessary.
+     * And, call '
+     */
+    public void checkStoragePermission() {
+        if (!PermissionUtils.checkStoragePermission(this)) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                requestPermissions(
+                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        PermissionUtils.PERMISSIONS_STORAGE);
+            }
+        } else {
+            onStoragePermissionGranted();
+        }
+    }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -93,6 +117,13 @@ public abstract class CablushActivity extends AppCompatActivity {
                 }
                 return;
             case PermissionUtils.PERMISSIONS_STORAGE:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    onStoragePermissionGranted();
+                } else {
+                    // TODO - Permission denied! Disable the functionality that depends on this permission. (?)
+                    //http://inthecheesefactory.com/blog/things-you-need-to-know-about-android-m-permission-developer-edition/en
+                    Toast.makeText(this, R.string.ask_permissions_storage, Toast.LENGTH_SHORT).show();
+                }
                 return;
         }
     }

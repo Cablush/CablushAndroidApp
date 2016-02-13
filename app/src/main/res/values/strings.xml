@@ -199,9 +199,7 @@
 
     <!-- Mensagens de permissões -->
     <string name="ask_permissions_location">O Cablush utiliza a sua localização para sugerir locais onde praticar esportes com mais precisão.</string>
-    <string name="favor_preencher">Favor preencher os campos obrigatórios!</string>
-    <string name="favor_preencher_dia_funcionamento">Favor preencher os dias de funcionamento!</string>
-    <!--<string name="ask_permissions_storage"></string>-->
+    <string name="ask_permissions_storage">O Cablush necessita permissão de escrita em seu dispositivo para salvar as fotos.</string>
 
     <!-- Mensagens de erro genéricas -->
     <string name="error_create_map">Error a carregar o mapa!</string>
@@ -222,6 +220,8 @@
     <string name="msg_set_address_manually">Endereço não encontrado. Prencha os dados manualmente.</string>
     <string name="msg_check_address">Endereço encontrado. Confira os dados preenchidos.</string>
     <string name="msg_confirm_no_save">Descartar alterações não salvas?</string>
+    <string name="favor_preencher">Favor preencher os campos obrigatórios!</string>
+    <string name="favor_preencher_dia_funcionamento">Favor preencher os dias de funcionamento!</string>
 
     <!-- Mensagens de login e registro -->
     <string name="msg_register_missing_data">Preencha todos os campos.</string>
@@ -232,6 +232,7 @@
     <string name="success_register">Cadastro realizado! Antes de fazer Login, confirme o cadastro no email que te enviamos!</string>
 
     <!-- Mensagens de fotos/galeria -->
+    <string name="error_no_camera_found">Nenhuma camera encontrada neste dispositivo.</string>
     <string name="error_getting_picture">Erro ao obter foto.</string>
 
     <!-- Mensagens do serviço de localização -->

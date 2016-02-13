@@ -53,7 +53,7 @@ public class LojaFragment extends CablushFragment {
     private ImageView logoImageView;
     private EditText descricaoEditText;
     private MultiAutoCompleteTextView esportesMultiComplete;
-    private String fotoImagePath;
+
     public LojaFragment() {
         // Required empty public constructor
     }
@@ -95,9 +95,15 @@ public class LojaFragment extends CablushFragment {
     }
 
     @Override
+    public void onStoragePermissionGranted() {
+        super.onStoragePermissionGranted();
+        dispatchTakePictureIntent();
+    }
+
+    @Override
     public void onPictureLoaded(Uri pictureFileUri) {
-        logoImageView.setImageBitmap(PictureUtils.getBitmapFromUri(getContext(), pictureFileUri));
-        fotoImagePath = pictureFileUri.getPath();
+        logoImageView.setImageBitmap(PictureUtils.getBitmapFromUri(getContext(), pictureFileUri,
+                logoImageView.getWidth(), logoImageView.getHeight()));
     }
 
     private void initializeData() {
@@ -127,7 +133,7 @@ public class LojaFragment extends CablushFragment {
         pictureImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dispatchTakePictureIntent();
+                checkStoragePermission();
             }
         });
         logoImageView = (ImageView) activity.findViewById(R.id.imageViewLogo);
@@ -219,7 +225,7 @@ public class LojaFragment extends CablushFragment {
         loja.setEmail(emailEditText.getText().toString());
         loja.setWebsite(websiteEditText.getText().toString());
         loja.setFacebook(facebookEditText.getText().toString());
-        loja.setLogo(fotoImagePath);
+        loja.setLogo(getPictureFilePath());
         loja.setDescricao(descricaoEditText.getText().toString());
         loja.setEsportes(esportesSelecionados);
         return loja;

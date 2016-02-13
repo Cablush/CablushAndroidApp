@@ -2,7 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.cablush.cablushapp" >
 
-    <uses-feature android:name="android.hardware.camera" android:required="true" />
+    <!-- Camera permission (used but not required) -->
+    <uses-feature android:name="android.hardware.camera" android:required="false" />
 
     <!-- Normal permissions -->
     <uses-permission android:name="android.permission.INTERNET" />
