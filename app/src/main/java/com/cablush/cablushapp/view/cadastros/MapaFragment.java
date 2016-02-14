@@ -44,10 +44,7 @@ public class MapaFragment extends CablushFragment implements OnMapReadyCallback,
     }
 
     /**
-     *
-     * @param latLng
-     * @param selectLocationListener
-     * @return
+     * Creates a new instance of this fragment with the necessary data.
      */
     public static MapaFragment newInstance(LatLng latLng,
                                            @NonNull SelectLocationListener selectLocationListener) {
@@ -61,26 +58,25 @@ public class MapaFragment extends CablushFragment implements OnMapReadyCallback,
         return fragment;
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Log.d(TAG, "onCreate()");
+        // Initialize necessary data
+        if (getArguments() != null) {
+            latLng = getArguments().getParcelable(LOCATION_BUNDLE_KEY);
+        }
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         Log.d(TAG, "onCreateView()");
-        if (getArguments() != null) {
-            latLng = getArguments().getParcelable(LOCATION_BUNDLE_KEY);
-        }
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_mapa, container, false);
-        mapView = (MapView) view.findViewById(R.id.mapView);
-        mapView.onCreate(savedInstanceState);
-        mapView.getMapAsync(this);
+        initializeView(view, savedInstanceState);
         return view;
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        Log.d(TAG, "onActivityCreated()");
     }
 
     @Override
@@ -118,6 +114,12 @@ public class MapaFragment extends CablushFragment implements OnMapReadyCallback,
         if (this.isVisible() && isVisibleToUser && latLng == null) {
             Toast.makeText(getActivity(), R.string.txt_select_location, Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void initializeView(View view, Bundle savedInstanceState) {
+        mapView = (MapView) view.findViewById(R.id.mapView);
+        mapView.onCreate(savedInstanceState);
+        mapView.getMapAsync(this);
     }
 
     @Override

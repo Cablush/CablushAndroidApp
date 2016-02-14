@@ -7,7 +7,6 @@ import android.os.Handler;
 import android.os.ResultReceiver;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -50,9 +49,7 @@ public class LocalFragment extends CablushFragment implements MapaFragment.Selec
     }
 
     /**
-     *
-     * @param local
-     * @return
+     * Creates a new instance of this fragment with the necessary data.
      */
     public static LocalFragment newInstance(@NonNull Local local) {
         LocalFragment fragment = new LocalFragment();
@@ -62,26 +59,38 @@ public class LocalFragment extends CablushFragment implements MapaFragment.Selec
         return fragment;
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Log.d(TAG, "onCreate()");
+        // Initialize necessary data
+        if (getArguments() != null) {
+            local = (Local) getArguments().getSerializable(LOCAL_BUNDLE_KEY);
+        }
+
+        String[] estados = getResources().getStringArray(R.array.states);
+        estadosAdapter = new ArrayAdapter<>(getActivity(), R.layout.simple_item, estados);
+        estadosAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        mResultReceiver = new AddressResultReceiver(new Handler());
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         Log.d(TAG, "onCreateView()");
-        if (getArguments() != null) {
-            local = (Local) getArguments().getSerializable(LOCAL_BUNDLE_KEY);
-        }
-        mResultReceiver = new AddressResultReceiver(new Handler());
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_local, container, false);
+        View view = inflater.inflate(R.layout.fragment_local, container, false);
+        initializeView(view);
+        setViewValues();
+        return view;
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        Log.d(TAG, "onActivityCreated()");
-        initializeData();
-        initializeView(getActivity());
-        fetchLocal();
+    public void onPause() {
+        super.onPause();
+        Log.d(TAG, "onPause()");
     }
 
     @Override
@@ -90,38 +99,30 @@ public class LocalFragment extends CablushFragment implements MapaFragment.Selec
         getActivity().startService(intent);
     }
 
-    private void initializeData() {
-        String[] estados = getResources().getStringArray(R.array.states);
-        estadosAdapter = new ArrayAdapter<>(getActivity(), R.layout.simple_item, estados);
-        estadosAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-    }
-
-    private void initializeView(FragmentActivity activity) {
-        cepEditText = (EditText) activity.findViewById(R.id.editTextCep);
+    private void initializeView(View view) {
+        cepEditText = (EditText) view.findViewById(R.id.editTextCep);
         // Estado
-        estadoSpinner = (Spinner) activity.findViewById(R.id.spinnerEstado);
+        estadoSpinner = (Spinner) view.findViewById(R.id.spinnerEstado);
         if (estadosAdapter != null) {
             estadoSpinner.setAdapter(estadosAdapter);
         }
-        cidadeEditText = (EditText) activity.findViewById(R.id.editTextCidade);
-        bairroEditText = (EditText) activity.findViewById(R.id.editTextBairro);
-        logradouroEditText = (EditText) activity.findViewById(R.id.editTextLogradouro);
-        numeroEditText = (EditText) activity.findViewById(R.id.editTextNumero);
-        complementoEditText = (EditText) activity.findViewById(R.id.editTextComplemento);
+        cidadeEditText = (EditText) view.findViewById(R.id.editTextCidade);
+        bairroEditText = (EditText) view.findViewById(R.id.editTextBairro);
+        logradouroEditText = (EditText) view.findViewById(R.id.editTextLogradouro);
+        numeroEditText = (EditText) view.findViewById(R.id.editTextNumero);
+        complementoEditText = (EditText) view.findViewById(R.id.editTextComplemento);
     }
 
-    private void fetchLocal() {
-        if (this.local != null) {
-            cepEditText.setText(this.local.getCep());
-            if (estadosAdapter != null) {
-                estadoSpinner.setSelection(estadosAdapter.getPosition(this.local.getEstado()));
-            }
-            cidadeEditText.setText(this.local.getCidade());
-            bairroEditText.setText(this.local.getBairro());
-            logradouroEditText.setText(this.local.getLogradouro());
-            numeroEditText.setText(this.local.getNumero());
-            complementoEditText.setText(this.local.getComplemento());
+    private void setViewValues() {
+        cepEditText.setText(local.getCep());
+        if (estadosAdapter != null) {
+            estadoSpinner.setSelection(estadosAdapter.getPosition(local.getEstado()));
         }
+        cidadeEditText.setText(local.getCidade());
+        bairroEditText.setText(local.getBairro());
+        logradouroEditText.setText(local.getLogradouro());
+        numeroEditText.setText(local.getNumero());
+        complementoEditText.setText(local.getComplemento());
     }
 
     /**
@@ -130,16 +131,16 @@ public class LocalFragment extends CablushFragment implements MapaFragment.Selec
      */
     public boolean doValidate() {
         boolean valido = true;
-
-        valido = ViewUtils.checkNotEmpty(getContext(), cepEditText) && valido;
-        valido = ViewUtils.checkSelected(getContext(),
-                    (TextView)getActivity().findViewById(R.id.textViewEstado),
+        if (isAdded()) {
+            valido = ViewUtils.checkNotEmpty(getContext(), cepEditText) && valido;
+            valido = ViewUtils.checkSelected(getContext(),
+                    (TextView) getActivity().findViewById(R.id.textViewEstado),
                     estadoSpinner)
-                && valido;
-        valido = ViewUtils.checkNotEmpty(getContext(), cidadeEditText) && valido;
-        valido = ViewUtils.checkNotEmpty(getContext(), bairroEditText) && valido;
-        valido = ViewUtils.checkNotEmpty(getContext(), logradouroEditText) && valido;
-
+                    && valido;
+            valido = ViewUtils.checkNotEmpty(getContext(), cidadeEditText) && valido;
+            valido = ViewUtils.checkNotEmpty(getContext(), bairroEditText) && valido;
+            valido = ViewUtils.checkNotEmpty(getContext(), logradouroEditText) && valido;
+        }
         return valido;
     }
 
@@ -148,16 +149,15 @@ public class LocalFragment extends CablushFragment implements MapaFragment.Selec
      * @return
      */
     public Local getLocal() {
-        if (local == null) {
-            local = new Local();
+        if (isAdded()) {
+            local.setCep(cepEditText.getText().toString());
+            local.setEstado((String) estadoSpinner.getSelectedItem());
+            local.setCidade(cidadeEditText.getText().toString());
+            local.setBairro(bairroEditText.getText().toString());
+            local.setLogradouro(logradouroEditText.getText().toString());
+            local.setNumero(numeroEditText.getText().toString());
+            local.setComplemento(complementoEditText.getText().toString());
         }
-        local.setCep(cepEditText.getText().toString());
-        local.setEstado(estadosAdapter.getItem(estadoSpinner.getSelectedItemPosition()));
-        local.setCidade(cidadeEditText.getText().toString());
-        local.setBairro(bairroEditText.getText().toString());
-        local.setLogradouro(logradouroEditText.getText().toString());
-        local.setNumero(numeroEditText.getText().toString());
-        local.setComplemento(complementoEditText.getText().toString());
         return local;
     }
 
@@ -178,7 +178,7 @@ public class LocalFragment extends CablushFragment implements MapaFragment.Selec
             Log.d(TAG, "onReceiveResult()");
             if (resultCode == FetchAddressIntentService.SUCCESS_RESULT) {
                 local = (Local) resultData.getSerializable(FetchAddressIntentService.RESULT_LOCAL_KEY);
-                fetchLocal();
+                setViewValues();
                 if (local != null) {
                     Toast.makeText(getActivity(), R.string.msg_check_address, Toast.LENGTH_SHORT).show();
                 }

@@ -4,14 +4,10 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentActivity;
-import android.support.v7.widget.AppCompatTextView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -24,10 +20,6 @@ import com.cablush.cablushapp.model.domain.Loja;
 import com.cablush.cablushapp.utils.PictureUtils;
 import com.cablush.cablushapp.utils.ViewUtils;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 /**
  * Created by oscar on 06/02/16.
  */
@@ -37,9 +29,7 @@ public class LojaFragment extends CablushFragment {
 
     private Loja loja;
 
-    List<Esporte> esportes = new ArrayList<>();
-    List<Esporte> esportesSelecionados = new ArrayList<>();
-    private ArrayAdapter<Esporte> esportesAdapter;
+    private EsporteArrayAdapter esportesAdapter;
 
     private EditText nomeEditText;
     private EditText telefoneEditText;
@@ -57,9 +47,7 @@ public class LojaFragment extends CablushFragment {
     }
 
     /**
-     *
-     * @param loja
-     * @return
+     * Creates a new instance of this fragment with the necessary data.
      */
     public static LojaFragment newInstance(@NonNull Loja loja) {
         LojaFragment fragment = new LojaFragment();
@@ -69,25 +57,37 @@ public class LojaFragment extends CablushFragment {
         return fragment;
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Log.d(TAG, "onCreate()");
+        // Initialize necessary data
+        if (getArguments() != null) {
+            loja = (Loja) getArguments().getSerializable(LOJA_BUNDLE_KEY);
+        }
+
+        EsportesMediator esportesMediator = new EsportesMediator(getContext());
+        esportesAdapter = new EsporteArrayAdapter(getContext(),
+                android.R.layout.simple_dropdown_item_1line,
+                esportesMediator.getEsportes());
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         Log.d(TAG, "onCreateView()");
-        if (getArguments() != null) {
-            loja = (Loja) getArguments().getSerializable(LOJA_BUNDLE_KEY);
-        }
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_loja, container, false);
+        View view = inflater.inflate(R.layout.fragment_loja, container, false);
+        initializeView(view);
+        setViewValues();
+        return view;
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        Log.d(TAG, "onActivityCreated()");
-        initializeData();
-        initializeView(getActivity());
-        setViewValues();
+    public void onPause() {
+        super.onPause();
+        Log.d(TAG, "onPause()");
     }
 
     @Override
@@ -102,22 +102,14 @@ public class LojaFragment extends CablushFragment {
                 logoImageView.getWidth(), logoImageView.getHeight()));
     }
 
-    private void initializeData() {
-        EsportesMediator esportesMediator = new EsportesMediator(getContext());
-        esportes = esportesMediator.getEsportes();
-        //esportes = Arrays.asList(getResources().getStringArray(R.array.sports));
-        esportesAdapter = new ArrayAdapter<>(getActivity(),
-                android.R.layout.simple_dropdown_item_1line, esportes);
-    }
-
-    private void initializeView(FragmentActivity activity) {
-        nomeEditText = (EditText) activity.findViewById(R.id.editTextNome);
-        telefoneEditText = (EditText) activity.findViewById(R.id.editTextTelefone);
-        emailEditText = (EditText) activity.findViewById(R.id.editTextEmail);
-        websiteEditText = (EditText) activity.findViewById(R.id.editTextWebsite);
-        facebookEditText = (EditText) activity.findViewById(R.id.editTextFacebook);
+    private void initializeView(View view) {
+        nomeEditText = (EditText) view.findViewById(R.id.editTextNome);
+        telefoneEditText = (EditText) view.findViewById(R.id.editTextTelefone);
+        emailEditText = (EditText) view.findViewById(R.id.editTextEmail);
+        websiteEditText = (EditText) view.findViewById(R.id.editTextWebsite);
+        facebookEditText = (EditText) view.findViewById(R.id.editTextFacebook);
         // gallery button
-        galleryImageButton = (ImageButton) activity.findViewById(R.id.buttonGallery);
+        galleryImageButton = (ImageButton) view.findViewById(R.id.buttonGallery);
         galleryImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -125,63 +117,37 @@ public class LojaFragment extends CablushFragment {
             }
         });
         // picture button
-        pictureImageButton = (ImageButton) activity.findViewById(R.id.buttonPicture);
+        pictureImageButton = (ImageButton) view.findViewById(R.id.buttonPicture);
         pictureImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 checkStoragePermission();
             }
         });
-        logoImageView = (ImageView) activity.findViewById(R.id.imageViewLogo);
-        descricaoEditText = (EditText) activity.findViewById(R.id.editTextDescricao);
+        logoImageView = (ImageView) view.findViewById(R.id.imageViewLogo);
+        descricaoEditText = (EditText) view.findViewById(R.id.editTextDescricao);
         // esportes
-        esportesMultiComplete = (MultiAutoCompleteTextView) activity
+        esportesMultiComplete = (MultiAutoCompleteTextView) view
                 .findViewById(R.id.multiAutoCompleteEsportes);
-        if (esportesAdapter != null) {
-            esportesMultiComplete.setAdapter(esportesAdapter);
-        }
+        esportesMultiComplete.setThreshold(1);
+        esportesMultiComplete.setAdapter(esportesAdapter);
         esportesMultiComplete.setTokenizer(new MultiAutoCompleteTextView.CommaTokenizer());
-        /*
-        esportesMultiComplete.setOnEditorActionListener(new MultiAutoCompleteTextView.OnEditorActionListener(){
-
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (event.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
-                    esportes.add(v.getText().toString());
-                    esportesAdapter.notifyDataSetChanged();
-                    return true;
-                }
-                return false;
-            }
-        });
-         */
-        esportesMultiComplete.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                for(Esporte esporte : esportes){
-                    if(esporte.getNome().equals(((AppCompatTextView) view).getText().toString())){
-                        esportesSelecionados.add(esporte);
-                    }
-                }
-            }
-        });
+        esportesAdapter.setTokenizer(new MultiAutoCompleteTextView.CommaTokenizer());
     }
 
     private void setViewValues() {
-        if (loja != null) {
-            nomeEditText.setText(loja.getNome());
-            telefoneEditText.setText(loja.getTelefone());
-            emailEditText.setText(loja.getEmail());
-            websiteEditText.setText(loja.getWebsite());
-            facebookEditText.setText(loja.getFacebook());
-            PictureUtils.loadRemoteImage(getActivity(), loja.getLogo(), logoImageView, false);
-            descricaoEditText.setText(loja.getDescricao());
-            // esportes
-            for (Esporte esporte : loja.getEsportes()) {
-                String text = esportesMultiComplete.getText().toString()
-                        + esporte.getCategoriaNome() + ",";
-                esportesMultiComplete.setText(text);
-            }
+        nomeEditText.setText(loja.getNome());
+        telefoneEditText.setText(loja.getTelefone());
+        emailEditText.setText(loja.getEmail());
+        websiteEditText.setText(loja.getWebsite());
+        facebookEditText.setText(loja.getFacebook());
+        PictureUtils.loadRemoteImage(getActivity(), loja.getLogo(), logoImageView, false);
+        descricaoEditText.setText(loja.getDescricao());
+        // esportes
+        for (Esporte esporte : loja.getEsportes()) {
+            String text = esportesMultiComplete.getText().toString()
+                    + esporte.getCategoriaNome() + ",";
+            esportesMultiComplete.setText(text);
         }
     }
 
@@ -191,24 +157,19 @@ public class LojaFragment extends CablushFragment {
      */
     public boolean doValidate() {
         boolean valido = true;
-
         if (isAdded()) {
             valido = ViewUtils.checkNotEmpty(getContext(), nomeEditText) && valido;
             valido = ViewUtils.checkNotEmpty(getContext(), descricaoEditText) && valido;
             valido = ViewUtils.checkNotEmpty(getContext(), esportesMultiComplete) && valido;
         }
-
         return valido;
     }
 
     /**
      *
-     * @return
+     * @eturn
      */
     public Loja getLoja() {
-        if (loja == null) {
-            loja = new Loja();
-        }
         if (isAdded()) {
             loja.setNome(nomeEditText.getText().toString());
             loja.setTelefone(telefoneEditText.getText().toString());
@@ -217,7 +178,8 @@ public class LojaFragment extends CablushFragment {
             loja.setFacebook(facebookEditText.getText().toString());
             loja.setLogo(getPictureFilePath());
             loja.setDescricao(descricaoEditText.getText().toString());
-            loja.setEsportes(esportesSelecionados);
+            loja.setEsportes(esportesAdapter.getSelectedItems(
+                    esportesMultiComplete.getText().toString()));
         }
         return loja;
     }

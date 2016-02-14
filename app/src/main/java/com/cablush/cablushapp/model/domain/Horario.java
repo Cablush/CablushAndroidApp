@@ -3,8 +3,6 @@ package com.cablush.cablushapp.model.domain;
 import com.google.gson.annotations.Expose;
 
 import java.io.Serializable;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -12,28 +10,25 @@ import java.util.Date;
  */
 public class Horario implements Serializable {
 
-    public static final DateFormat FORMAT_TIME = new SimpleDateFormat("HH:mm");
-    public static final DateFormat FORMAT_DATE = new SimpleDateFormat("dd/MM/yyyy");
-
     private String uuidLocalizavel;
     @Expose
     private Date inicio;
     @Expose
     private Date fim;
     @Expose
-    private Boolean seg = false;
+    private Boolean seg;
     @Expose
-    private Boolean ter = false;
+    private Boolean ter;
     @Expose
-    private Boolean qua = false;
+    private Boolean qua;
     @Expose
-    private Boolean qui = false;
+    private Boolean qui;
     @Expose
-    private Boolean sex = false;
+    private Boolean sex;
     @Expose
-    private Boolean sab = false;
+    private Boolean sab;
     @Expose
-    private Boolean dom = false;
+    private Boolean dom;
     @Expose
     private String detalhes;
 
@@ -62,6 +57,9 @@ public class Horario implements Serializable {
     }
 
     public Boolean getSeg() {
+        if (seg == null) {
+            seg = Boolean.FALSE;
+        }
         return seg;
     }
 
@@ -70,6 +68,9 @@ public class Horario implements Serializable {
     }
 
     public Boolean getTer() {
+        if (ter == null) {
+            ter = Boolean.FALSE;
+        }
         return ter;
     }
 
@@ -78,6 +79,9 @@ public class Horario implements Serializable {
     }
 
     public Boolean getQua() {
+        if (qua == null) {
+            qua = Boolean.FALSE;
+        }
         return qua;
     }
 
@@ -86,6 +90,9 @@ public class Horario implements Serializable {
     }
 
     public Boolean getQui() {
+        if (qui == null) {
+            qui = Boolean.FALSE;
+        }
         return qui;
     }
 
@@ -94,6 +101,9 @@ public class Horario implements Serializable {
     }
 
     public Boolean getSex() {
+        if (sex == null) {
+            sex = Boolean.FALSE;
+        }
         return sex;
     }
 
@@ -102,6 +112,9 @@ public class Horario implements Serializable {
     }
 
     public Boolean getSab() {
+        if (sab == null) {
+            sab = Boolean.FALSE;
+        }
         return sab;
     }
 
@@ -110,6 +123,9 @@ public class Horario implements Serializable {
     }
 
     public Boolean getDom() {
+        if (dom == null) {
+            dom = Boolean.FALSE;
+        }
         return dom;
     }
 
@@ -123,9 +139,5 @@ public class Horario implements Serializable {
 
     public void setDetalhes(String detalhes) {
         this.detalhes = detalhes;
-    }
-
-    public boolean isOpenOneDay(){
-        return seg || ter || qua || qui || sex || sab || dom;
     }
 }
