@@ -75,7 +75,7 @@ public class EventosMediator extends CablushMediator {
     }
 
     private void updateEventoOnline(final Evento evento) {
-        apiEventos.updateEvento(evento, new Callback<Evento>() {
+        apiEventos.updateEvento(evento.getUuid(), evento, new Callback<Evento>() {
             @Override
             public void success(Evento eventoRemote, Response response) {
                 eventoDAO.merge(evento, eventoRemote);

@@ -9,6 +9,7 @@ import retrofit.http.Body;
 import retrofit.http.GET;
 import retrofit.http.POST;
 import retrofit.http.PUT;
+import retrofit.http.Path;
 import retrofit.http.Query;
 
 /**
@@ -28,7 +29,7 @@ public interface ApiLojas {
     @POST("/lojas")
     void createLoja(@Body Loja loja, Callback<Loja> savedLoja);
 
-    @PUT("/lojas")
-    void updateLoja(@Body Loja loja, Callback<Loja> savedLoja);
+    @PUT("/lojas/{uuid}")
+    void updateLoja(@Path("uuid") String uuid, @Body Loja loja, Callback<Loja> savedLoja);
 
 }

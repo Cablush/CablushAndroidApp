@@ -9,7 +9,6 @@ import com.cablush.cablushapp.model.persistence.EsporteDAO;
 import com.cablush.cablushapp.model.rest.ApiEsportes;
 import com.cablush.cablushapp.model.rest.RestServiceBuilder;
 
-import java.lang.ref.WeakReference;
 import java.util.List;
 
 import retrofit.Callback;

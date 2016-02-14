@@ -9,6 +9,7 @@ import retrofit.http.Body;
 import retrofit.http.GET;
 import retrofit.http.POST;
 import retrofit.http.PUT;
+import retrofit.http.Path;
 import retrofit.http.Query;
 
 /**
@@ -28,7 +29,7 @@ public interface ApiEventos {
     @POST("/eventos")
     void createEvento(@Body Evento evento, Callback<Evento> savedEvento);
     
-    @PUT("/eventos")
-    void updateEvento(@Body Evento evento, Callback<Evento> savedEvento);
+    @PUT("/eventos/{uuid}")
+    void updateEvento(@Path("uuid") String uuid, @Body Evento evento, Callback<Evento> savedEvento);
 
 }

@@ -76,7 +76,7 @@ public class LojasMediator extends CablushMediator {
     }
 
     private void updateLojaOnline(final Loja loja) {
-        apiLojas.updateLoja(loja, new Callback<Loja>() {
+        apiLojas.updateLoja(loja.getUuid(), loja, new Callback<Loja>() {
             @Override
             public void success(Loja lojaRemote, Response response) {
                 lojaDAO.merge(loja, lojaRemote);

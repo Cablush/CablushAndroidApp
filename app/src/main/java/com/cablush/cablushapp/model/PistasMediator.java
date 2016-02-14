@@ -76,7 +76,7 @@ public class PistasMediator extends CablushMediator {
     }
 
     private void updatePistaOnline(final Pista pista) {
-        apiPistas.updatePista(pista, new Callback<Pista>() {
+        apiPistas.updatePista(pista.getUuid(), pista, new Callback<Pista>() {
             @Override
             public void success(Pista pistaRemote, Response response) {
                 pistaDAO.merge(pista, pistaRemote);
