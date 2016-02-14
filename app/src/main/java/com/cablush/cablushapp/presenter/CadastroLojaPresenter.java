@@ -4,7 +4,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 
 import com.cablush.cablushapp.model.LojasMediator;
-import com.cablush.cablushapp.model.SearchResult;
+import com.cablush.cablushapp.model.OperationResult;
 import com.cablush.cablushapp.model.domain.Loja;
 
 import java.util.List;
@@ -17,18 +17,24 @@ public class CadastroLojaPresenter extends CadastroPresenter<Loja>
 
     private LojasMediator lojasMediator;
 
-    public CadastroLojaPresenter(@NonNull Context context) {
-        super(context);
+    public CadastroLojaPresenter(@NonNull CadastroView view, @NonNull Context context) {
+        super(view, context);
         lojasMediator = new LojasMediator(this, context);
     }
 
     @Override
-    public void doSave(Loja loja) {
+    public Loja doSave(Loja loja) {
         lojasMediator.saveLoja(loja);
+        return loja;
     }
 
     @Override
-    public void onGetLojasResult(SearchResult result, List<Loja> lojas) {
-        // Do Nothing
+    public void onSaveLojaResult(OperationResult result, Loja loja) {
+        cadastroView.onSaveResult(result, loja);
+    }
+
+    @Override
+    public void onGetLojasResult(OperationResult result, List<Loja> lojas) {
+        /* do nothing */
     }
 }

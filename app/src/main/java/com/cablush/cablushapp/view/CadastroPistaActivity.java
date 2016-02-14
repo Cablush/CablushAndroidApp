@@ -8,9 +8,12 @@ import android.support.v4.view.ViewPager;
 import android.widget.Toast;
 
 import com.cablush.cablushapp.R;
+import com.cablush.cablushapp.model.OperationResult;
+import com.cablush.cablushapp.model.domain.Local;
 import com.cablush.cablushapp.model.domain.Pista;
 import com.cablush.cablushapp.presenter.CadastroPistaPresenter;
 import com.cablush.cablushapp.presenter.CadastroPresenter;
+import com.cablush.cablushapp.utils.ValidateUtils;
 import com.cablush.cablushapp.view.cadastros.HorarioFragment;
 import com.cablush.cablushapp.view.cadastros.LocalFragment;
 import com.cablush.cablushapp.view.cadastros.MapaFragment;
@@ -19,13 +22,16 @@ import com.cablush.cablushapp.view.cadastros.PistaFragment;
 /**
  * Created by jonathan on 07/11/15.
  */
-public class CadastroPistaActivity extends CadastroActivity<Pista> {
+public class CadastroPistaActivity extends CadastroActivity<Pista>
+        implements CadastroPresenter.CadastroView {
 
     private static final String PISTA_EXTRA_KEY = "PISTA_EXTRA_KEY";
     private PistaFragment pistaFragment;
     private MapaFragment mapaFragment;
     private LocalFragment localFragment;
     private HorarioFragment horarioFragment;
+
+    private Pista pista;
     /**
      * Make the intent of this activity.
      *
@@ -41,7 +47,7 @@ public class CadastroPistaActivity extends CadastroActivity<Pista> {
     @Override
     protected void setupViewPager(ViewPager viewPager) {
         // Get the Pista object, if it was set
-        Pista pista = (Pista) getIntent().getSerializableExtra(PISTA_EXTRA_KEY);
+        pista = (Pista) getIntent().getSerializableExtra(PISTA_EXTRA_KEY);
 
         // Initialize the fragments
         pistaFragment = PistaFragment.newInstance(pista);
@@ -60,26 +66,63 @@ public class CadastroPistaActivity extends CadastroActivity<Pista> {
 
     @Override
     protected CadastroPresenter<Pista> setupPresenter() {
-        return new CadastroPistaPresenter(this);
+        return new CadastroPistaPresenter(this, this);
     }
 
     @Override
-    protected boolean validate() {
-        boolean valido = pistaFragment.doValidate()
-                && localFragment.doValidate()
-                && horarioFragment.doValidate();
-
-        if (!valido) {
-            Toast.makeText(this, R.string.msg_invalid_pista, Toast.LENGTH_SHORT).show();
+    protected Pista getData() {
+        if (pistaFragment.isAdded() || pistaFragment.isDetached()) {
+            pista = pistaFragment.getPista();
         }
-        return valido;
+        if (localFragment.isAdded() || localFragment.isAdded()) {
+            pista.setLocal(localFragment.getLocal());
+        }
+        if (horarioFragment.isAdded() || localFragment.isDetached()) {
+            pista.setHorario(horarioFragment.getHorario());
+        }
+        return pista;
     }
 
     @Override
-    protected Pista save() {
-        Pista pista = pistaFragment.getPista();
-        pista.setLocal(localFragment.getLocal());
-        pista.setHorario(horarioFragment.getHorario());
-        return pista;
+    protected boolean validate(Pista pista) {
+        boolean validLoja = ValidateUtils.isNotBlank(pista.getNome());
+        validLoja = ValidateUtils.isNotBlank(pista.getDescricao()) && validLoja;
+        validLoja = ValidateUtils.isNotEmpty(pista.getEsportes()) && validLoja;
+        if (!validLoja) {
+            Toast.makeText(this, R.string.msg_invalid_loja, Toast.LENGTH_SHORT).show();
+        }
+
+        Local local = pista.getLocal();
+        boolean validMapa = local.getLatLng() != null;
+        if (!validMapa) {
+            Toast.makeText(this, R.string.txt_select_location, Toast.LENGTH_SHORT).show();
+        }
+        boolean validLocal = ValidateUtils.isNotBlank(local.getCep());
+        validLocal = ValidateUtils.isNotBlank(local.getEstado()) && validLocal;
+        validLocal = ValidateUtils.isNotBlank(local.getCidade()) && validLocal;
+        validLocal = ValidateUtils.isNotBlank(local.getBairro()) && validLocal;
+        validLocal = ValidateUtils.isNotBlank(local.getLogradouro()) && validLocal;
+        validLocal = local.getLatLng() != null && validLocal;
+        if (!validLocal) {
+            Toast.makeText(this, R.string.msg_invalid_local, Toast.LENGTH_SHORT).show();
+        }
+
+        return validLoja && validMapa && validLocal;
+    }
+
+    @Override
+    public void onSaveResult(OperationResult result, Object o) {
+        switch (result) {
+            case ERROR:
+                Toast.makeText(this, R.string.msg_save_error, Toast.LENGTH_SHORT).show();
+                break;
+            case OFF_LINE:
+                Toast.makeText(this, R.string.msg_save_off_line, Toast.LENGTH_SHORT).show();
+                break;
+            case ON_LINE:
+                Toast.makeText(this, R.string.msg_save_on_line, Toast.LENGTH_SHORT).show();
+                break;
+        }
+        navigateBack();
     }
 }

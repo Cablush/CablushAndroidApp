@@ -7,9 +7,13 @@ import android.support.v4.view.ViewPager;
 import android.widget.Toast;
 
 import com.cablush.cablushapp.R;
+import com.cablush.cablushapp.model.OperationResult;
+import com.cablush.cablushapp.model.domain.Horario;
+import com.cablush.cablushapp.model.domain.Local;
 import com.cablush.cablushapp.model.domain.Loja;
 import com.cablush.cablushapp.presenter.CadastroLojaPresenter;
 import com.cablush.cablushapp.presenter.CadastroPresenter;
+import com.cablush.cablushapp.utils.ValidateUtils;
 import com.cablush.cablushapp.view.cadastros.HorarioFragment;
 import com.cablush.cablushapp.view.cadastros.LocalFragment;
 import com.cablush.cablushapp.view.cadastros.LojaFragment;
@@ -18,7 +22,8 @@ import com.cablush.cablushapp.view.cadastros.MapaFragment;
 /**
  * Created by jonathan on 07/11/15.
  */
-public class CadastroLojaActivity extends CadastroActivity<Loja> {
+public class CadastroLojaActivity extends CadastroActivity<Loja>
+        implements CadastroPresenter.CadastroView<Loja> {
 
     private static final String LOJA_EXTRA_KEY = "LOJA_EXTRA_KEY";
 
@@ -26,6 +31,8 @@ public class CadastroLojaActivity extends CadastroActivity<Loja> {
     private MapaFragment mapaFragment;
     private LocalFragment localFragment;
     private HorarioFragment horarioFragment;
+
+    private Loja loja;
 
     /**
      * Make the intent of this activity.
@@ -42,7 +49,7 @@ public class CadastroLojaActivity extends CadastroActivity<Loja> {
     @Override
     protected void setupViewPager(ViewPager viewPager) {
         // Get the Loja object, if it was set
-        Loja loja = (Loja) getIntent().getSerializableExtra(LOJA_EXTRA_KEY);
+        loja = (Loja) getIntent().getSerializableExtra(LOJA_EXTRA_KEY);
 
         // Initialize the fragments
         lojaFragment = LojaFragment.newInstance(loja);
@@ -61,27 +68,72 @@ public class CadastroLojaActivity extends CadastroActivity<Loja> {
 
     @Override
     protected CadastroPresenter<Loja> setupPresenter() {
-        return new CadastroLojaPresenter(this);
+        return new CadastroLojaPresenter(this, this);
     }
 
     @Override
-    protected boolean validate() {
-        boolean valido = lojaFragment.doValidate()
-                & localFragment.doValidate()
-                & horarioFragment.doValidate();
+    protected Loja getData() {
+        if (lojaFragment.isAdded() || lojaFragment.isDetached()) {
+            loja = lojaFragment.getLoja();
+        }
+        if (localFragment.isAdded() || localFragment.isDetached()) {
+            loja.setLocal(localFragment.getLocal());
+        }
+        if (horarioFragment.isAdded() || localFragment.isDetached()) {
+            loja.setHorario(horarioFragment.getHorario());
+        }
+        return loja;
+    }
 
-        if (!valido) {
+    @Override
+    protected boolean validate(Loja loja) {
+        boolean validLoja = ValidateUtils.isNotBlank(loja.getNome());
+        validLoja = ValidateUtils.isNotBlank(loja.getDescricao()) && validLoja;
+        validLoja = ValidateUtils.isNotEmpty(loja.getEsportes()) && validLoja;
+        if (!validLoja) {
             Toast.makeText(this, R.string.msg_invalid_loja, Toast.LENGTH_SHORT).show();
         }
-        return valido;
+
+        Local local = loja.getLocal();
+        boolean validMapa = local.getLatLng() != null;
+        if (!validMapa) {
+            Toast.makeText(this, R.string.txt_select_location, Toast.LENGTH_SHORT).show();
+        }
+        boolean validLocal = ValidateUtils.isNotBlank(local.getCep());
+        validLocal = ValidateUtils.isNotBlank(local.getEstado()) && validLocal;
+        validLocal = ValidateUtils.isNotBlank(local.getCidade()) && validLocal;
+        validLocal = ValidateUtils.isNotBlank(local.getBairro()) && validLocal;
+        validLocal = ValidateUtils.isNotBlank(local.getLogradouro()) && validLocal;
+        validLocal = local.getLatLng() != null && validLocal;
+        if (!validLocal) {
+            Toast.makeText(this, R.string.msg_invalid_local, Toast.LENGTH_SHORT).show();
+        }
+
+        Horario horario = loja.getHorario();
+        boolean validHorario = horario.isOpenOneDay();
+        validHorario = ValidateUtils.isNotEmpty(horario.getInicio()) && validHorario;
+        validHorario = ValidateUtils.isNotEmpty(horario.getFim()) && validHorario;
+        if (!validHorario) {
+            Toast.makeText(this, R.string.msg_invalid_horario, Toast.LENGTH_SHORT).show();
+        }
+
+        return validLoja && validMapa && validLocal && validHorario;
     }
 
     @Override
-    protected Loja save() {
-        Loja loja = lojaFragment.getLoja();
-        loja.setLocal(localFragment.getLocal());
-        loja.setHorario(horarioFragment.getHorario());
-        return loja;
+    public void onSaveResult(OperationResult result, Loja loja) {
+        switch (result) {
+            case ERROR:
+                Toast.makeText(this, R.string.msg_save_error, Toast.LENGTH_SHORT).show();
+                break;
+            case OFF_LINE:
+                Toast.makeText(this, R.string.msg_save_off_line, Toast.LENGTH_SHORT).show();
+                break;
+            case ON_LINE:
+                Toast.makeText(this, R.string.msg_save_on_line, Toast.LENGTH_SHORT).show();
+                break;
+        }
+        navigateBack();
     }
 }
 

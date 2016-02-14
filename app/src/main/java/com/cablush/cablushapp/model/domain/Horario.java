@@ -1,5 +1,6 @@
 package com.cablush.cablushapp.model.domain;
 
+import com.cablush.cablushapp.utils.DateTimeUtils;
 import com.google.gson.annotations.Expose;
 
 import java.io.Serializable;
@@ -41,6 +42,9 @@ public class Horario implements Serializable {
     }
 
     public Date getInicio() {
+        if (inicio == null || inicio.getTime() == 0) {
+            inicio = DateTimeUtils.parseTime("09:00");
+        }
         return inicio;
     }
 
@@ -49,6 +53,9 @@ public class Horario implements Serializable {
     }
 
     public Date getFim() {
+        if (fim == null || fim.getTime() == 0) {
+            fim = DateTimeUtils.parseTime("18:00");
+        }
         return fim;
     }
 
@@ -139,5 +146,9 @@ public class Horario implements Serializable {
 
     public void setDetalhes(String detalhes) {
         this.detalhes = detalhes;
+    }
+
+    public boolean isOpenOneDay(){
+        return getSeg() || getTer() || getQua() || getQui() || getSex() || getSab() || getDom();
     }
 }

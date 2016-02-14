@@ -4,8 +4,9 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 
 import com.cablush.cablushapp.model.EventosMediator;
-import com.cablush.cablushapp.model.SearchResult;
+import com.cablush.cablushapp.model.OperationResult;
 import com.cablush.cablushapp.model.domain.Evento;
+import com.cablush.cablushapp.model.domain.Loja;
 
 import java.util.List;
 
@@ -17,18 +18,24 @@ public class CadastroEventoPresenter extends CadastroPresenter<Evento>
 
     private EventosMediator eventosMediator;
 
-    public CadastroEventoPresenter(@NonNull Context context) {
-        super(context);
+    public CadastroEventoPresenter(@NonNull CadastroView view, @NonNull Context context) {
+        super(view, context);
         eventosMediator = new EventosMediator(this, context);
     }
 
     @Override
-    public void doSave(Evento evento) {
+    public Evento doSave(Evento evento) {
         eventosMediator.saveEvento(evento);
+        return evento;
     }
 
     @Override
-    public void onGetEventosResult(SearchResult result, List<Evento> eventos) {
+    public void onSaveEventosResult(OperationResult result, Evento evento) {
+        cadastroView.onSaveResult(result, evento);
+    }
+
+    @Override
+    public void onGetEventosResult(OperationResult result, List<Evento> eventos) {
         // Do Nothing
     }
 }

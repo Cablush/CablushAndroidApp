@@ -51,6 +51,17 @@ public class Evento implements Localizavel, Serializable {
         local = new Local();
     }
 
+    /**
+     *
+     * @param responsavel
+     */
+    public Evento(Usuario responsavel) {
+        this();
+        if (responsavel != null) {
+            this.responsavel = responsavel.getUuid();
+        }
+    }
+
     @Override
     public String getUuid() {
         return uuid;

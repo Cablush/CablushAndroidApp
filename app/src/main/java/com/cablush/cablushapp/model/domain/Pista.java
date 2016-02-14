@@ -47,6 +47,17 @@ public class Pista implements Localizavel, Serializable {
         horario = new Horario();
     }
 
+    /**
+     *
+     * @param responsavel
+     */
+    public Pista(Usuario responsavel) {
+        this();
+        if (responsavel != null) {
+            this.responsavel = responsavel.getUuid();
+        }
+    }
+
     @Override
     public String getUuid() {
         return uuid;

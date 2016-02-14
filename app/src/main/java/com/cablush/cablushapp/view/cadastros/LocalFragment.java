@@ -91,6 +91,7 @@ public class LocalFragment extends CablushFragment implements MapaFragment.Selec
     public void onPause() {
         super.onPause();
         Log.d(TAG, "onPause()");
+        getViewValues();
     }
 
     @Override
@@ -100,14 +101,19 @@ public class LocalFragment extends CablushFragment implements MapaFragment.Selec
     }
 
     private void initializeView(View view) {
+        ViewUtils.markAsRequired((TextView) view.findViewById(R.id.textViewCep));
         cepEditText = (EditText) view.findViewById(R.id.editTextCep);
         // Estado
+        ViewUtils.markAsRequired((TextView) view.findViewById(R.id.textViewEstado));
         estadoSpinner = (Spinner) view.findViewById(R.id.spinnerEstado);
         if (estadosAdapter != null) {
             estadoSpinner.setAdapter(estadosAdapter);
         }
+        ViewUtils.markAsRequired((TextView) view.findViewById(R.id.textViewCidade));
         cidadeEditText = (EditText) view.findViewById(R.id.editTextCidade);
+        ViewUtils.markAsRequired((TextView) view.findViewById(R.id.textViewBairro));
         bairroEditText = (EditText) view.findViewById(R.id.editTextBairro);
+        ViewUtils.markAsRequired((TextView) view.findViewById(R.id.textViewLogradouro));
         logradouroEditText = (EditText) view.findViewById(R.id.editTextLogradouro);
         numeroEditText = (EditText) view.findViewById(R.id.editTextNumero);
         complementoEditText = (EditText) view.findViewById(R.id.editTextComplemento);
@@ -125,23 +131,14 @@ public class LocalFragment extends CablushFragment implements MapaFragment.Selec
         complementoEditText.setText(local.getComplemento());
     }
 
-    /**
-     *
-     * @return
-     */
-    public boolean doValidate() {
-        boolean valido = true;
-        if (isAdded()) {
-            valido = ViewUtils.checkNotEmpty(getContext(), cepEditText) && valido;
-            valido = ViewUtils.checkSelected(getContext(),
-                    (TextView) getActivity().findViewById(R.id.textViewEstado),
-                    estadoSpinner)
-                    && valido;
-            valido = ViewUtils.checkNotEmpty(getContext(), cidadeEditText) && valido;
-            valido = ViewUtils.checkNotEmpty(getContext(), bairroEditText) && valido;
-            valido = ViewUtils.checkNotEmpty(getContext(), logradouroEditText) && valido;
-        }
-        return valido;
+    private void getViewValues() {
+        local.setCep(cepEditText.getText().toString());
+        local.setEstado((String) estadoSpinner.getSelectedItem());
+        local.setCidade(cidadeEditText.getText().toString());
+        local.setBairro(bairroEditText.getText().toString());
+        local.setLogradouro(logradouroEditText.getText().toString());
+        local.setNumero(numeroEditText.getText().toString());
+        local.setComplemento(complementoEditText.getText().toString());
     }
 
     /**
@@ -149,14 +146,8 @@ public class LocalFragment extends CablushFragment implements MapaFragment.Selec
      * @return
      */
     public Local getLocal() {
-        if (isAdded()) {
-            local.setCep(cepEditText.getText().toString());
-            local.setEstado((String) estadoSpinner.getSelectedItem());
-            local.setCidade(cidadeEditText.getText().toString());
-            local.setBairro(bairroEditText.getText().toString());
-            local.setLogradouro(logradouroEditText.getText().toString());
-            local.setNumero(numeroEditText.getText().toString());
-            local.setComplemento(complementoEditText.getText().toString());
+        if (isAdded() || isDetached()) { // If is added or detached, update the object with the views
+            getViewValues();
         }
         return local;
     }

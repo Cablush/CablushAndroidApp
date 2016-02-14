@@ -205,39 +205,48 @@ public class EventoDAO extends AppBaseDAO {
 
     public Evento save(Evento evento) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        if (evento.getUuid() == null) {
-            evento.setUuid(UUID.randomUUID().toString());
-            evento.setRemote(false);
-            insert(db, evento);
-        } else {
-            update(db, evento);
-        }
-        dbHelper.close(db);
-        return evento;
-    }
-
-    public Evento merge(Evento evento, Evento eventoRemote) {
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-        // delete local evento
-        delete(db, evento.getUuid());
-        // insert remote evento
-        eventoRemote.setRemote(true);
-        insert(db, eventoRemote);
-        dbHelper.close(db);
-        return null;
-    }
-
-    public void bulkSave(List<Evento> eventos) {
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-        for (Evento evento : eventos) {
-            evento.setRemote(true);
-            if (getEvento(db, evento.getUuid()) == null) {
+        try {
+            if (evento.getUuid() == null) {
+                evento.setUuid(UUID.randomUUID().toString());
+                evento.setRemote(false);
                 insert(db, evento);
             } else {
                 update(db, evento);
             }
+            return getEvento(db, evento.getUuid());
+        } finally {
+            dbHelper.close(db);
         }
-        dbHelper.close(db);
+    }
+
+    public Evento merge(Evento evento, Evento eventoRemote) {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        try {
+            // delete local evento
+            delete(db, evento.getUuid());
+            // insert remote evento
+            eventoRemote.setRemote(true);
+            insert(db, eventoRemote);
+            return getEvento(db, eventoRemote.getUuid());
+        } finally {
+            dbHelper.close(db);
+        }
+    }
+
+    public void bulkSave(List<Evento> eventos) {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        try {
+            for (Evento evento : eventos) {
+                evento.setRemote(true);
+                if (getEvento(db, evento.getUuid()) == null) {
+                    insert(db, evento);
+                } else {
+                    update(db, evento);
+                }
+            }
+        } finally {
+            dbHelper.close(db);
+        }
     }
 
     private Evento getEvento(SQLiteDatabase db, String uuid) {

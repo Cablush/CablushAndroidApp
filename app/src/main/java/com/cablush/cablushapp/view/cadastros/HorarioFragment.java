@@ -82,9 +82,11 @@ public class HorarioFragment extends CablushFragment {
     public void onPause() {
         super.onPause();
         Log.d(TAG, "onPause()");
+        getViewValues();
     }
 
     private void initializeView(View view) {
+        ViewUtils.markAsRequired((TextView) view.findViewById(R.id.textViewDias));
         checkBoxSeg = (CheckBox) view.findViewById(R.id.checkBoxSeg);
         checkBoxTer = (CheckBox) view.findViewById(R.id.checkBoxTer);
         checkBoxQua = (CheckBox) view.findViewById(R.id.checkBoxQua);
@@ -93,6 +95,7 @@ public class HorarioFragment extends CablushFragment {
         checkBoxSab = (CheckBox) view.findViewById(R.id.checkBoxSab);
         checkBoxDom = (CheckBox) view.findViewById(R.id.checkBoxDom);
 
+        ViewUtils.markAsRequired((TextView) view.findViewById(R.id.textViewHoraInicio));
         editTextIni = (EditText) view.findViewById(R.id.editTextInicio);
         editTextIni.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -105,12 +108,13 @@ public class HorarioFragment extends CablushFragment {
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                         calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
                         calendar.set(Calendar.MINUTE, minute);
-                        editTextIni.setText(DateTimeUtils.formatDate(calendar.getTime()));
+                        editTextIni.setText(DateTimeUtils.formatTime(calendar.getTime()));
                     }
                 });
             }
         });
 
+        ViewUtils.markAsRequired((TextView) view.findViewById(R.id.textViewHoraFim));
         editTextFim = (EditText) view.findViewById(R.id.editTextFim);
         editTextFim.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -123,7 +127,7 @@ public class HorarioFragment extends CablushFragment {
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                         calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
                         calendar.set(Calendar.MINUTE, minute);
-                        editTextFim.setText(DateTimeUtils.formatDate(calendar.getTime()));
+                        editTextFim.setText(DateTimeUtils.formatTime(calendar.getTime()));
                     }
                 });
             }
@@ -145,21 +149,17 @@ public class HorarioFragment extends CablushFragment {
         editTextDet.setText(horario.getDetalhes());
     }
 
-    /**
-     *
-     * @return
-     */
-    public boolean doValidate() {
-        boolean valido = true;
-        if (isAdded()) {
-            valido = ViewUtils.checkNotEmpty(getContext(), editTextIni) && valido;
-            valido = ViewUtils.checkOneChecked(getContext(),
-                    (TextView) getActivity().findViewById(R.id.textViewDias),
-                    checkBoxSeg, checkBoxTer, checkBoxQua, checkBoxQui,
-                    checkBoxSex, checkBoxSab, checkBoxDom)
-                    && valido;
-        }
-        return valido;
+    private void getViewValues() {
+        horario.setSeg(checkBoxSeg.isChecked());
+        horario.setTer(checkBoxTer.isChecked());
+        horario.setQua(checkBoxQua.isChecked());
+        horario.setQui(checkBoxQui.isChecked());
+        horario.setSex(checkBoxSex.isChecked());
+        horario.setSab(checkBoxSab.isChecked());
+        horario.setDom(checkBoxDom.isChecked());
+        horario.setInicio(DateTimeUtils.parseTime(editTextIni.getText().toString()));
+        horario.setFim(DateTimeUtils.parseTime(editTextFim.getText().toString()));
+        horario.setDetalhes(editTextDet.getText().toString());
     }
 
     /**
@@ -167,17 +167,8 @@ public class HorarioFragment extends CablushFragment {
      * @return
      */
     public Horario getHorario() {
-        if (isAdded()) {
-            horario.setSeg(checkBoxSeg.isChecked());
-            horario.setTer(checkBoxTer.isChecked());
-            horario.setQua(checkBoxQua.isChecked());
-            horario.setQui(checkBoxQui.isChecked());
-            horario.setSex(checkBoxSex.isChecked());
-            horario.setSab(checkBoxSab.isChecked());
-            horario.setDom(checkBoxDom.isChecked());
-            horario.setInicio(DateTimeUtils.parseTime(editTextIni.getText().toString()));
-            horario.setFim(DateTimeUtils.parseTime(editTextFim.getText().toString()));
-            horario.setDetalhes(editTextDet.getText().toString());
+        if (isAdded() || isDetached()) { // If is added or detached, update the object with the views
+            getViewValues();
         }
         return horario;
     }

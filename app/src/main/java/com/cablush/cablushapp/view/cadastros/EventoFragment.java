@@ -23,7 +23,6 @@ import com.cablush.cablushapp.model.domain.Esporte;
 import com.cablush.cablushapp.model.domain.Evento;
 import com.cablush.cablushapp.utils.DateTimeUtils;
 import com.cablush.cablushapp.utils.PictureUtils;
-import com.cablush.cablushapp.utils.ViewUtils;
 import com.cablush.cablushapp.view.dialogs.DatePickerFragmentDialog;
 import com.cablush.cablushapp.view.dialogs.TimePickerFragmentDialog;
 
@@ -99,6 +98,7 @@ public class EventoFragment extends CablushFragment {
     public void onPause() {
         super.onPause();
         Log.d(TAG, "onPause()");
+        getViewValues();
     }
 
     @Override
@@ -205,6 +205,7 @@ public class EventoFragment extends CablushFragment {
         dataFimEditText.setText(DateTimeUtils.formatTime(evento.getHora()));
         websiteEditText.setText(evento.getWebsite());
         facebookEditText.setText(evento.getFacebook());
+        // TODO não mostra imagem local!
         PictureUtils.loadRemoteImage(getActivity(), evento.getFlyer(), flyerImageView, false);
         descricaoEditText.setText(evento.getDescricao());
         // esportes
@@ -215,20 +216,17 @@ public class EventoFragment extends CablushFragment {
         }
     }
 
-    /**
-     *
-     * @return boolean
-     */
-    public boolean doValidate() {
-        boolean valido = true;
-        if (isAdded()) {
-            valido = ViewUtils.checkNotEmpty(getContext(), nomeEditText) && valido;
-            valido = ViewUtils.checkNotEmpty(getContext(), dataInicioEditText) && valido;
-            valido = ViewUtils.checkNotEmpty(getContext(), horarioEditText) && valido;
-            valido = ViewUtils.checkNotEmpty(getContext(), descricaoEditText) && valido;
-            valido = ViewUtils.checkNotEmpty(getContext(), esportesMultiComplete) && valido;
-        }
-        return valido;
+    private void getViewValues() {
+        evento.setNome(nomeEditText.getText().toString());
+        evento.setData(DateTimeUtils.parseDate(dataInicioEditText.getText().toString()));
+        evento.setHora(DateTimeUtils.parseTime(horarioEditText.getText().toString()));
+        evento.setDataFim(DateTimeUtils.parseDate(dataFimEditText.getText().toString()));
+        evento.setWebsite(websiteEditText.getText().toString());
+        evento.setFacebook(facebookEditText.getText().toString());
+        evento.setFlyer(getPictureFilePath());
+        evento.setDescricao(descricaoEditText.getText().toString());
+        evento.setEsportes(esportesAdapter.getSelectedItems(
+                esportesMultiComplete.getText().toString()));
     }
 
     /**
@@ -236,17 +234,8 @@ public class EventoFragment extends CablushFragment {
      * @return
      */
     public Evento getEvento() {
-        if (isAdded()) {
-            evento.setNome(nomeEditText.getText().toString());
-            evento.setData(DateTimeUtils.parseDate(dataInicioEditText.getText().toString()));
-            evento.setHora(DateTimeUtils.parseTime(horarioEditText.getText().toString()));
-            evento.setDataFim(DateTimeUtils.parseDate(dataFimEditText.getText().toString()));
-            evento.setWebsite(websiteEditText.getText().toString());
-            evento.setFacebook(facebookEditText.getText().toString());
-            evento.setFlyer(getPictureFilePath());
-            evento.setDescricao(descricaoEditText.getText().toString());
-            evento.setEsportes(esportesAdapter.getSelectedItems(
-                    esportesMultiComplete.getText().toString()));
+        if (isAdded() || isDetached()) { // If is added or detached, update the object with the views
+            getViewValues();
         }
         return evento;
     }

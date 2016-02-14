@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import com.cablush.cablushapp.R;
 import com.cablush.cablushapp.presenter.RegisterPresenter;
+import com.cablush.cablushapp.utils.ValidateUtils;
 import com.cablush.cablushapp.utils.ViewUtils;
 
 import java.lang.ref.WeakReference;
@@ -78,11 +79,15 @@ public class RegisterDialog extends DialogFragment {
                 String password = passwordEdit.getText().toString();
                 Boolean shopkeeper = shopkeeperCheck.isChecked();
 
-                if (!name.isEmpty() && !email.isEmpty() && !password.isEmpty()) {
+                if (!ValidateUtils.isNotBlank(name)) {
+                    Toast.makeText(getActivity(), R.string.msg_register_missing_data, Toast.LENGTH_SHORT).show();
+                } else if (!ValidateUtils.isValidEmail(email, true)) {
+                    Toast.makeText(getActivity(), R.string.msg_invalid_email, Toast.LENGTH_SHORT).show();
+                } else if (!ValidateUtils.isValidPassword(password)) {
+                    Toast.makeText(getActivity(), R.string.msg_invalid_password, Toast.LENGTH_SHORT).show();
+                } else {
                     RegisterPresenter registerPresenter = new RegisterPresenter(mView.get());
                     registerPresenter.doRegister(name, email, password, shopkeeper);
-                } else {
-                    Toast.makeText(getActivity(), R.string.msg_register_missing_data, Toast.LENGTH_SHORT).show();
                 }
             }
         });

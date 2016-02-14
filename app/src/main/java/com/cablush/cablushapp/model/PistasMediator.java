@@ -2,7 +2,6 @@ package com.cablush.cablushapp.model;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.cablush.cablushapp.model.domain.Usuario;
@@ -27,7 +26,8 @@ public class PistasMediator extends CablushMediator {
      *
      */
     public interface PistasMediatorListener {
-        void onGetPistasResult(SearchResult result, List<Pista> pistas);
+        void onGetPistasResult(OperationResult result, List<Pista> pistas);
+        void onSavePistasResult(OperationResult result, Pista pista);
     }
 
     private WeakReference<PistasMediatorListener> mListener;
@@ -58,6 +58,8 @@ public class PistasMediator extends CablushMediator {
             } else {
                 createPistaOnline(pista);
             }
+        } else {
+            sendPistaResult(pista, OperationResult.OFF_LINE);
         }
     }
 
@@ -65,12 +67,14 @@ public class PistasMediator extends CablushMediator {
         apiPistas.createPista(pista, new Callback<Pista>() {
             @Override
             public void success(Pista pistaRemote, Response response) {
-                pistaDAO.merge(pista, pistaRemote);
+                Pista pistaResult = pistaDAO.merge(pista, pistaRemote);
+                sendPistaResult(pistaResult, OperationResult.ON_LINE);
             }
 
             @Override
             public void failure(RetrofitError error) {
                 Log.e(TAG, "Error creating pista online: " + error.getMessage());
+                sendPistaResult(pista, OperationResult.ERROR);
             }
         });
     }
@@ -79,14 +83,23 @@ public class PistasMediator extends CablushMediator {
         apiPistas.updatePista(pista.getUuid(), pista, new Callback<Pista>() {
             @Override
             public void success(Pista pistaRemote, Response response) {
-                pistaDAO.merge(pista, pistaRemote);
+                Pista pistaResult = pistaDAO.merge(pista, pistaRemote);
+                sendPistaResult(pistaResult, OperationResult.ON_LINE);
             }
 
             @Override
             public void failure(RetrofitError error) {
                 Log.e(TAG, "Error updating pista online: " + error.getMessage());
+                sendPistaResult(pista, OperationResult.ERROR);
             }
         });
+    }
+
+    private void sendPistaResult(final Pista pista, OperationResult result) {
+        PistasMediatorListener listener = mListener.get();
+        if (listener != null) {
+            listener.onSavePistasResult(result, pista);
+        }
     }
 
     /**
@@ -99,7 +112,7 @@ public class PistasMediator extends CablushMediator {
         if (isOnline()) {
             getPistasOnline(name, estado, esporte);
         } else {
-            sendPistasResult(name, estado, esporte, SearchResult.SEARCH_OFF_LINE);
+            sendPistasResult(name, estado, esporte, OperationResult.OFF_LINE);
         }
     }
 
@@ -110,19 +123,19 @@ public class PistasMediator extends CablushMediator {
                 if (!pistas.isEmpty()) {
                     pistaDAO.bulkSave(pistas);
                 }
-                sendPistasResult(name, estado, esporte, SearchResult.SEARCH_ON_LINE);
+                sendPistasResult(name, estado, esporte, OperationResult.ON_LINE);
             }
 
             @Override
             public void failure(RetrofitError error) {
                 Log.e(TAG, "Error getting pistas online: " + error.getMessage());
-                sendPistasResult(name, estado, esporte, SearchResult.SEARCH_ERROR);
+                sendPistasResult(name, estado, esporte, OperationResult.ERROR);
             }
         });
     }
 
     private void sendPistasResult(final String name, final String estado, final String esporte,
-                                  SearchResult result) {
+                                  OperationResult result) {
         PistasMediatorListener listener = mListener.get();
         if (listener != null) {
             listener.onGetPistasResult(result, pistaDAO.getPistas(name, estado, esporte));
@@ -136,7 +149,7 @@ public class PistasMediator extends CablushMediator {
         if (isOnline()) {
             getMyPistasOnline();
         } else {
-            sendPistasResult(SearchResult.SEARCH_OFF_LINE);
+            sendPistasResult(OperationResult.OFF_LINE);
         }
     }
 
@@ -147,18 +160,18 @@ public class PistasMediator extends CablushMediator {
                 if (!pistas.isEmpty()) {
                     pistaDAO.bulkSave(pistas);
                 }
-                sendPistasResult(SearchResult.SEARCH_ON_LINE);
+                sendPistasResult(OperationResult.ON_LINE);
             }
 
             @Override
             public void failure(RetrofitError error) {
                 Log.e(TAG, "Error getting my pistas online: " + error.getMessage());
-                sendPistasResult(SearchResult.SEARCH_ERROR);
+                sendPistasResult(OperationResult.ERROR);
             }
         });
     }
 
-    private void sendPistasResult(SearchResult result) {
+    private void sendPistasResult(OperationResult result) {
         PistasMediatorListener listener = mListener.get();
         if (listener != null) {
             listener.onGetPistasResult(result, pistaDAO.getPistas(Usuario.LOGGED_USER.getUuid()));

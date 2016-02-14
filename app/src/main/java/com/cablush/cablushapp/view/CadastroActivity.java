@@ -111,6 +111,7 @@ public abstract class CadastroActivity<T> extends CablushActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         NavUtils.navigateUpFromSameTask(CadastroActivity.this);
+                        // TODO retornar de onde chamou (?)
                     }
                 })
                 .setNegativeButton(R.string.btn_no, new DialogInterface.OnClickListener() {
@@ -121,28 +122,35 @@ public abstract class CadastroActivity<T> extends CablushActivity {
                 }).show();
     }
 
+    protected void navigateBack() {
+        setResult(RESULT_OK, MainActivity.makeIntent(this));
+        finish();
+    }
+
     /**
      * Called by the save menu option.
      */
     private void doSave() {
-        if (validate()) {
-            presenter.doSave(save());
+        T t = getData();
+        if (validate(t)) {
+            presenter.doSave(t);
         }
     }
 
     /**
-     * Validate the data before save.
+     * Get the datea from the concrete activity.
      *
-     * @return True, if it is everything ok to save.
+     * @return
      */
-    protected abstract boolean validate();
+    protected abstract T getData();
 
     /**
-     * Save the registry.
+     * Validate the data before save.
      *
-     * @return The registry to be saved.
+     * @param t
+     * @return True, if it is everything ok to save.
      */
-    protected abstract T save();
+    protected abstract boolean validate(T t);
 
     /**
      * Adapter to handle the tabs

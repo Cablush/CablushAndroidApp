@@ -25,6 +25,7 @@ import com.cablush.cablushapp.utils.ViewUtils;
 import com.cablush.cablushapp.view.CadastroEventoActivity;
 import com.cablush.cablushapp.view.CadastroLojaActivity;
 import com.cablush.cablushapp.view.CadastroPistaActivity;
+import com.cablush.cablushapp.view.MainActivity;
 
 import java.lang.ref.WeakReference;
 
@@ -82,6 +83,7 @@ public class LocalInfoDialog<L extends Localizavel> extends DialogFragment {
 
         // Initialize logo
         final ImageView logo = (ImageView) view.findViewById(R.id.imageViewLogo);
+        // TODO não mostra imagem local!
         PictureUtils.loadRemoteImage(getActivity(), localizavel.getImagemURL(), logo, true);
 
         // Initialize description
@@ -157,14 +159,17 @@ public class LocalInfoDialog<L extends Localizavel> extends DialogFragment {
                 @Override
                 public void onClick(View v) {
                     if (localizavel instanceof Loja) {
-                        startActivity(CadastroLojaActivity
-                                .makeIntent(getActivity(), (Loja) localizavel));
+                        startActivityForResult(CadastroLojaActivity
+                                .makeIntent(getActivity(), (Loja) localizavel),
+                                MainActivity.CADASTRO_LOJA);
                     } else if (localizavel instanceof Evento) {
-                        startActivity(CadastroEventoActivity
-                                .makeIntent(getActivity(), (Evento) localizavel));
+                        startActivityForResult(CadastroEventoActivity
+                                .makeIntent(getActivity(), (Evento) localizavel),
+                                MainActivity.CADASTRO_EVENTO);
                     } else if (localizavel instanceof Pista) {
-                        startActivity(CadastroPistaActivity
-                                .makeIntent(getActivity(), (Pista) localizavel));
+                        startActivityForResult(CadastroPistaActivity
+                                .makeIntent(getActivity(), (Pista) localizavel),
+                                MainActivity.CADASTRO_PISTA);
                     }
                 }
             });

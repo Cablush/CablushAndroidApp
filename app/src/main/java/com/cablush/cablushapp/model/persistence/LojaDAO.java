@@ -203,39 +203,48 @@ public class LojaDAO extends AppBaseDAO {
 
     public Loja save(Loja loja) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        if (loja.getUuid() == null) {
-            loja.setUuid(UUID.randomUUID().toString());
-            loja.setRemote(false);
-            insert(db, loja);
-        } else {
-            update(db, loja);
-        }
-        dbHelper.close(db);
-        return loja;
-    }
-
-    public Loja merge(Loja loja, Loja lojaRemote) {
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-        // delete local loja
-        delete(db, loja.getUuid());
-        // insert remote loja
-        lojaRemote.setRemote(true);
-        insert(db, lojaRemote);
-        dbHelper.close(db);
-        return null;
-    }
-
-    public void bulkSave(List<Loja> lojas) {
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-        for (Loja loja : lojas) {
-            loja.setRemote(true);
-            if (getLoja(db, loja.getUuid()) == null) {
+        try {
+            if (loja.getUuid() == null) {
+                loja.setUuid(UUID.randomUUID().toString());
+                loja.setRemote(false);
                 insert(db, loja);
             } else {
                 update(db, loja);
             }
+            return getLoja(db, loja.getUuid());
+        } finally {
+            dbHelper.close(db);
         }
-        dbHelper.close(db);
+    }
+
+    public Loja merge(Loja loja, Loja lojaRemote) {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        try {
+            // delete local loja
+            delete(db, loja.getUuid());
+            // insert remote loja
+            lojaRemote.setRemote(true);
+            insert(db, lojaRemote);
+            return getLoja(db, lojaRemote.getUuid());
+        } finally {
+            dbHelper.close(db);
+        }
+    }
+
+    public void bulkSave(List<Loja> lojas) {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        try {
+            for (Loja loja : lojas) {
+                loja.setRemote(true);
+                if (getLoja(db, loja.getUuid()) == null) {
+                    insert(db, loja);
+                } else {
+                    update(db, loja);
+                }
+            }
+        } finally {
+            dbHelper.close(db);
+        }
     }
 
     private Loja getLoja(SQLiteDatabase db, String uuid) {

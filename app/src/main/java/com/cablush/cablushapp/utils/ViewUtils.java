@@ -4,8 +4,6 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.CheckBox;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -49,39 +47,12 @@ public class ViewUtils {
     }
 
     /**
-     * Check if the editText is not empty, and "mark" if it is empty.
+     * Mark a TextView as required.
+     *
+     * @param textView
      */
-    public static boolean checkNotEmpty(Context context, EditText editText) {
-        if (editText.getText().toString().isEmpty()) {
-            editText.setError(context.getString(R.string.msg_required));
-            return false;
-        }
-        return true;
-    }
-
-    /**
-     * Check if at least one checkbox is checked, and "mark" the textView if not.
-     */
-    public static boolean checkOneChecked(Context context, TextView textView,
-                                          CheckBox... checkBoxes) {
-        for (CheckBox checkBox : checkBoxes) {
-            if (!checkBox.isChecked()) {
-                textView.setError(context.getString(R.string.msg_select_one));
-                return false;
-            }
-        }
-        return true;
-    }
-
-    /**
-     * Check if a valid option is selected, and 'mark' the textView if not.
-     */
-    public static boolean checkSelected(Context context, TextView textView, AdapterView adapter) {
-        if (getSelectedItem(context, adapter).isEmpty()) {
-            textView.setError(context.getString(R.string.msg_select_one));
-            return false;
-        }
-        return true;
+    public static void markAsRequired(TextView textView) {
+        textView.setText(String.format("%s (*)", textView.getText()));
     }
 
     /**

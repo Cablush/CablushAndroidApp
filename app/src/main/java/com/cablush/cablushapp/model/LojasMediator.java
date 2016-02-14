@@ -2,7 +2,6 @@ package com.cablush.cablushapp.model;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.cablush.cablushapp.model.domain.Usuario;
@@ -27,7 +26,8 @@ public class LojasMediator extends CablushMediator {
      *
      */
     public interface LojasMediatorListener {
-        void onGetLojasResult(SearchResult result, List<Loja> lojas);
+        void onGetLojasResult(OperationResult result, List<Loja> lojas);
+        void onSaveLojaResult(OperationResult result, Loja loja);
     }
 
     private WeakReference<LojasMediatorListener> mListener;
@@ -58,6 +58,8 @@ public class LojasMediator extends CablushMediator {
             } else {
                 createLojaOnline(loja);
             }
+        } else {
+            sendLojaResult(loja, OperationResult.OFF_LINE);
         }
     }
 
@@ -65,12 +67,14 @@ public class LojasMediator extends CablushMediator {
         apiLojas.createLoja(loja, new Callback<Loja>() {
             @Override
             public void success(Loja lojaRemote, Response response) {
-                lojaDAO.merge(loja, lojaRemote);
+                Loja lojaResult = lojaDAO.merge(loja, lojaRemote);
+                sendLojaResult(lojaResult, OperationResult.ON_LINE);
             }
 
             @Override
             public void failure(RetrofitError error) {
                 Log.e(TAG, "Error creating loja online: " + error.getMessage());
+                sendLojaResult(loja, OperationResult.ERROR);
             }
         });
     }
@@ -89,6 +93,13 @@ public class LojasMediator extends CablushMediator {
         });
     }
 
+    private void sendLojaResult(final Loja loja, OperationResult result) {
+        LojasMediatorListener listener = mListener.get();
+        if (listener != null) {
+            listener.onSaveLojaResult(result, loja);
+        }
+    }
+
     /**
      *
      * @param name
@@ -99,7 +110,7 @@ public class LojasMediator extends CablushMediator {
         if (isOnline()) {
             getLojasOnline(name, estado, esporte);
         } else {
-            sendLojasResult(name, estado, esporte, SearchResult.SEARCH_OFF_LINE);
+            sendLojasResult(name, estado, esporte, OperationResult.OFF_LINE);
         }
     }
 
@@ -110,19 +121,19 @@ public class LojasMediator extends CablushMediator {
                 if (!lojas.isEmpty()) {
                     lojaDAO.bulkSave(lojas);
                 }
-                sendLojasResult(name, estado, esporte, SearchResult.SEARCH_ON_LINE);
+                sendLojasResult(name, estado, esporte, OperationResult.ON_LINE);
             }
 
             @Override
             public void failure(RetrofitError error) {
                 Log.e(TAG, "Error getting lojas online: " + error.getMessage());
-                sendLojasResult(name, estado, esporte, SearchResult.SEARCH_ERROR);
+                sendLojasResult(name, estado, esporte, OperationResult.ERROR);
             }
         });
     }
 
     private void sendLojasResult(final String name, final String estado, final String esporte,
-                                 SearchResult result) {
+                                 OperationResult result) {
         LojasMediatorListener listener = mListener.get();
         if (listener != null) {
             listener.onGetLojasResult(result, lojaDAO.getLojas(name, estado, esporte));
@@ -136,7 +147,7 @@ public class LojasMediator extends CablushMediator {
         if (isOnline()) {
             getMyLojasOnline();
         } else {
-            sendLojasResult(SearchResult.SEARCH_OFF_LINE);
+            sendLojasResult(OperationResult.OFF_LINE);
         }
     }
 
@@ -147,18 +158,18 @@ public class LojasMediator extends CablushMediator {
                 if (!lojas.isEmpty()) {
                     lojaDAO.bulkSave(lojas);
                 }
-                sendLojasResult(SearchResult.SEARCH_ON_LINE);
+                sendLojasResult(OperationResult.ON_LINE);
             }
 
             @Override
             public void failure(RetrofitError error) {
                 Log.e(TAG, "Error getting my lojas online: " + error.getMessage());
-                sendLojasResult(SearchResult.SEARCH_ERROR);
+                sendLojasResult(OperationResult.ERROR);
             }
         });
     }
 
-    private void sendLojasResult(SearchResult result) {
+    private void sendLojasResult(OperationResult result) {
         LojasMediatorListener listener = mListener.get();
         if (listener != null) {
             listener.onGetLojasResult(result, lojaDAO.getLojas(Usuario.LOGGED_USER.getUuid()));

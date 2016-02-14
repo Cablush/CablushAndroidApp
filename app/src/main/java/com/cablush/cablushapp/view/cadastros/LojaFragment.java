@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.MultiAutoCompleteTextView;
+import android.widget.TextView;
 
 import com.cablush.cablushapp.R;
 import com.cablush.cablushapp.model.EsportesMediator;
@@ -88,6 +89,7 @@ public class LojaFragment extends CablushFragment {
     public void onPause() {
         super.onPause();
         Log.d(TAG, "onPause()");
+        getViewValues();
     }
 
     @Override
@@ -103,6 +105,7 @@ public class LojaFragment extends CablushFragment {
     }
 
     private void initializeView(View view) {
+        ViewUtils.markAsRequired((TextView) view.findViewById(R.id.textViewNome));
         nomeEditText = (EditText) view.findViewById(R.id.editTextNome);
         telefoneEditText = (EditText) view.findViewById(R.id.editTextTelefone);
         emailEditText = (EditText) view.findViewById(R.id.editTextEmail);
@@ -125,8 +128,10 @@ public class LojaFragment extends CablushFragment {
             }
         });
         logoImageView = (ImageView) view.findViewById(R.id.imageViewLogo);
+        ViewUtils.markAsRequired((TextView) view.findViewById(R.id.textViewDescricao));
         descricaoEditText = (EditText) view.findViewById(R.id.editTextDescricao);
         // esportes
+        ViewUtils.markAsRequired((TextView) view.findViewById(R.id.textViewEsportes));
         esportesMultiComplete = (MultiAutoCompleteTextView) view
                 .findViewById(R.id.multiAutoCompleteEsportes);
         esportesMultiComplete.setThreshold(1);
@@ -141,6 +146,7 @@ public class LojaFragment extends CablushFragment {
         emailEditText.setText(loja.getEmail());
         websiteEditText.setText(loja.getWebsite());
         facebookEditText.setText(loja.getFacebook());
+        // TODO não mostra imagem local!
         PictureUtils.loadRemoteImage(getActivity(), loja.getLogo(), logoImageView, false);
         descricaoEditText.setText(loja.getDescricao());
         // esportes
@@ -151,18 +157,16 @@ public class LojaFragment extends CablushFragment {
         }
     }
 
-    /**
-     *
-     * @return
-     */
-    public boolean doValidate() {
-        boolean valido = true;
-        if (isAdded()) {
-            valido = ViewUtils.checkNotEmpty(getContext(), nomeEditText) && valido;
-            valido = ViewUtils.checkNotEmpty(getContext(), descricaoEditText) && valido;
-            valido = ViewUtils.checkNotEmpty(getContext(), esportesMultiComplete) && valido;
-        }
-        return valido;
+    private void getViewValues() {
+        loja.setNome(nomeEditText.getText().toString());
+        loja.setTelefone(telefoneEditText.getText().toString());
+        loja.setEmail(emailEditText.getText().toString());
+        loja.setWebsite(websiteEditText.getText().toString());
+        loja.setFacebook(facebookEditText.getText().toString());
+        loja.setLogo(getPictureFilePath());
+        loja.setDescricao(descricaoEditText.getText().toString());
+        loja.setEsportes(esportesAdapter.getSelectedItems(
+                esportesMultiComplete.getText().toString()));
     }
 
     /**
@@ -170,16 +174,8 @@ public class LojaFragment extends CablushFragment {
      * @eturn
      */
     public Loja getLoja() {
-        if (isAdded()) {
-            loja.setNome(nomeEditText.getText().toString());
-            loja.setTelefone(telefoneEditText.getText().toString());
-            loja.setEmail(emailEditText.getText().toString());
-            loja.setWebsite(websiteEditText.getText().toString());
-            loja.setFacebook(facebookEditText.getText().toString());
-            loja.setLogo(getPictureFilePath());
-            loja.setDescricao(descricaoEditText.getText().toString());
-            loja.setEsportes(esportesAdapter.getSelectedItems(
-                    esportesMultiComplete.getText().toString()));
+        if (isAdded() || isDetached()) { // If is added or detached, update the object with the views
+            getViewValues();
         }
         return loja;
     }

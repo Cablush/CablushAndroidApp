@@ -18,7 +18,6 @@ import com.cablush.cablushapp.model.EsportesMediator;
 import com.cablush.cablushapp.model.domain.Esporte;
 import com.cablush.cablushapp.model.domain.Pista;
 import com.cablush.cablushapp.utils.PictureUtils;
-import com.cablush.cablushapp.utils.ViewUtils;
 
 /**
  * Created by jonathan on 11/02/16.
@@ -86,6 +85,7 @@ public class PistaFragment extends CablushFragment {
     public void onPause() {
         super.onPause();
         Log.d(TAG, "onPause()");
+        getViewValues();
     }
 
     @Override
@@ -129,6 +129,7 @@ public class PistaFragment extends CablushFragment {
         nomeEditText.setText(pista.getNome());
         websiteEditText.setText(pista.getWebsite());
         facebookEditText.setText(pista.getFacebook());
+        // TODO não mostra imagem local!
         PictureUtils.loadRemoteImage(getActivity(), pista.getFoto(), fotoImageView, false);
         descricaoEditText.setText(pista.getDescricao());
         // esportes
@@ -139,18 +140,14 @@ public class PistaFragment extends CablushFragment {
         }
     }
 
-    /**
-     *
-     * @return
-     */
-    public boolean doValidate() {
-        boolean valido = true;
-        if (isAdded()) {
-            valido = ViewUtils.checkNotEmpty(getContext(), nomeEditText) && valido;
-            valido = ViewUtils.checkNotEmpty(getContext(), descricaoEditText) && valido;
-            valido = ViewUtils.checkNotEmpty(getContext(), esportesMultiComplete) && valido;
-        }
-        return valido;
+    private void getViewValues() {
+        pista.setNome(nomeEditText.getText().toString());
+        pista.setWebsite(websiteEditText.getText().toString());
+        pista.setFacebook(facebookEditText.getText().toString());
+        pista.setFoto(getPictureFilePath());
+        pista.setDescricao(descricaoEditText.getText().toString());
+        pista.setEsportes(esportesAdapter.getSelectedItems(
+                esportesMultiComplete.getText().toString()));
     }
 
     /**
@@ -158,14 +155,8 @@ public class PistaFragment extends CablushFragment {
      * @return
      */
     public Pista getPista() {
-        if (isAdded()) {
-            pista.setNome(nomeEditText.getText().toString());
-            pista.setWebsite(websiteEditText.getText().toString());
-            pista.setFacebook(facebookEditText.getText().toString());
-            pista.setFoto(getPictureFilePath());
-            pista.setDescricao(descricaoEditText.getText().toString());
-            pista.setEsportes(esportesAdapter.getSelectedItems(
-                    esportesMultiComplete.getText().toString()));
+        if (isAdded() || isDetached()) { // If is added or detached, update the object with the views
+            getViewValues();
         }
         return pista;
     }

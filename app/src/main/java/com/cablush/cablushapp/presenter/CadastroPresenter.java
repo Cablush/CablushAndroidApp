@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 
 import com.cablush.cablushapp.model.EsportesMediator;
+import com.cablush.cablushapp.model.OperationResult;
 import com.cablush.cablushapp.model.domain.Esporte;
 
 import java.util.List;
@@ -15,10 +16,20 @@ public abstract class CadastroPresenter<T> {
 
     private final String TAG = getClass().getSimpleName();
 
+    /**
+     * Interface to be implemented by this Presenter's client.
+     */
+    public interface CadastroView<T> {
+        void onSaveResult(OperationResult result, T t);
+    }
+
+    protected CadastroView cadastroView;
+
     private EsportesMediator esportesMediator;
 
-    public CadastroPresenter(@NonNull Context context) {
+    public CadastroPresenter(@NonNull CadastroView view, @NonNull Context context) {
         this.esportesMediator = new EsportesMediator(context);
+        this.cadastroView = view;
     }
 
     /**
@@ -33,6 +44,5 @@ public abstract class CadastroPresenter<T> {
      *
      * @param t
      */
-    public abstract void doSave(T t);
-
+    public abstract T doSave(T t);
 }

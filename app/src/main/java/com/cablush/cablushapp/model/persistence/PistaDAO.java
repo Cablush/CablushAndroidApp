@@ -193,39 +193,48 @@ public class PistaDAO extends AppBaseDAO {
 
     public Pista save(Pista pista) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        if (pista.getUuid() == null) {
-            pista.setUuid(UUID.randomUUID().toString());
-            pista.setRemote(false);
-            insert(db, pista);
-        } else {
-            update(db, pista);
-        }
-        dbHelper.close(db);
-        return pista;
-    }
-
-    public Pista merge(Pista pista, Pista pistaRemote) {
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-        // delete local pista
-        delete(db, pista.getUuid());
-        // insert remote pista
-        pistaRemote.setRemote(true);
-        insert(db, pistaRemote);
-        dbHelper.close(db);
-        return null;
-    }
-
-    public void bulkSave(List<Pista> pistas) {
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-        for (Pista pista : pistas) {
-            pista.setRemote(true);
-            if (getPista(db, pista.getUuid()) == null) {
+        try {
+            if (pista.getUuid() == null) {
+                pista.setUuid(UUID.randomUUID().toString());
+                pista.setRemote(false);
                 insert(db, pista);
             } else {
                 update(db, pista);
             }
+            return getPista(db, pista.getUuid());
+        } finally {
+            dbHelper.close(db);
         }
-        dbHelper.close(db);
+    }
+
+    public Pista merge(Pista pista, Pista pistaRemote) {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        try {
+            // delete local pista
+            delete(db, pista.getUuid());
+            // insert remote pista
+            pistaRemote.setRemote(true);
+            insert(db, pistaRemote);
+            return getPista(db, pistaRemote.getUuid());
+        } finally {
+            dbHelper.close(db);
+        }
+    }
+
+    public void bulkSave(List<Pista> pistas) {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        try {
+            for (Pista pista : pistas) {
+                pista.setRemote(true);
+                if (getPista(db, pista.getUuid()) == null) {
+                    insert(db, pista);
+                } else {
+                    update(db, pista);
+                }
+            }
+        } finally {
+            dbHelper.close(db);
+        }
     }
 
     private Pista getPista(SQLiteDatabase db, String uuid) {

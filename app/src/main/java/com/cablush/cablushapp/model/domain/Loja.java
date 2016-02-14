@@ -51,6 +51,17 @@ public class Loja implements Localizavel, Serializable {
         horario = new Horario();
     }
 
+    /**
+     *
+     * @param responsavel
+     */
+    public Loja(Usuario responsavel) {
+        this();
+        if (responsavel != null) {
+            this.responsavel = responsavel.getUuid();
+        }
+    }
+
     @Override
     public String getUuid() {
         return uuid;

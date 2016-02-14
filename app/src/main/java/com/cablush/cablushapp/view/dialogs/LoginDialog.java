@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.cablush.cablushapp.R;
 import com.cablush.cablushapp.presenter.LoginPresenter;
+import com.cablush.cablushapp.utils.ValidateUtils;
 import com.cablush.cablushapp.utils.ViewUtils;
 
 import java.lang.ref.WeakReference;
@@ -87,7 +88,7 @@ public class LoginDialog extends DialogFragment {
                 String email = emailEdit.getText().toString();
                 String password = passwordEdit.getText().toString();
 
-                if (!email.isEmpty() && !password.isEmpty()) {
+                if (ValidateUtils.isNotBlank(email) && ValidateUtils.isNotBlank(password)) {
                     LoginPresenter loginPresenter = new LoginPresenter(mView.get(), getActivity());
                     loginPresenter.doLogin(email, password);
                 } else {

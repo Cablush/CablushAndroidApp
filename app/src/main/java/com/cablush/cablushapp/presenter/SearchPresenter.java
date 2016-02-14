@@ -6,7 +6,7 @@ import android.support.annotation.NonNull;
 import com.cablush.cablushapp.model.EventosMediator;
 import com.cablush.cablushapp.model.LojasMediator;
 import com.cablush.cablushapp.model.PistasMediator;
-import com.cablush.cablushapp.model.SearchResult;
+import com.cablush.cablushapp.model.OperationResult;
 import com.cablush.cablushapp.model.domain.Evento;
 import com.cablush.cablushapp.model.domain.Localizavel;
 import com.cablush.cablushapp.model.domain.Loja;
@@ -28,7 +28,7 @@ public class SearchPresenter implements LojasMediator.LojasMediatorListener,
      */
     public interface SearchView {
         SearchPresenter getSearchPresenter();
-        void onSearchResult(SearchResult result, List<? extends Localizavel> localizaveis);
+        void onSearchResult(OperationResult result, List<? extends Localizavel> localizaveis);
     }
 
     private WeakReference<SearchView> mView;
@@ -61,11 +61,16 @@ public class SearchPresenter implements LojasMediator.LojasMediatorListener,
     }
 
     @Override
-    public void onGetLojasResult(SearchResult result, List<Loja> lojas) {
+    public void onGetLojasResult(OperationResult result, List<Loja> lojas) {
         SearchView view = mView.get();
         if (view != null) {
             view.onSearchResult(result, lojas);
         }
+    }
+
+    @Override
+    public void onSaveLojaResult(OperationResult result, Loja loja) {
+        /* do nothing */
     }
 
     // Searches for Eventos
@@ -79,11 +84,16 @@ public class SearchPresenter implements LojasMediator.LojasMediatorListener,
     }
 
     @Override
-    public void onGetEventosResult(SearchResult result, List<Evento> eventos) {
+    public void onGetEventosResult(OperationResult result, List<Evento> eventos) {
         SearchView view = mView.get();
         if (view != null) {
             view.onSearchResult(result, eventos);
         }
+    }
+
+    @Override
+    public void onSaveEventosResult(OperationResult result, Evento evento) {
+        /* do nothing */
     }
 
     // Searches for Pistas
@@ -97,10 +107,15 @@ public class SearchPresenter implements LojasMediator.LojasMediatorListener,
     }
 
     @Override
-    public void onGetPistasResult(SearchResult result, List<Pista> pistas) {
+    public void onGetPistasResult(OperationResult result, List<Pista> pistas) {
         SearchView view = mView.get();
         if (view != null) {
             view.onSearchResult(result, pistas);
         }
+    }
+
+    @Override
+    public void onSavePistasResult(OperationResult result, Pista pista) {
+        /* do nothing */
     }
 }

@@ -4,7 +4,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 
 import com.cablush.cablushapp.model.PistasMediator;
-import com.cablush.cablushapp.model.SearchResult;
+import com.cablush.cablushapp.model.OperationResult;
 import com.cablush.cablushapp.model.domain.Pista;
 
 import java.util.List;
@@ -17,18 +17,24 @@ public class CadastroPistaPresenter extends CadastroPresenter<Pista>
 
     private PistasMediator pistasMediator;
 
-    public CadastroPistaPresenter(@NonNull Context context) {
-        super(context);
+    public CadastroPistaPresenter(@NonNull CadastroView view, @NonNull Context context) {
+        super(view, context);
         pistasMediator = new PistasMediator(this, context);
     }
 
     @Override
-    public void doSave(Pista pista) {
+    public Pista doSave(Pista pista) {
         pistasMediator.savePista(pista);
+        return pista;
     }
 
     @Override
-    public void onGetPistasResult(SearchResult result, List<Pista> pistas) {
+    public void onSavePistasResult(OperationResult result, Pista pista) {
+        cadastroView.onSaveResult(result, pista);
+    }
+
+    @Override
+    public void onGetPistasResult(OperationResult result, List<Pista> pistas) {
         // Do Nothing
     }
 }

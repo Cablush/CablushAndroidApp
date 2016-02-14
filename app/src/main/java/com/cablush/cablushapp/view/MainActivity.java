@@ -13,7 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cablush.cablushapp.R;
-import com.cablush.cablushapp.model.SearchResult;
+import com.cablush.cablushapp.model.OperationResult;
 import com.cablush.cablushapp.model.domain.Evento;
 import com.cablush.cablushapp.model.domain.Localizavel;
 import com.cablush.cablushapp.model.domain.Loja;
@@ -48,6 +48,10 @@ import io.github.yavski.fabspeeddial.SimpleMenuListenerAdapter;
 public class MainActivity extends AbstractDrawerActivity implements OnMapReadyCallback,
         LoginDialog.LoginDialogListener, LoginPresenter.LoginView,
         RegisterPresenter.RegisterView, SearchPresenter.SearchView {
+
+    public static final int CADASTRO_LOJA = 1;
+    public static final int CADASTRO_EVENTO = 2;
+    public static final int CADASTRO_PISTA = 3;
 
     private ProgressBar spinner;
 
@@ -87,20 +91,23 @@ public class MainActivity extends AbstractDrawerActivity implements OnMapReadyCa
                 switch (menuItem.getItemId()){
                     case R.id.cadastro_loja:
                         if (checkUserLoggedIn()) {
-                            startActivity(CadastroLojaActivity
-                                    .makeIntent(MainActivity.this, new Loja()));
+                            startActivityForResult(CadastroLojaActivity
+                                    .makeIntent(MainActivity.this, new Loja(Usuario.LOGGED_USER)),
+                                    CADASTRO_LOJA);
                         }
                         break;
                     case R.id.cadastro_evento:
                         if (checkUserLoggedIn()) {
-                            startActivity(CadastroEventoActivity
-                                    .makeIntent(MainActivity.this, new Evento()));
+                            startActivityForResult(CadastroEventoActivity
+                                    .makeIntent(MainActivity.this, new Evento(Usuario.LOGGED_USER)),
+                                    CADASTRO_EVENTO);
                         }
                         break;
                     case R.id.cadastro_pista:
                         if (checkUserLoggedIn()) {
-                            startActivity(CadastroPistaActivity
-                                    .makeIntent(MainActivity.this, new Pista()));
+                            startActivityForResult(CadastroPistaActivity
+                                    .makeIntent(MainActivity.this, new Pista(Usuario.LOGGED_USER)),
+                                    CADASTRO_PISTA);
                         }
                         break;
                 }
@@ -165,26 +172,56 @@ public class MainActivity extends AbstractDrawerActivity implements OnMapReadyCa
                 SearchDialog.showDialog(getFragmentManager(), SearchDialog.TYPE.PISTA);
                 return true;
             case R.id.drawer_my_lojas:
-                if (checkUserLoggedIn()) {
-                    searchPresenter.getMyLojas();
-                    spinner.setVisibility(View.VISIBLE);
-                    return true;
-                }
-                return false;
+                return getMyLojas();
             case R.id.drawer_my_eventos:
-                if (checkUserLoggedIn()) {
-                    searchPresenter.getMyEventos();
-                    spinner.setVisibility(View.VISIBLE);
-                    return true;
-                }
-                return false;
+                return getMyEventos();
             case R.id.drawer_my_pistas:
-                if (checkUserLoggedIn()) {
-                    searchPresenter.getMyPistas();
-                    spinner.setVisibility(View.VISIBLE);
-                    return true;
-                }
-                return false;
+                return getMyPistas();
+        }
+        return false;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case CADASTRO_LOJA:
+                    getMyLojas();
+                    break;
+                case CADASTRO_EVENTO:
+                    getMyEventos();
+                    break;
+                case CADASTRO_PISTA:
+                    getMyPistas();
+                    break;
+            }
+        }
+    }
+
+    private boolean getMyLojas() {
+        if (checkUserLoggedIn()) {
+            searchPresenter.getMyLojas();
+            spinner.setVisibility(View.VISIBLE);
+            return true;
+        }
+        return false;
+    }
+
+    private boolean getMyEventos() {
+        if (checkUserLoggedIn()) {
+            searchPresenter.getMyEventos();
+            spinner.setVisibility(View.VISIBLE);
+            return true;
+        }
+        return false;
+    }
+
+    private boolean getMyPistas() {
+        if (checkUserLoggedIn()) {
+            searchPresenter.getMyPistas();
+            spinner.setVisibility(View.VISIBLE);
+            return true;
         }
         return false;
     }
@@ -248,13 +285,13 @@ public class MainActivity extends AbstractDrawerActivity implements OnMapReadyCa
     }
 
     @Override
-    public void onSearchResult(SearchResult result, List<? extends Localizavel> localizaveis) {
+    public void onSearchResult(OperationResult result, List<? extends Localizavel> localizaveis) {
         clearMap();
         switch (result) {
-            case SEARCH_OFF_LINE:
+            case OFF_LINE:
                 Toast.makeText(this, R.string.msg_search_off_line, Toast.LENGTH_SHORT).show();
                 break;
-            case SEARCH_ERROR:
+            case ERROR:
                 Toast.makeText(this, R.string.msg_search_error, Toast.LENGTH_SHORT).show();
                 break;
         }
