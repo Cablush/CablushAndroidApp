@@ -54,7 +54,7 @@ public class MapaFragment extends CablushFragment implements OnMapReadyCallback,
             args.putParcelable(LOCATION_BUNDLE_KEY, latLng);
             fragment.setArguments(args);
         }
-        fragment.selectLocationListener = new WeakReference<>(selectLocationListener);
+        fragment.selectLocationListener = new WeakReference<>(selectLocationListener); // TODO send this via to bundle
         return fragment;
     }
 
@@ -154,24 +154,24 @@ public class MapaFragment extends CablushFragment implements OnMapReadyCallback,
     }
 
     private void setMarker() {
-        if (googleMap != null && this.latLng != null) {
+        if (googleMap != null && latLng != null) {
             // Clear Map
             googleMap.clear();
             // Add the mark to LatLng
             googleMap.addMarker(new MarkerOptions()
                     .position(latLng)
                     .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_mark_cablush_orange)));
-            googleMap.moveCamera(CameraUpdateFactory.newLatLng(this.latLng));
+            googleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
             googleMap.animateCamera(CameraUpdateFactory.zoomTo(MapUtils.DEFAULT_ZOOM));
         }
     }
 
     private void fethLocation() {
-        if (googleMap != null && this.latLng != null) {
+        if (googleMap != null && latLng != null) {
             // Call the SelectLocationListener
             SelectLocationListener listener = selectLocationListener.get();
             if (listener != null) {
-                listener.onLocationSelected(this.latLng);
+                listener.onLocationSelected(latLng);
             }
         }
     }

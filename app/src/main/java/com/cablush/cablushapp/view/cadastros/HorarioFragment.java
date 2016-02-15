@@ -137,13 +137,13 @@ public class HorarioFragment extends CablushFragment {
     }
 
     private void setViewValues() {
-        checkBoxSeg.setSelected(horario.getSeg());
-        checkBoxTer.setSelected(horario.getTer());
-        checkBoxQua.setSelected(horario.getQua());
-        checkBoxQui.setSelected(horario.getQui());
-        checkBoxSex.setSelected(horario.getSex());
-        checkBoxSab.setSelected(horario.getSab());
-        checkBoxDom.setSelected(horario.getDom());
+        checkBoxSeg.setChecked(horario.getSeg());
+        checkBoxTer.setChecked(horario.getTer());
+        checkBoxQua.setChecked(horario.getQua());
+        checkBoxQui.setChecked(horario.getQui());
+        checkBoxSex.setChecked(horario.getSex());
+        checkBoxSab.setChecked(horario.getSab());
+        checkBoxDom.setChecked(horario.getDom());
         editTextIni.setText(DateTimeUtils.formatTime(horario.getInicio()));
         editTextFim.setText(DateTimeUtils.formatTime(horario.getFim()));
         editTextDet.setText(horario.getDetalhes());

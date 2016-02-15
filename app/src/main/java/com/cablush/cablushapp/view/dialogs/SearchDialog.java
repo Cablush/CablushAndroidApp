@@ -89,7 +89,8 @@ public class SearchDialog extends DialogFragment {
         builder.setPositiveButton(R.string.btn_search, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 String nome = nameEdit.getText().toString();
-                String estado = getResources().getStringArray(R.array.states_values)[statesSpinner.getSelectedItemPosition()];
+                String estado = ViewUtils.getCodigoEstado(getActivity(),
+                        statesSpinner.getSelectedItemPosition());
                 String esporte = ViewUtils.getSelectedItem(getActivity(), sportsSpinner);
 
                 switch (searchType) {

@@ -122,7 +122,7 @@ public class LocalFragment extends CablushFragment implements MapaFragment.Selec
     private void setViewValues() {
         cepEditText.setText(local.getCep());
         if (estadosAdapter != null) {
-            estadoSpinner.setSelection(estadosAdapter.getPosition(local.getEstado()));
+            estadoSpinner.setSelection(ViewUtils.getPositionEstado(getContext(), local.getEstado()));
         }
         cidadeEditText.setText(local.getCidade());
         bairroEditText.setText(local.getBairro());
@@ -133,7 +133,7 @@ public class LocalFragment extends CablushFragment implements MapaFragment.Selec
 
     private void getViewValues() {
         local.setCep(cepEditText.getText().toString());
-        local.setEstado((String) estadoSpinner.getSelectedItem());
+        local.setEstado(ViewUtils.getCodigoEstado(getActivity(), estadoSpinner.getSelectedItemPosition()));
         local.setCidade(cidadeEditText.getText().toString());
         local.setBairro(bairroEditText.getText().toString());
         local.setLogradouro(logradouroEditText.getText().toString());
