@@ -171,6 +171,7 @@ public class LocalInfoDialog<L extends Localizavel> extends DialogFragment {
                                 .makeIntent(getActivity(), (Pista) localizavel),
                                 MainActivity.CADASTRO_PISTA);
                     }
+                    LocalInfoDialog.this.dismiss();
                 }
             });
         }
