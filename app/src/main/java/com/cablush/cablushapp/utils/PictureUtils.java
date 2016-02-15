@@ -22,7 +22,6 @@ import com.squareup.picasso.Picasso;
 import com.squareup.picasso.RequestCreator;
 
 import java.io.File;
-import java.net.URL;
 import java.util.Locale;
 import java.util.Random;
 
@@ -75,6 +74,20 @@ public class PictureUtils {
     public static void loadImage(Context context, String imagePath,
                                  final ImageView view, final boolean hideOnFail) {
 
+    }
+
+    /**
+     * Check if a file exists in the local filesystem.
+     *
+     * @param filePath
+     * @return
+     */
+    public static boolean fileExist(String filePath) {
+        if (filePath == null) {
+            return false;
+        }
+        File file = new File(filePath);
+        return file.exists();
     }
 
     /**
