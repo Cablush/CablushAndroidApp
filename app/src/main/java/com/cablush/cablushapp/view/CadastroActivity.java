@@ -122,6 +122,9 @@ public abstract class CadastroActivity<T> extends CablushActivity {
                 }).show();
     }
 
+    /**
+     * Return to the main activity.
+     */
     protected void navigateBack() {
         setResult(RESULT_OK, MainActivity.makeIntent(this));
         finish();

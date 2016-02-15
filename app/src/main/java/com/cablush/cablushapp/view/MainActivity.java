@@ -49,9 +49,9 @@ public class MainActivity extends AbstractDrawerActivity implements OnMapReadyCa
         LoginDialog.LoginDialogListener, LoginPresenter.LoginView,
         RegisterPresenter.RegisterView, SearchPresenter.SearchView {
 
-    public static final int CADASTRO_LOJA = 1;
-    public static final int CADASTRO_EVENTO = 2;
-    public static final int CADASTRO_PISTA = 3;
+    public static final int REQUEST_CADASTRO_LOJA = 1;
+    public static final int REQUEST_CADASTRO_EVENTO = 2;
+    public static final int REQUEST_CADASTRO_PISTA = 3;
 
     private ProgressBar spinner;
 
@@ -93,21 +93,21 @@ public class MainActivity extends AbstractDrawerActivity implements OnMapReadyCa
                         if (checkUserLoggedIn()) {
                             startActivityForResult(CadastroLojaActivity
                                     .makeIntent(MainActivity.this, new Loja(Usuario.LOGGED_USER)),
-                                    CADASTRO_LOJA);
+                                    REQUEST_CADASTRO_LOJA);
                         }
                         break;
                     case R.id.cadastro_evento:
                         if (checkUserLoggedIn()) {
                             startActivityForResult(CadastroEventoActivity
                                     .makeIntent(MainActivity.this, new Evento(Usuario.LOGGED_USER)),
-                                    CADASTRO_EVENTO);
+                                    REQUEST_CADASTRO_EVENTO);
                         }
                         break;
                     case R.id.cadastro_pista:
                         if (checkUserLoggedIn()) {
                             startActivityForResult(CadastroPistaActivity
                                     .makeIntent(MainActivity.this, new Pista(Usuario.LOGGED_USER)),
-                                    CADASTRO_PISTA);
+                                    REQUEST_CADASTRO_PISTA);
                         }
                         break;
                 }
@@ -186,13 +186,13 @@ public class MainActivity extends AbstractDrawerActivity implements OnMapReadyCa
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
-                case CADASTRO_LOJA:
+                case REQUEST_CADASTRO_LOJA:
                     getMyLojas();
                     break;
-                case CADASTRO_EVENTO:
+                case REQUEST_CADASTRO_EVENTO:
                     getMyEventos();
                     break;
-                case CADASTRO_PISTA:
+                case REQUEST_CADASTRO_PISTA:
                     getMyPistas();
                     break;
             }
