@@ -237,9 +237,9 @@ public class LojaDAO extends AppBaseDAO {
             for (Loja loja : lojas) {
                 loja.setRemote(true);
                 if (existsLoja(db, loja.getUuid())) {
-                    insert(db, loja);
-                } else {
                     update(db, loja);
+                } else {
+                    insert(db, loja);
                 }
             }
         } finally {

@@ -154,9 +154,9 @@ class HorarioDAO extends AppBaseDAO {
 
     void save(SQLiteDatabase db, Horario horario) {
         if (existsHorario(db, horario.getUuidLocalizavel())) {
-            insert(db, horario);
-        } else {
             update(db, horario);
+        } else {
+            insert(db, horario);
         }
     }
 

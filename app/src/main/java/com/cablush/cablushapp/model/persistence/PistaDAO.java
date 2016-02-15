@@ -227,9 +227,9 @@ public class PistaDAO extends AppBaseDAO {
             for (Pista pista : pistas) {
                 pista.setRemote(true);
                 if (existsPista(db, pista.getUuid())) {
-                    insert(db, pista);
-                } else {
                     update(db, pista);
+                } else {
+                    insert(db, pista);
                 }
             }
         } finally {

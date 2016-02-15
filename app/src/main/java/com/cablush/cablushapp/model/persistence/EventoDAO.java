@@ -239,9 +239,9 @@ public class EventoDAO extends AppBaseDAO {
             for (Evento evento : eventos) {
                 evento.setRemote(true);
                 if (existsEvento(db, evento.getUuid())) {
-                    insert(db, evento);
-                } else {
                     update(db, evento);
+                } else {
+                    insert(db, evento);
                 }
             }
         } finally {

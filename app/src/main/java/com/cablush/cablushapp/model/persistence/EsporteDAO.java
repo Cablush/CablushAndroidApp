@@ -117,9 +117,9 @@ public class EsporteDAO  extends AppBaseDAO {
 
     void save(SQLiteDatabase db, Esporte esporte) {
         if (existsEsporte(db, esporte.getId())) {
-            insert(db, esporte);
-        } else {
             update(db, esporte);
+        } else {
+            insert(db, esporte);
         }
     }
 

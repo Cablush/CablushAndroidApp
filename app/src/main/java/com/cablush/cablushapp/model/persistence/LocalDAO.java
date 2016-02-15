@@ -148,9 +148,9 @@ class LocalDAO extends AppBaseDAO {
 
     void save(SQLiteDatabase db, Local local) {
         if (existsLocal(db, local.getUuidLocalizavel())) {
-            insert(db, local);
-        } else {
             update(db, local);
+        } else {
+            insert(db, local);
         }
     }
 
