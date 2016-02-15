@@ -205,8 +205,7 @@ public class EventoFragment extends CablushFragment {
         dataFimEditText.setText(DateTimeUtils.formatTime(evento.getHora()));
         websiteEditText.setText(evento.getWebsite());
         facebookEditText.setText(evento.getFacebook());
-        // TODO não mostra imagem local!
-        PictureUtils.loadRemoteImage(getActivity(), evento.getFlyer(), flyerImageView, false);
+        PictureUtils.loadImage(getActivity(), evento.getFlyer(), flyerImageView, false);
         descricaoEditText.setText(evento.getDescricao());
         // esportes
         for (Esporte esporte : evento.getEsportes()) {

@@ -129,8 +129,7 @@ public class PistaFragment extends CablushFragment {
         nomeEditText.setText(pista.getNome());
         websiteEditText.setText(pista.getWebsite());
         facebookEditText.setText(pista.getFacebook());
-        // TODO não mostra imagem local!
-        PictureUtils.loadRemoteImage(getActivity(), pista.getFoto(), fotoImageView, false);
+        PictureUtils.loadImage(getActivity(), pista.getFoto(), fotoImageView, false);
         descricaoEditText.setText(pista.getDescricao());
         // esportes
         for (Esporte esporte : pista.getEsportes()) {

@@ -83,8 +83,7 @@ public class LocalInfoDialog<L extends Localizavel> extends DialogFragment {
 
         // Initialize logo
         final ImageView logo = (ImageView) view.findViewById(R.id.imageViewLogo);
-        // TODO não mostra imagem local!
-        PictureUtils.loadRemoteImage(getActivity(), localizavel.getImagemURL(), logo, true);
+        PictureUtils.loadImage(getActivity(), localizavel.getImagemURL(), logo, true);
 
         // Initialize description
         TextView descricaoView = (TextView) view.findViewById(R.id.descricaoTextView);
@@ -161,15 +160,15 @@ public class LocalInfoDialog<L extends Localizavel> extends DialogFragment {
                     if (localizavel instanceof Loja) {
                         startActivityForResult(CadastroLojaActivity
                                 .makeIntent(getActivity(), (Loja) localizavel),
-                                MainActivity.CADASTRO_LOJA);
+                                MainActivity.REQUEST_CADASTRO_LOJA);
                     } else if (localizavel instanceof Evento) {
                         startActivityForResult(CadastroEventoActivity
                                 .makeIntent(getActivity(), (Evento) localizavel),
-                                MainActivity.CADASTRO_EVENTO);
+                                MainActivity.REQUEST_CADASTRO_EVENTO);
                     } else if (localizavel instanceof Pista) {
                         startActivityForResult(CadastroPistaActivity
                                 .makeIntent(getActivity(), (Pista) localizavel),
-                                MainActivity.CADASTRO_PISTA);
+                                MainActivity.REQUEST_CADASTRO_PISTA);
                     }
                     LocalInfoDialog.this.dismiss();
                 }

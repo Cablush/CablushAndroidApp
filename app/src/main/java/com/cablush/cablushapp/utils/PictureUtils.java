@@ -12,6 +12,7 @@ import android.os.Build;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -29,6 +30,8 @@ import java.util.Random;
  * Created by oscar on 07/02/16.
  */
 public class PictureUtils {
+
+    public static final String TAG = PictureUtils.class.getSimpleName();
 
     private static final String PICTURE_DIR = "Cablush";
     private static final String PICTURE_FILE_NAME =  "Cablush_%9d.jpg";
@@ -71,9 +74,27 @@ public class PictureUtils {
         }
     }
 
+    /**
+     * Load a image from path
+     *
+     * @param context
+     * @param imagePath
+     * @param view
+     * @param hideOnFail
+     */
     public static void loadImage(Context context, String imagePath,
                                  final ImageView view, final boolean hideOnFail) {
-
+        if (fileExist(imagePath)) {
+            int width = view.getWidth();
+            int height = view.getHeight();
+            if ((width == 0 || height == 0) && view.getDrawable() != null) {
+                width = view.getDrawable().getMinimumWidth();
+                height = view.getDrawable().getMinimumHeight();
+            }
+            view.setImageBitmap(getBitmapFromPath(context, imagePath, width, height));
+        } else {
+            loadRemoteImage(context, imagePath, view, hideOnFail);
+        }
     }
 
     /**
@@ -217,19 +238,41 @@ public class PictureUtils {
         // Get picture path
         String picturePath = getPath(context, pictureUri);
 
-        // Get the dimensions of the bitmap
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inJustDecodeBounds = true;
-        BitmapFactory.decodeFile(picturePath, options);
+        return getBitmapFromPath(context, picturePath, targetWidth, targetHeight);
+    }
 
-        // Determine how much to scale down the image
-        int scaleFactor = Math.min(options.outWidth/targetWidth, options.outHeight/targetHeight);
+    /**
+     * Get the Scaled Bitmap.
+     *
+     * @param context
+     * @param picturePath
+     * @param targetWidth
+     * @param targetHeight
+     * @return
+     */
+    public static Bitmap getBitmapFromPath(Context context, String picturePath,
+                                          int targetWidth, int targetHeight) {
+        try {
+            // Get the dimensions of the bitmap
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inJustDecodeBounds = true;
+            BitmapFactory.decodeFile(picturePath, options);
 
-        // Decode the image file into a Bitmap sized to fill the View
-        options.inJustDecodeBounds = false;
-        options.inSampleSize = scaleFactor;
+            // Determine how much to scale down the image
+            int scaleFactor = 1;
+            if (targetWidth > 0 && targetHeight > 0) {
+                scaleFactor = Math.min(options.outWidth / targetWidth, options.outHeight / targetHeight);
+            }
 
-        return BitmapFactory.decodeFile(picturePath, options);
+            // Decode the image file into a Bitmap sized to fill the View
+            options.inJustDecodeBounds = false;
+            options.inSampleSize = scaleFactor;
+
+            return BitmapFactory.decodeFile(picturePath, options);
+        } catch (Exception ex) {
+            Log.e(TAG, "Error getting Bitmap from file.", ex);
+        }
+        return null;
     }
 
     /**

@@ -146,8 +146,7 @@ public class LojaFragment extends CablushFragment {
         emailEditText.setText(loja.getEmail());
         websiteEditText.setText(loja.getWebsite());
         facebookEditText.setText(loja.getFacebook());
-        // TODO não mostra imagem local!
-        PictureUtils.loadRemoteImage(getActivity(), loja.getLogo(), logoImageView, false);
+        PictureUtils.loadImage(getActivity(), loja.getLogo(), logoImageView, false);
         descricaoEditText.setText(loja.getDescricao());
         // esportes
         for (Esporte esporte : loja.getEsportes()) {
