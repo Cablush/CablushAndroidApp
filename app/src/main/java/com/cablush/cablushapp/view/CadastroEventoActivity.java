@@ -16,12 +16,13 @@ import com.cablush.cablushapp.utils.ValidateUtils;
 import com.cablush.cablushapp.view.cadastros.EventoFragment;
 import com.cablush.cablushapp.view.cadastros.LocalFragment;
 import com.cablush.cablushapp.view.cadastros.MapaFragment;
+import com.google.android.gms.maps.model.LatLng;
 
 /**
  * Created by jonathan on 07/11/15.
  */
 public class CadastroEventoActivity extends CadastroActivity<Evento>
-        implements CadastroPresenter.CadastroView {
+        implements CadastroPresenter.CadastroView<Evento> {
 
     private static final String EVENTO_EXTRA_KEY = "EVENTO_EXTRA_KEY";
 
@@ -74,6 +75,12 @@ public class CadastroEventoActivity extends CadastroActivity<Evento>
         if (localFragment.isAdded() || localFragment.isAdded()) {
             evento.setLocal(localFragment.getLocal());
         }
+        if (mapaFragment.isAdded() || mapaFragment.isDetached()) {
+            LatLng position = mapaFragment.getPosition();
+            if (evento.getLocal().getLatLng() == null && position != null) {
+                evento.getLocal().setLatLng(position);
+            }
+        }
         return evento;
     }
 
@@ -107,7 +114,7 @@ public class CadastroEventoActivity extends CadastroActivity<Evento>
     }
 
     @Override
-    public void onSaveResult(OperationResult result, Object o) {
+    public void onSaveResult(OperationResult result, Evento evento) {
         switch (result) {
             case ERROR:
                 Toast.makeText(this, R.string.msg_save_error, Toast.LENGTH_SHORT).show();

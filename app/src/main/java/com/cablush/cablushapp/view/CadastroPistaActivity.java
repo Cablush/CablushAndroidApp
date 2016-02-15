@@ -18,12 +18,13 @@ import com.cablush.cablushapp.view.cadastros.HorarioFragment;
 import com.cablush.cablushapp.view.cadastros.LocalFragment;
 import com.cablush.cablushapp.view.cadastros.MapaFragment;
 import com.cablush.cablushapp.view.cadastros.PistaFragment;
+import com.google.android.gms.maps.model.LatLng;
 
 /**
  * Created by jonathan on 07/11/15.
  */
 public class CadastroPistaActivity extends CadastroActivity<Pista>
-        implements CadastroPresenter.CadastroView {
+        implements CadastroPresenter.CadastroView<Pista> {
 
     private static final String PISTA_EXTRA_KEY = "PISTA_EXTRA_KEY";
     private PistaFragment pistaFragment;
@@ -77,6 +78,12 @@ public class CadastroPistaActivity extends CadastroActivity<Pista>
         if (localFragment.isAdded() || localFragment.isAdded()) {
             pista.setLocal(localFragment.getLocal());
         }
+        if (mapaFragment.isAdded() || mapaFragment.isDetached()) {
+            LatLng position = mapaFragment.getPosition();
+            if (pista.getLocal().getLatLng() == null && position != null) {
+                pista.getLocal().setLatLng(position);
+            }
+        }
         if (horarioFragment.isAdded() || localFragment.isDetached()) {
             pista.setHorario(horarioFragment.getHorario());
         }
@@ -111,7 +118,7 @@ public class CadastroPistaActivity extends CadastroActivity<Pista>
     }
 
     @Override
-    public void onSaveResult(OperationResult result, Object o) {
+    public void onSaveResult(OperationResult result, Pista pista) {
         switch (result) {
             case ERROR:
                 Toast.makeText(this, R.string.msg_save_error, Toast.LENGTH_SHORT).show();

@@ -18,6 +18,7 @@ import com.cablush.cablushapp.view.cadastros.HorarioFragment;
 import com.cablush.cablushapp.view.cadastros.LocalFragment;
 import com.cablush.cablushapp.view.cadastros.LojaFragment;
 import com.cablush.cablushapp.view.cadastros.MapaFragment;
+import com.google.android.gms.maps.model.LatLng;
 
 /**
  * Created by jonathan on 07/11/15.
@@ -78,6 +79,12 @@ public class CadastroLojaActivity extends CadastroActivity<Loja>
         }
         if (localFragment.isAdded() || localFragment.isDetached()) {
             loja.setLocal(localFragment.getLocal());
+        }
+        if (mapaFragment.isAdded() || mapaFragment.isDetached()) {
+            LatLng position = mapaFragment.getPosition();
+            if (loja.getLocal().getLatLng() == null && position != null) {
+                loja.getLocal().setLatLng(position);
+            }
         }
         if (horarioFragment.isAdded() || localFragment.isDetached()) {
             loja.setHorario(horarioFragment.getHorario());

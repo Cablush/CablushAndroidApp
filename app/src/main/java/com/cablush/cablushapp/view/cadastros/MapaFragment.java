@@ -175,4 +175,12 @@ public class MapaFragment extends CablushFragment implements OnMapReadyCallback,
             }
         }
     }
+
+    /**
+     *
+     * @return
+     */
+    public LatLng getPosition() {
+        return latLng;
+    }
 }
