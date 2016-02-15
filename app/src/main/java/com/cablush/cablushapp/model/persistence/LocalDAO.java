@@ -147,11 +147,19 @@ class LocalDAO extends AppBaseDAO {
     }
 
     void save(SQLiteDatabase db, Local local) {
-        if (getLocal(db, local.getUuidLocalizavel()) == null) {
+        if (existsLocal(db, local.getUuidLocalizavel())) {
             insert(db, local);
         } else {
             update(db, local);
         }
+    }
+
+    boolean existsLocal(SQLiteDatabase db, String uuid) {
+        Cursor cursor = db.rawQuery("SELECT 1 FROM " + TABLE
+                + " WHERE " + Columns._UUID.getColumnName() + " = ? ", new String[] {uuid});
+        boolean exists = cursor.getCount() > 0;
+        cursor.close();
+        return exists;
     }
 
     Local getLocal(SQLiteDatabase db, String uuid) {

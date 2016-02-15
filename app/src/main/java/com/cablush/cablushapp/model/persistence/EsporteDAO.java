@@ -116,11 +116,19 @@ public class EsporteDAO  extends AppBaseDAO {
     }
 
     void save(SQLiteDatabase db, Esporte esporte) {
-        if (getEsporte(db, esporte.getId()) == null) {
+        if (existsEsporte(db, esporte.getId())) {
             insert(db, esporte);
         } else {
             update(db, esporte);
         }
+    }
+
+    private boolean existsEsporte(SQLiteDatabase db, Integer id) {
+        Cursor cursor = db.rawQuery("SELECT 1 FROM " + TABLE
+                + " WHERE " + Columns._ID.getColumnName() + " = ? ", new String[] {id.toString()});
+        boolean exists = cursor.getCount() > 0;
+        cursor.close();
+        return exists;
     }
 
     Esporte getEsporte(SQLiteDatabase db, Integer id) {

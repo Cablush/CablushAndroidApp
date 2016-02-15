@@ -120,12 +120,20 @@ public class UsuarioDAO extends AppBaseDAO {
 
     public void save(Usuario usuario) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        if (getUsuario(db, usuario.getUuid()) == null) {
+        if (existsUsuario(db, usuario.getUuid())) {
             insert(db, usuario);
         } else {
             update(db, usuario);
         }
         dbHelper.close(db);
+    }
+
+    private boolean existsUsuario(SQLiteDatabase db, String uuid) {
+        Cursor cursor = db.rawQuery("SELECT 1 FROM " + TABLE
+                + " WHERE " + Columns._UUID.getColumnName() + " = ? ", new String[] {uuid});
+        boolean exists = cursor.getCount() > 0;
+        cursor.close();
+        return exists;
     }
 
     private Usuario getUsuario(SQLiteDatabase db, String uuid) {

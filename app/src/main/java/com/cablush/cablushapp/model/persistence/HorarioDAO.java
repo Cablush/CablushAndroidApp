@@ -153,11 +153,19 @@ class HorarioDAO extends AppBaseDAO {
     }
 
     void save(SQLiteDatabase db, Horario horario) {
-        if (getHorario(db, horario.getUuidLocalizavel()) == null) {
+        if (existsHorario(db, horario.getUuidLocalizavel())) {
             insert(db, horario);
         } else {
             update(db, horario);
         }
+    }
+
+    private boolean existsHorario(SQLiteDatabase db, String uuid) {
+        Cursor cursor = db.rawQuery("SELECT 1 FROM " + TABLE
+                + " WHERE " + Columns._UUID.getColumnName() + " = ? ", new String[] {uuid});
+        boolean exists = cursor.getCount() > 0;
+        cursor.close();
+        return exists;
     }
 
     Horario getHorario(SQLiteDatabase db, String uuid) {

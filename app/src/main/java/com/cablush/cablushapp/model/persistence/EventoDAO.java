@@ -213,7 +213,7 @@ public class EventoDAO extends AppBaseDAO {
             } else {
                 update(db, evento);
             }
-            return getEvento(db, evento.getUuid());
+            return getEvento(evento.getUuid());
         } finally {
             dbHelper.close(db);
         }
@@ -227,7 +227,7 @@ public class EventoDAO extends AppBaseDAO {
             // insert remote evento
             eventoRemote.setRemote(true);
             insert(db, eventoRemote);
-            return getEvento(db, eventoRemote.getUuid());
+            return getEvento(eventoRemote.getUuid());
         } finally {
             dbHelper.close(db);
         }
@@ -238,7 +238,7 @@ public class EventoDAO extends AppBaseDAO {
         try {
             for (Evento evento : eventos) {
                 evento.setRemote(true);
-                if (getEvento(db, evento.getUuid()) == null) {
+                if (existsEvento(db, evento.getUuid())) {
                     insert(db, evento);
                 } else {
                     update(db, evento);
@@ -249,71 +249,83 @@ public class EventoDAO extends AppBaseDAO {
         }
     }
 
-    private Evento getEvento(SQLiteDatabase db, String uuid) {
-        Cursor cursor = db.query(TABLE, null,
-                Columns._UUID.getColumnName() + " = ? ", new String[]{uuid}, null, null, null);
-        Evento evento = null;
-        if (cursor.moveToFirst()) {
-            evento = getEvento(cursor, false);
-        }
+    private boolean existsEvento(SQLiteDatabase db, String uuid) {
+        Cursor cursor = db.rawQuery("SELECT 1 FROM " + TABLE
+                + " WHERE " + Columns._UUID.getColumnName() + " = ? ", new String[] {uuid});
+        boolean exists = cursor.getCount() > 0;
         cursor.close();
-        return evento;
+        return exists;
+    }
+
+    private Evento getEvento(String uuid) {
+        List<Evento> eventos = getEventos(uuid, null, null, null, null);
+        if (!eventos.isEmpty()) {
+            return eventos.get(0);
+        }
+        return null;
     }
 
     public List<Evento> getEventos(String responsavelUuid) {
-        return getEventos(null, null, null, responsavelUuid);
+        return getEventos(null, null, null, null, responsavelUuid);
     }
 
     public List<Evento> getEventos(String name, String estado, String esporte) {
-        return getEventos(name, estado, esporte, null);
+        return getEventos(null, name, estado, esporte, null);
     }
 
-    public List<Evento> getEventos(String name, String estado, String esporte, String responsavelUuid) {
+    public List<Evento> getEventos(String uuid, String name, String estado,
+                                   String esporte, String responsavelUuid) {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
-
-        SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
-        queryBuilder.setTables(TABLE
-                + " INNER JOIN " + LocalDAO.TABLE + " ON " + Columns._UUID.getColumnNameWithTable()
+        try {
+            SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
+            queryBuilder.setTables(TABLE
+                    + " INNER JOIN " + LocalDAO.TABLE + " ON " + Columns._UUID.getColumnNameWithTable()
                     + " = " + LocalDAO.Columns._UUID.getColumnNameWithTable()
-                + " LEFT OUTER JOIN " + LocalizavelEsporteDAO.TABLE + " ON " + Columns._UUID.getColumnNameWithTable()
+                    + " LEFT OUTER JOIN " + LocalizavelEsporteDAO.TABLE + " ON " + Columns._UUID.getColumnNameWithTable()
                     + " = " + LocalizavelEsporteDAO.Columns._UUID.getColumnNameWithTable()
-                + " INNER JOIN " + EsporteDAO.TABLE + " ON " + LocalizavelEsporteDAO.Columns._ESPORTE_ID.getColumnNameWithTable()
+                    + " INNER JOIN " + EsporteDAO.TABLE + " ON " + LocalizavelEsporteDAO.Columns._ESPORTE_ID.getColumnNameWithTable()
                     + " = " + EsporteDAO.Columns._ID.getColumnNameWithTable());
 
-        StringBuilder selection = new StringBuilder();
-        List<String> selectionArgs = new ArrayList<>();
-        if (name != null && !name.isEmpty()) {
-            selection.append(Columns._NOME.getColumnNameWithTable()).append(" LIKE ? ");
-            selectionArgs.add(name + "%");
-        }
-        if (estado != null && !estado.isEmpty()) {
-            selection.append(LocalDAO.Columns._ESTADO.getColumnName()).append(" = ? ");
-            selectionArgs.add(estado);
-        }
-        if (esporte != null && !esporte.isEmpty()) {
-            selection.append(EsporteDAO.Columns._CATEGORIA.getColumnNameWithTable()).append(" = ? ");
-            selectionArgs.add(esporte);
-        }
-        if (responsavelUuid != null && !responsavelUuid.isEmpty()) {
-            selection.append(Columns._RESPONSAVEL_UUID.getColumnNameWithTable()).append(" = ? ");
-            selectionArgs.add(responsavelUuid);
-        }
+            StringBuilder selection = new StringBuilder();
+            List<String> selectionArgs = new ArrayList<>();
+            if (uuid != null && !uuid.isEmpty()) {
+                selection.append(Columns._UUID.getColumnNameWithTable()).append(" = ? ");
+                selectionArgs.add(uuid);
+            }
+            if (name != null && !name.isEmpty()) {
+                selection.append(Columns._NOME.getColumnNameWithTable()).append(" LIKE ? ");
+                selectionArgs.add(name + "%");
+            }
+            if (estado != null && !estado.isEmpty()) {
+                selection.append(LocalDAO.Columns._ESTADO.getColumnName()).append(" = ? ");
+                selectionArgs.add(estado);
+            }
+            if (esporte != null && !esporte.isEmpty()) {
+                selection.append(EsporteDAO.Columns._CATEGORIA.getColumnNameWithTable()).append(" = ? ");
+                selectionArgs.add(esporte);
+            }
+            if (responsavelUuid != null && !responsavelUuid.isEmpty()) {
+                selection.append(Columns._RESPONSAVEL_UUID.getColumnNameWithTable()).append(" = ? ");
+                selectionArgs.add(responsavelUuid);
+            }
 
-        Cursor cursor = queryBuilder.query(db,
-                getColumnsProjectionWithAlias(Columns.class, LocalDAO.Columns.class),
-                selection.toString(), selectionArgs.toArray(new String[selectionArgs.size()]),
-                getGroupBy(Columns.class, LocalDAO.Columns.class), null, null);
-        List<Evento> eventos = new ArrayList<>();
-        if (cursor.moveToFirst()) {
-            do {
-                Evento evento = getEvento(cursor, true);
-                evento.setLocal(localDAO.getLocal(cursor, true));
-                evento.setEsportes(localizavelEsporteDAO.getEsportes(db, evento.getUuid()));
-                eventos.add(evento);
-            } while (cursor.moveToNext());
+            Cursor cursor = queryBuilder.query(db,
+                    getColumnsProjectionWithAlias(Columns.class, LocalDAO.Columns.class),
+                    selection.toString(), selectionArgs.toArray(new String[selectionArgs.size()]),
+                    getGroupBy(Columns.class, LocalDAO.Columns.class), null, null);
+            List<Evento> eventos = new ArrayList<>();
+            if (cursor.moveToFirst()) {
+                do {
+                    Evento evento = getEvento(cursor, true);
+                    evento.setLocal(localDAO.getLocal(cursor, true));
+                    evento.setEsportes(localizavelEsporteDAO.getEsportes(db, evento.getUuid()));
+                    eventos.add(evento);
+                } while (cursor.moveToNext());
+            }
+            cursor.close();
+            return eventos;
+        } finally {
+            dbHelper.close(db);
         }
-        cursor.close();
-        dbHelper.close(db);
-        return eventos;
     }
 }

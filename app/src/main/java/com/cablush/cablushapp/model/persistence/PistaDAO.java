@@ -201,7 +201,7 @@ public class PistaDAO extends AppBaseDAO {
             } else {
                 update(db, pista);
             }
-            return getPista(db, pista.getUuid());
+            return getPista(pista.getUuid());
         } finally {
             dbHelper.close(db);
         }
@@ -215,7 +215,7 @@ public class PistaDAO extends AppBaseDAO {
             // insert remote pista
             pistaRemote.setRemote(true);
             insert(db, pistaRemote);
-            return getPista(db, pistaRemote.getUuid());
+            return getPista(pistaRemote.getUuid());
         } finally {
             dbHelper.close(db);
         }
@@ -226,7 +226,7 @@ public class PistaDAO extends AppBaseDAO {
         try {
             for (Pista pista : pistas) {
                 pista.setRemote(true);
-                if (getPista(db, pista.getUuid()) == null) {
+                if (existsPista(db, pista.getUuid())) {
                     insert(db, pista);
                 } else {
                     update(db, pista);
@@ -237,74 +237,86 @@ public class PistaDAO extends AppBaseDAO {
         }
     }
 
-    private Pista getPista(SQLiteDatabase db, String uuid) {
-        Cursor cursor = db.query(TABLE, null,
-                Columns._UUID.getColumnName() + " = ? ", new String[]{uuid}, null, null, null);
-        Pista pista = null;
-        if (cursor.moveToFirst()) {
-            pista = getPista(cursor, false);
-        }
+    private boolean existsPista(SQLiteDatabase db, String uuid) {
+        Cursor cursor = db.rawQuery("SELECT 1 FROM " + TABLE
+                + " WHERE " + Columns._UUID.getColumnName() + " = ? ", new String[] {uuid});
+        boolean exists = cursor.getCount() > 0;
         cursor.close();
-        return pista;
+        return exists;
+    }
+
+    private Pista getPista(String uuid) {
+        List<Pista> pistas = getPistas(uuid, null, null, null, null);
+        if (!pistas.isEmpty()) {
+            return pistas.get(0);
+        }
+        return null;
     }
 
     public List<Pista> getPistas(String responsavelUuid) {
-        return getPistas(null, null, null, responsavelUuid);
+        return getPistas(null, null, null, null, responsavelUuid);
     }
 
     public List<Pista> getPistas(String name, String estado, String esporte) {
-        return getPistas(name, estado, esporte, null);
+        return getPistas(null, name, estado, esporte, null);
     }
 
-    public List<Pista> getPistas(String name, String estado, String esporte, String responsavelUuid) {
+    public List<Pista> getPistas(String uuid, String name, String estado,
+                                 String esporte, String responsavelUuid) {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
-
-        SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
-        queryBuilder.setTables(TABLE
-                + " INNER JOIN " + LocalDAO.TABLE + " ON " + Columns._UUID.getColumnNameWithTable()
+        try {
+            SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
+            queryBuilder.setTables(TABLE
+                    + " INNER JOIN " + LocalDAO.TABLE + " ON " + Columns._UUID.getColumnNameWithTable()
                     + " = " + LocalDAO.Columns._UUID.getColumnNameWithTable()
-                + " LEFT OUTER JOIN " + HorarioDAO.TABLE + " ON " + Columns._UUID.getColumnNameWithTable()
+                    + " LEFT OUTER JOIN " + HorarioDAO.TABLE + " ON " + Columns._UUID.getColumnNameWithTable()
                     + " = " + HorarioDAO.Columns._UUID.getColumnNameWithTable()
-                + " LEFT OUTER JOIN " + LocalizavelEsporteDAO.TABLE + " ON " + Columns._UUID.getColumnNameWithTable()
+                    + " LEFT OUTER JOIN " + LocalizavelEsporteDAO.TABLE + " ON " + Columns._UUID.getColumnNameWithTable()
                     + " = " + LocalizavelEsporteDAO.Columns._UUID.getColumnNameWithTable()
-                + " INNER JOIN " + EsporteDAO.TABLE + " ON " + LocalizavelEsporteDAO.Columns._ESPORTE_ID.getColumnNameWithTable()
+                    + " INNER JOIN " + EsporteDAO.TABLE + " ON " + LocalizavelEsporteDAO.Columns._ESPORTE_ID.getColumnNameWithTable()
                     + " = " + EsporteDAO.Columns._ID.getColumnNameWithTable());
 
-        StringBuilder selection = new StringBuilder();
-        List<String> selectionArgs = new ArrayList<>();
-        if (name != null && !name.isEmpty()) {
-            selection.append(Columns._NOME.getColumnNameWithTable()).append(" LIKE ? ");
-            selectionArgs.add(name + "%");
-        }
-        if (estado != null && !estado.isEmpty()) {
-            selection.append(LocalDAO.Columns._ESTADO.getColumnNameWithTable()).append(" = ? ");
-            selectionArgs.add(estado);
-        }
-        if (esporte != null && !esporte.isEmpty()) {
-            selection.append(EsporteDAO.Columns._CATEGORIA.getColumnNameWithTable()).append(" = ? ");
-            selectionArgs.add(esporte);
-        }
-        if (responsavelUuid != null && !responsavelUuid.isEmpty()) {
-            selection.append(Columns._RESPONSAVEL_UUID.getColumnNameWithTable()).append(" = ? ");
-            selectionArgs.add(responsavelUuid);
-        }
+            StringBuilder selection = new StringBuilder();
+            List<String> selectionArgs = new ArrayList<>();
+            if (uuid != null && !uuid.isEmpty()) {
+                selection.append(Columns._UUID.getColumnNameWithTable()).append(" = ? ");
+                selectionArgs.add(uuid);
+            }
+            if (name != null && !name.isEmpty()) {
+                selection.append(Columns._NOME.getColumnNameWithTable()).append(" LIKE ? ");
+                selectionArgs.add(name + "%");
+            }
+            if (estado != null && !estado.isEmpty()) {
+                selection.append(LocalDAO.Columns._ESTADO.getColumnNameWithTable()).append(" = ? ");
+                selectionArgs.add(estado);
+            }
+            if (esporte != null && !esporte.isEmpty()) {
+                selection.append(EsporteDAO.Columns._CATEGORIA.getColumnNameWithTable()).append(" = ? ");
+                selectionArgs.add(esporte);
+            }
+            if (responsavelUuid != null && !responsavelUuid.isEmpty()) {
+                selection.append(Columns._RESPONSAVEL_UUID.getColumnNameWithTable()).append(" = ? ");
+                selectionArgs.add(responsavelUuid);
+            }
 
-        Cursor cursor = queryBuilder.query(db,
-                getColumnsProjectionWithAlias(Columns.class, LocalDAO.Columns.class, HorarioDAO.Columns.class),
-                selection.toString(), selectionArgs.toArray(new String[selectionArgs.size()]),
-                getGroupBy(Columns.class, LocalDAO.Columns.class, HorarioDAO.Columns.class), null, null);
-        List<Pista> pistas = new ArrayList<>();
-        if (cursor.moveToFirst()) {
-            do {
-                Pista pista = getPista(cursor, true);
-                pista.setLocal(localDAO.getLocal(cursor, true));
-                pista.setHorario(horarioDAO.getHorario(cursor, true));
-                pista.setEsportes(localizavelEsporteDAO.getEsportes(db, pista.getUuid()));
-                pistas.add(pista);
-            } while (cursor.moveToNext());
+            Cursor cursor = queryBuilder.query(db,
+                    getColumnsProjectionWithAlias(Columns.class, LocalDAO.Columns.class, HorarioDAO.Columns.class),
+                    selection.toString(), selectionArgs.toArray(new String[selectionArgs.size()]),
+                    getGroupBy(Columns.class, LocalDAO.Columns.class, HorarioDAO.Columns.class), null, null);
+            List<Pista> pistas = new ArrayList<>();
+            if (cursor.moveToFirst()) {
+                do {
+                    Pista pista = getPista(cursor, true);
+                    pista.setLocal(localDAO.getLocal(cursor, true));
+                    pista.setHorario(horarioDAO.getHorario(cursor, true));
+                    pista.setEsportes(localizavelEsporteDAO.getEsportes(db, pista.getUuid()));
+                    pistas.add(pista);
+                } while (cursor.moveToNext());
+            }
+            cursor.close();
+            return pistas;
+        } finally {
+            dbHelper.close(db);
         }
-        cursor.close();
-        dbHelper.close(db);
-        return pistas;
     }
 }
