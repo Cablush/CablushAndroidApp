@@ -53,6 +53,7 @@ public class EventosMediator extends CablushMediator {
      */
     public void saveEvento(Evento evento) {
         Log.d(TAG, "saveEvento()");
+        evento.setChanged(true);
         evento = eventoDAO.save(evento);    // Save the evento in local database.
         if (isOnline()) {                   // Check if there is connection available,
             if (evento.isRemote()) {        // yes, then check if the evento is on remote server

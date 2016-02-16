@@ -53,6 +53,7 @@ public class PistasMediator extends CablushMediator {
      */
     public void savePista(Pista pista) {
         Log.d(TAG, "savePista()");
+        pista.setChanged(true);
         pista = pistaDAO.save(pista);       // Save the pista in local database.
         if (isOnline()) {                   // Check if there is connection available,
             if (pista.isRemote()) {         // yes, then check if the pista is on remote server

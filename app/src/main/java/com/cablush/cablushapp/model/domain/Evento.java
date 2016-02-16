@@ -57,6 +57,9 @@ public class Evento implements Localizavel, Serializable {
     /** Identify that the object is on server **/
     private Boolean remote;
 
+    /** Indicate that the object was locally changed **/
+    private Boolean changed;
+
     /**
      * Default constructor;
      */
@@ -189,11 +192,26 @@ public class Evento implements Localizavel, Serializable {
 
     @Override
     public Boolean isRemote() {
+        if (remote == null) {
+            remote = Boolean.FALSE;
+        }
         return remote;
     }
 
     public void setRemote(Boolean remote) {
         this.remote = remote;
+    }
+
+    @Override
+    public Boolean isChanged() {
+        if (changed == null) {
+            changed = Boolean.FALSE;
+        }
+        return changed;
+    }
+
+    public void setChanged(Boolean changed) {
+        this.changed = changed;
     }
 
     @Override

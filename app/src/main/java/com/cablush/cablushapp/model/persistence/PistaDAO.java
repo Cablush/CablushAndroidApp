@@ -31,7 +31,8 @@ public class PistaDAO extends AppBaseDAO {
         _FOTO("foto", "TEXT", false),
         _FUNDO("fundo", "INTEGER", false),
         _RESPONSAVEL_UUID("responsavel_uuid", "TEXT", false),
-        _REMOTE("remote", "INTEGER", false);
+        _REMOTE("remote", "INTEGER", false),
+        _CHANGED("changed", "INTEGER", false);
 
         private String columnName;
         private String columnType;
@@ -100,6 +101,7 @@ public class PistaDAO extends AppBaseDAO {
         values.put(Columns._FUNDO.getColumnName(), pista.getFundo());
         values.put(Columns._RESPONSAVEL_UUID.getColumnName(), pista.getResponsavel());
         values.put(Columns._REMOTE.getColumnName(), pista.isRemote());
+        values.put(Columns._CHANGED.getColumnName(), pista.isChanged());
         return values;
     }
 
@@ -131,6 +133,9 @@ public class PistaDAO extends AppBaseDAO {
                 String.class));
         pista.setRemote(readCursor(cursor,
                 byColumnAlias ? Columns._REMOTE.getColumnAlias() : Columns._REMOTE.getColumnName(),
+                Boolean.class));
+        pista.setChanged(readCursor(cursor,
+                byColumnAlias ? Columns._CHANGED.getColumnAlias() : Columns._CHANGED.getColumnName(),
                 Boolean.class));
         return pista;
     }
@@ -192,6 +197,9 @@ public class PistaDAO extends AppBaseDAO {
         return db.delete(TABLE, Columns._UUID.getColumnName() + " = ? ", new String[]{uuid});
     }
 
+    /**
+     * Save a pista into local database.
+     */
     public Pista save(Pista pista) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         try {
@@ -208,6 +216,10 @@ public class PistaDAO extends AppBaseDAO {
         }
     }
 
+    /**
+     * Merges a remote pista into local database.
+     * <p> To be used on result of a remote insert/update; this method 'mark' the object as remote.</p>
+     */
     public Pista merge(Pista pista, Pista pistaRemote) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         try {
@@ -215,6 +227,7 @@ public class PistaDAO extends AppBaseDAO {
             delete(db, pista.getUuid());
             // insert remote pista
             pistaRemote.setRemote(true);
+            pistaRemote.setChanged(false);
             insert(db, pistaRemote);
             return getPista(pistaRemote.getUuid());
         } finally {
@@ -222,13 +235,21 @@ public class PistaDAO extends AppBaseDAO {
         }
     }
 
+    /**
+     * Save the list of pistas into local database.
+     * <p>To be used on result of a remote search; this method 'mark' the object as remote.</p>
+     * <p>The object is updated only if it exists in local database and was not locally changed.
+     * And it is inserted if it not exist in local database.</p>
+     */
     public void bulkSave(List<Pista> pistas) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         try {
             for (Pista pista : pistas) {
                 pista.setRemote(true);
                 if (existsPista(db, pista.getUuid())) {
-                    update(db, pista);
+                    if (!wasLocallyChanged(db, pista.getUuid())) {
+                        update(db, pista);
+                    }
                 } else {
                     insert(db, pista);
                 }
@@ -241,6 +262,15 @@ public class PistaDAO extends AppBaseDAO {
     private boolean existsPista(SQLiteDatabase db, String uuid) {
         Cursor cursor = db.rawQuery("SELECT 1 FROM " + TABLE
                 + " WHERE " + Columns._UUID.getColumnName() + " = ? ", new String[] {uuid});
+        boolean exists = cursor.getCount() > 0;
+        cursor.close();
+        return exists;
+    }
+
+    private boolean wasLocallyChanged(SQLiteDatabase db, String uuid) {
+        Cursor cursor = db.rawQuery("SELECT 1 FROM " + TABLE
+                + " WHERE " + Columns._UUID.getColumnName() + " = ? "
+                + " AND " + Columns._CHANGED.getColumnName() + " != 0 ", new String[] {uuid});
         boolean exists = cursor.getCount() > 0;
         cursor.close();
         return exists;

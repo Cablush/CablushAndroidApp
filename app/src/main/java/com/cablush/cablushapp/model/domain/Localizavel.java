@@ -22,4 +22,6 @@ public interface Localizavel {
     String getResponsavel();
 
     Boolean isRemote();
+
+    Boolean isChanged();
 }

@@ -316,7 +316,8 @@ public class MainActivity extends AbstractDrawerActivity implements OnMapReadyCa
         googleMap.addMarker(new MarkerOptions()
                 .position(localizavel.getLocal().getLatLng())
                 .snippet(localizavel.getUuid())
-                .icon(BitmapDescriptorFactory.fromResource(localizavel.isRemote()
+                .icon(BitmapDescriptorFactory.fromResource(
+                        (localizavel.isRemote() && !localizavel.isChanged())
                         ? R.drawable.ic_mark_cablush_orange
                         : R.drawable.ic_mark_cablush_blue)));
 

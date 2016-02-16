@@ -53,6 +53,7 @@ public class LojasMediator extends CablushMediator {
      */
     public void saveLoja(Loja loja) {
         Log.d(TAG, "saveLoja()");
+        loja.setChanged(true);
         loja = lojaDAO.save(loja);      // Save the loja in local database.
         if (isOnline()) {               // Check if there is connection available,
             if (loja.isRemote()) {      // yes, then check if the loja is on remote server

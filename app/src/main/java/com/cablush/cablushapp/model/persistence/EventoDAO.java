@@ -35,7 +35,8 @@ public class EventoDAO extends AppBaseDAO {
         _FLYER("flyer", "TEXT", false),
         _FUNDO("fundo", "INTEGER", false),
         _RESPONSAVEL_UUID("responsavel_uuid", "TEXT", false),
-        _REMOTE("remote", "INTEGER", false);
+        _REMOTE("remote", "INTEGER", false),
+        _CHANGED("changed", "INTEGER", false);
 
         private String columnName;
         private String columnType;
@@ -111,6 +112,7 @@ public class EventoDAO extends AppBaseDAO {
         values.put(Columns._FUNDO.getColumnName(), evento.getFundo());
         values.put(Columns._RESPONSAVEL_UUID.getColumnName(), evento.getResponsavel());
         values.put(Columns._REMOTE.getColumnName(), evento.isRemote());
+        values.put(Columns._CHANGED.getColumnName(), evento.isChanged());
         return values;
     }
 
@@ -151,6 +153,9 @@ public class EventoDAO extends AppBaseDAO {
                 String.class));
         evento.setRemote(readCursor(cursor,
                 byColumnAlias ? Columns._REMOTE.getColumnAlias() : Columns._REMOTE.getColumnName(),
+                Boolean.class));
+        evento.setChanged(readCursor(cursor,
+                byColumnAlias ? Columns._CHANGED.getColumnAlias() : Columns._CHANGED.getColumnName(),
                 Boolean.class));
         return evento;
     }
@@ -204,6 +209,9 @@ public class EventoDAO extends AppBaseDAO {
         return db.delete(TABLE, Columns._UUID.getColumnName() + " = ? ", new String[]{uuid});
     }
 
+    /**
+     * Save a evento into local database.
+     */
     public Evento save(Evento evento) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         try {
@@ -220,6 +228,12 @@ public class EventoDAO extends AppBaseDAO {
         }
     }
 
+    /**
+     * Merges a remote evento into local database.
+     * <p>
+     * To be used on result of a remote insert/update; this method 'mark' the object as remote.
+     * </p>
+     */
     public Evento merge(Evento evento, Evento eventoRemote) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         try {
@@ -234,13 +248,21 @@ public class EventoDAO extends AppBaseDAO {
         }
     }
 
+    /**
+     * Save the list of eventos into local database.
+     * <p>To be used on result of a remote search; this method 'mark' the object as remote.</p>
+     * <p>The object is updated only if it exists in local database and was not locally changed.
+     * And it is inserted if it not exist in local database.</p>
+     */
     public void bulkSave(List<Evento> eventos) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         try {
             for (Evento evento : eventos) {
                 evento.setRemote(true);
                 if (existsEvento(db, evento.getUuid())) {
-                    update(db, evento);
+                    if (!wasLocallyChanged(db, evento.getUuid())) {
+                        update(db, evento);
+                    }
                 } else {
                     insert(db, evento);
                 }
@@ -253,6 +275,15 @@ public class EventoDAO extends AppBaseDAO {
     private boolean existsEvento(SQLiteDatabase db, String uuid) {
         Cursor cursor = db.rawQuery("SELECT 1 FROM " + TABLE
                 + " WHERE " + Columns._UUID.getColumnName() + " = ? ", new String[] {uuid});
+        boolean exists = cursor.getCount() > 0;
+        cursor.close();
+        return exists;
+    }
+
+    private boolean wasLocallyChanged(SQLiteDatabase db, String uuid) {
+        Cursor cursor = db.rawQuery("SELECT 1 FROM " + TABLE
+                + " WHERE " + Columns._UUID.getColumnName() + " = ? "
+                + " AND " + Columns._CHANGED.getColumnName() + " != 0 ", new String[] {uuid});
         boolean exists = cursor.getCount() > 0;
         cursor.close();
         return exists;
