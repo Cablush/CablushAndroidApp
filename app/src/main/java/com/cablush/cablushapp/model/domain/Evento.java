@@ -15,32 +15,45 @@ public class Evento implements Localizavel, Serializable {
 
     @Expose
     private String uuid;
+
     @Expose
     private String nome;
+
     @Expose
     private String descricao;
+
     @Expose
     private Date hora;
+
     @Expose
     private Date data;
+
     @Expose
     private Date dataFim;
+
     @Expose
     private String website;
+
     @Expose
     private String facebook;
-    @Expose
+
+    @Expose(serialize = false)
     @SerializedName("flyer_url")
     private String flyer;
+
     @Expose
     private Boolean fundo;
+
     @Expose
     private Local local;
+
     @Expose
     private List<Esporte> esportes = new ArrayList<>();
+
     @Expose
     @SerializedName("responsavel_uuid")
     private String responsavel;
+
     /** Identify that the object is on server **/
     private Boolean remote;
 
@@ -52,6 +65,7 @@ public class Evento implements Localizavel, Serializable {
     }
 
     /**
+     * Constructor by responsavel.
      *
      * @param responsavel
      */

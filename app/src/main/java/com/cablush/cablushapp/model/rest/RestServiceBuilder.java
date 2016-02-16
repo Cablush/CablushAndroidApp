@@ -77,6 +77,7 @@ public class RestServiceBuilder {
     private static Converter createDateConverter() {
         // Creates the json object which will manage the information received
         GsonBuilder builder = new GsonBuilder();
+        builder.excludeFieldsWithoutExposeAnnotation();
 
         // Register an adapter to manage the date types as long values
         builder.registerTypeAdapter(Date.class, new JsonDeserializer<Date>() {

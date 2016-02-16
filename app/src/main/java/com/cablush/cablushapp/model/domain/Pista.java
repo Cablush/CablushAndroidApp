@@ -14,28 +14,39 @@ public class Pista implements Localizavel, Serializable {
 
     @Expose
     private String uuid;
+
     @Expose
     private String nome;
+
     @Expose
     private String descricao;
+
     @Expose
     private String website;
+
     @Expose
     private String facebook;
-    @Expose
+
+    @Expose(serialize = false)
     @SerializedName("foto_url")
     private String foto;
+
     @Expose
     private Boolean fundo;
+
     @Expose
     private Local local;
+
     @Expose
     private List<Esporte> esportes = new ArrayList<>();
+
     @Expose
     private Horario horario;
+
     @Expose
     @SerializedName("responsavel_uuid")
     private String responsavel;
+
     /** Identify that the object is on server **/
     private Boolean remote;
 
@@ -48,6 +59,7 @@ public class Pista implements Localizavel, Serializable {
     }
 
     /**
+     * Constructor by responsavel.
      *
      * @param responsavel
      */

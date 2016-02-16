@@ -14,32 +14,44 @@ public class Loja implements Localizavel, Serializable {
 
     @Expose
     private String uuid;
+
     @Expose
     private String nome;
+
     @Expose
     private String descricao;
+
     @Expose
     private String telefone;
+
     @Expose
     private String email;
+
     @Expose
     private String website;
+
     @Expose
     private String facebook;
-    @Expose
+
+    @Expose(serialize = false)
     @SerializedName("logo_url")
     private String logo;
+
     @Expose
     private Boolean fundo;
+
     @Expose
     private List<Local> locais = new ArrayList<>();
+
     @Expose
     private List<Esporte> esportes = new ArrayList<>();
+
     @Expose
     private Horario horario;
-    @Expose
+
     @SerializedName("responsavel_uuid")
     private String responsavel;
+
     /** Identify that the object is on server **/
     private Boolean remote;
 
@@ -52,6 +64,7 @@ public class Loja implements Localizavel, Serializable {
     }
 
     /**
+     * Constructor by responsavel.
      *
      * @param responsavel
      */
