@@ -171,6 +171,7 @@ public class PistaDAO extends AppBaseDAO {
             horarioDAO.save(db, pista.getHorario());
             // save esportes
             localizavelEsporteDAO.save(db, pista.getUuid(), pista.getEsportes());
+            db.setTransactionSuccessful();
             return row;
         } catch (Exception ex) {
             Log.e(TAG, "Error updating pista.", ex);

@@ -181,6 +181,7 @@ public class LojaDAO extends AppBaseDAO {
             horarioDAO.save(db, loja.getHorario());
             // save esportes
             localizavelEsporteDAO.save(db, loja.getUuid(), loja.getEsportes());
+            db.setTransactionSuccessful();
             return row;
         } catch (Exception ex) {
             Log.e(TAG, "Error updating loja.", ex);

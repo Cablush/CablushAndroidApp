@@ -185,6 +185,7 @@ public class EventoDAO extends AppBaseDAO {
             localDAO.save(db, evento.getLocal());
             // save esportes
             localizavelEsporteDAO.save(db, evento.getUuid(), evento.getEsportes());
+            db.setTransactionSuccessful();
             return row;
         } catch (Exception ex) {
             Log.e(TAG, "Error updating evento.", ex);
