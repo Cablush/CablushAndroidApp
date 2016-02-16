@@ -18,9 +18,12 @@ public class CadastroEventoPresenter extends CadastroPresenter<Evento>
 
     private EventosMediator eventosMediator;
 
-    public CadastroEventoPresenter(@NonNull CadastroView view, @NonNull Context context) {
-        super(view, context);
-        eventosMediator = new EventosMediator(this, context);
+    /**
+     * Constructor.
+     */
+    public CadastroEventoPresenter(@NonNull Context context, @NonNull CadastroView view) {
+        super(context, view);
+        eventosMediator = new EventosMediator(context, this);
     }
 
     @Override

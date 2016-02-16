@@ -27,6 +27,9 @@ public class LoginPresenter {
 
     private static final String TAG = LoginPresenter.class.getSimpleName();
 
+    /**
+     * Responses for login.
+     */
     public enum LoginResponse {
         SUCCESS, ERROR
     }
@@ -46,10 +49,7 @@ public class LoginPresenter {
     private EsportesMediator esportesMediator;
 
     /**
-     * Constructor
-     *
-     * @param view
-     * @param context
+     * Constructor.
      */
     public LoginPresenter(@NonNull LoginView view, @NonNull Context context) {
         this.mContext = new WeakReference<>(context);

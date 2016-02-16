@@ -21,6 +21,9 @@ public class RegisterPresenter {
 
     private static final String TAG = RegisterPresenter.class.getSimpleName();
 
+    /**
+     * Responses for register.
+     */
     public enum RegisterResponse {
         SUCCESS, ERROR
     }
@@ -36,9 +39,7 @@ public class RegisterPresenter {
     private ApiUsuario apiUsuario;
 
     /**
-     * Constructor
-     *
-     * @param view
+     * Constructor.
      */
     public RegisterPresenter(@NonNull RegisterView view) {
         this.mView = new WeakReference<>(view);

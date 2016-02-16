@@ -27,22 +27,20 @@ public abstract class CadastroPresenter<T> {
 
     private EsportesMediator esportesMediator;
 
-    public CadastroPresenter(@NonNull CadastroView view, @NonNull Context context) {
+    public CadastroPresenter(@NonNull Context context, @NonNull CadastroView view) {
         this.esportesMediator = new EsportesMediator(context);
         this.cadastroView = view;
     }
 
     /**
-     *
-     * @return
+     * Get the esportes from local database.
      */
     public List<Esporte> getEsportes() {
         return esportesMediator.getEsportes();
     }
 
     /**
-     *
-     * @param t
+     * Save the t.
      */
     public abstract T doSave(T t);
 }

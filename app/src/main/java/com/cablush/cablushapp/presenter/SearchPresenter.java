@@ -39,15 +39,12 @@ public class SearchPresenter implements LojasMediator.LojasMediatorListener,
 
     /**
      * Constructor
-     *
-     * @param view
-     * @param context
      */
     public SearchPresenter(@NonNull SearchView view, @NonNull Context context) {
         this.mView = new WeakReference<>(view);
-        this.lojasMediator = new LojasMediator(this, context);
-        this.pistasMediator = new PistasMediator(this, context);
-        this.eventosMediator = new EventosMediator(this, context);
+        this.lojasMediator = new LojasMediator(context, this);
+        this.pistasMediator = new PistasMediator(context, this);
+        this.eventosMediator = new EventosMediator(context, this);
     }
 
     // Searches for Lojas

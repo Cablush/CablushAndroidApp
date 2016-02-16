@@ -17,9 +17,12 @@ public class CadastroPistaPresenter extends CadastroPresenter<Pista>
 
     private PistasMediator pistasMediator;
 
-    public CadastroPistaPresenter(@NonNull CadastroView view, @NonNull Context context) {
-        super(view, context);
-        pistasMediator = new PistasMediator(this, context);
+    /**
+     * Constructor.
+     */
+    public CadastroPistaPresenter(@NonNull Context context, @NonNull CadastroView view) {
+        super(context, view);
+        pistasMediator = new PistasMediator(context, this);
     }
 
     @Override
