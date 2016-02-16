@@ -29,6 +29,7 @@ public class Evento implements Localizavel, Serializable {
     private Date data;
 
     @Expose
+    @SerializedName("data_fim")
     private Date dataFim;
 
     @Expose
