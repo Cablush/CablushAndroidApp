@@ -46,6 +46,9 @@ public class RestServiceBuilder {
         new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
     };
 
+    /**
+     * Create a Retrofit service to the api service class.
+     */
     public static <S> S createService(@NonNull Class<S> serviceClass) {
         RestAdapter.Builder builder = new RestAdapter.Builder()
                 .setEndpoint(BuildConfig.RETROFIT_END_POINT)

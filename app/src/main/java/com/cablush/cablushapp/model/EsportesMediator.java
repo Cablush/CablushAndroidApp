@@ -26,8 +26,7 @@ public class EsportesMediator {
     private EsporteDAO esporteDAO;
 
     /**
-     *
-     * @param context
+     * Constructor.
      */
     public EsportesMediator(@NonNull Context context) {
         this.apiEsportes = RestServiceBuilder.createService(ApiEsportes.class);
@@ -57,8 +56,6 @@ public class EsportesMediator {
 
     /**
      * Get the local stored Esportes.
-     *
-     * @return
      */
     public List<Esporte> getEsportes() {
         return esporteDAO.getEsportes();

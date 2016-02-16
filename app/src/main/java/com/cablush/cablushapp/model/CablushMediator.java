@@ -17,13 +17,15 @@ public abstract class CablushMediator {
     private WeakReference<Context> mContext;
 
     /**
-     *
-     * @param context
+     * Constructor.
      */
     public CablushMediator(@NonNull Context context) {
         this.mContext = new WeakReference<>(context);
     }
 
+    /**
+     * Check if the device is online.
+     */
     protected boolean isOnline() {
         Context context = mContext.get();
         return context != null && ConnectivityChangeReceiver.isNetworkAvailable(context);
