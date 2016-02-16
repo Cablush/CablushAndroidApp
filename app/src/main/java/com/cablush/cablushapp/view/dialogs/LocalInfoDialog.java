@@ -158,15 +158,15 @@ public class LocalInfoDialog<L extends Localizavel> extends DialogFragment {
                 @Override
                 public void onClick(View v) {
                     if (localizavel instanceof Loja) {
-                        startActivityForResult(CadastroLojaActivity
+                        getActivity().startActivityForResult(CadastroLojaActivity
                                 .makeIntent(getActivity(), (Loja) localizavel),
                                 MainActivity.REQUEST_CADASTRO_LOJA);
                     } else if (localizavel instanceof Evento) {
-                        startActivityForResult(CadastroEventoActivity
+                        getActivity().startActivityForResult(CadastroEventoActivity
                                 .makeIntent(getActivity(), (Evento) localizavel),
                                 MainActivity.REQUEST_CADASTRO_EVENTO);
                     } else if (localizavel instanceof Pista) {
-                        startActivityForResult(CadastroPistaActivity
+                        getActivity().startActivityForResult(CadastroPistaActivity
                                 .makeIntent(getActivity(), (Pista) localizavel),
                                 MainActivity.REQUEST_CADASTRO_PISTA);
                     }
