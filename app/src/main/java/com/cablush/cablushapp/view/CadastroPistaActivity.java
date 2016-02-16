@@ -92,11 +92,11 @@ public class CadastroPistaActivity extends CadastroActivity<Pista>
 
     @Override
     protected boolean validate(Pista pista) {
-        boolean validLoja = ValidateUtils.isNotBlank(pista.getNome());
-        validLoja = ValidateUtils.isNotBlank(pista.getDescricao()) && validLoja;
-        validLoja = ValidateUtils.isNotEmpty(pista.getEsportes()) && validLoja;
-        if (!validLoja) {
-            Toast.makeText(this, R.string.msg_invalid_loja, Toast.LENGTH_SHORT).show();
+        boolean validPista = ValidateUtils.isNotBlank(pista.getNome());
+        validPista = ValidateUtils.isNotBlank(pista.getDescricao()) && validPista;
+        validPista = ValidateUtils.isNotEmpty(pista.getEsportes()) && validPista;
+        if (!validPista) {
+            Toast.makeText(this, R.string.msg_invalid_pista, Toast.LENGTH_SHORT).show();
         }
 
         Local local = pista.getLocal();
@@ -114,7 +114,7 @@ public class CadastroPistaActivity extends CadastroActivity<Pista>
             Toast.makeText(this, R.string.msg_invalid_local, Toast.LENGTH_SHORT).show();
         }
 
-        return validLoja && validMapa && validLocal;
+        return validPista && validMapa && validLocal;
     }
 
     @Override

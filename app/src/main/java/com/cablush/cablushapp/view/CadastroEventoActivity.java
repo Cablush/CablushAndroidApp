@@ -86,13 +86,13 @@ public class CadastroEventoActivity extends CadastroActivity<Evento>
 
     @Override
     protected boolean validate(Evento evento) {
-        boolean validLoja = ValidateUtils.isNotBlank(evento.getNome());
-        validLoja = ValidateUtils.isNotEmpty(evento.getData()) && validLoja;
-        validLoja = ValidateUtils.isNotEmpty(evento.getHora()) && validLoja;
-        validLoja = ValidateUtils.isNotBlank(evento.getDescricao()) && validLoja;
-        validLoja = ValidateUtils.isNotEmpty(evento.getEsportes()) && validLoja;
-        if (!validLoja) {
-            Toast.makeText(this, R.string.msg_invalid_loja, Toast.LENGTH_SHORT).show();
+        boolean validEvento = ValidateUtils.isNotBlank(evento.getNome());
+        validEvento = ValidateUtils.isNotEmpty(evento.getData()) && validEvento;
+        validEvento = ValidateUtils.isNotEmpty(evento.getHora()) && validEvento;
+        validEvento = ValidateUtils.isNotBlank(evento.getDescricao()) && validEvento;
+        validEvento = ValidateUtils.isNotEmpty(evento.getEsportes()) && validEvento;
+        if (!validEvento) {
+            Toast.makeText(this, R.string.msg_invalid_evento, Toast.LENGTH_SHORT).show();
         }
 
         Local local = evento.getLocal();
@@ -110,7 +110,7 @@ public class CadastroEventoActivity extends CadastroActivity<Evento>
             Toast.makeText(this, R.string.msg_invalid_local, Toast.LENGTH_SHORT).show();
         }
 
-        return validLoja && validMapa && validLocal;
+        return validEvento && validMapa && validLocal;
     }
 
     @Override

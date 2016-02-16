@@ -49,31 +49,9 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/imageViewEmail"
-        android:src="@drawable/ic_action_ic_mail_outline_blue"
-        android:layout_below="@+id/imageViewTelefone"
-        android:layout_marginLeft="@dimen/dialog_margin"/>
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="cablush@cablush.com"
-        android:id="@+id/emailTextView"
-        android:autoLink="email"
-        android:layout_toRightOf="@+id/imageViewEmail"
-        android:layout_toEndOf="@+id/imageViewEmail"
-        android:layout_alignTop="@+id/imageViewEmail"
-        android:layout_marginTop="@dimen/vertical_spacing"
-        android:layout_marginRight="@dimen/dialog_margin"/>
-
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:id="@+id/imageViewWeb"
         android:src="@drawable/ic_action_ic_language_blue"
-        android:layout_below="@+id/imageViewEmail"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="false"
+        android:layout_below="@+id/imageViewTelefone"
         android:layout_marginLeft="@dimen/dialog_margin"/>
 
     <TextView
@@ -82,9 +60,31 @@
         android:text="www.cablush.com"
         android:id="@+id/textViewWeb"
         android:autoLink="web"
-        android:layout_toRightOf="@+id/imageViewEmail"
-        android:layout_toEndOf="@+id/imageViewEmail"
+        android:layout_toRightOf="@+id/imageViewWeb"
+        android:layout_toEndOf="@+id/imageViewWeb"
         android:layout_alignTop="@+id/imageViewWeb"
+        android:layout_marginTop="@dimen/vertical_spacing"
+        android:layout_marginRight="@dimen/dialog_margin"/>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageViewEmail"
+        android:src="@drawable/ic_action_ic_mail_outline_blue"
+        android:layout_below="@+id/imageViewWeb"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="false"
+        android:layout_marginLeft="@dimen/dialog_margin"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="cablush@cablush.com"
+        android:id="@+id/emailTextView"
+        android:autoLink="email"
+        android:layout_toRightOf="@+id/imageViewWeb"
+        android:layout_toEndOf="@+id/imageViewWeb"
+        android:layout_alignTop="@+id/imageViewEmail"
         android:layout_marginTop="@dimen/vertical_spacing"
         android:layout_marginRight="@dimen/dialog_margin"/>
 
@@ -93,7 +93,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/imageViewFace"
         android:src="@drawable/ic_action_facebook_blue"
-        android:layout_below="@+id/imageViewWeb"
+        android:layout_below="@+id/imageViewEmail"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="false"
         android:layout_marginLeft="@dimen/dialog_margin"/>
