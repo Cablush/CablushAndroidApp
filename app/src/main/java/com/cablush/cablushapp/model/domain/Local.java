@@ -11,24 +11,34 @@ import java.io.Serializable;
 public class Local implements Serializable {
 
     private String uuidLocalizavel;
+
     @Expose
     private Double latitude;
+
     @Expose
     private Double longitude;
+
     @Expose
     private String logradouro;
+
     @Expose
     private String numero;
+
     @Expose
     private String complemento;
+
     @Expose
     private String bairro;
+
     @Expose
     private String cidade;
+
     @Expose
     private String estado;
+
     @Expose
     private String cep;
+
     @Expose
     private String pais;
 

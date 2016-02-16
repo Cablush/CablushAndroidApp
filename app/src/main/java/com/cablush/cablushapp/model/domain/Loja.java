@@ -49,6 +49,7 @@ public class Loja implements Localizavel, Serializable {
     @Expose
     private Horario horario;
 
+    @Expose
     @SerializedName("responsavel_uuid")
     private String responsavel;
 

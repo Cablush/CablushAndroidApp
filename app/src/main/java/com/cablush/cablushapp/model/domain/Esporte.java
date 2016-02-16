@@ -11,10 +11,13 @@ public class Esporte implements Serializable {
 
     @Expose
     private Integer id;
+
     @Expose
     private String nome;
+
     @Expose
     private String categoria;
+
     @Expose
     private String icone;
 

@@ -12,24 +12,34 @@ import java.util.Date;
 public class Horario implements Serializable {
 
     private String uuidLocalizavel;
+
     @Expose
     private Date inicio;
+
     @Expose
     private Date fim;
+
     @Expose
     private Boolean seg;
+
     @Expose
     private Boolean ter;
+
     @Expose
     private Boolean qua;
+
     @Expose
     private Boolean qui;
+
     @Expose
     private Boolean sex;
+
     @Expose
     private Boolean sab;
+
     @Expose
     private Boolean dom;
+
     @Expose
     private String detalhes;
 
