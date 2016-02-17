@@ -20,7 +20,7 @@ android {
         release {
             buildConfigField 'java.lang.String', 'RETROFIT_END_POINT', '"http://www.cablush.com/api"'
             buildConfigField 'retrofit.RestAdapter.LogLevel', 'RETROFIT_LOG_LEVEL', 'retrofit.RestAdapter.LogLevel.NONE'
-            minifyEnabled true
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
