@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.cablush.cablushapp.R;
 import com.cablush.cablushapp.utils.PermissionUtils;
 import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 
 /**
@@ -45,12 +46,13 @@ public abstract class CablushActivity extends AppCompatActivity {
      * @return
      */
     public boolean isGooglePlayServicesAvailable() {
-        int status = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this); // TODO check deprecated
-        if (ConnectionResult.SUCCESS == status) {
+        GoogleApiAvailability googleAPI = GoogleApiAvailability.getInstance();
+        int result = googleAPI.isGooglePlayServicesAvailable(this);
+        if (ConnectionResult.SUCCESS == result) {
             Log.d(TAG, "Google Play Services is available.");
             return true;
         } else {
-            GooglePlayServicesUtil.getErrorDialog(status, this, 0).show(); // TODO check deprecated
+            googleAPI.getErrorDialog(this, result, 0).show();
             return false;
         }
     }
