@@ -12,12 +12,14 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.MultiAutoCompleteTextView;
+import android.widget.TextView;
 
 import com.cablush.cablushapp.R;
 import com.cablush.cablushapp.model.EsportesMediator;
 import com.cablush.cablushapp.model.domain.Esporte;
 import com.cablush.cablushapp.model.domain.Pista;
 import com.cablush.cablushapp.utils.PictureUtils;
+import com.cablush.cablushapp.utils.ViewUtils;
 
 /**
  * Created by jonathan on 11/02/16.
@@ -96,6 +98,8 @@ public class PistaFragment extends CablushFragment {
 
     private void initializeView(View view) {
         nomeEditText = (EditText) view.findViewById(R.id.editTextNome);
+        ViewUtils.markAsRequired((TextView) view.findViewById(R.id.textViewNome));
+
         websiteEditText = (EditText) view.findViewById(R.id.editTextWebsite);
         facebookEditText = (EditText) view.findViewById(R.id.editTextFacebook);
         // gallery button
@@ -116,9 +120,11 @@ public class PistaFragment extends CablushFragment {
         });
         fotoImageView = (ImageView) view.findViewById(R.id.imageViewLogo);
         descricaoEditText = (EditText) view.findViewById(R.id.editTextDescricao);
+        ViewUtils.markAsRequired((TextView) view.findViewById(R.id.textViewDescricao));
         // esportes
         esportesMultiComplete = (MultiAutoCompleteTextView) view
                 .findViewById(R.id.multiAutoCompleteEsportes);
+        ViewUtils.markAsRequired((TextView) view.findViewById(R.id.textViewEsportes));
         esportesMultiComplete.setThreshold(1);
         esportesMultiComplete.setAdapter(esportesAdapter);
         esportesMultiComplete.setTokenizer(new MultiAutoCompleteTextView.CommaTokenizer());

@@ -15,6 +15,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.MultiAutoCompleteTextView;
+import android.widget.TextView;
 import android.widget.TimePicker;
 
 import com.cablush.cablushapp.R;
@@ -23,6 +24,7 @@ import com.cablush.cablushapp.model.domain.Esporte;
 import com.cablush.cablushapp.model.domain.Evento;
 import com.cablush.cablushapp.utils.DateTimeUtils;
 import com.cablush.cablushapp.utils.PictureUtils;
+import com.cablush.cablushapp.utils.ViewUtils;
 import com.cablush.cablushapp.view.dialogs.DatePickerFragmentDialog;
 import com.cablush.cablushapp.view.dialogs.TimePickerFragmentDialog;
 
@@ -110,9 +112,11 @@ public class EventoFragment extends CablushFragment {
 
     private void initializeView(View view) {
         nomeEditText = (EditText) view.findViewById(R.id.editTextNome);
+        ViewUtils.markAsRequired((TextView) view.findViewById(R.id.textViewNome));
         websiteEditText = (EditText) view.findViewById(R.id.editTextWebsite);
 
         dataInicioEditText = (EditText) view.findViewById(R.id.editTextDataInicio);
+        ViewUtils.markAsRequired((TextView) view.findViewById(R.id.textViewDataInicio));
         dataInicioEditText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -133,6 +137,7 @@ public class EventoFragment extends CablushFragment {
         });
 
         dataFimEditText = (EditText) view.findViewById(R.id.editTextDataFim);
+        ViewUtils.markAsRequired((TextView) view.findViewById(R.id.textViewDataFim));
         dataFimEditText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -153,6 +158,7 @@ public class EventoFragment extends CablushFragment {
         });
 
         horarioEditText = (EditText) view.findViewById(R.id.editTextHorario);
+        ViewUtils.markAsRequired((TextView) view.findViewById(R.id.textViewHorario));
         horarioEditText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -189,9 +195,11 @@ public class EventoFragment extends CablushFragment {
         });
         flyerImageView = (ImageView) view.findViewById(R.id.imageViewFlyer);
         descricaoEditText = (EditText) view.findViewById(R.id.editTextDescricao);
+        ViewUtils.markAsRequired((TextView) view.findViewById(R.id.textViewDescricao));
         // esportes
         esportesMultiComplete = (MultiAutoCompleteTextView) view
                 .findViewById(R.id.multiAutoCompleteEsportes);
+        ViewUtils.markAsRequired((TextView) view.findViewById(R.id.textViewEsportes));
         esportesMultiComplete.setThreshold(1);
         esportesMultiComplete.setAdapter(esportesAdapter);
         esportesMultiComplete.setTokenizer(new MultiAutoCompleteTextView.CommaTokenizer());
@@ -202,7 +210,7 @@ public class EventoFragment extends CablushFragment {
         nomeEditText.setText(evento.getNome());
         dataInicioEditText.setText(DateTimeUtils.formatDate(evento.getData()));
         dataFimEditText.setText(DateTimeUtils.formatDate(evento.getDataFim()));
-        dataFimEditText.setText(DateTimeUtils.formatTime(evento.getHora()));
+        horarioEditText.setText(DateTimeUtils.formatTime(evento.getHora()));
         websiteEditText.setText(evento.getWebsite());
         facebookEditText.setText(evento.getFacebook());
         PictureUtils.loadImage(getActivity(), evento.getFlyer(), flyerImageView, false);
