@@ -59,6 +59,9 @@ public class LoginPresenter {
         this.esportesMediator  = new EsportesMediator(context);
     }
 
+    /**
+     * Do Login on server.
+     */
     public void doLogin(String email, String senha) {
         apiUsuario.doLogin(email, senha, new Callback<ResponseDTO<Usuario>>() {
             @Override
@@ -85,6 +88,9 @@ public class LoginPresenter {
         });
     }
 
+    /**
+     * Check if the last login is still valid.
+     */
     public void checkLogin() {
         Usuario usuario = usuarioDAO.getUsuario();
         if (usuario != null) {
@@ -113,6 +119,11 @@ public class LoginPresenter {
                         }
                     }
                 });
+            }
+        } else {
+            LoginView view = mView.get();
+            if (view != null) {
+                view.onLoginResponse(LoginResponse.ERROR);
             }
         }
     }
