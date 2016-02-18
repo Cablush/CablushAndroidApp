@@ -90,10 +90,8 @@ public class LoginPresenter {
 
     /**
      * Check if the last login is still valid.
-     *
-     * @return True, if there is a previous user and the test will be do, false otherwise.
      */
-    public boolean checkLogin() {
+    public void checkLogin() {
         Usuario usuario = usuarioDAO.getUsuario();
         if (usuario != null) {
             Usuario.LOGGED_USER = usuario;
@@ -121,10 +119,13 @@ public class LoginPresenter {
                         }
                     }
                 });
-                return true;
+            }
+        } else {
+            LoginView view = mView.get();
+            if (view != null) {
+                view.onLoginResponse(LoginResponse.ERROR);
             }
         }
-        return false;
     }
 
     private Usuario updateAuthData(Usuario usuario, Response response) {
