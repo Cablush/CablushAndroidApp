@@ -76,6 +76,7 @@ public class LoginPresenter {
             @Override
             public void failure(RetrofitError error) {
                 Log.e(TAG, "Error on user login. " + error.getMessage());
+                Usuario.LOGGED_USER = null;
                 LoginView view = mView.get();
                 if (view != null) {
                     view.onLoginResponse(LoginResponse.ERROR);
@@ -89,7 +90,7 @@ public class LoginPresenter {
         if (usuario != null) {
             Usuario.LOGGED_USER = usuario;
             // Only validate the token if there is connection, allowing offline registries
-            if (!ConnectivityChangeReceiver.isNetworkAvailable(mContext.get())) {
+            if (ConnectivityChangeReceiver.isNetworkAvailable(mContext.get())) {
                 apiUsuario.doValidateToken(new Callback<ResponseDTO<Usuario>>() {
                     @Override
                     public void success(ResponseDTO<Usuario> dto, Response response) {
@@ -119,7 +120,7 @@ public class LoginPresenter {
     private Usuario updateAuthData(Usuario usuario, Response response) {
         List<Header> headerList = response.getHeaders();
         for (Header header : headerList) {
-            switch (header.getName()){
+            switch (header.getName().toLowerCase()){
                 case RestServiceBuilder.ACCESS_TOKEN:
                     usuario.setAccessToken(header.getValue());
                     break;

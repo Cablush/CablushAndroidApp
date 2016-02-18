@@ -35,11 +35,11 @@ public class RestServiceBuilder {
 
     protected String TAG = getClass().getSimpleName();
 
-    public static final String ACCESS_TOKEN = "Access-Token";
-    public static final String TOKEN_TYPE = "Token-Type";
-    public static final String CLIENT = "Client";
-    public static final String EXPIRY = "Expiry";
-    public static final String UID = "Uid";
+    public static final String ACCESS_TOKEN = "access-token";
+    public static final String TOKEN_TYPE = "token-type";
+    public static final String CLIENT = "client";
+    public static final String EXPIRY = "expiry";
+    public static final String UID = "uid";
 
     protected static final SimpleDateFormat[] SERVER_DATE_FORMATS = {
         new SimpleDateFormat("yyyy-MM-dd"),
