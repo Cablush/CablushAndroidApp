@@ -86,11 +86,11 @@ public class LocalInfoDialog<L extends Localizavel> extends DialogFragment {
         PictureUtils.loadImage(getActivity(), localizavel.getImagemURL(), logo, true);
 
         // Initialize description
-        TextView descricaoView = (TextView) view.findViewById(R.id.descricaoTextView);
+        TextView descricaoView = (TextView) view.findViewById(R.id.textViewDescricao);
         descricaoView.setText(localizavel.getDescricao());
 
         // Initialize phone
-        TextView telefoneView = (TextView) view.findViewById(R.id.telefoneTextView);
+        TextView telefoneView = (TextView) view.findViewById(R.id.textViewTelefone);
         ImageView telefoneIcon = (ImageView) view.findViewById(R.id.imageViewTelefone);
         if (telefone != null && telefone.length() > 0) {
             telefoneView.setText(telefone);
@@ -100,7 +100,7 @@ public class LocalInfoDialog<L extends Localizavel> extends DialogFragment {
         }
 
         // Initialize email
-        TextView emailView = (TextView) view.findViewById(R.id.emailTextView);
+        TextView emailView = (TextView) view.findViewById(R.id.textViewEmail);
         ImageView emailIcon = (ImageView) view.findViewById(R.id.imageViewEmail);
         if (email != null && email.length() > 0) {
             emailView.setText(email);
@@ -110,8 +110,8 @@ public class LocalInfoDialog<L extends Localizavel> extends DialogFragment {
         }
 
         // Initialize website
-        TextView webView = (TextView) view.findViewById(R.id.textViewWeb);
-        ImageView webIcon = (ImageView) view.findViewById(R.id.imageViewWeb);
+        TextView webView = (TextView) view.findViewById(R.id.textViewWebsite);
+        ImageView webIcon = (ImageView) view.findViewById(R.id.imageViewWebsite);
         String web = localizavel.getWebsite();
         if (web != null && web.length() > 0) {
             webView.setText(web);
@@ -121,8 +121,8 @@ public class LocalInfoDialog<L extends Localizavel> extends DialogFragment {
         }
 
         // Initialize facebook
-        TextView faceView = (TextView) view.findViewById(R.id.textViewFace);
-        ImageView faceIcon = (ImageView) view.findViewById(R.id.imageViewFace);
+        TextView faceView = (TextView) view.findViewById(R.id.textViewFacebook);
+        ImageView faceIcon = (ImageView) view.findViewById(R.id.imageViewFacebook);
         String face = localizavel.getFacebook();
         if (face != null && face.length() > 0) {
             faceView.setText(face);
@@ -132,11 +132,11 @@ public class LocalInfoDialog<L extends Localizavel> extends DialogFragment {
         }
 
         // Initialize address
-        TextView endereco = (TextView) view.findViewById(R.id.enderecoTextView);
+        TextView endereco = (TextView) view.findViewById(R.id.textViewEndereco);
         endereco.setText(localizavel.getLocal().getEndereco());
-        TextView cidadeEstado = (TextView) view.findViewById(R.id.cidadeEstadoTextView);
+        TextView cidadeEstado = (TextView) view.findViewById(R.id.textViewCidadeEstado);
         cidadeEstado.setText(localizavel.getLocal().getCidadeEstado());
-        TextView cep = (TextView) view.findViewById(R.id.cepTextView);
+        TextView cep = (TextView) view.findViewById(R.id.textViewCep);
         cep.setText(localizavel.getLocal().getCep());
 
         // Directions Button
