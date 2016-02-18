@@ -29,7 +29,9 @@ public class SplashScreenActivity extends Activity implements Runnable, LoginPre
 
         // Check the user login
         LoginPresenter loginPresenter = new LoginPresenter(this, this);
-        loginPresenter.checkLogin();
+        if (!loginPresenter.checkLogin()) {
+            startMainActivity();
+        }
     }
 
     @Override
@@ -40,13 +42,17 @@ public class SplashScreenActivity extends Activity implements Runnable, LoginPre
 
     @Override
     public void onLoginResponse(LoginPresenter.LoginResponse response) {
-        Handler handle = new Handler();
-        handle.postDelayed(this, DELAY);
+        startMainActivity();
         if (LoginPresenter.LoginResponse.SUCCESS.equals(response)) {
             Toast.makeText(this,
                     getString(R.string.success_check_login, Usuario.LOGGED_USER.getNome()),
                     Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void startMainActivity() {
+        Handler handle = new Handler();
+        handle.postDelayed(this, DELAY);
     }
 
 }

@@ -59,6 +59,9 @@ public class LoginPresenter {
         this.esportesMediator  = new EsportesMediator(context);
     }
 
+    /**
+     * Do Login on server.
+     */
     public void doLogin(String email, String senha) {
         apiUsuario.doLogin(email, senha, new Callback<ResponseDTO<Usuario>>() {
             @Override
@@ -85,7 +88,12 @@ public class LoginPresenter {
         });
     }
 
-    public void checkLogin() {
+    /**
+     * Check if the last login is still valid.
+     *
+     * @return True, if there is a previous user and the test will be do, false otherwise.
+     */
+    public boolean checkLogin() {
         Usuario usuario = usuarioDAO.getUsuario();
         if (usuario != null) {
             Usuario.LOGGED_USER = usuario;
@@ -113,8 +121,10 @@ public class LoginPresenter {
                         }
                     }
                 });
+                return true;
             }
         }
+        return false;
     }
 
     private Usuario updateAuthData(Usuario usuario, Response response) {
