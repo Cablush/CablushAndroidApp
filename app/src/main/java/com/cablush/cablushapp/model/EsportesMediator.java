@@ -58,6 +58,6 @@ public class EsportesMediator {
      * Get the local stored Esportes.
      */
     public List<Esporte> getEsportes() {
-        return esporteDAO.getEsportes();
+        return esporteDAO.getAllEsportes();
     }
 }

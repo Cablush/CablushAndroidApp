@@ -132,13 +132,8 @@ public class EsporteDAO  extends AppBaseDAO {
     }
 
     Esporte getEsporte(SQLiteDatabase db, Integer id) {
-        Cursor cursor = db.query(TABLE,
-                null,
-                Columns._ID.getColumnName() + " = ? ",
-                new String[]{id.toString()},
-                null,
-                null,
-                null);
+        Cursor cursor = db.query(TABLE, null, Columns._ID.getColumnName() + " = ? ",
+                new String[]{id.toString()}, null, null, null);
         Esporte esporte = null;
         if (cursor.moveToFirst()) {
             esporte = getEsporte(cursor, false);
@@ -147,38 +142,72 @@ public class EsporteDAO  extends AppBaseDAO {
         return esporte;
     }
 
+    /**
+     * Save a list of esportes into local database.
+     *
+     * @param esportes The list of esportes to be saved.
+     * @return The number of esportes saved or -1 if something goes wrong.
+     */
     public long bulkSave(List<Esporte> esportes) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        int count = 0;
-        for (Esporte esporte : esportes) {
-            long rowID = db.insert(TABLE, null, getContentValues(esporte));
-            if (rowID >= 0) {
-                count++;
-            } else {
-                Log.e(TAG, "Error inserting esporte: " + esporte.getNome());
+        try {
+            int count = 0;
+            for (Esporte esporte : esportes) {
+                long rowID = insert(db, esporte);
+                if (rowID >= 0) {
+                    count++;
+                } else {
+                    Log.e(TAG, "Error inserting esporte: " + esporte.getNome());
+                }
             }
+            return count;
+        } catch (Exception ex) {
+            Log.e(TAG, "Error on bulk save of esportes.", ex);
+        } finally {
+            dbHelper.close(db);
         }
-        dbHelper.close(db);
-        return count;
+        return -1;
     }
 
-    public List<Esporte> getEsportes() {
+    /**
+     * Get all esportes stored into local database.
+     *
+     * @return The list of esportes.
+     */
+    public List<Esporte> getAllEsportes() {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         List<Esporte> esportes = new ArrayList<>();
-        Cursor cursor = db.query(TABLE, null, null, null, null, null, null);
-        if (cursor.moveToFirst()) {
-            do {
-                esportes.add(getEsporte(cursor, false));
-            } while (cursor.moveToNext());
+        try {
+            Cursor cursor = db.query(TABLE, null, null, null, null, null, null);
+            if (cursor.moveToFirst()) {
+                do {
+                    esportes.add(getEsporte(cursor, false));
+                } while (cursor.moveToNext());
+            }
+            cursor.close();
+        } catch (Exception ex) {
+            Log.e(TAG, "Error getting esportes.", ex);
+        } finally {
+            dbHelper.close(db);
         }
-        cursor.close();
-        dbHelper.close(db);
         return esportes;
     }
 
-    public void deleteAll() {
+    /**
+     * Delete all esportes from local database.
+     *
+     * @return True if the esportes was deleted or false if something goes wrong.
+     */
+    public boolean deleteAll() {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        db.delete(TABLE, "1", null);
-        dbHelper.close(db);
+        try {
+            db.delete(TABLE, "1", null);
+            return true;
+        } catch (Exception ex) {
+            Log.e(TAG, "Error deleting esportes.", ex);
+        } finally {
+            dbHelper.close(db);
+        }
+        return false;
     }
 }

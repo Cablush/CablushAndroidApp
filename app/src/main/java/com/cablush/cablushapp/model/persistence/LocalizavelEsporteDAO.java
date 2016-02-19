@@ -112,8 +112,6 @@ public class LocalizavelEsporteDAO extends AppBaseDAO {
     }
 
     List<Esporte> getEsportes(SQLiteDatabase db, String uuid) {
-        //SQLiteDatabase db = dbHelper.getReadableDatabase();
-
         SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
         queryBuilder.setTables(TABLE
                 + " INNER JOIN " + EsporteDAO.TABLE + " ON " + Columns._ESPORTE_ID.getColumnNameWithTable()
@@ -130,7 +128,6 @@ public class LocalizavelEsporteDAO extends AppBaseDAO {
             } while (cursor.moveToNext());
         }
         cursor.close();
-        //dbHelper.close(db);
         return esportes;
     }
 }

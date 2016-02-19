@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.cablush.cablushapp.model.domain.Usuario;
 
@@ -105,27 +106,47 @@ public class UsuarioDAO extends AppBaseDAO {
     }
 
     private long insert(SQLiteDatabase db, Usuario usuario) throws SQLException {
-        return db.insertOrThrow("usuario", null, getContentValues(usuario));
-        // TODO save relacionamento de esportes
-        //pode ser feito para a proxima versão, não dei foco
+        db.beginTransaction();
+        try {
+            return db.insertOrThrow("usuario", null, getContentValues(usuario));
+            // TODO save relacionamento de esportes / pode ser feito para a proxima versão
+        } finally {
+            db.endTransaction();
+        }
     }
 
     private int update(SQLiteDatabase db, Usuario usuario) {
-        return db.update(TABLE, getContentValues(usuario),
-                Columns._UUID.getColumnName() + " = ? ", new String[]{usuario.getUuid()});
-        // TODO save relacionamento de esportes
-        //pode ser feito para a proxima versão, não dei foco
-
+        db.beginTransaction();
+        try {
+            return db.update(TABLE, getContentValues(usuario),
+                    Columns._UUID.getColumnName() + " = ? ", new String[]{usuario.getUuid()});
+            // TODO save relacionamento de esportes / pode ser feito para a proxima versão
+        } finally {
+            db.endTransaction();
+        }
     }
 
-    public void save(Usuario usuario) {
+    /**
+     * Save a Usuario.
+     *
+     * @param usuario The usuario to be saved.
+     * @return The saved usuario, or null if something goes wrong.
+     */
+    public Usuario save(Usuario usuario) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        if (existsUsuario(db, usuario.getUuid())) {
-            update(db, usuario);
-        } else {
-            insert(db, usuario);
+        try {
+            if (existsUsuario(db, usuario.getUuid())) {
+                update(db, usuario);
+            } else {
+                insert(db, usuario);
+            }
+            return getUsuario(db, usuario.getUuid());
+        } catch (Exception ex) {
+            Log.e(TAG, "Error saving usuario.", ex);
+        } finally {
+            dbHelper.close(db);
         }
-        dbHelper.close(db);
+        return null;
     }
 
     private boolean existsUsuario(SQLiteDatabase db, String uuid) {
@@ -147,15 +168,25 @@ public class UsuarioDAO extends AppBaseDAO {
         return usuario;
     }
 
+    /**
+     * Get the first Usuario of database.
+     *
+     * @return A object of Usuario, or null if something goes wrong.
+     */
     public Usuario getUsuario() {
-        Usuario usuario = null;
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        Cursor cursor = db.query(TABLE, null, null, null, null, null, null);
-        if (cursor.moveToFirst()) {
-            usuario = getUsuario(cursor);
+        Usuario usuario = null;
+        try {
+            Cursor cursor = db.query(TABLE, null, null, null, null, null, null);
+            if (cursor.moveToFirst()) {
+                usuario = getUsuario(cursor);
+            }
+            cursor.close();
+        } catch (Exception e) {
+            Log.e(TAG, "Error getting usuario.", e);
+        } finally {
+            dbHelper.close(db);
         }
-        cursor.close();
-        dbHelper.close(db);
         return usuario;
     }
 }

@@ -199,6 +199,9 @@ public class PistaDAO extends AppBaseDAO {
 
     /**
      * Save a pista into local database.
+     *
+     * @param pista The pista to be saved.
+     * @return The saved pista or null if something goes wrong.
      */
     public Pista save(Pista pista) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
@@ -211,14 +214,22 @@ public class PistaDAO extends AppBaseDAO {
                 update(db, pista);
             }
             return getPista(pista.getUuid());
+        } catch (Exception ex) {
+            Log.e(TAG, "Error saving pista.", ex);
         } finally {
             dbHelper.close(db);
         }
+        return null;
     }
 
     /**
-     * Merges a remote pista into local database.
-     * <p> To be used on result of a remote insert/update; this method 'mark' the object as remote.</p>
+     * Merges a remote pista into local database, overridign the local pista.
+     * <p>WARNING: To be used on result of a remote insert/update;
+     * this method 'mark' the object as remote.</p>
+     *
+     * @param pista The local pista to be override.
+     * @param pistaRemote The remote pista to be saved.
+     * @return The saved pista or null if something goes wrong.
      */
     public Pista merge(Pista pista, Pista pistaRemote) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
@@ -230,9 +241,12 @@ public class PistaDAO extends AppBaseDAO {
             pistaRemote.setChanged(false);
             insert(db, pistaRemote);
             return getPista(pistaRemote.getUuid());
+        } catch (Exception ex) {
+            Log.e(TAG, "Error merging pistas.", ex);
         } finally {
             dbHelper.close(db);
         }
+        return null;
     }
 
     /**
@@ -240,23 +254,36 @@ public class PistaDAO extends AppBaseDAO {
      * <p>To be used on result of a remote search; this method 'mark' the object as remote.</p>
      * <p>The object is updated only if it exists in local database and was not locally changed.
      * And it is inserted if it not exist in local database.</p>
+     *
+     * @param pistas
      */
-    public void bulkSave(List<Pista> pistas) {
+    public long bulkSave(List<Pista> pistas) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         try {
+            long count = 0;
             for (Pista pista : pistas) {
                 pista.setRemote(true);
+                long rowID = -1;
                 if (existsPista(db, pista.getUuid())) {
                     if (!wasLocallyChanged(db, pista.getUuid())) {
-                        update(db, pista);
+                        rowID = update(db, pista);
                     }
                 } else {
-                    insert(db, pista);
+                    rowID = insert(db, pista);
+                }
+                if (rowID >= 0) {
+                    count++;
+                } else {
+                    Log.e(TAG, "Error inserting pista: " + pista.getNome());
                 }
             }
+            return count;
+        } catch (Exception ex) { // must not happening
+            Log.e(TAG, "Error on bulk save of pistas.", ex);
         } finally {
             dbHelper.close(db);
         }
+        return -1;
     }
 
     private boolean existsPista(SQLiteDatabase db, String uuid) {
@@ -284,17 +311,32 @@ public class PistaDAO extends AppBaseDAO {
         return null;
     }
 
+    /**
+     * Get the psitas by responsavel from the local database.
+     *
+     * @param responsavelUuid The uuid of the responsavel.
+     * @return The list of pistas.
+     */
     public List<Pista> getPistas(String responsavelUuid) {
         return getPistas(null, null, null, null, responsavelUuid);
     }
 
+    /**
+     * Get the pistas by name, estado and/or esporte from the local database.
+     *
+     * @param name The name of the pista.
+     * @param estado The estado of the pistas.
+     * @param esporte The esporte of the pistas.
+     * @return The list of pistas.
+     */
     public List<Pista> getPistas(String name, String estado, String esporte) {
         return getPistas(null, name, estado, esporte, null);
     }
 
-    public List<Pista> getPistas(String uuid, String name, String estado,
+    private List<Pista> getPistas(String uuid, String name, String estado,
                                  String esporte, String responsavelUuid) {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
+        List<Pista> pistas = new ArrayList<>();
         try {
             SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
             queryBuilder.setTables(TABLE
@@ -307,26 +349,26 @@ public class PistaDAO extends AppBaseDAO {
                     + " INNER JOIN " + EsporteDAO.TABLE + " ON " + LocalizavelEsporteDAO.Columns._ESPORTE_ID.getColumnNameWithTable()
                     + " = " + EsporteDAO.Columns._ID.getColumnNameWithTable());
 
-            StringBuilder selection = new StringBuilder();
+            StringBuilder selection = new StringBuilder("1 = 1");
             List<String> selectionArgs = new ArrayList<>();
             if (uuid != null && !uuid.isEmpty()) {
-                selection.append(Columns._UUID.getColumnNameWithTable()).append(" = ? ");
+                selection.append(" AND ").append(Columns._UUID.getColumnNameWithTable()).append(" = ? ");
                 selectionArgs.add(uuid);
             }
             if (name != null && !name.isEmpty()) {
-                selection.append(Columns._NOME.getColumnNameWithTable()).append(" LIKE ? ");
+                selection.append(" AND ").append(Columns._NOME.getColumnNameWithTable()).append(" LIKE ? ");
                 selectionArgs.add(name + "%");
             }
             if (estado != null && !estado.isEmpty()) {
-                selection.append(LocalDAO.Columns._ESTADO.getColumnNameWithTable()).append(" = ? ");
+                selection.append(" AND ").append(LocalDAO.Columns._ESTADO.getColumnNameWithTable()).append(" = ? ");
                 selectionArgs.add(estado);
             }
             if (esporte != null && !esporte.isEmpty()) {
-                selection.append(EsporteDAO.Columns._CATEGORIA.getColumnNameWithTable()).append(" = ? ");
+                selection.append(" AND ").append(EsporteDAO.Columns._CATEGORIA.getColumnNameWithTable()).append(" = ? ");
                 selectionArgs.add(esporte);
             }
             if (responsavelUuid != null && !responsavelUuid.isEmpty()) {
-                selection.append(Columns._RESPONSAVEL_UUID.getColumnNameWithTable()).append(" = ? ");
+                selection.append(" AND ").append(Columns._RESPONSAVEL_UUID.getColumnNameWithTable()).append(" = ? ");
                 selectionArgs.add(responsavelUuid);
             }
 
@@ -334,7 +376,6 @@ public class PistaDAO extends AppBaseDAO {
                     getColumnsProjectionWithAlias(Columns.class, LocalDAO.Columns.class, HorarioDAO.Columns.class),
                     selection.toString(), selectionArgs.toArray(new String[selectionArgs.size()]),
                     getGroupBy(Columns.class, LocalDAO.Columns.class, HorarioDAO.Columns.class), null, null);
-            List<Pista> pistas = new ArrayList<>();
             if (cursor.moveToFirst()) {
                 do {
                     Pista pista = getPista(cursor, true);
@@ -345,9 +386,11 @@ public class PistaDAO extends AppBaseDAO {
                 } while (cursor.moveToNext());
             }
             cursor.close();
-            return pistas;
+        } catch (Exception ex) {
+            Log.e(TAG, "Error getting pistas.", ex);
         } finally {
             dbHelper.close(db);
         }
+        return pistas;
     }
 }
