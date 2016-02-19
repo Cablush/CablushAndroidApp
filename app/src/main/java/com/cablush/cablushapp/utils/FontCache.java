@@ -24,8 +24,8 @@ public class FontCache {
         if (tf == null) {
             try {
                 tf = Typeface.createFromAsset(context.getAssets(), name);
-            } catch (Exception e) {
-                Log.e(TAG, "Error creating Font from Asset.", e);
+            } catch (Exception ex) {
+                Log.e(TAG, "Error creating Font from Asset.", ex);
                 return null;
             }
             fontCache.put(name, tf);
@@ -45,8 +45,8 @@ public class FontCache {
             final Typeface customFontTypeface = get(context, customFontFileNameInAssets);
 
             replaceFont(defaultFontNameToOverride, customFontTypeface);
-        } catch (Exception e) {
-            Log.e(TAG, "Can not set custom font " + customFontFileNameInAssets + " instead of " + defaultFontNameToOverride);
+        } catch (Exception ex) {
+            Log.e(TAG, "Can not set custom font " + customFontFileNameInAssets + " instead of " + defaultFontNameToOverride, ex);
         }
     }
 
@@ -58,20 +58,20 @@ public class FontCache {
                 final Field staticField = Typeface.class.getDeclaredField("sSystemFontMap");
                 staticField.setAccessible(true);
                 staticField.set(null, newMap);
-            } catch (NoSuchFieldException e) {
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
+            } catch (NoSuchFieldException ex) {
+                Log.e(TAG, "Error replacing font.", ex);
+            } catch (IllegalAccessException ex) {
+                Log.e(TAG, "Error replacing font.", ex);
             }
         } else {
             try {
                 final Field staticField = Typeface.class.getDeclaredField(staticTypefaceFieldName);
                 staticField.setAccessible(true);
                 staticField.set(null, newTypeface);
-            } catch (NoSuchFieldException e) {
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
+            } catch (NoSuchFieldException ex) {
+                Log.e(TAG, "Error replacing font.", ex);
+            } catch (IllegalAccessException ex) {
+                Log.e(TAG, "Error replacing font.", ex);
             }
         }
     }
