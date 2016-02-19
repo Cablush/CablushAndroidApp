@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * Created by jonathan on 22/10/15.
  */
-public class Evento implements Localizavel, Serializable {
+public class Evento implements Localizavel {
 
     @Expose
     private String uuid;

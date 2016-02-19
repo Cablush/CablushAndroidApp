@@ -1,9 +1,11 @@
 package com.cablush.cablushapp.model.domain;
 
+import java.io.Serializable;
+
 /**
  * Created by oscar on 13/12/15.
  */
-public interface Localizavel {
+public interface Localizavel extends Serializable {
 
     String getUuid();
 
