@@ -56,7 +56,7 @@ public class SearchDialog extends DialogFragment {
     public static void showDialog(@NonNull FragmentManager fragmentManager,
                                   @NonNull TYPE searchType) {
         SearchDialog dialog = new SearchDialog();
-        dialog.searchType = searchType;
+        dialog.searchType = searchType; // TODO send this via bundle
         dialog.show(fragmentManager, TAG);
     }
 

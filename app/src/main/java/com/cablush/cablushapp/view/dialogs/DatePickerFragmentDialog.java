@@ -33,8 +33,8 @@ public class DatePickerFragmentDialog extends DialogFragment {
                                   @NonNull Calendar calendar,
                                   @NonNull DatePickerDialog.OnDateSetListener listener) {
         DatePickerFragmentDialog dialog = new DatePickerFragmentDialog();
-        dialog.calendar = calendar;
-        dialog.listener = listener;
+        dialog.calendar = calendar; // TODO send this via bundle
+        dialog.listener = listener; // TODO send this via bundle
         dialog.show(fragmentManager, TAG);
     }
 
