@@ -16,6 +16,7 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.cablush.cablushapp.R;
 import com.squareup.picasso.Callback;
@@ -46,10 +47,8 @@ public class PictureUtils {
      * @param context
      * @param imageURL
      * @param view
-     * @param hideOnFail
      */
-    public static void loadRemoteImage(final Context context, final String imageURL,
-                                       final ImageView view, final boolean hideOnFail) {
+    public static void loadRemoteImage(final Context context, final String imageURL, final ImageView view) {
         if (imageURL != null) {
             // Preload the image to picasso cache.
             Picasso.with(context).load(imageURL).fetch(new Callback() {
@@ -71,9 +70,7 @@ public class PictureUtils {
                 public void run() {
                     RequestCreator rc = Picasso.with(context).load(imageURL);
                     rc.placeholder(R.drawable.missing);
-                    if (!hideOnFail) {
-                        rc.error(R.drawable.missing);
-                    }
+                    rc.error(R.drawable.missing);
                     rc.fit().centerInside().into(view, new Callback() {
                         @Override
                         public void onSuccess() {
@@ -83,17 +80,11 @@ public class PictureUtils {
                         @Override
                         public void onError() {
                             Log.d(TAG, "Error loading image!");
-                            if (hideOnFail) {
-                                view.setVisibility(View.GONE);
-                            }
+                            Toast.makeText(context, R.string.error_loading_image, Toast.LENGTH_SHORT).show();
                         }
                     });
                 }
             }, 1000); // 1 sec (!?)
-        } else {
-            if (hideOnFail) {
-                view.setVisibility(View.GONE);
-            }
         }
     }
 
@@ -103,10 +94,8 @@ public class PictureUtils {
      * @param context
      * @param imagePath
      * @param view
-     * @param hideOnFail
      */
-    public static void loadImage(Context context, String imagePath,
-                                 final ImageView view, final boolean hideOnFail) {
+    public static void loadImage(Context context, String imagePath, final ImageView view) {
         if (fileExist(imagePath)) {
             int width = view.getWidth();
             int height = view.getHeight();
@@ -116,7 +105,7 @@ public class PictureUtils {
             }
             view.setImageBitmap(getBitmapFromPath(context, imagePath, width, height));
         } else {
-            loadRemoteImage(context, imagePath, view, hideOnFail);
+            loadRemoteImage(context, imagePath, view);
         }
     }
 

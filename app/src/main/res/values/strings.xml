@@ -242,6 +242,7 @@
     <!-- Mensagens de fotos/galeria -->
     <string name="error_no_camera_found">Nenhuma camera encontrada neste dispositivo.</string>
     <string name="error_getting_picture">Erro ao obter foto.</string>
+    <string name="error_loading_image">Erro carregando a imagem.</string>
 
     <!-- Mensagens do serviço de localização -->
     <string name="error_no_location_data_provided">Localização não informada.</string>

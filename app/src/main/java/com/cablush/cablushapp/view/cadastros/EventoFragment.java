@@ -213,7 +213,7 @@ public class EventoFragment extends CablushFragment {
         horarioEditText.setText(DateTimeUtils.formatTime(evento.getHora()));
         websiteEditText.setText(evento.getWebsite());
         facebookEditText.setText(evento.getFacebook());
-        PictureUtils.loadImage(getActivity(), evento.getFlyer(), flyerImageView, false);
+        PictureUtils.loadImage(getActivity(), evento.getFlyer(), flyerImageView);
         descricaoEditText.setText(evento.getDescricao());
         // esportes
         for (Esporte esporte : evento.getEsportes()) {
