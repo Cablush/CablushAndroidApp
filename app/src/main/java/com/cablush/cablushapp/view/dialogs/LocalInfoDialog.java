@@ -46,7 +46,7 @@ public class LocalInfoDialog<L extends Localizavel> extends DialogFragment {
     public static <L extends Localizavel> void showDialog(@NonNull FragmentManager fragmentManager,
                                                           @NonNull L localizavel) {
         LocalInfoDialog dialog = new LocalInfoDialog();
-        dialog.mLocalizavel = new WeakReference<>(localizavel);
+        dialog.mLocalizavel = new WeakReference<>(localizavel); // TODO send this via bundle
         dialog.show(fragmentManager, TAG);
     }
 
