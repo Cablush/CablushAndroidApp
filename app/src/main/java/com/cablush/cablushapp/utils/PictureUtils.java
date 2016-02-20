@@ -10,13 +10,14 @@ import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
+import android.os.Handler;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
-import com.cablush.cablushapp.BuildConfig;
 import com.cablush.cablushapp.R;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
@@ -38,39 +39,52 @@ public class PictureUtils {
 
     /**
      * Load a remote image by its url into a ImageView.
+     * <p>
+     * Use a handler to load a image after the view was started, because a bug in Picasso
+     * to fit the image in a view without predefined width and height.
+     * </p>
      *
      * @param context
      * @param imageURL
      * @param view
-     * @param hideOnFail
      */
-    public static void loadRemoteImage(Context context, String imageURL,
-                                       final ImageView view, final boolean hideOnFail) {
+    public static void loadRemoteImage(final Context context, final String imageURL, final ImageView view) {
         if (imageURL != null) {
-            if (BuildConfig.DEBUG) {
-                imageURL = imageURL.replace("localhost", "10.0.2.2");
-            }
-            RequestCreator rc = Picasso.with(context).load(imageURL);
-            if (!hideOnFail) {
-                rc.placeholder(R.drawable.missing);
-                rc.error(R.drawable.missing);
-            }
-            rc.fit().into(view, new Callback() {
+            // Preload the image to picasso cache.
+            Picasso.with(context).load(imageURL).fetch(new Callback() {
                 @Override
                 public void onSuccess() {
+                    Log.d(TAG, "Image preloaded in cache!");
                 }
 
                 @Override
                 public void onError() {
-                    if (hideOnFail) {
-                        view.setVisibility(View.GONE);
-                    }
+                    Log.d(TAG, "Error preloading the image!");
                 }
             });
-        } else {
-            if (hideOnFail) {
-                view.setVisibility(View.GONE);
-            }
+
+            // Handler to load the image after the view was visible,
+            Handler handle = new Handler();
+            handle.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    RequestCreator rc = Picasso.with(context).load(imageURL);
+                    rc.placeholder(R.drawable.missing);
+                    rc.error(R.drawable.missing);
+                    rc.fit().centerInside().into(view, new Callback() {
+                        @Override
+                        public void onSuccess() {
+                            Log.d(TAG, "Image loaded!");
+                        }
+
+                        @Override
+                        public void onError() {
+                            Log.d(TAG, "Error loading image!");
+                            Toast.makeText(context, R.string.error_loading_image, Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+            }, 1000); // 1 sec (!?)
         }
     }
 
@@ -80,10 +94,8 @@ public class PictureUtils {
      * @param context
      * @param imagePath
      * @param view
-     * @param hideOnFail
      */
-    public static void loadImage(Context context, String imagePath,
-                                 final ImageView view, final boolean hideOnFail) {
+    public static void loadImage(Context context, String imagePath, final ImageView view) {
         if (fileExist(imagePath)) {
             int width = view.getWidth();
             int height = view.getHeight();
@@ -93,7 +105,7 @@ public class PictureUtils {
             }
             view.setImageBitmap(getBitmapFromPath(context, imagePath, width, height));
         } else {
-            loadRemoteImage(context, imagePath, view, hideOnFail);
+            loadRemoteImage(context, imagePath, view);
         }
     }
 

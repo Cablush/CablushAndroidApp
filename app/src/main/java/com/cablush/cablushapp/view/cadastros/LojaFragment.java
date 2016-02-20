@@ -146,7 +146,7 @@ public class LojaFragment extends CablushFragment {
         emailEditText.setText(loja.getEmail());
         websiteEditText.setText(loja.getWebsite());
         facebookEditText.setText(loja.getFacebook());
-        PictureUtils.loadImage(getActivity(), loja.getLogo(), logoImageView, false);
+        PictureUtils.loadImage(getActivity(), loja.getLogo(), logoImageView);
         descricaoEditText.setText(loja.getDescricao());
         // esportes
         for (Esporte esporte : loja.getEsportes()) {

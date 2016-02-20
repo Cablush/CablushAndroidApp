@@ -169,13 +169,8 @@ class HorarioDAO extends AppBaseDAO {
     }
 
     Horario getHorario(SQLiteDatabase db, String uuid) {
-        Cursor cursor = db.query(TABLE,
-                null,
-                Columns._UUID.getColumnName() + " = ? ",
-                new String[]{uuid},
-                null,
-                null,
-                null);
+        Cursor cursor = db.query(TABLE, null, Columns._UUID.getColumnName() + " = ? ",
+                new String[]{uuid}, null, null, null);
         Horario horario = null;
         if (cursor.moveToFirst()) {
             horario = getHorario(cursor, false);

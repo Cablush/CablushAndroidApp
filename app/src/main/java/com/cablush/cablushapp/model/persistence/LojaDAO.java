@@ -209,6 +209,9 @@ public class LojaDAO extends AppBaseDAO {
 
     /**
      * Save a loja into local database.
+     *
+     * @param loja The loja to be saved.
+     * @return The saved loja or null if something goes wrong.
      */
     public Loja save(Loja loja) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
@@ -221,14 +224,22 @@ public class LojaDAO extends AppBaseDAO {
                 update(db, loja);
             }
             return getLoja(loja.getUuid());
+        } catch (Exception ex) {
+            Log.e(TAG, "Error saving loja.", ex);
         } finally {
             dbHelper.close(db);
         }
+        return null;
     }
 
     /**
-     * Merges a remote loja into local database.
-     * <p>To be used on result of a remote insert/update; this method 'mark' the object as remote.</p>
+     * Merges a remote loja into local database, overriding the local loja.
+     * <p>WARNING: To be used on result of a remote insert/update;
+     * this method 'mark' the object as remote.</p>
+     *
+     * @param loja The local loja to be override.
+     * @param lojaRemote The remote loja to be saved.
+     * @return The saved loja or null if something goes wrong.
      */
     public Loja merge(Loja loja, Loja lojaRemote) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
@@ -239,33 +250,51 @@ public class LojaDAO extends AppBaseDAO {
             lojaRemote.setRemote(true);
             insert(db, lojaRemote);
             return getLoja(lojaRemote.getUuid());
+        } catch (Exception ex) {
+            Log.e(TAG, "Error merging lojas.", ex);
         } finally {
             dbHelper.close(db);
         }
+        return null;
     }
 
     /**
      * Save the list of lojas into local database.
-     * <p>To be used on result of a remote search; this method 'mark' the object as remote.</p>
+     * <p>WARNING: To be used on result of a remote search;
+     * this method 'mark' the object as remote.</p>
      * <p>The object is updated only if it exists in local database and was not locally changed.
      * And it is inserted if it not exist in local database.</p>
+     *
+     * @param lojas The list of lojas to be saved.
+     * @return The number of lojas saved or -1 if something goes wrong.
      */
-    public void bulkSave(List<Loja> lojas) {
+    public long bulkSave(List<Loja> lojas) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         try {
+            long count = 0;
             for (Loja loja : lojas) {
                 loja.setRemote(true);
+                long rowID = -1;
                 if (existsLoja(db, loja.getUuid())) {
                     if (!wasLocallyChanged(db, loja.getUuid())) {
-                        update(db, loja);
+                        rowID = update(db, loja);
                     }
                 } else {
-                    insert(db, loja);
+                    rowID = insert(db, loja);
+                }
+                if (rowID >= 0) {
+                    count++;
+                } else {
+                    Log.e(TAG, "Error inserting loja: " + loja.getNome());
                 }
             }
+            return count;
+        } catch (Exception ex) { // must not happening
+            Log.e(TAG, "Error on bulk save of lojas.", ex);
         } finally {
             dbHelper.close(db);
         }
+        return -1;
     }
 
     private boolean existsLoja(SQLiteDatabase db, String uuid) {
@@ -285,7 +314,7 @@ public class LojaDAO extends AppBaseDAO {
         return exists;
     }
 
-    public Loja getLoja(String uuid) {
+    private Loja getLoja(String uuid) {
         List<Loja> lojas = getLojas(uuid, null, null, null, null);
         if (!lojas.isEmpty()) {
             return lojas.get(0);
@@ -293,17 +322,32 @@ public class LojaDAO extends AppBaseDAO {
         return null;
     }
 
+    /**
+     * Get the lojas by responsavel from the local database.
+     *
+     * @param responsavelUuid The uuid of the responsavel.
+     * @return The list of lojas.
+     */
     public List<Loja> getLojas(String responsavelUuid) {
         return getLojas(null, null, null, null, responsavelUuid);
     }
 
+    /**
+     * Get the lojas by name, estado and/or esporte from the local database.
+     *
+     * @param name The name of the loja.
+     * @param estado The estado of the lojas.
+     * @param esporte The esporte of the lojas.
+     * @return The list of lojas.
+     */
     public List<Loja> getLojas(String name, String estado, String esporte) {
         return getLojas(null, name, estado, esporte, null);
     }
 
-    public List<Loja> getLojas(String uuid, String name, String estado,
+    private List<Loja> getLojas(String uuid, String name, String estado,
                                String esporte, String responsavelUuid) {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
+        List<Loja> lojas = new ArrayList<>();
         try {
             SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
             queryBuilder.setTables(TABLE
@@ -316,26 +360,26 @@ public class LojaDAO extends AppBaseDAO {
                     + " INNER JOIN " + EsporteDAO.TABLE + " ON " + LocalizavelEsporteDAO.Columns._ESPORTE_ID.getColumnNameWithTable()
                     + " = " + EsporteDAO.Columns._ID.getColumnNameWithTable());
 
-            StringBuilder selection = new StringBuilder();
+            StringBuilder selection = new StringBuilder("1 = 1");
             List<String> selectionArgs = new ArrayList<>();
             if (uuid != null && !uuid.isEmpty()) {
-                selection.append(Columns._UUID.getColumnNameWithTable()).append(" = ? ");
+                selection.append(" AND ").append(Columns._UUID.getColumnNameWithTable()).append(" = ? ");
                 selectionArgs.add(uuid);
             }
             if (name != null && !name.isEmpty()) {
-                selection.append(Columns._NOME.getColumnNameWithTable()).append(" LIKE ? ");
+                selection.append(" AND ").append(Columns._NOME.getColumnNameWithTable()).append(" LIKE ? ");
                 selectionArgs.add(name + "%");
             }
             if (estado != null && !estado.isEmpty()) {
-                selection.append(LocalDAO.Columns._ESTADO.getColumnNameWithTable()).append(" = ? ");
+                selection.append(" AND ").append(LocalDAO.Columns._ESTADO.getColumnNameWithTable()).append(" = ? ");
                 selectionArgs.add(estado);
             }
             if (esporte != null && !esporte.isEmpty()) {
-                selection.append(EsporteDAO.Columns._CATEGORIA.getColumnNameWithTable()).append(" = ? ");
+                selection.append(" AND ").append(EsporteDAO.Columns._CATEGORIA.getColumnNameWithTable()).append(" = ? ");
                 selectionArgs.add(esporte);
             }
             if (responsavelUuid != null && !responsavelUuid.isEmpty()) {
-                selection.append(Columns._RESPONSAVEL_UUID.getColumnNameWithTable()).append(" = ? ");
+                selection.append(" AND ").append(Columns._RESPONSAVEL_UUID.getColumnNameWithTable()).append(" = ? ");
                 selectionArgs.add(responsavelUuid);
             }
 
@@ -343,7 +387,6 @@ public class LojaDAO extends AppBaseDAO {
                     getColumnsProjectionWithAlias(Columns.class, LocalDAO.Columns.class, HorarioDAO.Columns.class),
                     selection.toString(), selectionArgs.toArray(new String[selectionArgs.size()]),
                     getGroupBy(Columns.class, LocalDAO.Columns.class, HorarioDAO.Columns.class), null, null);
-            List<Loja> lojas = new ArrayList<>();
             if (cursor.moveToFirst()) {
                 do {
                     Loja loja = getLoja(cursor, true);
@@ -354,9 +397,11 @@ public class LojaDAO extends AppBaseDAO {
                 } while (cursor.moveToNext());
             }
             cursor.close();
-            return lojas;
+        } catch (Exception ex) {
+            Log.e(TAG, "Error getting lojas.", ex);
         } finally {
             dbHelper.close(db);
         }
+        return lojas;
     }
 }

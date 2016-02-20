@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * Created by jonathan on 22/10/15.
  */
-public class Pista implements Localizavel, Serializable {
+public class Pista implements Localizavel {
 
     @Expose
     private String uuid;

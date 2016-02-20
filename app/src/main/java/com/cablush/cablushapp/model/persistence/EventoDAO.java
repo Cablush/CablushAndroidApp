@@ -211,6 +211,9 @@ public class EventoDAO extends AppBaseDAO {
 
     /**
      * Save a evento into local database.
+     *
+     * @param evento The evento to be saved.
+     * @return The saved evento or null if something goes wrong.
      */
     public Evento save(Evento evento) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
@@ -223,16 +226,22 @@ public class EventoDAO extends AppBaseDAO {
                 update(db, evento);
             }
             return getEvento(evento.getUuid());
+        } catch (Exception ex) {
+            Log.e(TAG, "Error saving evento.", ex);
         } finally {
             dbHelper.close(db);
         }
+        return null;
     }
 
     /**
-     * Merges a remote evento into local database.
-     * <p>
-     * To be used on result of a remote insert/update; this method 'mark' the object as remote.
-     * </p>
+     * Merges a remote evento into local database, overriding a local evento.
+     * <p> WARNING: To be used on result of a remote insert/update;
+     * this method 'mark' the object as remote.</p>
+     *
+     * @param evento The local evento to be override.
+     * @param eventoRemote The remote evento to be saved.
+     * @return The saved evento or null if something goes wrong.
      */
     public Evento merge(Evento evento, Evento eventoRemote) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
@@ -243,33 +252,51 @@ public class EventoDAO extends AppBaseDAO {
             eventoRemote.setRemote(true);
             insert(db, eventoRemote);
             return getEvento(eventoRemote.getUuid());
+        } catch (Exception ex) {
+            Log.e(TAG, "Error merging eventos.", ex);
         } finally {
             dbHelper.close(db);
         }
+        return null;
     }
 
     /**
      * Save the list of eventos into local database.
-     * <p>To be used on result of a remote search; this method 'mark' the object as remote.</p>
+     * <p>WARNING: To be used on result of a remote search;
+     * this method 'mark' the object as remote.</p>
      * <p>The object is updated only if it exists in local database and was not locally changed.
      * And it is inserted if it not exist in local database.</p>
+     *
+     * @param eventos The list of eventos to be saved.
+     * @return The number of eventos saved or -1 if something goes wrong.
      */
-    public void bulkSave(List<Evento> eventos) {
+    public long bulkSave(List<Evento> eventos) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         try {
+            long count = 0;
             for (Evento evento : eventos) {
                 evento.setRemote(true);
+                long rowID = -1;
                 if (existsEvento(db, evento.getUuid())) {
                     if (!wasLocallyChanged(db, evento.getUuid())) {
-                        update(db, evento);
+                        rowID = update(db, evento);
                     }
                 } else {
-                    insert(db, evento);
+                    rowID = insert(db, evento);
+                }
+                if (rowID >= 0) {
+                    count++;
+                } else {
+                    Log.e(TAG, "Error inserting evento: " + evento.getNome());
                 }
             }
+            return count;
+        } catch (Exception ex) { // must not happening
+            Log.e(TAG, "Error on bulk save of eventos.", ex);
         } finally {
             dbHelper.close(db);
         }
+        return -1;
     }
 
     private boolean existsEvento(SQLiteDatabase db, String uuid) {
@@ -297,17 +324,32 @@ public class EventoDAO extends AppBaseDAO {
         return null;
     }
 
+    /**
+     * Get the eventos by responsavel from the local database.
+     *
+     * @param responsavelUuid The uuid of the responsavel.
+     * @return The list of eventos.
+     */
     public List<Evento> getEventos(String responsavelUuid) {
         return getEventos(null, null, null, null, responsavelUuid);
     }
 
+    /**
+     * Get the eventos by name, estado, and/or esporte from the local database.
+     *
+     * @param name The name of the eventos.
+     * @param estado The estado of the eventos.
+     * @param esporte The esporte of the eventos.
+     * @return The list of eventos.
+     */
     public List<Evento> getEventos(String name, String estado, String esporte) {
         return getEventos(null, name, estado, esporte, null);
     }
 
-    public List<Evento> getEventos(String uuid, String name, String estado,
-                                   String esporte, String responsavelUuid) {
+    private List<Evento> getEventos(String uuid, String name, String estado,
+                                    String esporte, String responsavelUuid) {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
+        List<Evento> eventos = new ArrayList<>();
         try {
             SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
             queryBuilder.setTables(TABLE
@@ -318,26 +360,26 @@ public class EventoDAO extends AppBaseDAO {
                     + " INNER JOIN " + EsporteDAO.TABLE + " ON " + LocalizavelEsporteDAO.Columns._ESPORTE_ID.getColumnNameWithTable()
                     + " = " + EsporteDAO.Columns._ID.getColumnNameWithTable());
 
-            StringBuilder selection = new StringBuilder();
+            StringBuilder selection = new StringBuilder("1 = 1");
             List<String> selectionArgs = new ArrayList<>();
             if (uuid != null && !uuid.isEmpty()) {
-                selection.append(Columns._UUID.getColumnNameWithTable()).append(" = ? ");
+                selection.append(" AND ").append(Columns._UUID.getColumnNameWithTable()).append(" = ? ");
                 selectionArgs.add(uuid);
             }
             if (name != null && !name.isEmpty()) {
-                selection.append(Columns._NOME.getColumnNameWithTable()).append(" LIKE ? ");
+                selection.append(" AND ").append(Columns._NOME.getColumnNameWithTable()).append(" LIKE ? ");
                 selectionArgs.add(name + "%");
             }
             if (estado != null && !estado.isEmpty()) {
-                selection.append(LocalDAO.Columns._ESTADO.getColumnName()).append(" = ? ");
+                selection.append(" AND ").append(LocalDAO.Columns._ESTADO.getColumnName()).append(" = ? ");
                 selectionArgs.add(estado);
             }
             if (esporte != null && !esporte.isEmpty()) {
-                selection.append(EsporteDAO.Columns._CATEGORIA.getColumnNameWithTable()).append(" = ? ");
+                selection.append(" AND ").append(EsporteDAO.Columns._CATEGORIA.getColumnNameWithTable()).append(" = ? ");
                 selectionArgs.add(esporte);
             }
             if (responsavelUuid != null && !responsavelUuid.isEmpty()) {
-                selection.append(Columns._RESPONSAVEL_UUID.getColumnNameWithTable()).append(" = ? ");
+                selection.append(" AND ").append(Columns._RESPONSAVEL_UUID.getColumnNameWithTable()).append(" = ? ");
                 selectionArgs.add(responsavelUuid);
             }
 
@@ -345,7 +387,6 @@ public class EventoDAO extends AppBaseDAO {
                     getColumnsProjectionWithAlias(Columns.class, LocalDAO.Columns.class),
                     selection.toString(), selectionArgs.toArray(new String[selectionArgs.size()]),
                     getGroupBy(Columns.class, LocalDAO.Columns.class), null, null);
-            List<Evento> eventos = new ArrayList<>();
             if (cursor.moveToFirst()) {
                 do {
                     Evento evento = getEvento(cursor, true);
@@ -355,9 +396,11 @@ public class EventoDAO extends AppBaseDAO {
                 } while (cursor.moveToNext());
             }
             cursor.close();
-            return eventos;
+        } catch (Exception ex) {
+            Log.e(TAG, "Error getting eventos.", ex);
         } finally {
             dbHelper.close(db);
         }
+        return eventos;
     }
 }

@@ -2,6 +2,7 @@ package com.cablush.cablushapp.view.cadastros;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -95,8 +96,8 @@ public class EsporteArrayAdapter extends ArrayAdapter<Esporte> {
             Esporte esporte = getItem(position);
             TextView text = (TextView) convertView;
             text.setText(esporte.getCategoriaNome());
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception ex) {
+            Log.e(TAG, "Error getting view.", ex);
         }
         return convertView;
     }

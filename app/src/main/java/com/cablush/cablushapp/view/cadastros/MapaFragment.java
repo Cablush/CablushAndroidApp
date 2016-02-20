@@ -54,7 +54,7 @@ public class MapaFragment extends CablushFragment implements OnMapReadyCallback,
             args.putParcelable(LOCATION_BUNDLE_KEY, latLng);
             fragment.setArguments(args);
         }
-        fragment.selectLocationListener = new WeakReference<>(selectLocationListener); // TODO send this via to bundle
+        fragment.selectLocationListener = new WeakReference<>(selectLocationListener); // TODO send this via bundle
         return fragment;
     }
 

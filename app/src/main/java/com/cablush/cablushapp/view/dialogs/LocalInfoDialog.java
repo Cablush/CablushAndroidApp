@@ -46,7 +46,7 @@ public class LocalInfoDialog<L extends Localizavel> extends DialogFragment {
     public static <L extends Localizavel> void showDialog(@NonNull FragmentManager fragmentManager,
                                                           @NonNull L localizavel) {
         LocalInfoDialog dialog = new LocalInfoDialog();
-        dialog.mLocalizavel = new WeakReference<>(localizavel);
+        dialog.mLocalizavel = new WeakReference<>(localizavel); // TODO send this via bundle
         dialog.show(fragmentManager, TAG);
     }
 
@@ -83,7 +83,11 @@ public class LocalInfoDialog<L extends Localizavel> extends DialogFragment {
 
         // Initialize logo
         final ImageView logo = (ImageView) view.findViewById(R.id.imageViewLogo);
-        PictureUtils.loadImage(getActivity(), localizavel.getImagemURL(), logo, true);
+        if (localizavel.getImagemURL() != null) {
+            PictureUtils.loadImage(getActivity(), localizavel.getImagemURL(), logo);
+        } else {
+            logo.setVisibility(View.GONE);
+        }
 
         // Initialize description
         TextView descricaoView = (TextView) view.findViewById(R.id.textViewDescricao);

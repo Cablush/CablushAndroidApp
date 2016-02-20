@@ -163,8 +163,8 @@ class LocalDAO extends AppBaseDAO {
     }
 
     Local getLocal(SQLiteDatabase db, String uuid) {
-        Cursor cursor = db.query(TABLE, null,
-                Columns._UUID.getColumnName() + " = ? ", new String[]{uuid}, null, null, null);
+        Cursor cursor = db.query(TABLE, null, Columns._UUID.getColumnName() + " = ? ",
+                new String[]{uuid}, null, null, null);
         Local local = null;
         if (cursor.moveToFirst()) {
             local = getLocal(cursor, false);

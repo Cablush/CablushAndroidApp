@@ -33,8 +33,8 @@ public class TimePickerFragmentDialog extends DialogFragment {
                                   @NonNull Calendar calendar,
                                   @NonNull TimePickerDialog.OnTimeSetListener listener) {
         TimePickerFragmentDialog dialog = new TimePickerFragmentDialog();
-        dialog.calendar = calendar;
-        dialog.listener = listener;
+        dialog.calendar = calendar; // TODO send this via bundle
+        dialog.listener = listener; // TODO send this via bundle
         dialog.show(fragmentManager, TAG);
     }
 
