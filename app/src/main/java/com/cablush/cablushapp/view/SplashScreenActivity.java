@@ -4,8 +4,11 @@ import android.app.Activity;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.cablush.cablushapp.R;
+import com.cablush.cablushapp.model.domain.Usuario;
 import com.cablush.cablushapp.presenter.LoginPresenter;
 
 /**
@@ -15,16 +18,16 @@ public class SplashScreenActivity extends Activity implements Runnable, LoginPre
 
     private static final String TAG = SplashScreenActivity.class.getSimpleName();
 
-    private final int DELAY = 3000;
+    private final int DELAY = 1000; // 1 sec after login check
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d(TAG, "onCreate()");
         setContentView(R.layout.activity_splashscreen);
-        Handler handle = new Handler();
-        handle.postDelayed(this, DELAY);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
+        // Check the user login
         LoginPresenter loginPresenter = new LoginPresenter(this, this);
         loginPresenter.checkLogin();
     }
@@ -36,10 +39,15 @@ public class SplashScreenActivity extends Activity implements Runnable, LoginPre
     }
 
     @Override
-    public void onLoginSuccess() {
-    }
-
-    @Override
-    public void onLoginError(String message) {
+    public void onLoginResponse(LoginPresenter.LoginResponse response) {
+        // Call Main activity
+        Handler handle = new Handler();
+        handle.postDelayed(this, DELAY);
+        // Show welcome message
+        if (LoginPresenter.LoginResponse.SUCCESS.equals(response)) {
+            Toast.makeText(this,
+                    getString(R.string.success_check_login, Usuario.LOGGED_USER.getNome()),
+                    Toast.LENGTH_SHORT).show();
+        }
     }
 }

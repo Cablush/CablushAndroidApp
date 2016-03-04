@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.support.annotation.NonNull;
 
 import com.cablush.cablushapp.model.domain.Local;
 
@@ -65,7 +66,7 @@ class LocalDAO extends AppBaseDAO {
         }
     }
 
-    LocalDAO(Context context) {
+    LocalDAO(@NonNull Context context) {
         dbHelper = CablushDBHelper.getInstance(context);
     }
 
@@ -141,21 +142,29 @@ class LocalDAO extends AppBaseDAO {
                 Columns._UUID.getColumnName() + " = ? ", new String[]{local.getUuidLocalizavel()});
     }
 
-    private int delete(SQLiteDatabase db, String uuid) {
+    int delete(SQLiteDatabase db, String uuid) {
         return db.delete(TABLE, Columns._UUID.getColumnName() + " = ? ", new String[]{uuid});
     }
 
-    void saveLocal(SQLiteDatabase db, Local local) {
-        if (getLocal(db, local.getUuidLocalizavel()) == null) {
-            insert(db, local);
-        } else {
+    void save(SQLiteDatabase db, Local local) {
+        if (existsLocal(db, local.getUuidLocalizavel())) {
             update(db, local);
+        } else {
+            insert(db, local);
         }
     }
 
+    boolean existsLocal(SQLiteDatabase db, String uuid) {
+        Cursor cursor = db.rawQuery("SELECT 1 FROM " + TABLE
+                + " WHERE " + Columns._UUID.getColumnName() + " = ? ", new String[] {uuid});
+        boolean exists = cursor.getCount() > 0;
+        cursor.close();
+        return exists;
+    }
+
     Local getLocal(SQLiteDatabase db, String uuid) {
-        Cursor cursor = db.query(TABLE, null,
-                Columns._UUID.getColumnName() + " = ? ", new String[]{uuid}, null, null, null);
+        Cursor cursor = db.query(TABLE, null, Columns._UUID.getColumnName() + " = ? ",
+                new String[]{uuid}, null, null, null);
         Local local = null;
         if (cursor.moveToFirst()) {
             local = getLocal(cursor, false);

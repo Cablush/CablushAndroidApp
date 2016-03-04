@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.support.annotation.NonNull;
 
 import com.cablush.cablushapp.model.domain.Horario;
 
@@ -66,7 +67,7 @@ class HorarioDAO extends AppBaseDAO {
         }
     }
 
-    HorarioDAO(Context context) {
+    HorarioDAO(@NonNull Context context) {
         dbHelper = CablushDBHelper.getInstance(context);
     }
 
@@ -147,26 +148,29 @@ class HorarioDAO extends AppBaseDAO {
                 new String[]{horario.getUuidLocalizavel()});
     }
 
-    private int delete(SQLiteDatabase db, String uuid) {
+    int delete(SQLiteDatabase db, String uuid) {
         return db.delete(TABLE, Columns._UUID.getColumnName() + " = ? ", new String[]{uuid});
     }
 
-    void saveHorario(SQLiteDatabase db, Horario horario) {
-        if (getHorario(db, horario.getUuidLocalizavel()) == null) {
-            insert(db, horario);
-        } else {
+    void save(SQLiteDatabase db, Horario horario) {
+        if (existsHorario(db, horario.getUuidLocalizavel())) {
             update(db, horario);
+        } else {
+            insert(db, horario);
         }
     }
 
+    private boolean existsHorario(SQLiteDatabase db, String uuid) {
+        Cursor cursor = db.rawQuery("SELECT 1 FROM " + TABLE
+                + " WHERE " + Columns._UUID.getColumnName() + " = ? ", new String[] {uuid});
+        boolean exists = cursor.getCount() > 0;
+        cursor.close();
+        return exists;
+    }
+
     Horario getHorario(SQLiteDatabase db, String uuid) {
-        Cursor cursor = db.query(TABLE,
-                null,
-                Columns._UUID.getColumnName() + " = ? ",
-                new String[]{uuid},
-                null,
-                null,
-                null);
+        Cursor cursor = db.query(TABLE, null, Columns._UUID.getColumnName() + " = ? ",
+                new String[]{uuid}, null, null, null);
         Horario horario = null;
         if (cursor.moveToFirst()) {
             horario = getHorario(cursor, false);

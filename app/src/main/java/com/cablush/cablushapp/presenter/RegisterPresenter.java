@@ -1,12 +1,12 @@
 package com.cablush.cablushapp.presenter;
 
-import android.content.Context;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
-import com.cablush.cablushapp.R;
 import com.cablush.cablushapp.model.domain.Usuario;
 import com.cablush.cablushapp.model.rest.ApiUsuario;
 import com.cablush.cablushapp.model.rest.RestServiceBuilder;
+import com.cablush.cablushapp.model.rest.dto.ResponseDTO;
 
 import java.lang.ref.WeakReference;
 
@@ -22,35 +22,37 @@ public class RegisterPresenter {
     private static final String TAG = RegisterPresenter.class.getSimpleName();
 
     /**
+     * Responses for register.
+     */
+    public enum RegisterResponse {
+        SUCCESS, ERROR
+    }
+
+    /**
      * Interface to be implemented by this Presenter's client.
      */
     public interface RegisterView {
-        void onRegisterSuccess();
-        void onRegisterError(String message);
+        void onRegisterResponse(RegisterResponse response);
     }
 
     private WeakReference<RegisterView> mView;
-    private WeakReference<Context> mContext;
     private ApiUsuario apiUsuario;
 
     /**
-     * Constructor
-     *
-     * @param view
+     * Constructor.
      */
-    public RegisterPresenter(RegisterView view, Context context) {
+    public RegisterPresenter(@NonNull RegisterView view) {
         this.mView = new WeakReference<>(view);
-        this.mContext = new WeakReference<>(context);
         this.apiUsuario = RestServiceBuilder.createService(ApiUsuario.class);
     }
 
     public void doRegister(String name, String email, String password, Boolean shopkeeper) {
-        apiUsuario.doRegister(name, email, password, password, shopkeeper, new Callback<Usuario>() {
+        apiUsuario.doRegister(name, email, password, password, shopkeeper, new Callback<ResponseDTO<Usuario>>() {
             @Override
-            public void success(Usuario usuario, Response response) {
+            public void success(ResponseDTO<Usuario> dto, Response response) {
                 RegisterView view = mView.get();
                 if (view != null) {
-                    view.onRegisterSuccess();
+                    view.onRegisterResponse(RegisterResponse.SUCCESS);
                 }
             }
 
@@ -58,9 +60,8 @@ public class RegisterPresenter {
             public void failure(RetrofitError error) {
                 Log.e(TAG, "Error on user register. " + error.getMessage());
                 RegisterView view = mView.get();
-                Context context = mContext.get();
-                if (view != null && context != null) {
-                    view.onRegisterError(context.getString(R.string.error_register));
+                if (view != null) {
+                    view.onRegisterResponse(RegisterResponse.ERROR);
                 }
             }
         });

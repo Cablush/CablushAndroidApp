@@ -3,33 +3,43 @@ package com.cablush.cablushapp.model.domain;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by jonathan on 04/11/15.
  */
-public class Usuario {
+public class Usuario implements Serializable {
 
     @Expose
     private String uuid;
+
     @Expose
     private String nome;
+
     @Expose
     private String email;
+
     @Expose
     private String role;
+
     @Expose
     private String uid;
+
     @Expose
     @SerializedName("access_token")
     private String accessToken;
+
     @Expose
     @SerializedName("token_type")
     private String tokenType;
+
     @Expose
     private String client;
+
     @Expose
     private Long expiry;
+
     @Expose
     private List<Esporte> esportes;
 

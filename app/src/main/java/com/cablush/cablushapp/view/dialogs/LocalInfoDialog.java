@@ -4,9 +4,13 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.FragmentManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.cablush.cablushapp.R;
@@ -14,12 +18,16 @@ import com.cablush.cablushapp.model.domain.Evento;
 import com.cablush.cablushapp.model.domain.Localizavel;
 import com.cablush.cablushapp.model.domain.Loja;
 import com.cablush.cablushapp.model.domain.Pista;
+import com.cablush.cablushapp.model.domain.Usuario;
+import com.cablush.cablushapp.utils.MapUtils;
+import com.cablush.cablushapp.utils.PictureUtils;
 import com.cablush.cablushapp.utils.ViewUtils;
-import com.squareup.picasso.Picasso;
+import com.cablush.cablushapp.view.CadastroEventoActivity;
+import com.cablush.cablushapp.view.CadastroLojaActivity;
+import com.cablush.cablushapp.view.CadastroPistaActivity;
+import com.cablush.cablushapp.view.MainActivity;
 
 import java.lang.ref.WeakReference;
-
-import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Created by oscar on 29/12/15.
@@ -35,14 +43,16 @@ public class LocalInfoDialog<L extends Localizavel> extends DialogFragment {
      *
      * @param fragmentManager
      */
-    public static <L extends Localizavel> void showDialog(FragmentManager fragmentManager, L localizavel) {
+    public static <L extends Localizavel> void showDialog(@NonNull FragmentManager fragmentManager,
+                                                          @NonNull L localizavel) {
         LocalInfoDialog dialog = new LocalInfoDialog();
-        dialog.mLocalizavel = new WeakReference<>(localizavel);
+        dialog.mLocalizavel = new WeakReference<>(localizavel); // TODO send this via bundle
         dialog.show(fragmentManager, TAG);
     }
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
+        Log.d(TAG, "onCreateDialog()");
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setView(initializeView());
 
@@ -60,43 +70,116 @@ public class LocalInfoDialog<L extends Localizavel> extends DialogFragment {
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.dialog_local_info, null);
 
-        // TODO logo/foto
+        final Localizavel localizavel = mLocalizavel.get();
 
-        TextView descricao = (TextView) view.findViewById(R.id.descricaoTextView);
-        descricao.setText(mLocalizavel.get().getDescricao());
-
-        TextView telefone = (TextView) view.findViewById(R.id.telefoneTextView);
-        TextView email = (TextView) view.findViewById(R.id.emailTextView);
-        CircleImageView logoCircleImgView = (CircleImageView) view.findViewById(R.id.logo_localizavel);
-        if (mLocalizavel.get() instanceof Loja) {
-            Loja loja = (Loja) mLocalizavel.get();
-            telefone.setText(loja.getTelefone());
-            email.setText(loja.getEmail());
-            Picasso.with(inflater.getContext()).load(loja.getLogo()).into(logoCircleImgView);
-        } else {
-            if(mLocalizavel.get() instanceof Evento){
-                Evento evento = (Evento)mLocalizavel.get();
-                Picasso.with(inflater.getContext()).load(evento.getFlyer()).into(logoCircleImgView);
-            }else{
-                Pista pista = (Pista)mLocalizavel.get();
-                Picasso.with(inflater.getContext()).load(pista.getFoto()).into(logoCircleImgView);
-            }
-            telefone.setVisibility(View.GONE);
-            email.setVisibility(View.GONE);
+        // Get specific values from concrete classes
+        String telefone = null;
+        String email = null;
+        if (localizavel instanceof Loja) {
+            Loja loja = (Loja) localizavel;
+            telefone = loja.getTelefone();
+            email = loja.getEmail();
         }
 
-        // TODO facebook & site & directions && esportes
+        // Initialize logo
+        final ImageView logo = (ImageView) view.findViewById(R.id.imageViewLogo);
+        if (localizavel.getImagemURL() != null) {
+            PictureUtils.loadImage(getActivity(), localizavel.getImagemURL(), logo);
+        } else {
+            logo.setVisibility(View.GONE);
+        }
 
-        TextView endereco = (TextView) view.findViewById(R.id.enderecoTextView);
-        endereco.setText(mLocalizavel.get().getLocal().getEndereco());
+        // Initialize description
+        TextView descricaoView = (TextView) view.findViewById(R.id.textViewDescricao);
+        descricaoView.setText(localizavel.getDescricao());
 
-        TextView cidadeEstado = (TextView) view.findViewById(R.id.cidadeEstadoTextView);
-        cidadeEstado.setText(mLocalizavel.get().getLocal().getCidadeEstado());
+        // Initialize phone
+        TextView telefoneView = (TextView) view.findViewById(R.id.textViewTelefone);
+        ImageView telefoneIcon = (ImageView) view.findViewById(R.id.imageViewTelefone);
+        if (telefone != null && telefone.length() > 0) {
+            telefoneView.setText(telefone);
+        } else {
+            telefoneView.setVisibility(View.GONE);
+            telefoneIcon.setVisibility(View.GONE);
+        }
 
-        TextView cep = (TextView) view.findViewById(R.id.cepTextView);
-        cep.setText(mLocalizavel.get().getLocal().getCep());
+        // Initialize email
+        TextView emailView = (TextView) view.findViewById(R.id.textViewEmail);
+        ImageView emailIcon = (ImageView) view.findViewById(R.id.imageViewEmail);
+        if (email != null && email.length() > 0) {
+            emailView.setText(email);
+        } else {
+            emailView.setVisibility(View.GONE);
+            emailIcon.setVisibility(View.GONE);
+        }
 
+        // Initialize website
+        TextView webView = (TextView) view.findViewById(R.id.textViewWebsite);
+        ImageView webIcon = (ImageView) view.findViewById(R.id.imageViewWebsite);
+        String web = localizavel.getWebsite();
+        if (web != null && web.length() > 0) {
+            webView.setText(web);
+        } else {
+            webView.setVisibility(View.GONE);
+            webIcon.setVisibility(View.GONE);
+        }
 
+        // Initialize facebook
+        TextView faceView = (TextView) view.findViewById(R.id.textViewFacebook);
+        ImageView faceIcon = (ImageView) view.findViewById(R.id.imageViewFacebook);
+        String face = localizavel.getFacebook();
+        if (face != null && face.length() > 0) {
+            faceView.setText(face);
+        } else {
+            faceView.setVisibility(View.GONE);
+            faceIcon.setVisibility(View.GONE);
+        }
+
+        // Initialize address
+        TextView endereco = (TextView) view.findViewById(R.id.textViewEndereco);
+        endereco.setText(localizavel.getLocal().getEndereco());
+        TextView cidadeEstado = (TextView) view.findViewById(R.id.textViewCidadeEstado);
+        cidadeEstado.setText(localizavel.getLocal().getCidadeEstado());
+        TextView cep = (TextView) view.findViewById(R.id.textViewCep);
+        cep.setText(localizavel.getLocal().getCep());
+
+        // Directions Button
+        ImageButton directionsButton = (ImageButton) view.findViewById(R.id.imageButtonDirections);
+        directionsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MapUtils.openMapsNavigation(getActivity(), localizavel.getLocal().getLatLng());
+            }
+        });
+
+        // Edit Button
+        ImageButton editButton = (ImageButton) view.findViewById(R.id.imageButtonEdit);
+        if (Usuario.LOGGED_USER == null
+                || !Usuario.LOGGED_USER.getUuid().equals(localizavel.getResponsavel())) {
+            editButton.setVisibility(View.GONE);
+        } else {
+            editButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (localizavel instanceof Loja) {
+                        getActivity().startActivityForResult(CadastroLojaActivity
+                                .makeIntent(getActivity(), (Loja) localizavel),
+                                MainActivity.REQUEST_CADASTRO_LOJA);
+                    } else if (localizavel instanceof Evento) {
+                        getActivity().startActivityForResult(CadastroEventoActivity
+                                .makeIntent(getActivity(), (Evento) localizavel),
+                                MainActivity.REQUEST_CADASTRO_EVENTO);
+                    } else if (localizavel instanceof Pista) {
+                        getActivity().startActivityForResult(CadastroPistaActivity
+                                .makeIntent(getActivity(), (Pista) localizavel),
+                                MainActivity.REQUEST_CADASTRO_PISTA);
+                    }
+                    LocalInfoDialog.this.dismiss();
+                }
+            });
+        }
+
+        // TODO show esportes icons (?)
 
         return  view;
     }

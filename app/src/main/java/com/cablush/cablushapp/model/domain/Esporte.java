@@ -2,17 +2,22 @@ package com.cablush.cablushapp.model.domain;
 
 import com.google.gson.annotations.Expose;
 
+import java.io.Serializable;
+
 /**
  * Created by oscar on 12/12/15.
  */
-public class Esporte {
+public class Esporte implements Serializable {
 
     @Expose
     private Integer id;
+
     @Expose
     private String nome;
+
     @Expose
     private String categoria;
+
     @Expose
     private String icone;
 
@@ -46,5 +51,9 @@ public class Esporte {
 
     public void setIcone(String icone) {
         this.icone = icone;
+    }
+
+    public String getCategoriaNome() {
+        return categoria.equals("outros") ? nome : categoria + " - " + nome;
     }
 }

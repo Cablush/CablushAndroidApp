@@ -8,7 +8,9 @@ import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -16,6 +18,7 @@ import android.widget.Toast;
 
 import com.cablush.cablushapp.R;
 import com.cablush.cablushapp.presenter.LoginPresenter;
+import com.cablush.cablushapp.utils.ValidateUtils;
 import com.cablush.cablushapp.utils.ViewUtils;
 
 import java.lang.ref.WeakReference;
@@ -23,7 +26,7 @@ import java.lang.ref.WeakReference;
 /**
  * Created by oscar on 13/12/15.
  */
-public class LoginDialog extends DialogFragment implements LoginPresenter.LoginView {
+public class LoginDialog extends DialogFragment {
 
     private static final String TAG = LoginDialog.class.getSimpleName();
 
@@ -34,12 +37,11 @@ public class LoginDialog extends DialogFragment implements LoginPresenter.LoginV
      * Interface to be implemented by this Dialog's client.
      */
     public interface LoginDialogListener {
-        void onLoginDialogSuccess();
-        void onLoginDialogError(String message);
         void onRegisterButtonClicked();
     }
 
     // Use this instance of the interface to deliver action events
+    private WeakReference<LoginPresenter.LoginView> mView;
     private WeakReference<LoginDialogListener> mListener;
 
     /**
@@ -47,27 +49,31 @@ public class LoginDialog extends DialogFragment implements LoginPresenter.LoginV
      *
      * @param fragmentManager
      */
-    public static void showDialog(FragmentManager fragmentManager) {
+    public static void showDialog(@NonNull FragmentManager fragmentManager) {
         LoginDialog dialog = new LoginDialog();
         dialog.show(fragmentManager, TAG);
     }
 
-    // Override the Fragment.onAttach() method to instantiate the LoginDialogListener
+    // Override the Fragment.onAttach() method to instantiate the LoginPresenter.LoginView
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        // Verify that the host activity implements the callback interface
+        Log.d(TAG, "onAttach()");
         try {
-            // Instantiate the LoginDialogListener so we can send events to the host
+            mView = new WeakReference<>((LoginPresenter.LoginView) activity);
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString() + " must implement LoginPresenter.LoginView");
+        }
+        try {
             mListener = new WeakReference<>((LoginDialogListener) activity);
         } catch (ClassCastException e) {
-            // The activity doesn't implement the interface, throw exception
-            throw new ClassCastException(activity.toString() + " must implement LoginDialogListener");
+            throw new ClassCastException(activity.toString() + " must implement LoginDialog.LoginDialogListener");
         }
     }
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
+        Log.d(TAG, "onCreateDialog()");
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setView(initializeView());
 
@@ -82,8 +88,8 @@ public class LoginDialog extends DialogFragment implements LoginPresenter.LoginV
                 String email = emailEdit.getText().toString();
                 String password = passwordEdit.getText().toString();
 
-                if (!email.isEmpty() && !password.isEmpty()) {
-                    LoginPresenter loginPresenter = new LoginPresenter(LoginDialog.this, getActivity());
+                if (ValidateUtils.isNotBlank(email) && ValidateUtils.isNotBlank(password)) {
+                    LoginPresenter loginPresenter = new LoginPresenter(mView.get(), getActivity());
                     loginPresenter.doLogin(email, password);
                 } else {
                     Toast.makeText(getActivity(), R.string.msg_login_missing_data, Toast.LENGTH_SHORT).show();
@@ -104,7 +110,7 @@ public class LoginDialog extends DialogFragment implements LoginPresenter.LoginV
                 // nothing
             }
         });
-
+        builder.setCancelable(false);
         // Create the AlertDialog object and return it
         return builder.create();
     }
@@ -121,21 +127,5 @@ public class LoginDialog extends DialogFragment implements LoginPresenter.LoginV
         passwordEdit.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.SRC_ATOP);
 
         return view;
-    }
-
-    @Override
-    public void onLoginSuccess() {
-        LoginDialogListener listener = mListener.get();
-        if (listener != null) {
-            listener.onLoginDialogSuccess();
-        }
-    }
-
-    @Override
-    public void onLoginError(String message) {
-        LoginDialogListener listener = mListener.get();
-        if (listener != null) {
-            listener.onLoginDialogError(message);
-        }
     }
 }

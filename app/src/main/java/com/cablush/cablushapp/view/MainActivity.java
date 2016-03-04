@@ -3,17 +3,26 @@ package com.cablush.cablushapp.view;
 import android.content.Context;
 
 import android.content.Intent;
-import android.location.Location;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cablush.cablushapp.R;
+import com.cablush.cablushapp.model.OperationResult;
+import com.cablush.cablushapp.model.domain.Evento;
 import com.cablush.cablushapp.model.domain.Localizavel;
+import com.cablush.cablushapp.model.domain.Loja;
+import com.cablush.cablushapp.model.domain.Pista;
 import com.cablush.cablushapp.model.domain.Usuario;
+import com.cablush.cablushapp.presenter.LoginPresenter;
+import com.cablush.cablushapp.presenter.RegisterPresenter;
+import com.cablush.cablushapp.presenter.SearchPresenter;
+import com.cablush.cablushapp.utils.MapUtils;
 import com.cablush.cablushapp.view.dialogs.LocalInfoDialog;
 import com.cablush.cablushapp.view.dialogs.RegisterDialog;
 import com.cablush.cablushapp.view.drawer.DrawerActivityConfiguration;
@@ -25,7 +34,6 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -34,8 +42,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import io.github.yavski.fabspeeddial.FabSpeedDial;
+import io.github.yavski.fabspeeddial.SimpleMenuListenerAdapter;
+
 public class MainActivity extends AbstractDrawerActivity implements OnMapReadyCallback,
-        LoginDialog.LoginDialogListener, RegisterDialog.RegisterDialogListener, SearchDialog.SearchDialogListener {
+        LoginDialog.LoginDialogListener, LoginPresenter.LoginView,
+        RegisterPresenter.RegisterView, SearchPresenter.SearchView {
+
+    public static final int REQUEST_CADASTRO_LOJA = 1;
+    public static final int REQUEST_CADASTRO_EVENTO = 2;
+    public static final int REQUEST_CADASTRO_PISTA = 3;
 
     private ProgressBar spinner;
 
@@ -44,13 +60,15 @@ public class MainActivity extends AbstractDrawerActivity implements OnMapReadyCa
     // Map to store the localizaveis by UUIDs
     private Map<String, Localizavel> localizavelMap = new HashMap<>();
 
+    private SearchPresenter searchPresenter;
+
     /**
      * Make the intent of this activity.
      *
      * @param context
      * @return
      */
-    public static Intent makeIntent(Context context) {
+    public static Intent makeIntent(@NonNull Context context) {
         return new Intent(context, MainActivity.class);
     }
 
@@ -65,38 +83,61 @@ public class MainActivity extends AbstractDrawerActivity implements OnMapReadyCa
         MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.mapView);
         mapFragment.getMapAsync(this);
 
-//        FloatingActionButton addFAB = (FloatingActionButton) findViewById(R.id.add_fab);
-//        addFAB.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if (ViewUtils.checkUserLoggedIn(MainActivity.this)) {
-//
-//                }
-//            }
-//        });
+        FabSpeedDial fabSpeedDial = (FabSpeedDial) findViewById(R.id.add_fabDial);
+        fabSpeedDial.setMenuListener(new SimpleMenuListenerAdapter() {
+
+            @Override
+            public boolean onMenuItemSelected(MenuItem menuItem) {
+                switch (menuItem.getItemId()){
+                    case R.id.cadastro_loja:
+                        if (checkUserLoggedIn()) {
+                            startActivityForResult(CadastroLojaActivity
+                                    .makeIntent(MainActivity.this, new Loja(Usuario.LOGGED_USER)),
+                                    REQUEST_CADASTRO_LOJA);
+                        }
+                        break;
+                    case R.id.cadastro_evento:
+                        if (checkUserLoggedIn()) {
+                            startActivityForResult(CadastroEventoActivity
+                                    .makeIntent(MainActivity.this, new Evento(Usuario.LOGGED_USER)),
+                                    REQUEST_CADASTRO_EVENTO);
+                        }
+                        break;
+                    case R.id.cadastro_pista:
+                        if (checkUserLoggedIn()) {
+                            startActivityForResult(CadastroPistaActivity
+                                    .makeIntent(MainActivity.this, new Pista(Usuario.LOGGED_USER)),
+                                    REQUEST_CADASTRO_PISTA);
+                        }
+                        break;
+                }
+                return super.onMenuItemSelected(menuItem);
+            }
+        });
 
         spinner = (ProgressBar)findViewById(R.id.progressBar);
         spinner.setVisibility(View.GONE);
 
-        checkLogin();
-    }
+        searchPresenter = new SearchPresenter(this, this);
 
+        configNavigationHead();
+    }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         Log.d(TAG, "GoogleMap loaded.");
         this.googleMap = googleMap;
 
-        // Try to retrieve the current user location
-        getUserLocation();
+        // Check the Location Permissions
+        checkLocationPermission();
     }
 
     @Override
-    protected void onUserLocationReady(Location location) {
-        LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-        if (latLng != null) {
-            this.googleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-            this.googleMap.animateCamera(CameraUpdateFactory.zoomTo(15));
+    public void onLocationPermissionGranted() {
+        // If Location Permissions are granted, set the user location on Map
+        if (googleMap != null) {
+            MapUtils.setUserLocation(this, googleMap);
+            MapUtils.enableUserLocation(this, googleMap);
         }
     }
 
@@ -130,28 +171,62 @@ public class MainActivity extends AbstractDrawerActivity implements OnMapReadyCa
             case R.id.drawer_search_pistas:
                 SearchDialog.showDialog(getFragmentManager(), SearchDialog.TYPE.PISTA);
                 return true;
-//            case R.id.drawer_my_lojas:
-//                if (ViewUtils.checkUserLoggedIn(this)) {
-//                    return true;
-//                }
-//                return false;
-//            case R.id.drawer_my_eventos:
-//                if (ViewUtils.checkUserLoggedIn(this)) {
-//                    return true;
-//                }
-//                return false;
-//            case R.id.drawer_my_pistas:
-//                if (ViewUtils.checkUserLoggedIn(this)) {
-//                    return true;
-//                }
-//                return false;
-            default:
-                Toast.makeText(getApplicationContext(), R.string.erro_invalid_option, Toast.LENGTH_SHORT).show();
-                return false;
+            case R.id.drawer_my_lojas:
+                return getMyLojas();
+            case R.id.drawer_my_eventos:
+                return getMyEventos();
+            case R.id.drawer_my_pistas:
+                return getMyPistas();
+        }
+        return false;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case REQUEST_CADASTRO_LOJA:
+                    getMyLojas();
+                    break;
+                case REQUEST_CADASTRO_EVENTO:
+                    getMyEventos();
+                    break;
+                case REQUEST_CADASTRO_PISTA:
+                    getMyPistas();
+                    break;
+            }
         }
     }
 
-    private void checkLogin() {
+    private boolean getMyLojas() {
+        if (checkUserLoggedIn()) {
+            searchPresenter.getMyLojas();
+            spinner.setVisibility(View.VISIBLE);
+            return true;
+        }
+        return false;
+    }
+
+    private boolean getMyEventos() {
+        if (checkUserLoggedIn()) {
+            searchPresenter.getMyEventos();
+            spinner.setVisibility(View.VISIBLE);
+            return true;
+        }
+        return false;
+    }
+
+    private boolean getMyPistas() {
+        if (checkUserLoggedIn()) {
+            searchPresenter.getMyPistas();
+            spinner.setVisibility(View.VISIBLE);
+            return true;
+        }
+        return false;
+    }
+
+    private void configNavigationHead() {
         View header = navigationView.getHeaderView(0);
         TextView nameTextView = (TextView) header.findViewById(R.id.name);
         TextView emailTextView = (TextView) header.findViewById(R.id.email);
@@ -167,19 +242,15 @@ public class MainActivity extends AbstractDrawerActivity implements OnMapReadyCa
         }
     }
 
-
-    @Override
-    public void onLoginDialogSuccess() {
-        Toast.makeText(this,
-                getString(R.string.success_login, Usuario.LOGGED_USER.getNome()),
-                Toast.LENGTH_SHORT).show();
-
-        checkLogin();
-    }
-
-    @Override
-    public void onLoginDialogError(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    /**
+     * Check if the user is logged in, showing a toast if not.
+     */
+    private boolean checkUserLoggedIn() {
+        if (Usuario.LOGGED_USER == null) {
+            Toast.makeText(this, R.string.msg_login_required, Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        return true;
     }
 
     @Override
@@ -188,21 +259,45 @@ public class MainActivity extends AbstractDrawerActivity implements OnMapReadyCa
     }
 
     @Override
-    public void onRegisterDialogSuccess() {
-        Toast.makeText(this, R.string.success_register, Toast.LENGTH_SHORT).show();
+    public void onLoginResponse(LoginPresenter.LoginResponse response) {
+        if (LoginPresenter.LoginResponse.SUCCESS.equals(response)) {
+            Toast.makeText(this,
+                    getString(R.string.success_login, Usuario.LOGGED_USER.getNome()),
+                    Toast.LENGTH_SHORT).show();
+            configNavigationHead();
+        } else {
+            Toast.makeText(this, getString(R.string.error_login), Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
-    public void onRegisterDialogError(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    public void onRegisterResponse(RegisterPresenter.RegisterResponse response) {
+        if (RegisterPresenter.RegisterResponse.SUCCESS.equals(response)) {
+            Toast.makeText(this, R.string.success_register, Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, getString(R.string.error_register), Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
-    public void onSearchDialogSuccess(List<? extends Localizavel> localizaveis) {
-        if (localizaveis == null || localizaveis.isEmpty()) {
+    public SearchPresenter getSearchPresenter() {
+        return searchPresenter;
+    }
+
+    @Override
+    public void onSearchResult(OperationResult result, List<? extends Localizavel> localizaveis) {
+        clearMap();
+        switch (result) {
+            case OFF_LINE:
+                Toast.makeText(this, R.string.msg_search_off_line, Toast.LENGTH_SHORT).show();
+                break;
+            case ERROR:
+                Toast.makeText(this, R.string.msg_search_error, Toast.LENGTH_SHORT).show();
+                break;
+        }
+        if (localizaveis.isEmpty()) {
             Toast.makeText(this, R.string.msg_local_not_found, Toast.LENGTH_SHORT).show();
         } else {
-            clearMarker();
             for (Localizavel localizavel : localizaveis) {
                 setMarker(localizavel);
             }
@@ -211,13 +306,7 @@ public class MainActivity extends AbstractDrawerActivity implements OnMapReadyCa
         spinner.setVisibility(View.GONE);
     }
 
-    @Override
-    public void onSearchDialogError(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
-        spinner.setVisibility(View.GONE);
-    }
-
-    private void clearMarker() {
+    private void clearMap() {
         googleMap.clear();
         localizavelMap.clear();
     }
@@ -225,9 +314,12 @@ public class MainActivity extends AbstractDrawerActivity implements OnMapReadyCa
     private <L extends Localizavel> void setMarker(L localizavel) {
         localizavelMap.put(localizavel.getUuid(), localizavel);
         googleMap.addMarker(new MarkerOptions()
-                .position(new LatLng(localizavel.getLocal().getLatitude(), localizavel.getLocal().getLongitude()))
+                .position(localizavel.getLocal().getLatLng())
                 .snippet(localizavel.getUuid())
-                .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_mark_cablush_orange)));
+                .icon(BitmapDescriptorFactory.fromResource(
+                        (localizavel.isRemote() && !localizavel.isChanged())
+                        ? R.drawable.ic_mark_cablush_orange
+                        : R.drawable.ic_mark_cablush_blue)));
 
         googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
@@ -245,7 +337,7 @@ public class MainActivity extends AbstractDrawerActivity implements OnMapReadyCa
     private void centerMap(List<? extends Localizavel> localizaveis) {
         LatLngBounds.Builder builder = new LatLngBounds.Builder();
         for (Localizavel localizavel : localizaveis) {
-            builder.include(new LatLng(localizavel.getLocal().getLatitude(), localizavel.getLocal().getLongitude()));
+            builder.include(localizavel.getLocal().getLatLng());
         }
         LatLngBounds bounds = builder.build();
         int padding = 150; // offset from edges of the map in pixels

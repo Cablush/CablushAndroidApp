@@ -3,6 +3,8 @@ package com.cablush.cablushapp.model.domain;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -12,25 +14,64 @@ public class Pista implements Localizavel {
 
     @Expose
     private String uuid;
+
     @Expose
     private String nome;
+
     @Expose
     private String descricao;
+
     @Expose
     private String website;
+
     @Expose
     private String facebook;
-    @Expose
-    @SerializedName("foto_file_name")
+
+    @Expose(serialize = false)
+    @SerializedName("foto_url")
     private String foto;
+
     @Expose
     private Boolean fundo;
+
     @Expose
     private Local local;
+
     @Expose
-    private List<Esporte> esportes;
+    private List<Esporte> esportes = new ArrayList<>();
+
     @Expose
     private Horario horario;
+
+    @Expose
+    @SerializedName("responsavel_uuid")
+    private String responsavel;
+
+    /** Identify that the object is on server **/
+    private Boolean remote;
+
+    /** Indicate that the object was locally changed **/
+    private Boolean changed;
+
+    /**
+     * Default constructor;
+     */
+    public Pista() {
+        local = new Local();
+        horario = new Horario();
+    }
+
+    /**
+     * Constructor by responsavel.
+     *
+     * @param responsavel
+     */
+    public Pista(Usuario responsavel) {
+        this();
+        if (responsavel != null) {
+            this.responsavel = responsavel.getUuid();
+        }
+    }
 
     @Override
     public String getUuid() {
@@ -59,6 +100,7 @@ public class Pista implements Localizavel {
         this.descricao = descricao;
     }
 
+    @Override
     public String getWebsite() {
         return website;
     }
@@ -67,6 +109,7 @@ public class Pista implements Localizavel {
         this.website = website;
     }
 
+    @Override
     public String getFacebook() {
         return facebook;
     }
@@ -114,5 +157,43 @@ public class Pista implements Localizavel {
 
     public void setHorario(Horario horario) {
         this.horario = horario;
+    }
+
+    @Override
+    public String getResponsavel() {
+        return responsavel;
+    }
+
+    public void setResponsavel(String responsavel) {
+        this.responsavel = responsavel;
+    }
+
+    @Override
+    public Boolean isRemote() {
+        if (remote == null) {
+            remote = Boolean.FALSE;
+        }
+        return remote;
+    }
+
+    public void setRemote(Boolean remote) {
+        this.remote = remote;
+    }
+
+    @Override
+    public Boolean isChanged() {
+        if (changed == null) {
+            changed = Boolean.FALSE;
+        }
+        return changed;
+    }
+
+    public void setChanged(Boolean changed) {
+        this.changed = changed;
+    }
+
+    @Override
+    public String getImagemURL() {
+        return foto;
     }
 }

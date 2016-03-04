@@ -8,32 +8,31 @@ import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import com.cablush.cablushapp.R;
-import com.cablush.cablushapp.model.domain.Localizavel;
 import com.cablush.cablushapp.presenter.SearchPresenter;
 import com.cablush.cablushapp.utils.ViewUtils;
 
 import java.lang.ref.WeakReference;
-import java.util.List;
 
 /**
  * Created by oscar on 13/12/15.
  */
-public class SearchDialog extends DialogFragment implements SearchPresenter.SearchView {
+public class SearchDialog extends DialogFragment {
 
     private static final String TAG = SearchDialog.class.getSimpleName();
 
     public enum TYPE {
-        LOJA, EVENTO, PISTA;
+        LOJA, EVENTO, PISTA
     }
 
     private String[] types;
@@ -46,17 +45,7 @@ public class SearchDialog extends DialogFragment implements SearchPresenter.Sear
     private Spinner sportsSpinner;
     private EditText nameEdit;
 
-    private SearchPresenter presenter;
-
-    /**
-     * Interface to be implemented by this Dialog's client.
-     */
-    public interface SearchDialogListener {
-        void onSearchDialogSuccess(List<? extends Localizavel> searchablePlaces);
-        void onSearchDialogError(String message);
-    }
-
-    private WeakReference<SearchDialogListener> mListener;
+    private WeakReference<SearchPresenter.SearchView> mView;
 
     /**
      * Show the Search Dialog.
@@ -64,31 +53,29 @@ public class SearchDialog extends DialogFragment implements SearchPresenter.Sear
      * @param fragmentManager
      * @param searchType
      */
-    public static void showDialog(FragmentManager fragmentManager, TYPE searchType) {
+    public static void showDialog(@NonNull FragmentManager fragmentManager,
+                                  @NonNull TYPE searchType) {
         SearchDialog dialog = new SearchDialog();
-        dialog.searchType = searchType;
+        dialog.searchType = searchType; // TODO send this via bundle
         dialog.show(fragmentManager, TAG);
     }
 
-    // Override the Fragment.onAttach() method to instantiate the LoginDialogListener
+    // Override the Fragment.onAttach() method to instantiate the SearchPresenter.SearchView
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        // Verify that the host activity implements the callback interface
+        Log.d(TAG, "onAttach()");
         try {
-            // Instantiate the LoginDialogListener so we can send events to the host
-            mListener = new WeakReference<>((SearchDialogListener) activity);
+            mView = new WeakReference<>((SearchPresenter.SearchView) activity);
         } catch (ClassCastException e) {
-            // The activity doesn't implement the interface, throw exception
-            throw new ClassCastException(activity.toString() + " must implement SearchDialogListener");
+            throw new ClassCastException(activity.toString() + " must implement SearchPresenter.SearchView");
         }
     }
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
+        Log.d(TAG, "onCreateDialog()");
         loadData();
-
-        presenter = new SearchPresenter(this, getActivity());
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setView(initializeView());
@@ -102,21 +89,23 @@ public class SearchDialog extends DialogFragment implements SearchPresenter.Sear
         builder.setPositiveButton(R.string.btn_search, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 String nome = nameEdit.getText().toString();
-                String estado = getResources().getStringArray(R.array.states_values)[statesSpinner.getSelectedItemPosition()];
+                String estado = ViewUtils.getCodigoEstado(getActivity(),
+                        statesSpinner.getSelectedItemPosition());
                 String esporte = ViewUtils.getSelectedItem(getActivity(), sportsSpinner);
 
                 switch (searchType) {
                     case LOJA:
-                        presenter.getLojas(nome, estado, esporte);
+                        mView.get().getSearchPresenter().getLojas(nome, estado, esporte);
                         break;
                     case EVENTO:
-                        presenter.getEventos(nome, estado, esporte);
+                        mView.get().getSearchPresenter().getEventos(nome, estado, esporte);
                         break;
                     case PISTA:
-                        presenter.getPistas(nome, estado, esporte);
+                        mView.get().getSearchPresenter().getPistas(nome, estado, esporte);
                         break;
                     default:
-                        Toast.makeText(getActivity(), R.string.erro_invalid_search_type, Toast.LENGTH_SHORT).show();
+                        Log.e(TAG, "Invalid search type!");
+                        return;
                 }
 
                 ProgressBar spinner = (ProgressBar)getActivity().findViewById(R.id.progressBar);
@@ -130,22 +119,6 @@ public class SearchDialog extends DialogFragment implements SearchPresenter.Sear
 
         // Create the AlertDialog object and return it
         return builder.create();
-    }
-
-    @Override
-    public void onSearchSuccess(List<? extends Localizavel> locais) {
-        SearchDialogListener listener = mListener.get();
-        if (listener != null) {
-            listener.onSearchDialogSuccess(locais);
-        }
-    }
-
-    @Override
-    public void onSearchError(String message) {
-        SearchDialogListener listener = mListener.get();
-        if (listener != null) {
-            listener.onSearchDialogError(message);
-        }
     }
 
     private void loadData() {

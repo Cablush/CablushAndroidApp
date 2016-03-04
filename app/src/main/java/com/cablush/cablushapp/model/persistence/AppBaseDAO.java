@@ -63,11 +63,12 @@ public abstract class AppBaseDAO {
     }
 
     /**
+     * Read a column from a cursor returning a object of class.
      *
-     * @param cursor
-     * @param column
-     * @param <T>
-     * @return
+     * @param cursor The cursor to be read.
+     * @param column The name of column.
+     * @param <T> The class to be returned.
+     * @return The object read or null if something goes wrong.
      */
     protected <T> T readCursor(Cursor cursor, String column, Class<T> clazz) {
         try {
@@ -91,19 +92,19 @@ public abstract class AppBaseDAO {
                 objRet = (T) new Date(time);
             }
             return objRet;
-        } catch (Exception e) {
-            Log.e(TAG, "Exception on readCursor()", e);
+        } catch (Exception ex) {
+            Log.e(TAG, "Exception reading the cursor.", ex);
         }
         return null;
     }
 
     /**
+     * Read an enum from a cursor returning a enum instance of the class.
      *
-     * @param cursor
-     * @param column
-     * @param enumtype
-     * @param <T>
-     * @return
+     * @param cursor The cursor to be read.
+     * @param column The name of column.
+     * @param enumtype The type of the enum.
+     * @return The enum instance read or null if something goes wrong.
      */
     protected <T extends  Enum<T>> T readEnum(Cursor cursor, String column, Class<T> enumtype) {
         String name = readCursor(cursor, column, String.class);

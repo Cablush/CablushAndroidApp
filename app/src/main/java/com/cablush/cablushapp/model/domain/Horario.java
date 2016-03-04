@@ -1,33 +1,45 @@
 package com.cablush.cablushapp.model.domain;
 
+import com.cablush.cablushapp.utils.DateTimeUtils;
 import com.google.gson.annotations.Expose;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * Created by jonathan on 09/11/15.
  */
-public class Horario {
+public class Horario implements Serializable {
 
     private String uuidLocalizavel;
+
     @Expose
     private Date inicio;
+
     @Expose
     private Date fim;
+
     @Expose
     private Boolean seg;
+
     @Expose
     private Boolean ter;
+
     @Expose
     private Boolean qua;
+
     @Expose
     private Boolean qui;
+
     @Expose
     private Boolean sex;
+
     @Expose
     private Boolean sab;
+
     @Expose
     private Boolean dom;
+
     @Expose
     private String detalhes;
 
@@ -40,6 +52,9 @@ public class Horario {
     }
 
     public Date getInicio() {
+        if (inicio == null || inicio.getTime() == 0) {
+            inicio = DateTimeUtils.parseTime("09:00");
+        }
         return inicio;
     }
 
@@ -48,6 +63,9 @@ public class Horario {
     }
 
     public Date getFim() {
+        if (fim == null || fim.getTime() == 0) {
+            fim = DateTimeUtils.parseTime("18:00");
+        }
         return fim;
     }
 
@@ -56,6 +74,9 @@ public class Horario {
     }
 
     public Boolean getSeg() {
+        if (seg == null) {
+            seg = Boolean.FALSE;
+        }
         return seg;
     }
 
@@ -64,6 +85,9 @@ public class Horario {
     }
 
     public Boolean getTer() {
+        if (ter == null) {
+            ter = Boolean.FALSE;
+        }
         return ter;
     }
 
@@ -72,6 +96,9 @@ public class Horario {
     }
 
     public Boolean getQua() {
+        if (qua == null) {
+            qua = Boolean.FALSE;
+        }
         return qua;
     }
 
@@ -80,6 +107,9 @@ public class Horario {
     }
 
     public Boolean getQui() {
+        if (qui == null) {
+            qui = Boolean.FALSE;
+        }
         return qui;
     }
 
@@ -88,6 +118,9 @@ public class Horario {
     }
 
     public Boolean getSex() {
+        if (sex == null) {
+            sex = Boolean.FALSE;
+        }
         return sex;
     }
 
@@ -96,6 +129,9 @@ public class Horario {
     }
 
     public Boolean getSab() {
+        if (sab == null) {
+            sab = Boolean.FALSE;
+        }
         return sab;
     }
 
@@ -104,6 +140,9 @@ public class Horario {
     }
 
     public Boolean getDom() {
+        if (dom == null) {
+            dom = Boolean.FALSE;
+        }
         return dom;
     }
 
@@ -117,5 +156,9 @@ public class Horario {
 
     public void setDetalhes(String detalhes) {
         this.detalhes = detalhes;
+    }
+
+    public boolean isOpenOneDay(){
+        return getSeg() || getTer() || getQua() || getQui() || getSex() || getSab() || getDom();
     }
 }

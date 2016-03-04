@@ -3,6 +3,7 @@ package com.cablush.cablushapp.model.domain;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,29 +14,70 @@ public class Loja implements Localizavel {
 
     @Expose
     private String uuid;
+
     @Expose
     private String nome;
+
     @Expose
     private String descricao;
+
     @Expose
     private String telefone;
+
     @Expose
     private String email;
+
     @Expose
     private String website;
+
     @Expose
     private String facebook;
-    @Expose
-    @SerializedName("logo_file_name")
+
+    @Expose(serialize = false)
+    @SerializedName("logo_url")
     private String logo;
+
     @Expose
     private Boolean fundo;
+
     @Expose
-    private List<Local> locais;
+    private List<Local> locais = new ArrayList<>();
+
     @Expose
-    private List<Esporte> esportes;
+    private List<Esporte> esportes = new ArrayList<>();
+
     @Expose
     private Horario horario;
+
+    @Expose
+    @SerializedName("responsavel_uuid")
+    private String responsavel;
+
+    /** Identify that the object is on server **/
+    private Boolean remote;
+
+    /** Indicate that the object was locally changed **/
+    private Boolean changed;
+
+    /**
+     * Default constructor;
+     */
+    public Loja() {
+        setLocal(new Local());
+        horario = new Horario();
+    }
+
+    /**
+     * Constructor by responsavel.
+     *
+     * @param responsavel
+     */
+    public Loja(Usuario responsavel) {
+        this();
+        if (responsavel != null) {
+            this.responsavel = responsavel.getUuid();
+        }
+    }
 
     @Override
     public String getUuid() {
@@ -80,6 +122,7 @@ public class Loja implements Localizavel {
         this.email = email;
     }
 
+    @Override
     public String getWebsite() {
         return website;
     }
@@ -88,6 +131,7 @@ public class Loja implements Localizavel {
         this.website = website;
     }
 
+    @Override
     public String getFacebook() {
         return facebook;
     }
@@ -120,16 +164,18 @@ public class Loja implements Localizavel {
         this.locais = locais;
     }
 
+    // TODO remove when a 'loja' may have many 'locais'
     @Override
     public Local getLocal() {
         return locais.get(0);
     }
 
+    // TODO remove when a 'loja' may have many 'locais'
     public void setLocal(Local local) {
-        if (locais == null) {
-            locais = new ArrayList<>();
+        if (!locais.isEmpty()) {
+            locais.clear();
         }
-        locais.add(local);
+        locais.add(0, local);
     }
 
     public List<Esporte> getEsportes() {
@@ -146,5 +192,43 @@ public class Loja implements Localizavel {
 
     public void setHorario(Horario horario) {
         this.horario = horario;
+    }
+
+    @Override
+    public String getResponsavel() {
+        return responsavel;
+    }
+
+    public void setResponsavel(String responsavel) {
+        this.responsavel = responsavel;
+    }
+
+    @Override
+    public Boolean isRemote() {
+        if (remote == null) {
+            remote = Boolean.FALSE;
+        }
+        return remote;
+    }
+
+    public void setRemote(Boolean remote) {
+        this.remote = remote;
+    }
+
+    @Override
+    public Boolean isChanged() {
+        if (changed == null) {
+            changed = Boolean.FALSE;
+        }
+        return changed;
+    }
+
+    public void setChanged(Boolean changed) {
+        this.changed = changed;
+    }
+
+    @Override
+    public String getImagemURL() {
+        return logo;
     }
 }

@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
+import android.support.annotation.NonNull;
 
 import com.cablush.cablushapp.model.domain.Esporte;
 
@@ -71,7 +72,7 @@ public class LocalizavelEsporteDAO extends AppBaseDAO {
 
     private EsporteDAO esporteDAO;
 
-    public LocalizavelEsporteDAO(Context context) {
+    LocalizavelEsporteDAO(@NonNull Context context) {
         dbHelper = CablushDBHelper.getInstance(context);
         esporteDAO = new EsporteDAO(context);
     }
@@ -96,23 +97,21 @@ public class LocalizavelEsporteDAO extends AppBaseDAO {
         return db.insertOrThrow(TABLE, null, getContentValues(localizavelEsporte));
     }
 
-    private int delete(SQLiteDatabase db, String uuid) {
+    int delete(SQLiteDatabase db, String uuid) {
         return db.delete(TABLE, Columns._UUID.getColumnName() + " = ? ", new String[]{uuid});
     }
 
-    void saveEsportes(SQLiteDatabase db, String uuid, List<Esporte> esportes) {
+    void save(SQLiteDatabase db, String uuid, List<Esporte> esportes) {
         // delete the esportes relations with the localizavel
         delete(db, uuid);
         // recreate the needed relations
         for (Esporte esporte : esportes) {
-            esporteDAO.saveEsporte(db, esporte);
+            esporteDAO.save(db, esporte);
             insert(db, new LocalizavelEsporte(uuid, esporte.getId()));
         }
     }
 
     List<Esporte> getEsportes(SQLiteDatabase db, String uuid) {
-        //SQLiteDatabase db = dbHelper.getReadableDatabase();
-
         SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
         queryBuilder.setTables(TABLE
                 + " INNER JOIN " + EsporteDAO.TABLE + " ON " + Columns._ESPORTE_ID.getColumnNameWithTable()
@@ -129,7 +128,6 @@ public class LocalizavelEsporteDAO extends AppBaseDAO {
             } while (cursor.moveToNext());
         }
         cursor.close();
-        //dbHelper.close(db);
         return esportes;
     }
 }

@@ -5,6 +5,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.cablush.cablushapp.model.domain.Usuario;
 
@@ -62,7 +64,7 @@ public class UsuarioDAO extends AppBaseDAO {
         }
     }
 
-    public UsuarioDAO(Context context) {
+    public UsuarioDAO(@NonNull Context context) {
         dbHelper = CablushDBHelper.getInstance(context);
     }
 
@@ -90,38 +92,69 @@ public class UsuarioDAO extends AppBaseDAO {
     }
 
     Usuario getUsuario(Cursor cursor) {
-        Usuario evento = new Usuario();
-        evento.setUuid(readCursor(cursor, Columns._UUID.getColumnName(), String.class));
-        evento.setNome(readCursor(cursor, Columns._NOME.getColumnName(), String.class));
-        evento.setEmail(readCursor(cursor, Columns._EMAIL.getColumnName(), String.class));
-        evento.setRole(readCursor(cursor, Columns._ROLE.getColumnName(), String.class));
-        evento.setUid(readCursor(cursor, Columns._UID.getColumnName(), String.class));
-        evento.setAccessToken(readCursor(cursor, Columns._ACCESS_TOKEN.getColumnName(), String.class));
-        evento.setTokenType(readCursor(cursor, Columns._TOKEN_TYPE.getColumnName(), String.class));
-        evento.setClient(readCursor(cursor, Columns._CLIENT.getColumnName(), String.class));
-        evento.setExpiry(readCursor(cursor, Columns._EXPIRITY.getColumnName(), Long.class));
-        return evento;
+        Usuario usuario = new Usuario();
+        usuario.setUuid(readCursor(cursor, Columns._UUID.getColumnName(), String.class));
+        usuario.setNome(readCursor(cursor, Columns._NOME.getColumnName(), String.class));
+        usuario.setEmail(readCursor(cursor, Columns._EMAIL.getColumnName(), String.class));
+        usuario.setRole(readCursor(cursor, Columns._ROLE.getColumnName(), String.class));
+        usuario.setUid(readCursor(cursor, Columns._UID.getColumnName(), String.class));
+        usuario.setAccessToken(readCursor(cursor, Columns._ACCESS_TOKEN.getColumnName(), String.class));
+        usuario.setTokenType(readCursor(cursor, Columns._TOKEN_TYPE.getColumnName(), String.class));
+        usuario.setClient(readCursor(cursor, Columns._CLIENT.getColumnName(), String.class));
+        usuario.setExpiry(readCursor(cursor, Columns._EXPIRITY.getColumnName(), Long.class));
+        return usuario;
     }
 
     private long insert(SQLiteDatabase db, Usuario usuario) throws SQLException {
-        return db.insertOrThrow("usuario", null, getContentValues(usuario));
-        // TODO save esportes
+        db.beginTransaction();
+        try {
+            return db.insertOrThrow("usuario", null, getContentValues(usuario));
+            // TODO save relacionamento de esportes / pode ser feito para a proxima versão
+        } finally {
+            db.endTransaction();
+        }
     }
 
     private int update(SQLiteDatabase db, Usuario usuario) {
-        return db.update(TABLE, getContentValues(usuario),
-                Columns._UUID.getColumnName() + " = ? ", new String[]{usuario.getUuid()});
-        // TODO save esportes
+        db.beginTransaction();
+        try {
+            return db.update(TABLE, getContentValues(usuario),
+                    Columns._UUID.getColumnName() + " = ? ", new String[]{usuario.getUuid()});
+            // TODO save relacionamento de esportes / pode ser feito para a proxima versão
+        } finally {
+            db.endTransaction();
+        }
     }
 
-    public void saveUsuario(Usuario usuario) {
+    /**
+     * Save a Usuario.
+     *
+     * @param usuario The usuario to be saved.
+     * @return The saved usuario, or null if something goes wrong.
+     */
+    public Usuario save(Usuario usuario) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        if (getUsuario(db, usuario.getUuid()) == null) {
-            insert(db, usuario);
-        } else {
-            update(db, usuario);
+        try {
+            if (existsUsuario(db, usuario.getUuid())) {
+                update(db, usuario);
+            } else {
+                insert(db, usuario);
+            }
+            return getUsuario(db, usuario.getUuid());
+        } catch (Exception ex) {
+            Log.e(TAG, "Error saving usuario.", ex);
+        } finally {
+            dbHelper.close(db);
         }
-        dbHelper.close(db);
+        return null;
+    }
+
+    private boolean existsUsuario(SQLiteDatabase db, String uuid) {
+        Cursor cursor = db.rawQuery("SELECT 1 FROM " + TABLE
+                + " WHERE " + Columns._UUID.getColumnName() + " = ? ", new String[] {uuid});
+        boolean exists = cursor.getCount() > 0;
+        cursor.close();
+        return exists;
     }
 
     private Usuario getUsuario(SQLiteDatabase db, String uuid) {
@@ -135,15 +168,25 @@ public class UsuarioDAO extends AppBaseDAO {
         return usuario;
     }
 
+    /**
+     * Get the first Usuario of database.
+     *
+     * @return A object of Usuario, or null if something goes wrong.
+     */
     public Usuario getUsuario() {
-        Usuario usuario = null;
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        Cursor cursor = db.query(TABLE, null, null, null, null, null, null);
-        if (cursor.moveToFirst()) {
-            usuario = getUsuario(cursor);
+        Usuario usuario = null;
+        try {
+            Cursor cursor = db.query(TABLE, null, null, null, null, null, null);
+            if (cursor.moveToFirst()) {
+                usuario = getUsuario(cursor);
+            }
+            cursor.close();
+        } catch (Exception e) {
+            Log.e(TAG, "Error getting usuario.", e);
+        } finally {
+            dbHelper.close(db);
         }
-        cursor.close();
-        dbHelper.close(db);
         return usuario;
     }
 }

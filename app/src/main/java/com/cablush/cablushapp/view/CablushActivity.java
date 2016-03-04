@@ -3,21 +3,18 @@ package com.cablush.cablushapp.view;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.graphics.Typeface;
-import android.location.Criteria;
-import android.location.Location;
-import android.location.LocationManager;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.widget.Toast;
 
-import com.google.android.gms.appindexing.Action;
-import com.google.android.gms.appindexing.AppIndex;
+import com.cablush.cablushapp.R;
+import com.cablush.cablushapp.utils.PermissionUtils;
 import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.google.android.gms.common.api.GoogleApiClient;
 
 /**
  * Created by Jonathan on 11/11/2015.
@@ -25,9 +22,6 @@ import com.google.android.gms.common.api.GoogleApiClient;
 public abstract class CablushActivity extends AppCompatActivity {
 
     protected String TAG = getClass().getSimpleName();
-
-    private static final int PERMISSIONS_LOCATION = 901;
-    private static final int PERMISSIONS_STORAGE = 902;
 
 //    /**
 //     * ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -38,6 +32,7 @@ public abstract class CablushActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d(TAG, "onCreate()");
         Typeface custom_font = Typeface.createFromAsset(getAssets(), "fonts/PassionOne-Bold.ttf");
 
 //        // ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -50,53 +45,89 @@ public abstract class CablushActivity extends AppCompatActivity {
      *
      * @return
      */
-    boolean isGooglePlayServicesAvailable() {
-        int status = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
-        if (ConnectionResult.SUCCESS == status) {
+    public boolean isGooglePlayServicesAvailable() {
+        GoogleApiAvailability googleAPI = GoogleApiAvailability.getInstance();
+        int result = googleAPI.isGooglePlayServicesAvailable(this);
+        if (ConnectionResult.SUCCESS == result) {
             Log.d(TAG, "Google Play Services is available.");
             return true;
         } else {
-            GooglePlayServicesUtil.getErrorDialog(status, this, 0).show();
+            googleAPI.getErrorDialog(this, result, 0).show();
             return false;
         }
     }
 
     /**
-     * Get the user location based on "best provider".
+     * Callback called if Location Permissions are granted.
+     * <p>To be implemented by concrete classes that need Location Permissions.</p>
      */
-    protected void getUserLocation() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
-                && checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                && checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO - ask for permission rationale (?)
-            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, PERMISSIONS_LOCATION);
-        } else {
-            LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-            Criteria criteria = new Criteria();
-            String bestProvider = locationManager.getBestProvider(criteria, true);
-            Location location = locationManager.getLastKnownLocation(bestProvider);
-            if (location != null) {
-                onUserLocationReady(location);
+    public void onLocationPermissionGranted() {
+        /* callback - no nothing */
+    }
+
+    /**
+     * Check if the Location Permissions are granted, requesting the permissions to the user if necessary.
+     * And, call 'onLocationPermissionGranted()' on permissions granted.
+     */
+    public void checkLocationPermission() {
+        if (!PermissionUtils.checkLocationPermission(this)) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                requestPermissions(
+                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION},
+                        PermissionUtils.PERMISSIONS_LOCATION);
             }
+        } else {
+            onLocationPermissionGranted();
         }
     }
 
-    protected void onUserLocationReady(Location location) {
-        // Must be implemented if use getUserLocation() method.
-    };
+    /**
+     * Callback called if Storage Permission are granted.
+     * <p>To be implemented by concrete class that need Storage Permissions.</p>
+     */
+    public void onStoragePermissionGranted() {
+        /* callback - do nothing */
+    }
+
+    /**
+     * Check if the Storage Permissions are granted, requering the permissions to the user if necessary.
+     * And, call '
+     */
+    public void checkStoragePermission() {
+        if (!PermissionUtils.checkStoragePermission(this)) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                requestPermissions(
+                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        PermissionUtils.PERMISSIONS_STORAGE);
+            }
+        } else {
+            onStoragePermissionGranted();
+        }
+    }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode,
+                                           @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        Log.d(TAG, "onRequestPermissionsResult()");
         switch (requestCode) {
-            case PERMISSIONS_LOCATION:
+            case PermissionUtils.PERMISSIONS_LOCATION:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    getUserLocation(); // Recall the method, the permissions are now granted.
+                    onLocationPermissionGranted();
                 } else {
                     // TODO - Permission denied! Disable the functionality that depends on this permission. (?)
+                    Toast.makeText(this, R.string.ask_permissions_location, Toast.LENGTH_SHORT).show();
                 }
                 return;
-            case PERMISSIONS_STORAGE:
+            case PermissionUtils.PERMISSIONS_STORAGE:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    onStoragePermissionGranted();
+                } else {
+                    // TODO - Permission denied! Disable the functionality that depends on this permission. (?)
+                    //http://inthecheesefactory.com/blog/things-you-need-to-know-about-android-m-permission-developer-edition/en
+                    Toast.makeText(this, R.string.ask_permissions_storage, Toast.LENGTH_SHORT).show();
+                }
                 return;
         }
     }

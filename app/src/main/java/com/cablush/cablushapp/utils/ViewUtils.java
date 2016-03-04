@@ -1,21 +1,13 @@
 package com.cablush.cablushapp.utils;
 
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.cablush.cablushapp.R;
-import com.cablush.cablushapp.model.domain.Usuario;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 
 /**
  * Created by oscar on 26/12/15.
@@ -33,6 +25,9 @@ public class ViewUtils {
         return context.getString(resId, args);
     }
 
+    /**
+     * Inflate the "custom_title" layout.
+     */
     public static View getCustomTitleView(LayoutInflater inflater, String title, int iconId) {
         View view = inflater.inflate(R.layout.custom_title, null);
         ImageView iconImageView = (ImageView) view.findViewById(R.id.icon);
@@ -40,6 +35,26 @@ public class ViewUtils {
         TextView titleTextView = (TextView) view.findViewById(R.id.title);
         titleTextView.setText(title.toUpperCase());
         return view;
+    }
+
+    /**
+     * Get the codigo estado by its position in the string-array.
+     */
+    public static String getCodigoEstado(Context context, int position) {
+        return context.getResources().getStringArray(R.array.states_values)[position];
+    }
+
+    /**
+     * Get the position in the string-array of a codigo estado.
+     */
+    public static int getPositionEstado(Context context, String codigoEstado) {
+        String[] codes = context.getResources().getStringArray(R.array.states_values);
+        for (int i = 0; i < codes.length; i++) {
+            if (codes[i].equalsIgnoreCase(codigoEstado)) {
+                return i;
+            }
+        }
+        return 0;
     }
 
     /**
@@ -52,39 +67,18 @@ public class ViewUtils {
     }
 
     /**
-     * Check if the user is logged inm showing a toast if not.
+     * Mark a TextView as required.
+     *
+     * @param textView
      */
-    public static boolean checkUserLoggedIn(Context context) {
-        if (Usuario.LOGGED_USER == null) {
-            Toast.makeText(context, R.string.msg_login_required, Toast.LENGTH_SHORT).show();
-            return false;
-        }
-        return true;
+    public static void markAsRequired(TextView textView) {
+        textView.setText(String.format("%s (*)", textView.getText()));
     }
 
-    public static String getVersionName(Context context) {
-        try {
-            return context.getPackageManager().getPackageInfo(context.getPackageName(),0).versionName;
-        } catch (PackageManager.NameNotFoundException e) {
-            return "Unknown";
-        }
-    }
-
-    public static String readRawTextFile(Context context, int id) {
-        InputStream inputStream = context.getResources().openRawResource(id);
-
-        InputStreamReader in = new InputStreamReader(inputStream);
-        BufferedReader buf = new BufferedReader(in);
-
-        String line;
-
-        StringBuilder text = new StringBuilder();
-        try {
-            while (( line = buf.readLine()) != null) text.append(line);
-        } catch (IOException e) {
-            return null;
-        }
-
-        return text.toString();
+    /**
+     * Make ViewUtils a utility class by preventing instantiation.
+     */
+    private ViewUtils() {
+        throw new AssertionError();
     }
 }

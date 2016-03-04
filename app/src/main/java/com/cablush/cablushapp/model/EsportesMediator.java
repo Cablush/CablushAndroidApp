@@ -1,6 +1,7 @@
 package com.cablush.cablushapp.model;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.cablush.cablushapp.model.domain.Esporte;
@@ -21,23 +22,27 @@ public class EsportesMediator {
 
     private static final String TAG = EsportesMediator.class.getSimpleName();
 
-    private Context context;
-    private static ApiEsportes apiEsportes;
+    private ApiEsportes apiEsportes;
     private EsporteDAO esporteDAO;
 
-    public EsportesMediator(Context context) {
-        this.context = context;
+    /**
+     * Constructor.
+     */
+    public EsportesMediator(@NonNull Context context) {
         this.apiEsportes = RestServiceBuilder.createService(ApiEsportes.class);
         this.esporteDAO = new EsporteDAO(context);
     }
 
-    public void getEsportes() {
+    /**
+     * Load the Esportes from Webserver.
+     */
+    public void loadEsportes() {
         apiEsportes.getEsportes(new Callback<List<Esporte>>() {
             @Override
             public void success(List<Esporte> esportes, Response response) {
                 if (!esportes.isEmpty()) {
-                    esporteDAO.deleteEsportes();
-                    esporteDAO.saveEsportes(esportes);
+                    esporteDAO.deleteAll();
+                    esporteDAO.bulkSave(esportes);
                 }
             }
 
@@ -47,5 +52,12 @@ public class EsportesMediator {
             }
         });
 
+    }
+
+    /**
+     * Get the local stored Esportes.
+     */
+    public List<Esporte> getEsportes() {
+        return esporteDAO.getAllEsportes();
     }
 }

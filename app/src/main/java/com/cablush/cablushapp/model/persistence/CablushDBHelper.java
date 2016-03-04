@@ -3,6 +3,7 @@ package com.cablush.cablushapp.model.persistence;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 /**
@@ -13,7 +14,7 @@ public class CablushDBHelper extends SQLiteOpenHelper {
     private static final String TAG = CablushDBHelper.class.getSimpleName();
 
     private static final String DB_NAME = "CablushDB";
-    private static final int DB_VERSION = 3;
+    private static final int DB_VERSION = 4;
 
     private static CablushDBHelper instance;
 
@@ -21,7 +22,7 @@ public class CablushDBHelper extends SQLiteOpenHelper {
         super(context, DB_NAME, null, DB_VERSION);
     }
 
-    public static CablushDBHelper getInstance(Context context) {
+    public static CablushDBHelper getInstance(@NonNull Context context) {
         if (instance == null) {
             instance = new CablushDBHelper(context);
         }
@@ -47,7 +48,7 @@ public class CablushDBHelper extends SQLiteOpenHelper {
             PistaDAO.onCreate(db);
             UsuarioDAO.onCreate(db);
         } catch (Exception ex) {
-            Log.e(TAG, "Exception on onCreate()", ex);
+            Log.wtf(TAG, "Exception on onCreate()", ex);
         }
     }   
 
@@ -64,7 +65,7 @@ public class CablushDBHelper extends SQLiteOpenHelper {
             PistaDAO.onUpgrade(db, oldVersion, newVersion);
             UsuarioDAO.onUpgrade(db, oldVersion, newVersion);
         } catch (Exception ex){
-            Log.e(TAG, "Exception on onUpgrade()", ex);
+            Log.wtf(TAG, "Exception on onUpgrade()", ex);
         }
     }
 }

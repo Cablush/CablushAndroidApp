@@ -9,4 +9,7 @@ public class AppException extends Exception {
         super(message);
     }
 
+    public AppException(String detailMessage, Throwable throwable) {
+        super(detailMessage, throwable);
+    }
 }

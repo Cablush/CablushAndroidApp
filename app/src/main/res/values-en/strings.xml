@@ -10,17 +10,20 @@
     <string name="drawer_item_stores">Stores</string>
     <string name="drawer_item_events">Events</string>
     <string name="drawer_item_spots">Spots</string>
+    <string name="drawer_item_my_stores">My Stores</string>
+    <string name="drawer_item_my_events">My Events</string>
+    <string name="drawer_item_my_spots">My Spots</string>
 
     <!-- Buttons / Actions -->
     <string name="btn_cancel">Cancel</string>
-    <string name="btn_register">Add</string>
+    <string name="btn_register">Register</string>
     <string name="btn_login">Login</string>
         <string name="btn_search">Search</string>
     <string name="btn_save">Save</string>
 
     <!--Dialog Login/Register -->
     <string name="title_login">Login</string>
-    <string name="title_register">Add new</string>
+    <string name="title_register">Register new</string>
     <string name="txt_name">Name</string>
     <string name="txt_email">Email</string>
     <string name="txt_password">Pass</string>
@@ -33,8 +36,8 @@
     <string name="txt_by_name">By Name</string>
 
     <!-- Dialog Cadastros -->
-    <string name="title_cadastrar">Add %s</string>
-    <string name="txt_cadastrar">Add</string>
+    <string name="title_cadastrar">Register %s</string>
+    <string name="txt_cadastrar">Register</string>
 
     <string name="title_endereco">Address</string>
     <string name="title_horario_funcionamento">Business hours</string>
@@ -86,7 +89,7 @@
 
     <!-- Sports selection -->
     <string-array name="sports">
-        <item>Selecione&#8230;</item>
+        <item>Select&#8230;</item>
         <item>Athletics</item>
         <item>Auto Racing</item>
         <item>Bike</item>
@@ -98,7 +101,7 @@
 
     <!-- States selection -->
     <string-array name="states">
-        <item>Selecione&#8230;</item>
+        <item>Select&#8230;</item>
         <item>Acre</item>
         <item>Alagoas</item>
         <item>Amapá</item>
@@ -184,4 +187,91 @@
     <string name="error_register">Fail to do the place register! Try again.</string>
     <string name="msg_login_required">Please login.</string>
     <string name="error_no_connection">Fail to reach the server.Check out your connection and try again!</string>
+
+    <!-- Buttons / Actions -->
+    <string name="btn_gallery">Gallery</string>
+    <string name="btn_picture">Picture</string>
+    <string name="btn_yes">Yes</string>
+    <string name="btn_no">No</string>
+
+    <!-- Cadastros -->
+    <string name="txt_new_loja">New Store</string>
+    <string name="txt_new_evento">New Event</string>
+    <string name="txt_new_pista">New Spot</string>
+
+    <!--Cadastros Local -->
+    <string name="txt_logo">Logo</string>
+    <string name="txt_logotipo">Logotipo</string>
+    <string name="txt_foto">Take Picture</string>
+    <string name="txt_galeria">Gallery</string>
+    <string name="txt_select_picture">Select a Picture</string>
+    <string name="txt_select_location">Select a place in map.</string>
+
+    <!-- Cadastros Evento -->
+    <string name="txt_hora">Hour</string>
+    <string name="txt_minuto">Minute</string>
+    <string name="txt_flyer">Flyer</string>
+    <string name="txt_horario">Timetable</string>
+
+    <!-- Cadastros Horario Funcionamento -->
+    <string name="txt_horarios">Timetable</string>
+    <string name="txt_inicio">Start</string>
+    <string name="txt_fim">End</string>
+    <string name="txt_detalhes">Detail</string>
+
+    <string name="seg">M</string>
+    <string name="ter">T</string>
+    <string name="qua">W</string>
+    <string name="qui">Th</string>
+    <string name="sex">F</string>
+    <string name="sab">St</string>
+    <string name="dom">S</string>
+
+    <string-array name="dias_options">
+        <item>Mon</item>
+        <item>Tue</item>
+        <item>Wed</item>
+        <item>Thu</item>
+        <item>Fri</item>
+        <item>Sat</item>
+        <item>Sun</item>
+    </string-array>
+
+
+
+    <!-- Mensagens de pesquisa -->
+    <string name="msg_search_off_line">No conection, showing cache data.</string>
+    <string name="msg_search_error">Server no reachable,showing cache data.</string>
+
+    <!-- Mensagens de cadastros -->
+    <string name="msg_set_address_manually">Address not found, please fill data manually.</string>
+    <string name="msg_check_address">Address found, please check data.</string>
+    <string name="msg_confirm_no_save">Discard unsaved changes?Descartar alterações não salvas?</string>
+    <string name="msg_required">Required field!</string>
+    <string name="msg_select_one">Select one option.</string>
+    <string name="msg_invalid_web_url">Invalid url.</string>
+    <string name="msg_invalid_phone">Infalid phone number.</string>
+    <string name="msg_invalid_loja">Check data in tab store!</string>
+    <string name="msg_invalid_pista">Check data in spot tab!</string>
+    <string name="msg_invalid_evento">Check data in event tab!</string>
+    <string name="msg_invalid_mapa">Select a location in map!</string>
+    <string name="msg_invalid_local">Check data in addres tab!</string>
+    <string name="msg_invalid_horario">Check data in timetable tab!</string>
+    <string name="msg_save_on_line">Location successfully saved</string>
+    <string name="msg_save_off_line">No conection, place saved in cache.</string>
+    <string name="msg_save_error">Connection error, place saved in cache.</string>
+
+
+    <!-- Mensagens de fotos/galeria -->
+    <string name="error_no_camera_found">Camera not found.</string>
+    <string name="error_getting_picture">Error getting picture.</string>
+    <string name="error_loading_image">Picture load error.</string>
+
+    <!-- Mensagens do serviço de localização -->
+    <string name="error_no_location_data_provided">Location no informed.</string>
+    <string name="error_service_not_available">Search address service not available.</string>
+    <string name="error_invalid_lat_long_used">Invalid location.</string>
+    <string name="error_no_address_found">Address not found.</string>
+    <string name="msg_address_found">Address found!</string>
+
 </resources>

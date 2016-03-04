@@ -1,13 +1,16 @@
 package com.cablush.cablushapp.presenter;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
-import com.cablush.cablushapp.R;
+import com.cablush.cablushapp.model.EsportesMediator;
 import com.cablush.cablushapp.model.persistence.UsuarioDAO;
 import com.cablush.cablushapp.model.domain.Usuario;
 import com.cablush.cablushapp.model.rest.ApiUsuario;
 import com.cablush.cablushapp.model.rest.RestServiceBuilder;
+import com.cablush.cablushapp.model.rest.dto.ResponseDTO;
+import com.cablush.cablushapp.model.services.ConnectivityChangeReceiver;
 
 import java.lang.ref.WeakReference;
 import java.util.List;
@@ -25,88 +28,110 @@ public class LoginPresenter {
     private static final String TAG = LoginPresenter.class.getSimpleName();
 
     /**
+     * Responses for login.
+     */
+    public enum LoginResponse {
+        SUCCESS, ERROR
+    }
+
+    /**
      * Interface to be implemented by this Presenter's client.
      */
     public interface LoginView {
-        void onLoginSuccess();
-        void onLoginError(String message);
+        void onLoginResponse(LoginResponse response);
     }
 
-    private WeakReference<LoginView> mView;
     private WeakReference<Context> mContext;
+    private WeakReference<LoginView> mView;
     private ApiUsuario apiUsuario;
     private UsuarioDAO usuarioDAO;
 
+    private EsportesMediator esportesMediator;
+
     /**
-     * Constructor
-     *
-     * @param view
-     * @param context
+     * Constructor.
      */
-    public LoginPresenter(LoginView view, Context context) {
-        this.mView = new WeakReference<>(view);
+    public LoginPresenter(@NonNull LoginView view, @NonNull Context context) {
         this.mContext = new WeakReference<>(context);
+        this.mView = new WeakReference<>(view);
         this.apiUsuario = RestServiceBuilder.createService(ApiUsuario.class);
         this.usuarioDAO = new UsuarioDAO(context);
+        this.esportesMediator  = new EsportesMediator(context);
     }
 
+    /**
+     * Do Login on server.
+     */
     public void doLogin(String email, String senha) {
-        apiUsuario.doLogin(email, senha, new Callback<Usuario>() {
+        apiUsuario.doLogin(email, senha, new Callback<ResponseDTO<Usuario>>() {
             @Override
-            public void success(Usuario usuario, Response response) {
-                usuario = updateAuthData(usuario, response);
-                usuarioDAO.saveUsuario(usuario);
+            public void success(ResponseDTO<Usuario> dto, Response response) {
+                Usuario usuario = updateAuthData(dto.getData(), response);
+                usuarioDAO.save(usuario);
                 Usuario.LOGGED_USER = usuario;
                 LoginView view = mView.get();
                 if (view != null) {
-                    view.onLoginSuccess();
+                    view.onLoginResponse(LoginResponse.SUCCESS);
                 }
+                esportesMediator.loadEsportes();
             }
 
             @Override
             public void failure(RetrofitError error) {
                 Log.e(TAG, "Error on user login. " + error.getMessage());
+                Usuario.LOGGED_USER = null;
                 LoginView view = mView.get();
-                Context context = mContext.get();
-                if (view != null && context != null) {
-                    view.onLoginError(context.getString(R.string.error_login));
+                if (view != null) {
+                    view.onLoginResponse(LoginResponse.ERROR);
                 }
             }
         });
     }
 
+    /**
+     * Check if the last login is still valid.
+     */
     public void checkLogin() {
         Usuario usuario = usuarioDAO.getUsuario();
         if (usuario != null) {
-            apiUsuario.doValidateToken(usuario.getUid(), usuario.getAccessToken(), usuario.getClient(), new Callback<Usuario>() {
-                @Override
-                public void success(Usuario usuario, Response response) {
-                    usuario = updateAuthData(usuario, response);
-                    usuarioDAO.saveUsuario(usuario);
-                    Usuario.LOGGED_USER = usuario;
-                    LoginView view = mView.get();
-                    if (view != null) {
-                        view.onLoginSuccess();
+            Usuario.LOGGED_USER = usuario;
+            // Only validate the token if there is connection, allowing offline registries
+            if (ConnectivityChangeReceiver.isNetworkAvailable(mContext.get())) {
+                apiUsuario.doValidateToken(new Callback<ResponseDTO<Usuario>>() {
+                    @Override
+                    public void success(ResponseDTO<Usuario> dto, Response response) {
+                        Usuario usuario = updateAuthData(dto.getData(), response);
+                        usuarioDAO.save(usuario);
+                        Usuario.LOGGED_USER = usuario;
+                        LoginView view = mView.get();
+                        if (view != null) {
+                            view.onLoginResponse(LoginResponse.SUCCESS);
+                        }
                     }
-                }
 
-                @Override
-                public void failure(RetrofitError error) {
-                    Log.e(TAG, "Error on user check. " + error.getMessage());
-                    LoginView view = mView.get();
-                    Context context = mContext.get();
-                    if (view != null && context != null) {
-                        view.onLoginError(context.getString(R.string.error_login));
+                    @Override
+                    public void failure(RetrofitError error) {
+                        Log.e(TAG, "Error on user check. " + error.getMessage());
+                        Usuario.LOGGED_USER = null; // FIXME force (re)login at any http error?
+                        LoginView view = mView.get();
+                        if (view != null) {
+                            view.onLoginResponse(LoginResponse.ERROR);
+                        }
                     }
-                }
-            });
+                });
+            }
+        } else {
+            LoginView view = mView.get();
+            if (view != null) {
+                view.onLoginResponse(LoginResponse.ERROR);
+            }
         }
     }
 
     private Usuario updateAuthData(Usuario usuario, Response response) {
         List<Header> headerList = response.getHeaders();
         for (Header header : headerList) {
-            switch (header.getName()){
+            switch (header.getName().toLowerCase()){
                 case RestServiceBuilder.ACCESS_TOKEN:
                     usuario.setAccessToken(header.getValue());
                     break;
