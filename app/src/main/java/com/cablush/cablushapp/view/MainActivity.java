@@ -27,7 +27,6 @@ import com.cablush.cablushapp.view.dialogs.LocalInfoDialog;
 import com.cablush.cablushapp.view.dialogs.RegisterDialog;
 import com.cablush.cablushapp.view.drawer.DrawerActivityConfiguration;
 import com.cablush.cablushapp.view.dialogs.LoginDialog;
-import com.cablush.cablushapp.view.dialogs.SearchDialog;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -163,13 +162,16 @@ public class MainActivity extends AbstractDrawerActivity implements OnMapReadyCa
                 }
                 return false;
             case R.id.drawer_search_lojas:
-                SearchDialog.showDialog(getFragmentManager(), SearchDialog.TYPE.LOJA);
+                //SearchDialog.showDialog(getFragmentManager(), SearchDialog.TYPE.LOJA);
+                searchPresenter.getLojas(null, null, null);
                 return true;
             case R.id.drawer_search_eventos:
-                SearchDialog.showDialog(getFragmentManager(), SearchDialog.TYPE.EVENTO);
+                //SearchDialog.showDialog(getFragmentManager(), SearchDialog.TYPE.EVENTO);
+                searchPresenter.getEventos(null, null, null);
                 return true;
             case R.id.drawer_search_pistas:
-                SearchDialog.showDialog(getFragmentManager(), SearchDialog.TYPE.PISTA);
+                //SearchDialog.showDialog(getFragmentManager(), SearchDialog.TYPE.PISTA);
+                searchPresenter.getPistas(null, null, null);
                 return true;
             case R.id.drawer_my_lojas:
                 return getMyLojas();
