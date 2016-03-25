@@ -8,6 +8,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.cablush.cablushapp.R;
+import com.cablush.cablushapp.model.domain.Evento;
+import com.cablush.cablushapp.model.domain.Localizavel;
+import com.cablush.cablushapp.model.domain.Loja;
+import com.cablush.cablushapp.model.domain.Pista;
 
 /**
  * Created by oscar on 26/12/15.
@@ -68,11 +72,25 @@ public class ViewUtils {
 
     /**
      * Mark a TextView as required.
-     *
-     * @param textView
      */
     public static void markAsRequired(TextView textView) {
         textView.setText(String.format("%s (*)", textView.getText()));
+    }
+
+    /**
+     * Get the mark icon by the Localizavel.
+     */
+    public static int getMarkByLocalizavel(Localizavel localizavel) {
+        if (localizavel.isRemote() && !localizavel.isChanged()) {
+            if (localizavel instanceof Loja) {
+                return R.drawable.ic_mark_cablush_green;
+            } else if (localizavel instanceof Evento) {
+                return R.drawable.ic_mark_cablush_blue;
+            } else if (localizavel instanceof Pista) {
+                return R.drawable.ic_mark_cablush_orange;
+            }
+        }
+        return R.drawable.ic_mark_cablush_grey;
     }
 
     /**

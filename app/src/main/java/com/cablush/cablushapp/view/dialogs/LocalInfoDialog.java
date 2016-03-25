@@ -59,7 +59,7 @@ public class LocalInfoDialog<L extends Localizavel> extends DialogFragment {
         // Set the dialog title
         builder.setCustomTitle(ViewUtils.getCustomTitleView(getActivity().getLayoutInflater(),
                 mLocalizavel.get().getNome(),
-                R.drawable.ic_mark_cablush_orange));
+                ViewUtils.getMarkByLocalizavel(mLocalizavel.get())));
 
         // Create the AlertDialog object and return it
         return builder.create();
