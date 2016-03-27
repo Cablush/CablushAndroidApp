@@ -33,7 +33,7 @@ import java.util.Calendar;
 /**
  * Created by jonathan on 10/02/16.
  */
-public class EventoFragment extends CablushFragment {
+public class EventoFragment extends CablushFragment implements View.OnClickListener {
 
     private static final String EVENTO_BUNDLE_KEY = "EVENTO_BUNDLE_KEY";
 
@@ -109,60 +109,39 @@ public class EventoFragment extends CablushFragment {
                 flyerImageView.getWidth(), flyerImageView.getHeight()));
     }
 
-
-    private void initializeView(View view) {
-        nomeEditText = (EditText) view.findViewById(R.id.editTextNome);
-        ViewUtils.markAsRequired((TextView) view.findViewById(R.id.textViewNome));
-        websiteEditText = (EditText) view.findViewById(R.id.editTextWebsite);
-
-        dataInicioEditText = (EditText) view.findViewById(R.id.editTextDataInicio);
-        ViewUtils.markAsRequired((TextView) view.findViewById(R.id.textViewDataInicio));
-        dataInicioEditText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final Calendar calendar = Calendar.getInstance();
+    @Override
+    public void onClick(View v) {
+        final Calendar calendar = Calendar.getInstance();
+        switch (v.getId()) {
+            case R.id.editTextDataInicio:
                 calendar.setTime(DateTimeUtils.parseDate(dataInicioEditText.getText().toString()));
                 DatePickerFragmentDialog.showDialog(getActivity().getFragmentManager(),
                         calendar,
                         new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                        calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                        calendar.set(Calendar.MONTH,monthOfYear);
-                        calendar.set(Calendar.YEAR,year);
-                        dataInicioEditText.setText(DateTimeUtils.formatDate(calendar.getTime()));
-                    }
-                });
-            }
-        });
-
-        dataFimEditText = (EditText) view.findViewById(R.id.editTextDataFim);
-        ViewUtils.markAsRequired((TextView) view.findViewById(R.id.textViewDataFim));
-        dataFimEditText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final Calendar calendar = Calendar.getInstance();
+                            @Override
+                            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                                calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                                calendar.set(Calendar.MONTH,monthOfYear);
+                                calendar.set(Calendar.YEAR,year);
+                                dataInicioEditText.setText(DateTimeUtils.formatDate(calendar.getTime()));
+                            }
+                        });
+                break;
+            case R.id.editTextDataFim:
                 calendar.setTime(DateTimeUtils.parseDate(dataFimEditText.getText().toString()));
                 DatePickerFragmentDialog.showDialog(getActivity().getFragmentManager(),
                         calendar,
                         new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                        calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                        calendar.set(Calendar.MONTH,monthOfYear);
-                        calendar.set(Calendar.YEAR,year);
-                        dataFimEditText.setText(DateTimeUtils.formatDate(calendar.getTime()));
-                    }
-                });
-            }
-        });
-
-        horarioEditText = (EditText) view.findViewById(R.id.editTextHorario);
-        ViewUtils.markAsRequired((TextView) view.findViewById(R.id.textViewHorario));
-        horarioEditText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final Calendar calendar = Calendar.getInstance();
+                            @Override
+                            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                                calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                                calendar.set(Calendar.MONTH,monthOfYear);
+                                calendar.set(Calendar.YEAR,year);
+                                dataFimEditText.setText(DateTimeUtils.formatDate(calendar.getTime()));
+                            }
+                        });
+                break;
+            case R.id.editTextHorario:
                 calendar.setTime(DateTimeUtils.parseDate(horarioEditText.getText().toString()));
                 TimePickerFragmentDialog.showDialog(getActivity().getFragmentManager(),
                         calendar, new TimePickerDialog.OnTimeSetListener() {
@@ -173,29 +152,47 @@ public class EventoFragment extends CablushFragment {
                                 horarioEditText.setText(DateTimeUtils.formatTime(calendar.getTime()));
                             }
                         });
-            }
-        });
+                break;
+            case R.id.buttonGallery:
+                dispatchLoadPictureIntent();
+                break;
+            case R.id.buttonPicture:
+                dispatchTakePictureIntent();
+                break;
+        }
+    }
+
+    private void initializeView(View view) {
+        nomeEditText = (EditText) view.findViewById(R.id.editTextNome);
+        ViewUtils.markAsRequired((TextView) view.findViewById(R.id.textViewNome));
+        websiteEditText = (EditText) view.findViewById(R.id.editTextWebsite);
+
+        dataInicioEditText = (EditText) view.findViewById(R.id.editTextDataInicio);
+        ViewUtils.markAsRequired((TextView) view.findViewById(R.id.textViewDataInicio));
+        dataInicioEditText.setOnClickListener(this);
+
+        dataFimEditText = (EditText) view.findViewById(R.id.editTextDataFim);
+        ViewUtils.markAsRequired((TextView) view.findViewById(R.id.textViewDataFim));
+        dataFimEditText.setOnClickListener(this);
+
+        horarioEditText = (EditText) view.findViewById(R.id.editTextHorario);
+        ViewUtils.markAsRequired((TextView) view.findViewById(R.id.textViewHorario));
+        horarioEditText.setOnClickListener(this);
 
         facebookEditText = (EditText) view.findViewById(R.id.editTextFacebook);
+
         // gallery button
         galleryImageButton = (ImageButton) view.findViewById(R.id.buttonGallery);
-        galleryImageButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dispatchLoadPictureIntent();
-            }
-        });
+        galleryImageButton.setOnClickListener(this);
+
         // picture button
         pictureImageButton = (ImageButton) view.findViewById(R.id.buttonPicture);
-        pictureImageButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dispatchTakePictureIntent();
-            }
-        });
+        pictureImageButton.setOnClickListener(this);
+
         flyerImageView = (ImageView) view.findViewById(R.id.imageViewFlyer);
         descricaoEditText = (EditText) view.findViewById(R.id.editTextDescricao);
         ViewUtils.markAsRequired((TextView) view.findViewById(R.id.textViewDescricao));
+
         // esportes
         esportesMultiComplete = (MultiAutoCompleteTextView) view
                 .findViewById(R.id.multiAutoCompleteEsportes);

@@ -24,7 +24,7 @@ import com.cablush.cablushapp.utils.ViewUtils;
 /**
  * Created by oscar on 06/02/16.
  */
-public class LojaFragment extends CablushFragment {
+public class LojaFragment extends CablushFragment implements View.OnClickListener {
 
     private static final String LOJA_BUNDLE_KEY = "LOJA_BUNDLE_KEY";
 
@@ -104,6 +104,18 @@ public class LojaFragment extends CablushFragment {
                 logoImageView.getWidth(), logoImageView.getHeight()));
     }
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.buttonGallery:
+                dispatchLoadPictureIntent();
+                break;
+            case R.id.buttonPicture:
+                checkStoragePermission();
+                break;
+        }
+    }
+
     private void initializeView(View view) {
         ViewUtils.markAsRequired((TextView) view.findViewById(R.id.textViewNome));
         nomeEditText = (EditText) view.findViewById(R.id.editTextNome);
@@ -111,25 +123,19 @@ public class LojaFragment extends CablushFragment {
         emailEditText = (EditText) view.findViewById(R.id.editTextEmail);
         websiteEditText = (EditText) view.findViewById(R.id.editTextWebsite);
         facebookEditText = (EditText) view.findViewById(R.id.editTextFacebook);
+
         // gallery button
         galleryImageButton = (ImageButton) view.findViewById(R.id.buttonGallery);
-        galleryImageButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dispatchLoadPictureIntent();
-            }
-        });
+        galleryImageButton.setOnClickListener(this);
+
         // picture button
         pictureImageButton = (ImageButton) view.findViewById(R.id.buttonPicture);
-        pictureImageButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                checkStoragePermission();
-            }
-        });
+        pictureImageButton.setOnClickListener(this);
+
         logoImageView = (ImageView) view.findViewById(R.id.imageViewLogo);
         ViewUtils.markAsRequired((TextView) view.findViewById(R.id.textViewDescricao));
         descricaoEditText = (EditText) view.findViewById(R.id.editTextDescricao);
+
         // esportes
         ViewUtils.markAsRequired((TextView) view.findViewById(R.id.textViewEsportes));
         esportesMultiComplete = (MultiAutoCompleteTextView) view

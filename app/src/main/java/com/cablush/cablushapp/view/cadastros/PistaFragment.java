@@ -24,7 +24,7 @@ import com.cablush.cablushapp.utils.ViewUtils;
 /**
  * Created by jonathan on 11/02/16.
  */
-public class PistaFragment extends CablushFragment {
+public class PistaFragment extends CablushFragment implements View.OnClickListener {
 
     private static final String PISTA_BUNDLE_KEY = "PISTA_BUNDLE_KEY";
 
@@ -96,31 +96,37 @@ public class PistaFragment extends CablushFragment {
                 fotoImageView.getWidth(), fotoImageView.getHeight()));
     }
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.buttonGallery:
+                dispatchLoadPictureIntent();
+                break;
+            case R.id.buttonPicture:
+                dispatchTakePictureIntent();
+                break;
+        }
+    }
+
     private void initializeView(View view) {
         nomeEditText = (EditText) view.findViewById(R.id.editTextNome);
         ViewUtils.markAsRequired((TextView) view.findViewById(R.id.textViewNome));
 
         websiteEditText = (EditText) view.findViewById(R.id.editTextWebsite);
         facebookEditText = (EditText) view.findViewById(R.id.editTextFacebook);
+
         // gallery button
         galleryImageButton = (ImageButton) view.findViewById(R.id.buttonGallery);
-        galleryImageButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dispatchLoadPictureIntent();
-            }
-        });
+        galleryImageButton.setOnClickListener(this);
+
         // picture button
         pictureImageButton = (ImageButton) view.findViewById(R.id.buttonPicture);
-        pictureImageButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dispatchTakePictureIntent();
-            }
-        });
+        pictureImageButton.setOnClickListener(this);
+
         fotoImageView = (ImageView) view.findViewById(R.id.imageViewLogo);
         descricaoEditText = (EditText) view.findViewById(R.id.editTextDescricao);
         ViewUtils.markAsRequired((TextView) view.findViewById(R.id.textViewDescricao));
+
         // esportes
         esportesMultiComplete = (MultiAutoCompleteTextView) view
                 .findViewById(R.id.multiAutoCompleteEsportes);

@@ -32,7 +32,8 @@ import java.lang.ref.WeakReference;
 /**
  * Created by oscar on 29/12/15.
  */
-public class LocalInfoDialog<L extends Localizavel> extends DialogFragment {
+public class LocalInfoDialog<L extends Localizavel> extends DialogFragment
+        implements View.OnClickListener {
 
     private static final String TAG = LocalInfoDialog.class.getSimpleName();
 
@@ -63,6 +64,32 @@ public class LocalInfoDialog<L extends Localizavel> extends DialogFragment {
 
         // Create the AlertDialog object and return it
         return builder.create();
+    }
+
+    @Override
+    public void onClick(View v) {
+        Localizavel localizavel = mLocalizavel.get();
+        switch (v.getId()) {
+            case R.id.imageButtonDirections:
+                MapUtils.openMapsNavigation(getActivity(),localizavel.getLocal().getLatLng());
+                break;
+            case R.id.imageButtonEdit:
+                if (localizavel instanceof Loja) {
+                    getActivity().startActivityForResult(CadastroLojaActivity
+                                    .makeIntent(getActivity(), (Loja) localizavel),
+                            MainActivity.REQUEST_CADASTRO_LOJA);
+                } else if (localizavel instanceof Evento) {
+                    getActivity().startActivityForResult(CadastroEventoActivity
+                                    .makeIntent(getActivity(), (Evento) localizavel),
+                            MainActivity.REQUEST_CADASTRO_EVENTO);
+                } else if (localizavel instanceof Pista) {
+                    getActivity().startActivityForResult(CadastroPistaActivity
+                                    .makeIntent(getActivity(), (Pista) localizavel),
+                            MainActivity.REQUEST_CADASTRO_PISTA);
+                }
+                LocalInfoDialog.this.dismiss();
+                break;
+        }
     }
 
     private View initializeView() {
@@ -145,12 +172,7 @@ public class LocalInfoDialog<L extends Localizavel> extends DialogFragment {
 
         // Directions Button
         ImageButton directionsButton = (ImageButton) view.findViewById(R.id.imageButtonDirections);
-        directionsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                MapUtils.openMapsNavigation(getActivity(), localizavel.getLocal().getLatLng());
-            }
-        });
+        directionsButton.setOnClickListener(this);
 
         // Edit Button
         ImageButton editButton = (ImageButton) view.findViewById(R.id.imageButtonEdit);
@@ -158,25 +180,7 @@ public class LocalInfoDialog<L extends Localizavel> extends DialogFragment {
                 || !Usuario.LOGGED_USER.getUuid().equals(localizavel.getResponsavel())) {
             editButton.setVisibility(View.GONE);
         } else {
-            editButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (localizavel instanceof Loja) {
-                        getActivity().startActivityForResult(CadastroLojaActivity
-                                .makeIntent(getActivity(), (Loja) localizavel),
-                                MainActivity.REQUEST_CADASTRO_LOJA);
-                    } else if (localizavel instanceof Evento) {
-                        getActivity().startActivityForResult(CadastroEventoActivity
-                                .makeIntent(getActivity(), (Evento) localizavel),
-                                MainActivity.REQUEST_CADASTRO_EVENTO);
-                    } else if (localizavel instanceof Pista) {
-                        getActivity().startActivityForResult(CadastroPistaActivity
-                                .makeIntent(getActivity(), (Pista) localizavel),
-                                MainActivity.REQUEST_CADASTRO_PISTA);
-                    }
-                    LocalInfoDialog.this.dismiss();
-                }
-            });
+            editButton.setOnClickListener(this);
         }
 
         // TODO show esportes icons (?)
