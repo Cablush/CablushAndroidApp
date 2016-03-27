@@ -50,7 +50,6 @@ public abstract class AbstractDrawerActivity extends CablushActivity {
         });
         View headerView = navigationView.inflateHeaderView(navConf.getHeaderId());
         headerView.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View v) {
                 onNavItemSelected(v.getId());

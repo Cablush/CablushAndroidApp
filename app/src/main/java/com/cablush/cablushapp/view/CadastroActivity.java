@@ -117,7 +117,6 @@ public abstract class CadastroActivity<T> extends CablushActivity {
                 .setNegativeButton(R.string.btn_no, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        // Do nothing.
                     }
                 }).show();
     }
