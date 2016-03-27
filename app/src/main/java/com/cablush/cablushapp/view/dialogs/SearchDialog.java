@@ -95,13 +95,13 @@ public class SearchDialog extends DialogFragment {
 
                 switch (searchType) {
                     case LOJA:
-                        mView.get().getSearchPresenter().getLojas(nome, estado, esporte);
+                        //mView.get().getSearchPresenter().getLojas(nome, estado, esporte);
                         break;
                     case EVENTO:
-                        mView.get().getSearchPresenter().getEventos(nome, estado, esporte);
+                        //mView.get().getSearchPresenter().getEventos(nome, estado, esporte);
                         break;
                     case PISTA:
-                        mView.get().getSearchPresenter().getPistas(nome, estado, esporte);
+                        //mView.get().getSearchPresenter().getPistas(nome, estado, esporte);
                         break;
                     default:
                         Log.e(TAG, "Invalid search type!");

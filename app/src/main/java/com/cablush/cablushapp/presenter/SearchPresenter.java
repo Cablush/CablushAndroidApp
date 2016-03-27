@@ -27,7 +27,6 @@ public class SearchPresenter implements LojasMediator.LojasMediatorListener,
      * Interface to be implemented by this Presenter's client.
      */
     public interface SearchView {
-        SearchPresenter getSearchPresenter();
         void onSearchResult(OperationResult result, List<? extends Localizavel> localizaveis);
     }
 
