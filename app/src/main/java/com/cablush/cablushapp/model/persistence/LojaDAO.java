@@ -153,6 +153,7 @@ public class LojaDAO extends AppBaseDAO {
     private long insert(SQLiteDatabase db, Loja loja) {
         db.beginTransaction();
         try {
+            // save loja
             long rowID = db.insertOrThrow(TABLE, null, getContentValues(loja));
             // save local
             loja.getLocal().setUuidLocalizavel(loja.getUuid());

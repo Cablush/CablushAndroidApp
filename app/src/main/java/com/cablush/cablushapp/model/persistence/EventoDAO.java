@@ -163,6 +163,7 @@ public class EventoDAO extends AppBaseDAO {
     private long insert(SQLiteDatabase db, Evento evento) {
         db.beginTransaction();
         try {
+            // save evento
             long rowID = db.insertOrThrow(TABLE, null, getContentValues(evento));
             // save local
             evento.getLocal().setUuidLocalizavel(evento.getUuid());
