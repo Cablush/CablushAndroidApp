@@ -3,7 +3,6 @@ package com.cablush.cablushapp.model.domain;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,6 +25,9 @@ public class Pista implements Localizavel {
 
     @Expose
     private String facebook;
+
+    @Expose
+    private String video;
 
     @Expose(serialize = false)
     @SerializedName("foto_url")
@@ -116,6 +118,14 @@ public class Pista implements Localizavel {
 
     public void setFacebook(String facebook) {
         this.facebook = facebook;
+    }
+
+    public String getVideo() {
+        return video;
+    }
+
+    public void setVideo(String video) {
+        this.video = video;
     }
 
     public String getFoto() {

@@ -28,6 +28,7 @@ public class PistaDAO extends AppBaseDAO {
         _DESCRICAO("descricao", "TEXT", false),
         _WEBSITE("website", "TEXT", false),
         _FACEBOOK("facebook", "TEXT", false),
+        _VIDEO("video", "TEXT", false),
         _FOTO("foto", "TEXT", false),
         _FUNDO("fundo", "INTEGER", false),
         _RESPONSAVEL_UUID("responsavel_uuid", "TEXT", false),
@@ -97,6 +98,7 @@ public class PistaDAO extends AppBaseDAO {
         values.put(Columns._DESCRICAO.getColumnName(), pista.getDescricao());
         values.put(Columns._WEBSITE.getColumnName(), pista.getWebsite());
         values.put(Columns._FACEBOOK.getColumnName(), pista.getFacebook());
+        values.put(Columns._VIDEO.getColumnName(), pista.getVideo());
         values.put(Columns._FOTO.getColumnName(), pista.getFoto());
         values.put(Columns._FUNDO.getColumnName(), pista.getFundo());
         values.put(Columns._RESPONSAVEL_UUID.getColumnName(), pista.getResponsavel());
@@ -122,6 +124,9 @@ public class PistaDAO extends AppBaseDAO {
         pista.setFacebook(readCursor(cursor,
                 byColumnAlias ? Columns._FACEBOOK.getColumnAlias() : Columns._FACEBOOK.getColumnName(),
                 String.class));
+        pista.setVideo(readCursor(cursor,
+                byColumnAlias ? Columns._VIDEO.getColumnAlias() : Columns._VIDEO.getColumnName(),
+                String.class));
         pista.setFoto(readCursor(cursor,
                 byColumnAlias ? Columns._FOTO.getColumnAlias() : Columns._FOTO.getColumnName(),
                 String.class));
@@ -143,6 +148,7 @@ public class PistaDAO extends AppBaseDAO {
     private long insert(SQLiteDatabase db, Pista pista) {
         db.beginTransaction();
         try {
+            // save pista
             long rowID = db.insertOrThrow(TABLE, null, getContentValues(pista));
             // save local
             pista.getLocal().setUuidLocalizavel(pista.getUuid());
