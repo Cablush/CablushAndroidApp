@@ -20,23 +20,28 @@ public class MapUtils {
     public static final int DEFAULT_ZOOM = 15;
 
     /**
-     * Set the user location on the provided GoogleMap based on "best provider".
-     * @param googleMap
-     * @return
+     * Center the map in the provide location.
      */
-    public static Location setUserLocation(Activity activity, GoogleMap googleMap) {
+    private static void centerMap(GoogleMap googleMap, Location location) {
+        googleMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(location.getLatitude(), location.getLongitude())));
+        googleMap.animateCamera(CameraUpdateFactory.zoomTo(DEFAULT_ZOOM));
+    }
+
+    /**
+     * Set the user location on the provided GoogleMap based on "best provider".
+     */
+    public static void setUserLocation(Activity activity, final GoogleMap googleMap) {
         if (PermissionUtils.checkLocationPermission(activity)) { // Sanity check
             LocationManager locationManager = (LocationManager) activity.getSystemService(Context.LOCATION_SERVICE);
             Criteria criteria = new Criteria();
             String bestProvider = locationManager.getBestProvider(criteria, true);
-            Location location = locationManager.getLastKnownLocation(bestProvider);
-            if (location != null) {
-                googleMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(location.getLatitude(), location.getLongitude())));
-                googleMap.animateCamera(CameraUpdateFactory.zoomTo(DEFAULT_ZOOM));
-                return location;
+            if (bestProvider != null) {
+                Location location = locationManager.getLastKnownLocation(bestProvider);
+                if (location != null) {
+                    centerMap(googleMap, location);
+                }
             }
         }
-        return null;
     }
 
     /**
