@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <string name="app_name">CABLUSH</string>
 
     <!-- Drawer Menu -->
@@ -18,12 +17,20 @@
     <string name="btn_cancel">Cancel</string>
     <string name="btn_register">Register</string>
     <string name="btn_login">Login</string>
-        <string name="btn_search">Search</string>
+    <string name="btn_login_google">Login with Google</string>
+    <string name="com_facebook_loginview_log_in_button_long">Login with Facebook</string>
+    <string name="btn_reset_password">Reset Password</string>
+    <string name="btn_search">Search</string>
     <string name="btn_save">Save</string>
+    <string name="btn_gallery">Gallery</string>
+    <string name="btn_picture">Picture</string>
+    <string name="btn_yes">Yes</string>
+    <string name="btn_no">No</string>
 
     <!--Dialog Login/Register -->
     <string name="title_login">Login</string>
     <string name="title_register">Register new</string>
+    <string name="txt_login_email">Login with Email</string>
     <string name="txt_name">Name</string>
     <string name="txt_email">Email</string>
     <string name="txt_password">Pass</string>
@@ -35,40 +42,71 @@
     <string name="txt_by_state">By State</string>
     <string name="txt_by_name">By Name</string>
 
-    <!-- Dialog Cadastros -->
+    <!-- Cadastros -->
     <string name="title_cadastrar">Register %s</string>
     <string name="txt_cadastrar">Register</string>
-
     <string name="title_endereco">Address</string>
     <string name="title_horario_funcionamento">Business hours</string>
     <string name="title_evento">Event date and time</string>
 
-    <!--Cadastro localizavel -->
+    <!--Cadastros Local -->
     <string name="txt_site">Site</string>
     <string name="txt_telefone">Phone</string>
     <string name="txt_facebook">Facebook</string>
+    <string name="txt_logo">Logo</string>
     <string name="txt_descricao">Description</string>
-    <string name="txt_endereco">Address</string>
-    <string name="txt_horario_funcionameto">Business hours</string>
+    <string name="txt_logotipo">Logotipo</string>
+    <string name="txt_foto">Take Picture</string>
+    <string name="txt_galeria">Gallery</string>
+    <string name="txt_select_picture">Select a Picture</string>
+    <string name="txt_select_location">Select a place in map.</string>
 
-    <!-- Horario Funcionamento Layout -->
+    <!-- Cadastros Evento -->
+    <string name="txt_data_inicio">Start date</string>
+    <string name="txt_data_fim">End date</string>
+    <string name="txt_hora">Hour</string>
+    <string name="txt_minuto">Minute</string>
+    <string name="txt_flyer">Flyer</string>
+    <string name="txt_horario">Timetable</string>
+
+    <!-- Cadastros Horario Funcionamento -->
+    <string name="txt_horarios">Timetable</string>
     <string name="txt_dias">Days</string>
     <string name="txt_periodo">Period</string>
     <string name="txt_hora_inicio">Start time</string>
     <string name="txt_hora_fim">End time</string>
 
-    <!-- Cadastro Horario Evento -->
-    <string name="txt_data_inicio">Start date</string>
-    <string name="txt_data_fim">End date</string>
+    <string name="seg">M</string>
+    <string name="ter">T</string>
+    <string name="qua">W</string>
+    <string name="qui">Th</string>
+    <string name="sex">F</string>
+    <string name="sab">St</string>
+    <string name="dom">S</string>
 
-    <!-- Endereco Layout -->
+    <string-array name="dias_options">
+        <item>Mon</item>
+        <item>Tue</item>
+        <item>Wed</item>
+        <item>Thu</item>
+        <item>Fri</item>
+        <item>Sat</item>
+        <item>Sun</item>
+    </string-array>
+
+    <!-- Cadastros Endereco -->
+    <string name="txt_endereco">Address</string>
     <string name="txt_cep">Zip code</string>
+    <string name="txt_pais">Country</string>
+    <string name="txt_estado">State</string>
     <string name="txt_cidade">City</string>
     <string name="txt_bairro">Neighborhood</string>
     <string name="txt_logradouro">Place</string>
     <string name="txt_numero">Number</string>
     <string name="txt_complemento">Complement</string>
+    <string name="txt_localizacao">Location</string>
 
+    <!-- Tipos Locais -->
     <string name="txt_loja">Store</string>
     <string name="txt_evento">Event</string>
     <string name="txt_pista">Spot</string>
@@ -161,85 +199,21 @@
         <item>TO</item>
     </string-array>
 
-    <!-- Mensagens de sucesso -->
+    <!-- Mensagens de boas vindas -->
     <string name="success_login">Hello %s!  Now you can share your favorites places!</string>
-    <string name="success_register">Success! Before you login, please confirm your registration in your email!</string>
+    <string name="success_check_login">Bem vindo %s!</string>
 
     <!-- Mensagens de permissões -->
     <string name="ask_permissions_location">The Cablush use your location to suggest with more accuracy the places to practice your favorite sports.</string>
-    <string name="ask_permissions_storage"></string>
+    <string name="ask_permissions_storage">The Cablush needs permission to write in your device.</string>
 
-    <!-- Mensagens de erro -->
+    <!-- Mensagens de erro genéricas -->
     <string name="error_create_map">Fail to load the map!</string>
     <string name="error_gps_not_working">Fail to reach you by GPS! Please turn your gps on and try again.</string>
-    <string name="erro_invalid_search_type">Invalid type search!</string>
-    <string name="erro_invalid_entry_type">Tipo de cadastro inválido!</string>
-    <string name="erro_invalid_option">Invalid option!</string>
-    <string name="msg_local_not_found">No place found.</string>
-    <string name="msg_name_missing">Name is required.</string>
-    <string name="msg_description_missing">Description is required.</string>
-    <string name="msg_spot_missing">Place is required.</string>
-    <string name="msg_startDate_missing">Start date is required.</string>
-    <string name="msg_startTime_missing">Start time is required.</string>
-    <string name="msg_register_missing_data">All fields are required.</string>
-    <string name="msg_login_missing_data">Email and Password is required.</string>
-    <string name="error_login">Login failed! Try again.</string>
-    <string name="error_register">Fail to do the place register! Try again.</string>
-    <string name="msg_login_required">Please login.</string>
     <string name="error_no_connection">Fail to reach the server.Check out your connection and try again!</string>
 
-    <!-- Buttons / Actions -->
-    <string name="btn_gallery">Gallery</string>
-    <string name="btn_picture">Picture</string>
-    <string name="btn_yes">Yes</string>
-    <string name="btn_no">No</string>
-
-    <!-- Cadastros -->
-    <string name="txt_new_loja">New Store</string>
-    <string name="txt_new_evento">New Event</string>
-    <string name="txt_new_pista">New Spot</string>
-
-    <!--Cadastros Local -->
-    <string name="txt_logo">Logo</string>
-    <string name="txt_logotipo">Logotipo</string>
-    <string name="txt_foto">Take Picture</string>
-    <string name="txt_galeria">Gallery</string>
-    <string name="txt_select_picture">Select a Picture</string>
-    <string name="txt_select_location">Select a place in map.</string>
-
-    <!-- Cadastros Evento -->
-    <string name="txt_hora">Hour</string>
-    <string name="txt_minuto">Minute</string>
-    <string name="txt_flyer">Flyer</string>
-    <string name="txt_horario">Timetable</string>
-
-    <!-- Cadastros Horario Funcionamento -->
-    <string name="txt_horarios">Timetable</string>
-    <string name="txt_inicio">Start</string>
-    <string name="txt_fim">End</string>
-    <string name="txt_detalhes">Detail</string>
-
-    <string name="seg">M</string>
-    <string name="ter">T</string>
-    <string name="qua">W</string>
-    <string name="qui">Th</string>
-    <string name="sex">F</string>
-    <string name="sab">St</string>
-    <string name="dom">S</string>
-
-    <string-array name="dias_options">
-        <item>Mon</item>
-        <item>Tue</item>
-        <item>Wed</item>
-        <item>Thu</item>
-        <item>Fri</item>
-        <item>Sat</item>
-        <item>Sun</item>
-    </string-array>
-
-
-
     <!-- Mensagens de pesquisa -->
+    <string name="msg_local_not_found">No place found.</string>
     <string name="msg_search_off_line">No conection, showing cache data.</string>
     <string name="msg_search_error">Server no reachable,showing cache data.</string>
 
@@ -261,6 +235,17 @@
     <string name="msg_save_off_line">No conection, place saved in cache.</string>
     <string name="msg_save_error">Connection error, place saved in cache.</string>
 
+    <!-- Mensagens de login e registro -->
+    <string name="msg_register_missing_data">All fields are required.</string>
+    <string name="msg_login_missing_data">Email and Password are required.</string>
+    <string name="msg_invalid_email">Invalid email.</string>
+    <string name="msg_invalid_password">The password must have at least 6 characters.</string>
+    <string name="error_login">Login failed! Try again.</string>
+    <string name="error_register">Fail to do the place register! Try again.</string>
+    <string name="msg_login_required">Please login.</string>
+    <string name="success_register">Success! Before you login, please confirm your registration in your email!</string>
+    <string name="error_login_facebook">Unable to login in Facebook</string>
+    <string name="error_login_google">Unable to login in Google</string>
 
     <!-- Mensagens de fotos/galeria -->
     <string name="error_no_camera_found">Camera not found.</string>
@@ -273,5 +258,11 @@
     <string name="error_invalid_lat_long_used">Invalid location.</string>
     <string name="error_no_address_found">Address not found.</string>
     <string name="msg_address_found">Address found!</string>
+    <string name="txt_new_evento">New Event</string>
+    <string name="txt_new_loja">New Store</string>
+    <string name="txt_new_pista">New Spot</string>
+    <string name="txt_inicio">Start</string>
+    <string name="txt_fim">End</string>
+    <string name="txt_detalhes">Details</string>
 
 </resources>

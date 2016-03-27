@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">CABLUSH</string>
 
@@ -16,6 +17,9 @@
     <string name="btn_cancel">Cancelar</string>
     <string name="btn_register">Cadastrar</string>
     <string name="btn_login">Logar</string>
+    <string name="btn_login_google">Entrar com Google</string>
+    <string name="com_facebook_loginview_log_in_button_long">Entrar com Facebook</string>
+    <string name="btn_reset_password">Esqueci a Senha</string>
     <string name="btn_search">Buscar</string>
     <string name="btn_save">Salvar</string>
     <string name="btn_gallery">Galeria</string>
@@ -26,6 +30,7 @@
     <!--Dialog Login/Register -->
     <string name="title_login">Login</string>
     <string name="title_register">Novo Cadastro</string>
+    <string name="txt_login_email">Entrar com Email</string>
     <string name="txt_name">Nome</string>
     <string name="txt_email">Email</string>
     <string name="txt_password">Senha</string>
@@ -92,6 +97,7 @@
     <!-- Cadastros Endereco -->
     <string name="txt_endereco">Endereço</string>
     <string name="txt_cep">CEP</string>
+    <string name="txt_pais">País</string>
     <string name="txt_estado">Estado</string>
     <string name="txt_cidade">Cidade</string>
     <string name="txt_bairro">Bairro</string>
@@ -238,6 +244,8 @@
     <string name="error_register">Erro ao realizar cadastro! Tente novamente.</string>
     <string name="msg_login_required">Faça login para continuar.</string>
     <string name="success_register">Cadastro realizado! Antes de fazer Login, confirme o cadastro no email que te enviamos!</string>
+    <string name="error_login_facebook">Não foi possível logar no Facebook</string>
+    <string name="error_login_google">Não foi possível logar no Google</string>
 
     <!-- Mensagens de fotos/galeria -->
     <string name="error_no_camera_found">Nenhuma camera encontrada neste dispositivo.</string>
@@ -250,6 +258,11 @@
     <string name="error_invalid_lat_long_used">Localização inválida.</string>
     <string name="error_no_address_found">Endereço não encontrado.</string>
     <string name="msg_address_found">Endereço encontrado.</string>
+    <string name="txt_periodo">Periodo</string>
+    <string name="txt_hora_fim">Hora Fim</string>
+    <string name="txt_hora_inicio">Hora Início</string>
+    <string name="title_endereco">Endereço</string>
+    <string name="title_evento">Evento</string>
+    <string name="title_horario_funcionamento">Horário</string>
 
 </resources>
-
