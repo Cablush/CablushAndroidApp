@@ -14,6 +14,7 @@
     <string name="drawer_item_my_spots">My Spots</string>
 
     <!-- Buttons / Actions -->
+    <string name="btn_send">Send</string>
     <string name="btn_cancel">Cancel</string>
     <string name="btn_register">Register</string>
     <string name="btn_login">Login</string>
@@ -27,14 +28,14 @@
     <string name="btn_yes">Yes</string>
     <string name="btn_no">No</string>
 
-    <!--Dialog Login/Register -->
+    <!--Login/Register -->
     <string name="title_login">Login</string>
     <string name="title_register">Register new</string>
+    <string name="title_reset_password">Reset Password</string>
     <string name="txt_login_email">Login with Email</string>
     <string name="txt_name">Name</string>
     <string name="txt_email">Email</string>
-    <string name="txt_password">Pass</string>
-    <string name="txt_shopkeeper">Shop Keeper</string>
+    <string name="txt_password">Password</string>
 
     <!--Dialog Buscar -->
     <string name="title_search">Search %s</string>
@@ -240,6 +241,7 @@
     <string name="msg_login_missing_data">Email and Password are required.</string>
     <string name="msg_invalid_email">Invalid email.</string>
     <string name="msg_invalid_password">The password must have at least 6 characters.</string>
+    <string name="msg_reset_password_sent">Request for new password sent, check the instructions in your email.</string>
     <string name="error_login">Login failed! Try again.</string>
     <string name="error_register">Fail to do the place register! Try again.</string>
     <string name="msg_login_required">Please login.</string>

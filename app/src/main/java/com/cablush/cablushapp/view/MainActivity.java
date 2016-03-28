@@ -19,14 +19,12 @@ import com.cablush.cablushapp.model.domain.Localizavel;
 import com.cablush.cablushapp.model.domain.Loja;
 import com.cablush.cablushapp.model.domain.Pista;
 import com.cablush.cablushapp.model.domain.Usuario;
-import com.cablush.cablushapp.presenter.LoginPresenter;
-import com.cablush.cablushapp.presenter.RegisterPresenter;
 import com.cablush.cablushapp.presenter.SearchPresenter;
 import com.cablush.cablushapp.utils.MapUtils;
+import com.cablush.cablushapp.utils.ViewUtils;
 import com.cablush.cablushapp.view.dialogs.LocalInfoDialog;
-import com.cablush.cablushapp.view.dialogs.RegisterDialog;
 import com.cablush.cablushapp.view.drawer.DrawerActivityConfiguration;
-import com.cablush.cablushapp.view.dialogs.LoginDialog;
+import com.facebook.appevents.AppEventsLogger;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -44,13 +42,13 @@ import java.util.Map;
 import io.github.yavski.fabspeeddial.FabSpeedDial;
 import io.github.yavski.fabspeeddial.SimpleMenuListenerAdapter;
 
-public class MainActivity extends AbstractDrawerActivity implements OnMapReadyCallback,
-        LoginDialog.LoginDialogListener, LoginPresenter.LoginView,
-        RegisterPresenter.RegisterView, SearchPresenter.SearchView {
+public class MainActivity extends AbstractDrawerActivity
+        implements OnMapReadyCallback, SearchPresenter.SearchView {
 
     public static final int REQUEST_CADASTRO_LOJA = 1;
     public static final int REQUEST_CADASTRO_EVENTO = 2;
     public static final int REQUEST_CADASTRO_PISTA = 3;
+    public static final int REQUEST_SIGNIN = 10;
 
     private ProgressBar spinner;
 
@@ -123,12 +121,29 @@ public class MainActivity extends AbstractDrawerActivity implements OnMapReadyCa
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        // Logs 'install' and 'app activate' App Events.
+        AppEventsLogger.activateApp(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        // Logs 'app deactivate' App Event.
+        AppEventsLogger.deactivateApp(this);
+    }
+
+    @Override
     public void onMapReady(GoogleMap googleMap) {
         Log.d(TAG, "GoogleMap loaded.");
         this.googleMap = googleMap;
 
         // Check the Location Permissions
         checkLocationPermission();
+
+        // First search, get the eventos
+        getEventos();
     }
 
     @Override
@@ -155,24 +170,18 @@ public class MainActivity extends AbstractDrawerActivity implements OnMapReadyCa
     protected boolean onNavItemSelected(int id) {
         switch (id) {
             case R.id.header_view:
-                if (Usuario.LOGGED_USER == null) {
+                if (Usuario.LOGGED_USER == null) { // TODO verificar
                     drawerLayout.closeDrawers();
-                    LoginDialog.showDialog(getFragmentManager());
+                    startActivityForResult(SignInActivity.makeIntent(this), REQUEST_SIGNIN);
                     return true;
                 }
                 return false;
             case R.id.drawer_search_lojas:
-                //SearchDialog.showDialog(getFragmentManager(), SearchDialog.TYPE.LOJA);
-                searchPresenter.getLojas(null, null, null);
-                return true;
+                return getLojas();
             case R.id.drawer_search_eventos:
-                //SearchDialog.showDialog(getFragmentManager(), SearchDialog.TYPE.EVENTO);
-                searchPresenter.getEventos(null, null, null);
-                return true;
+                return getEventos();
             case R.id.drawer_search_pistas:
-                //SearchDialog.showDialog(getFragmentManager(), SearchDialog.TYPE.PISTA);
-                searchPresenter.getPistas(null, null, null);
-                return true;
+                return getPistas();
             case R.id.drawer_my_lojas:
                 return getMyLojas();
             case R.id.drawer_my_eventos:
@@ -197,8 +206,17 @@ public class MainActivity extends AbstractDrawerActivity implements OnMapReadyCa
                 case REQUEST_CADASTRO_PISTA:
                     getMyPistas();
                     break;
+                case REQUEST_SIGNIN:
+                    configNavigationHead();
+                    break;
             }
         }
+    }
+
+    private boolean getLojas() {
+        searchPresenter.getLojas(null, null, null);
+        spinner.setVisibility(View.VISIBLE);
+        return true;
     }
 
     private boolean getMyLojas() {
@@ -210,6 +228,12 @@ public class MainActivity extends AbstractDrawerActivity implements OnMapReadyCa
         return false;
     }
 
+    private boolean getEventos() {
+        searchPresenter.getEventos(null, null, null);
+        spinner.setVisibility(View.VISIBLE);
+        return true;
+    }
+
     private boolean getMyEventos() {
         if (checkUserLoggedIn()) {
             searchPresenter.getMyEventos();
@@ -217,6 +241,12 @@ public class MainActivity extends AbstractDrawerActivity implements OnMapReadyCa
             return true;
         }
         return false;
+    }
+
+    private boolean getPistas() {
+        searchPresenter.getLojas(null, null, null);
+        spinner.setVisibility(View.VISIBLE);
+        return true;
     }
 
     private boolean getMyPistas() {
@@ -233,7 +263,7 @@ public class MainActivity extends AbstractDrawerActivity implements OnMapReadyCa
         TextView nameTextView = (TextView) header.findViewById(R.id.name);
         TextView emailTextView = (TextView) header.findViewById(R.id.email);
 
-        if (Usuario.LOGGED_USER != null) {
+        if (Usuario.LOGGED_USER != null) { // TODO verificar
             nameTextView.setText(Usuario.LOGGED_USER.getNome());
             emailTextView.setText(Usuario.LOGGED_USER.getEmail());
             emailTextView.setVisibility(View.VISIBLE);
@@ -256,38 +286,8 @@ public class MainActivity extends AbstractDrawerActivity implements OnMapReadyCa
     }
 
     @Override
-    public void onRegisterButtonClicked() {
-        RegisterDialog.showDialog(getFragmentManager());
-    }
-
-    @Override
-    public void onLoginResponse(LoginPresenter.LoginResponse response) {
-        if (LoginPresenter.LoginResponse.SUCCESS.equals(response)) {
-            Toast.makeText(this,
-                    getString(R.string.success_login, Usuario.LOGGED_USER.getNome()),
-                    Toast.LENGTH_SHORT).show();
-            configNavigationHead();
-        } else {
-            Toast.makeText(this, getString(R.string.error_login), Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    @Override
-    public void onRegisterResponse(RegisterPresenter.RegisterResponse response) {
-        if (RegisterPresenter.RegisterResponse.SUCCESS.equals(response)) {
-            Toast.makeText(this, R.string.success_register, Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(this, getString(R.string.error_register), Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    @Override
-    public SearchPresenter getSearchPresenter() {
-        return searchPresenter;
-    }
-
-    @Override
     public void onSearchResult(OperationResult result, List<? extends Localizavel> localizaveis) {
+        spinner.setVisibility(View.GONE);
         clearMap();
         switch (result) {
             case OFF_LINE:
@@ -305,7 +305,6 @@ public class MainActivity extends AbstractDrawerActivity implements OnMapReadyCa
             }
             centerMap(localizaveis);
         }
-        spinner.setVisibility(View.GONE);
     }
 
     private void clearMap() {
@@ -318,10 +317,7 @@ public class MainActivity extends AbstractDrawerActivity implements OnMapReadyCa
         googleMap.addMarker(new MarkerOptions()
                 .position(localizavel.getLocal().getLatLng())
                 .snippet(localizavel.getUuid())
-                .icon(BitmapDescriptorFactory.fromResource(
-                        (localizavel.isRemote() && !localizavel.isChanged())
-                        ? R.drawable.ic_mark_cablush_orange
-                        : R.drawable.ic_mark_cablush_blue)));
+                .icon(BitmapDescriptorFactory.fromResource(ViewUtils.getMarkByLocalizavel(localizavel))));
 
         googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override

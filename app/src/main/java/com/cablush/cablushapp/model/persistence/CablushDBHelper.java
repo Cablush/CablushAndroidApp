@@ -14,7 +14,7 @@ public class CablushDBHelper extends SQLiteOpenHelper {
     private static final String TAG = CablushDBHelper.class.getSimpleName();
 
     private static final String DB_NAME = "CablushDB";
-    private static final int DB_VERSION = 4;
+    private static final int DB_VERSION = 5;
 
     private static CablushDBHelper instance;
 

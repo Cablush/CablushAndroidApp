@@ -1,12 +1,14 @@
 package com.cablush.cablushapp.presenter;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.cablush.cablushapp.model.domain.Usuario;
+import com.cablush.cablushapp.model.persistence.UsuarioDAO;
 import com.cablush.cablushapp.model.rest.ApiUsuario;
 import com.cablush.cablushapp.model.rest.RestServiceBuilder;
-import com.cablush.cablushapp.model.rest.dto.ResponseDTO;
+import com.cablush.cablushapp.model.rest.dto.RequestUsuarioDTO;
 
 import java.lang.ref.WeakReference;
 
@@ -37,33 +39,68 @@ public class RegisterPresenter {
 
     private WeakReference<RegisterView> mView;
     private ApiUsuario apiUsuario;
+    private UsuarioDAO usuarioDAO;
 
     /**
      * Constructor.
      */
-    public RegisterPresenter(@NonNull RegisterView view) {
+    public RegisterPresenter(@NonNull RegisterView view, @NonNull Context context) {
         this.mView = new WeakReference<>(view);
         this.apiUsuario = RestServiceBuilder.createService(ApiUsuario.class);
+        this.usuarioDAO = new UsuarioDAO(context);
     }
 
-    public void doRegister(String name, String email, String password, Boolean shopkeeper) {
-        apiUsuario.doRegister(name, email, password, password, shopkeeper, new Callback<ResponseDTO<Usuario>>() {
+    /**
+     * Register a new user on server.
+     */
+    public void register(String name, String email, String password) {
+        apiUsuario.register(new RequestUsuarioDTO(name, email, password), new Callback<Usuario>() {
             @Override
-            public void success(ResponseDTO<Usuario> dto, Response response) {
-                RegisterView view = mView.get();
-                if (view != null) {
-                    view.onRegisterResponse(RegisterResponse.SUCCESS);
-                }
+            public void success(Usuario usuario, Response response) {
+                Log.d(TAG, "User register successful.");
+                onRegisterSuccess();
             }
 
             @Override
             public void failure(RetrofitError error) {
                 Log.e(TAG, "Error on user register. " + error.getMessage());
-                RegisterView view = mView.get();
-                if (view != null) {
-                    view.onRegisterResponse(RegisterResponse.ERROR);
-                }
+                onRegisterError();
             }
         });
+    }
+
+    /**
+     * Edit the user on server
+     */
+    public void edit(String name, String email, String password) {
+        apiUsuario.edit(new RequestUsuarioDTO(name, email, password), new Callback<Usuario>() {
+            @Override
+            public void success(Usuario usuario, Response response) {
+                Log.d(TAG, "User edit successful.");
+                Usuario.LOGGED_USER = usuarioDAO.save(usuario);
+                onRegisterSuccess();
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                Log.e(TAG, "Error on user edition. " + error.getMessage());
+                onRegisterError();
+            }
+        });
+    }
+
+    private void onRegisterSuccess() {
+        RegisterView view = mView.get();
+        if (view != null) {
+            view.onRegisterResponse(RegisterResponse.SUCCESS);
+        }
+    }
+
+    private void onRegisterError() {
+        Usuario.LOGGED_USER = null;
+        RegisterView view = mView.get();
+        if (view != null) {
+            view.onRegisterResponse(RegisterResponse.ERROR);
+        }
     }
 }

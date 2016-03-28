@@ -10,16 +10,26 @@ android {
         targetSdkVersion 23
         versionCode 9
         versionName "1.3.3"
+        // Enabling multidex support.
+        multiDexEnabled true
     }
+
     buildTypes {
         debug {
-            buildConfigField 'java.lang.String', 'RETROFIT_END_POINT', '"http://10.0.2.2:3000/api"'
+            buildConfigField 'java.lang.String', 'RETROFIT_END_POINT', '"http://192.168.0.104:3000/api"'
             buildConfigField 'retrofit.RestAdapter.LogLevel', 'RETROFIT_LOG_LEVEL', 'retrofit.RestAdapter.LogLevel.FULL'
+            resValue 'string', 'GOOGLE_MAPS_API_KEY', '"AIzaSyDU-AnJmJH6XXYu8iKrWTq5Uju1OrXlq1s"'
+            resValue 'string', 'GOOGLE_CLIENT_ID', '"576813276276-redvogqkgpa8qdkpd00q0heef63uv79q.apps.googleusercontent.com"'
+            resValue 'string', 'FACEBOOK_APP_ID', '"1560597140917105"'
         }
 
         release {
             buildConfigField 'java.lang.String', 'RETROFIT_END_POINT', '"http://www.cablush.com/api"'
             buildConfigField 'retrofit.RestAdapter.LogLevel', 'RETROFIT_LOG_LEVEL', 'retrofit.RestAdapter.LogLevel.NONE'
+            resValue 'string', 'GOOGLE_MAPS_API_KEY', '"AIzaSyDU-AnJmJH6XXYu8iKrWTq5Uju1OrXlq1s"'
+            resValue 'string', 'GOOGLE_CLIENT_ID', '"576813276276-r5dgmau46nb9r71b3tfc02h5vmvt21vf.apps.googleusercontent.com"'
+            resValue 'string', 'FACEBOOK_APP_ID', '"1560584727585013"'
+
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
@@ -28,12 +38,17 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile 'com.android.support:appcompat-v7:23.1.1'
-    compile 'com.android.support:design:23.1.1'
+    compile 'com.android.support:appcompat-v7:23.2.1'
+    compile 'com.android.support:design:23.2.1'
     compile 'com.google.android.gms:play-services:8.4.0'
+    compile 'com.google.android.gms:play-services-auth:8.4.0'
+    compile 'com.facebook.android:facebook-android-sdk:4.10.1'
     compile 'com.squareup.okhttp:okhttp:2.4.0'
     compile 'com.squareup.retrofit:retrofit:1.9.0'
     compile 'com.google.code.gson:gson:2.4'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'io.github.yavski:fab-speed-dial:1.0.2'
+    compile 'com.android.support:multidex:1.0.1'
 }
+
+apply plugin: 'com.google.gms.google-services'

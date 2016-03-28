@@ -1,0 +1,76 @@
+{
+  "project_info": {
+    "project_id": "avcodetest",
+    "project_number": "576813276276",
+    "name": "CablushApp"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:576813276276:android:d9a02e2ab9656937",
+        "client_id": "android:com.cablush.cablushapp",
+        "client_type": 1,
+        "android_client_info": {
+          "package_name": "com.cablush.cablushapp",
+          "certificate_hash": []
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "576813276276-redvogqkgpa8qdkpd00q0heef63uv79q.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.cablush.cablushapp",
+            "certificate_hash": "2ED80C7D6DFC55A41D249413C463D782366782C4"
+          }
+        },
+        {
+          "client_id": "576813276276-r5dgmau46nb9r71b3tfc02h5vmvt21vf.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.cablush.cablushapp",
+            "certificate_hash": "CDBFCAA7500ACF901966B38288D5A7E22541D8EC"
+          }
+        },
+        {
+          "client_id": "576813276276-rch41980l8avg6luegi2mqef3g2p2d8v.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "576813276276-brdpqp3j63t0ujt0r0ji715be9dh9f3h.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [],
+      "services": {
+        "analytics_service": {
+          "status": 2,
+          "analytics_property": {
+            "tracking_id": "UA-69547125-1"
+          }
+        },
+        "cloud_messaging_service": {
+          "status": 1,
+          "apns_config": []
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "576813276276-rch41980l8avg6luegi2mqef3g2p2d8v.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "google_signin_service": {
+          "status": 2
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "client_info": [],
+  "ARTIFACT_VERSION": "1"
+}

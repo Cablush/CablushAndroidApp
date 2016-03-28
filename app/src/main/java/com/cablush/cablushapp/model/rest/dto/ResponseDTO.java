@@ -3,7 +3,7 @@ package com.cablush.cablushapp.model.rest.dto;
 import com.google.gson.annotations.Expose;
 
 /**
- * Created by oscar on 07/02/16.
+ * DTO to encapsulates Server responses.
  */
 public class ResponseDTO<T> {
 

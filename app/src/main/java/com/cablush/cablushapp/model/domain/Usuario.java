@@ -20,25 +20,16 @@ public class Usuario implements Serializable {
     @Expose
     private String email;
 
+    // Used only to send to server by json
+    @Expose
+    private String password;
+
     @Expose
     private String role;
 
     @Expose
-    private String uid;
-
-    @Expose
-    @SerializedName("access_token")
+    @SerializedName("authentication_token")
     private String accessToken;
-
-    @Expose
-    @SerializedName("token_type")
-    private String tokenType;
-
-    @Expose
-    private String client;
-
-    @Expose
-    private Long expiry;
 
     @Expose
     private List<Esporte> esportes;
@@ -47,6 +38,15 @@ public class Usuario implements Serializable {
      * Logged in user.
      */
     public static Usuario LOGGED_USER;
+
+    public Usuario() {
+    }
+
+    public Usuario(String nome, String email, String password) {
+        this.nome = nome;
+        this.email = email;
+        this.password = password;
+    }
 
     public String getNome() {
         return nome;
@@ -64,6 +64,14 @@ public class Usuario implements Serializable {
         this.email = email;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     public String getRole() {
         return role;
     }
@@ -72,44 +80,12 @@ public class Usuario implements Serializable {
         this.role = role;
     }
 
-    public String getUid() {
-        return uid;
-    }
-
-    public void setUid(String uid) {
-        this.uid = uid;
-    }
-
     public String getAccessToken() {
         return accessToken;
     }
 
     public void setAccessToken(String accessToken) {
         this.accessToken = accessToken;
-    }
-
-    public String getTokenType() {
-        return tokenType;
-    }
-
-    public void setTokenType(String tokenType) {
-        this.tokenType = tokenType;
-    }
-
-    public String getClient() {
-        return client;
-    }
-
-    public void setClient(String client) {
-        this.client = client;
-    }
-
-    public Long getExpiry() {
-        return expiry;
-    }
-
-    public void setExpiry(Long expiry) {
-        this.expiry = expiry;
     }
 
     public String getUuid() {

@@ -35,11 +35,8 @@ public class RestServiceBuilder {
 
     protected String TAG = getClass().getSimpleName();
 
-    public static final String ACCESS_TOKEN = "access-token";
-    public static final String TOKEN_TYPE = "token-type";
-    public static final String CLIENT = "client";
-    public static final String EXPIRY = "expiry";
-    public static final String UID = "uid";
+    public static final String X_ENTITY_TOKEN = "X-Usuario-Token";
+    public static final String X_ENTITY_EMAIL = "X-Usuario-Email";
 
     protected static final SimpleDateFormat[] SERVER_DATE_FORMATS = {
         new SimpleDateFormat("yyyy-MM-dd"),
@@ -65,11 +62,8 @@ public class RestServiceBuilder {
                 request.addHeader("Accept", "application/json");
                 request.addHeader("Request-Time", String.valueOf(System.currentTimeMillis()));
                 if (Usuario.LOGGED_USER != null) {
-                    request.addHeader(ACCESS_TOKEN, Usuario.LOGGED_USER.getAccessToken());
-                    request.addHeader(CLIENT, Usuario.LOGGED_USER.getClient());
-                    request.addHeader(EXPIRY, ""+Usuario.LOGGED_USER.getExpiry());
-                    request.addHeader(TOKEN_TYPE, Usuario.LOGGED_USER.getTokenType());
-                    request.addHeader(UID, Usuario.LOGGED_USER.getUid());
+                    request.addHeader(X_ENTITY_TOKEN, Usuario.LOGGED_USER.getAccessToken());
+                    request.addHeader(X_ENTITY_EMAIL, Usuario.LOGGED_USER.getEmail());
                 }
             }
         });

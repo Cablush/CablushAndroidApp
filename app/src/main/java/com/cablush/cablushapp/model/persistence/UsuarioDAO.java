@@ -22,11 +22,7 @@ public class UsuarioDAO extends AppBaseDAO {
         _NOME("nome", "TEXT", false),
         _EMAIL("email", "TEXT", false),
         _ROLE("role", "TEXT", false),
-        _UID("uid", "TEXT", false),
-        _ACCESS_TOKEN("access_token", "TEXT", false),
-        _TOKEN_TYPE("token_type", "TEXT", false),
-        _CLIENT("client", "TEXT", false),
-        _EXPIRITY("expiry", "INTEGER", false);
+        _ACCESS_TOKEN("access_token", "TEXT", false);
 
         private String columnName;
         private String columnType;
@@ -83,11 +79,7 @@ public class UsuarioDAO extends AppBaseDAO {
         values.put(Columns._NOME.getColumnName(), usuario.getNome());
         values.put(Columns._EMAIL.getColumnName(), usuario.getEmail());
         values.put(Columns._ROLE.getColumnName(), usuario.getRole());
-        values.put(Columns._UID.getColumnName(), usuario.getUid());
         values.put(Columns._ACCESS_TOKEN.getColumnName(), usuario.getAccessToken());
-        values.put(Columns._TOKEN_TYPE.getColumnName(), usuario.getTokenType());
-        values.put(Columns._CLIENT.getColumnName(), usuario.getClient());
-        values.put(Columns._EXPIRITY.getColumnName(), usuario.getExpiry());
         return values;
     }
 
@@ -97,33 +89,41 @@ public class UsuarioDAO extends AppBaseDAO {
         usuario.setNome(readCursor(cursor, Columns._NOME.getColumnName(), String.class));
         usuario.setEmail(readCursor(cursor, Columns._EMAIL.getColumnName(), String.class));
         usuario.setRole(readCursor(cursor, Columns._ROLE.getColumnName(), String.class));
-        usuario.setUid(readCursor(cursor, Columns._UID.getColumnName(), String.class));
         usuario.setAccessToken(readCursor(cursor, Columns._ACCESS_TOKEN.getColumnName(), String.class));
-        usuario.setTokenType(readCursor(cursor, Columns._TOKEN_TYPE.getColumnName(), String.class));
-        usuario.setClient(readCursor(cursor, Columns._CLIENT.getColumnName(), String.class));
-        usuario.setExpiry(readCursor(cursor, Columns._EXPIRITY.getColumnName(), Long.class));
         return usuario;
     }
 
     private long insert(SQLiteDatabase db, Usuario usuario) throws SQLException {
         db.beginTransaction();
         try {
-            return db.insertOrThrow("usuario", null, getContentValues(usuario));
-            // TODO save relacionamento de esportes / pode ser feito para a proxima versão
+            // save usuario
+            long rowID = db.insertOrThrow("usuario", null, getContentValues(usuario));
+            // TODO save relacionamento de esportes
+            db.setTransactionSuccessful();
+            return rowID;
+        } catch (Exception ex) {
+            Log.e(TAG, "Error inserting usuario.", ex);
         } finally {
             db.endTransaction();
         }
+        return -1;
     }
 
     private int update(SQLiteDatabase db, Usuario usuario) {
         db.beginTransaction();
         try {
-            return db.update(TABLE, getContentValues(usuario),
+            // save usuario
+            int rows = db.update(TABLE, getContentValues(usuario),
                     Columns._UUID.getColumnName() + " = ? ", new String[]{usuario.getUuid()});
-            // TODO save relacionamento de esportes / pode ser feito para a proxima versão
+            // TODO save relacionamento de esportes
+            db.setTransactionSuccessful();
+            return rows;
+        } catch (Exception ex) {
+            Log.e(TAG, "Error updating usuario.", ex);
         } finally {
             db.endTransaction();
         }
+        return -1;
     }
 
     /**

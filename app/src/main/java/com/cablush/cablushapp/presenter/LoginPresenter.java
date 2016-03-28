@@ -9,15 +9,13 @@ import com.cablush.cablushapp.model.persistence.UsuarioDAO;
 import com.cablush.cablushapp.model.domain.Usuario;
 import com.cablush.cablushapp.model.rest.ApiUsuario;
 import com.cablush.cablushapp.model.rest.RestServiceBuilder;
-import com.cablush.cablushapp.model.rest.dto.ResponseDTO;
+import com.cablush.cablushapp.model.rest.dto.RequestUsuarioDTO;
 import com.cablush.cablushapp.model.services.ConnectivityChangeReceiver;
 
 import java.lang.ref.WeakReference;
-import java.util.List;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;
-import retrofit.client.Header;
 import retrofit.client.Response;
 
 /**
@@ -32,6 +30,17 @@ public class LoginPresenter {
      */
     public enum LoginResponse {
         SUCCESS, ERROR
+    }
+
+    /**
+     * Omniauth providers.
+     */
+    public enum OmniauthProvider {
+        FACEBOOK("facebook"), GOOGLE("google_oauth2");
+        String name;
+        OmniauthProvider(String name) {
+            this.name = name;
+        }
     }
 
     /**
@@ -60,30 +69,20 @@ public class LoginPresenter {
     }
 
     /**
-     * Do Login on server.
+     * Login on server.
      */
-    public void doLogin(String email, String senha) {
-        apiUsuario.doLogin(email, senha, new Callback<ResponseDTO<Usuario>>() {
+    public void login(String email, String senha) {
+        apiUsuario.login(new RequestUsuarioDTO(email, senha), new Callback<Usuario>() {
             @Override
-            public void success(ResponseDTO<Usuario> dto, Response response) {
-                Usuario usuario = updateAuthData(dto.getData(), response);
-                usuarioDAO.save(usuario);
-                Usuario.LOGGED_USER = usuario;
-                LoginView view = mView.get();
-                if (view != null) {
-                    view.onLoginResponse(LoginResponse.SUCCESS);
-                }
-                esportesMediator.loadEsportes();
+            public void success(Usuario usuario, Response response) {
+                Log.d(TAG, "Login successful.");
+                onLoginSuccess(usuario);
             }
 
             @Override
             public void failure(RetrofitError error) {
                 Log.e(TAG, "Error on user login. " + error.getMessage());
-                Usuario.LOGGED_USER = null;
-                LoginView view = mView.get();
-                if (view != null) {
-                    view.onLoginResponse(LoginResponse.ERROR);
-                }
+                onLoginError();
             }
         });
     }
@@ -97,26 +96,17 @@ public class LoginPresenter {
             Usuario.LOGGED_USER = usuario;
             // Only validate the token if there is connection, allowing offline registries
             if (ConnectivityChangeReceiver.isNetworkAvailable(mContext.get())) {
-                apiUsuario.doValidateToken(new Callback<ResponseDTO<Usuario>>() {
+                apiUsuario.validateToken(new Callback<Usuario>() {
                     @Override
-                    public void success(ResponseDTO<Usuario> dto, Response response) {
-                        Usuario usuario = updateAuthData(dto.getData(), response);
-                        usuarioDAO.save(usuario);
-                        Usuario.LOGGED_USER = usuario;
-                        LoginView view = mView.get();
-                        if (view != null) {
-                            view.onLoginResponse(LoginResponse.SUCCESS);
-                        }
+                    public void success(Usuario usuario, Response response) {
+                        Log.d(TAG, "CheckLogin successful.");
+                        onLoginSuccess(usuario);
                     }
 
                     @Override
                     public void failure(RetrofitError error) {
                         Log.e(TAG, "Error on user check. " + error.getMessage());
-                        Usuario.LOGGED_USER = null; // FIXME force (re)login at any http error?
-                        LoginView view = mView.get();
-                        if (view != null) {
-                            view.onLoginResponse(LoginResponse.ERROR);
-                        }
+                        onLoginError();
                     }
                 });
             }
@@ -128,27 +118,39 @@ public class LoginPresenter {
         }
     }
 
-    private Usuario updateAuthData(Usuario usuario, Response response) {
-        List<Header> headerList = response.getHeaders();
-        for (Header header : headerList) {
-            switch (header.getName().toLowerCase()){
-                case RestServiceBuilder.ACCESS_TOKEN:
-                    usuario.setAccessToken(header.getValue());
-                    break;
-                case RestServiceBuilder.TOKEN_TYPE:
-                    usuario.setTokenType(header.getValue());
-                    break;
-                case RestServiceBuilder.CLIENT:
-                    usuario.setClient(header.getValue());
-                    break;
-                case RestServiceBuilder.EXPIRY:
-                    usuario.setExpiry(Long.parseLong(header.getValue()));
-                    break;
-                case RestServiceBuilder.UID:
-                    usuario.setUid(header.getValue());
-                    break;
+    /**
+     * Server callback for oauth2 login.
+     */
+    public void omniauthCallback(OmniauthProvider provider, String token) {
+        apiUsuario.omniauthCallback(provider.name, token, new Callback<Usuario>() {
+            @Override
+            public void success(Usuario usuario, Response response) {
+                Log.d(TAG, "Omniauth callback successful.");
+                onLoginSuccess(usuario);
             }
+
+            @Override
+            public void failure(RetrofitError error) {
+                Log.e(TAG, "Error on omniauth callback. " + error.getMessage());
+                onLoginError();
+            }
+        });
+    }
+
+    private void onLoginSuccess(Usuario usuario) {
+        Usuario.LOGGED_USER = usuarioDAO.save(usuario);
+        LoginView view = mView.get();
+        if (view != null) {
+            view.onLoginResponse(LoginResponse.SUCCESS);
         }
-        return usuario;
+        esportesMediator.loadEsportes();
+    }
+
+    private void onLoginError() {
+        Usuario.LOGGED_USER = null;
+        LoginView view = mView.get();
+        if (view != null) {
+            view.onLoginResponse(LoginResponse.ERROR);
+        }
     }
 }
