@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 23
-    buildToolsVersion "23.0.2"
+    buildToolsVersion "23.0.3"
 
     defaultConfig {
         applicationId "com.cablush.cablushapp"
@@ -18,17 +18,17 @@ android {
         debug {
             buildConfigField 'java.lang.String', 'RETROFIT_END_POINT', '"http://192.168.0.104:3000/api"'
             buildConfigField 'retrofit.RestAdapter.LogLevel', 'RETROFIT_LOG_LEVEL', 'retrofit.RestAdapter.LogLevel.FULL'
-            resValue 'string', 'GOOGLE_MAPS_API_KEY', '"AIzaSyDU-AnJmJH6XXYu8iKrWTq5Uju1OrXlq1s"'
-            resValue 'string', 'GOOGLE_CLIENT_ID', '"576813276276-redvogqkgpa8qdkpd00q0heef63uv79q.apps.googleusercontent.com"'
-            resValue 'string', 'FACEBOOK_APP_ID', '"1560597140917105"'
+            resValue 'string', 'GOOGLE_MAPS_API_KEY', 'AIzaSyDU-AnJmJH6XXYu8iKrWTq5Uju1OrXlq1s'
+            resValue 'string', 'GOOGLE_CLIENT_ID', '576813276276-brdpqp3j63t0ujt0r0ji715be9dh9f3h.apps.googleusercontent.com'
+            resValue 'string', 'FACEBOOK_APP_ID', '1560597140917105'
         }
 
         release {
             buildConfigField 'java.lang.String', 'RETROFIT_END_POINT', '"http://www.cablush.com/api"'
             buildConfigField 'retrofit.RestAdapter.LogLevel', 'RETROFIT_LOG_LEVEL', 'retrofit.RestAdapter.LogLevel.NONE'
-            resValue 'string', 'GOOGLE_MAPS_API_KEY', '"AIzaSyDU-AnJmJH6XXYu8iKrWTq5Uju1OrXlq1s"'
-            resValue 'string', 'GOOGLE_CLIENT_ID', '"576813276276-r5dgmau46nb9r71b3tfc02h5vmvt21vf.apps.googleusercontent.com"'
-            resValue 'string', 'FACEBOOK_APP_ID', '"1560584727585013"'
+            resValue 'string', 'GOOGLE_MAPS_API_KEY', 'AIzaSyDU-AnJmJH6XXYu8iKrWTq5Uju1OrXlq1s'
+            resValue 'string', 'GOOGLE_CLIENT_ID', '576813276276-rch41980l8avg6luegi2mqef3g2p2d8v.apps.googleusercontent.com'
+            resValue 'string', 'FACEBOOK_APP_ID', '1560584727585013'
 
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
