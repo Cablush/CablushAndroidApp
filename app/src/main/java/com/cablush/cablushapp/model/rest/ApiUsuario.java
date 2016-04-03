@@ -36,7 +36,8 @@ public interface ApiUsuario {
     void validateToken(Callback<Usuario> responseCallback);
 
     @GET("/usuarios/auth/{provider}/validate_token")
-    void omniauthCallback(@Path("provider") String provider, @Query("access_token") String accessToken,
+    void omniauthCallback(@Path("provider") String provider,
+                          @Query("access_token") String accessToken,
                           Callback<Usuario> responseCallback);
 
 }
