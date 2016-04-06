@@ -56,7 +56,7 @@
     <string name="txt_facebook">Facebook</string>
     <string name="txt_logo">Logo</string>
     <string name="txt_descricao">Description</string>
-    <string name="txt_logotipo">Logotipo</string>
+    <string name="txt_logotipo">Logotype</string>
     <string name="txt_foto">Take Picture</string>
     <string name="txt_galeria">Gallery</string>
     <string name="txt_select_picture">Select a Picture</string>
@@ -202,7 +202,7 @@
 
     <!-- Mensagens de boas vindas -->
     <string name="success_login">Hello %s!  Now you can share your favorites places!</string>
-    <string name="success_check_login">Bem vindo %s!</string>
+    <string name="success_check_login">Welcome %s!</string>
 
     <!-- Mensagens de permissões -->
     <string name="ask_permissions_location">The Cablush use your location to suggest with more accuracy the places to practice your favorite sports.</string>
@@ -215,25 +215,25 @@
 
     <!-- Mensagens de pesquisa -->
     <string name="msg_local_not_found">No place found.</string>
-    <string name="msg_search_off_line">No conection, showing cache data.</string>
-    <string name="msg_search_error">Server no reachable,showing cache data.</string>
+    <string name="msg_search_off_line">No connection, showing cached data.</string>
+    <string name="msg_search_error">Server no reachable,showing cached data.</string>
 
     <!-- Mensagens de cadastros -->
     <string name="msg_set_address_manually">Address not found, please fill data manually.</string>
     <string name="msg_check_address">Address found, please check data.</string>
-    <string name="msg_confirm_no_save">Discard unsaved changes?Descartar alterações não salvas?</string>
+    <string name="msg_confirm_no_save">Discard unsaved changes?</string>
     <string name="msg_required">Required field!</string>
     <string name="msg_select_one">Select one option.</string>
     <string name="msg_invalid_web_url">Invalid url.</string>
-    <string name="msg_invalid_phone">Infalid phone number.</string>
+    <string name="msg_invalid_phone">Invalid phone number.</string>
     <string name="msg_invalid_loja">Check data in tab store!</string>
     <string name="msg_invalid_pista">Check data in spot tab!</string>
     <string name="msg_invalid_evento">Check data in event tab!</string>
     <string name="msg_invalid_mapa">Select a location in map!</string>
-    <string name="msg_invalid_local">Check data in addres tab!</string>
+    <string name="msg_invalid_local">Check data in address tab!</string>
     <string name="msg_invalid_horario">Check data in timetable tab!</string>
     <string name="msg_save_on_line">Location successfully saved</string>
-    <string name="msg_save_off_line">No conection, place saved in cache.</string>
+    <string name="msg_save_off_line">No connection, place saved in cache.</string>
     <string name="msg_save_error">Connection error, place saved in cache.</string>
 
     <!-- Mensagens de login e registro -->

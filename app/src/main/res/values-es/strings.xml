@@ -1,2 +1,270 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="app_name">CABLUSH</string>
+
+    <!-- Drawer Menu -->
+    <string name="drawer_section_search">Buscar</string>
+    <string name="drawer_section_my_places">Mis Lugares</string>
+    <string name="drawer_item_login_register">Ingresar/ Registrarse</string>
+    <string name="drawer_item_stores">Tiendas</string>
+    <string name="drawer_item_events">Eventos</string>
+    <string name="drawer_item_spots">Pistas</string>
+    <string name="drawer_item_my_stores">Mis Tiendas</string>
+    <string name="drawer_item_my_events">Mis Eventos</string>
+    <string name="drawer_item_my_spots">Mis Pistas</string>
+
+    <!-- Buttons / Actions -->
+    <string name="btn_send">Enviar</string>
+    <string name="btn_cancel">Cancelar</string>
+    <string name="btn_register">Registrar</string>
+    <string name="btn_login">Ingresar</string>
+    <string name="btn_login_google">Ingresar con Google</string>
+    <string name="com_facebook_loginview_log_in_button_long">Ingresar conFacebook</string>
+    <string name="btn_reset_password">Restabelecer la contraseña</string>
+    <string name="btn_search">Buscar</string>
+    <string name="btn_save">Guardar</string>
+    <string name="btn_gallery">Galería</string>
+    <string name="btn_picture">Foto</string>
+    <string name="btn_yes">Sí</string>
+    <string name="btn_no">No</string>
+
+    <!--Login/Register -->
+    <string name="title_login">Ingresar</string>
+    <string name="title_register">Registrarse</string>
+    <string name="title_reset_password">Restabelecer la contraseña</string>
+    <string name="txt_login_email">Ingresar con Email</string>
+    <string name="txt_name">Nombre</string>
+    <string name="txt_email">Email</string>
+    <string name="txt_password">Contraseña</string>
+
+    <!--Dialog Buscar -->
+    <string name="title_search">Buscar por la %s</string>
+    <string name="txt_by_sport">Deporte</string>
+    <string name="txt_by_state">Estado</string>
+    <string name="txt_by_name">Nombre</string>
+
+    <!-- Cadastros -->
+    <string name="title_cadastrar">Registrar %s</string>
+    <string name="txt_cadastrar">Registrar</string>
+    <string name="title_endereco">Dirección</string>
+    <string name="title_horario_funcionamento">Business hours</string>
+    <string name="title_evento">Evento día y hora</string>
+
+    <!--Cadastros Local -->
+    <string name="txt_site">Sitio Web</string>
+    <string name="txt_telefone">Teléfono</string>
+    <string name="txt_facebook">Facebook</string>
+    <string name="txt_logo">Logo</string>
+    <string name="txt_descricao">Descripción</string>
+    <string name="txt_logotipo">Logotipo</string>
+    <string name="txt_foto">Toma una foto</string>
+    <string name="txt_galeria">Galería</string>
+    <string name="txt_select_picture">Seleccionar una foto</string>
+    <string name="txt_select_location">Seleccionar un lugar en el mapa</string>
+
+    <!-- Cadastros Evento -->
+    <string name="txt_data_inicio">Fecha de inicio</string>
+    <string name="txt_data_fim">Fecha final</string>
+    <string name="txt_hora">Hora</string>
+    <string name="txt_minuto">Acta</string>
+    <string name="txt_flyer">Flyer</string>
+    <string name="txt_horario">Calendario</string>
+
+    <!-- Cadastros Horario Funcionamento -->
+    <string name="txt_horarios">Calendario</string>
+    <string name="txt_dias">Dia</string>
+    <string name="txt_periodo">Período</string>
+    <string name="txt_hora_inicio">Fecha de inicio</string>
+    <string name="txt_hora_fim">Fecha final</string>
+
+    <string name="seg">L</string>
+    <string name="ter">M</string>
+    <string name="qua">Mi</string>
+    <string name="qui">J</string>
+    <string name="sex">V</string>
+    <string name="sab">S</string>
+    <string name="dom">D</string>
+
+    <string-array name="dias_options">
+        <item>Lun</item>
+        <item>Mar</item>
+        <item>Mie</item>
+        <item>Jue</item>
+        <item>Vie</item>
+        <item>Sab</item>
+        <item>Dom</item>
+    </string-array>
+
+    <!-- Cadastros Endereco -->
+    <string name="txt_endereco">Dirección</string>
+    <string name="txt_cep">Código Postal</string>
+    <string name="txt_pais">País</string>
+    <string name="txt_estado">Estado</string>
+    <string name="txt_cidade">Ciudad</string>
+    <string name="txt_bairro">Barrio</string>
+    <string name="txt_logradouro">Lugar</string>
+    <string name="txt_numero">Número</string>
+    <string name="txt_complemento">Complemento</string>
+    <string name="txt_localizacao">Ubicación</string>
+
+    <!-- Tipos Locais -->
+    <string name="txt_loja">Tienda</string>
+    <string name="txt_evento">Evento</string>
+    <string name="txt_pista">Pista</string>
+
+    <string-array name="cadastro_options">
+        <item>Tienda</item>
+        <item>Evento</item>
+        <item>Pista</item>
+    </string-array>
+
+    <string-array name="search_types">
+        <item>Tienda</item>
+        <item>Evento</item>
+        <item>Pista</item>
+    </string-array>
+
+    <string name="empty_selection">Selecionar &#8230;</string>
+
+    <!-- Sports selection -->
+    <string-array name="sports">
+        <item>Select&#8230;</item>
+        <item>Athletics</item>
+        <item>Auto Racing</item>
+        <item>Bike</item>
+        <item>Motorcycle</item>
+        <item>Rollerblades</item>
+        <item>Skate</item>
+        <item>Others</item>
+    </string-array>
+
+    <!-- States selection -->
+    <string-array name="states">
+        <item>Select&#8230;</item>
+        <item>Acre</item>
+        <item>Alagoas</item>
+        <item>Amapá</item>
+        <item>Amazonas</item>
+        <item>Bahia</item>
+        <item>Ceará</item>
+        <item>Distrito Federal</item>
+        <item>Espírito Santo</item>
+        <item>Goiás</item>
+        <item>Maranhão</item>
+        <item>Mato Grosso</item>
+        <item>Mato Grosso do Sul</item>
+        <item>Minas Gerais</item>
+        <item>Pará</item>
+        <item>Paraíba</item>
+        <item>Paraná</item>
+        <item>Pernambuco</item>
+        <item>Piauí</item>
+        <item>Rio de Janeiro</item>
+        <item>Rio Grande do Norte</item>
+        <item>Rio Grande do Sul</item>
+        <item>Rondônia</item>
+        <item>Roraima</item>
+        <item>Santa Catarina</item>
+        <item>São Paulo</item>
+        <item>Tocantins</item>
+    </string-array>
+
+    <!-- States values -->
+    <string-array name="states_values">
+        <item/>
+        <item>AC</item>
+        <item>AL</item>
+        <item>AP</item>
+        <item>AM</item>
+        <item>BA</item>
+        <item>CE</item>
+        <item>DF</item>
+        <item>ES</item>
+        <item>GO</item>
+        <item>MA</item>
+        <item>MT</item>
+        <item>MS</item>
+        <item>MG</item>
+        <item>PA</item>
+        <item>PB</item>
+        <item>PN</item>
+        <item>PE</item>
+        <item>PI</item>
+        <item>RJ</item>
+        <item>RN</item>
+        <item>RS</item>
+        <item>RO</item>
+        <item>RR</item>
+        <item>SC</item>
+        <item>SP</item>
+        <item>TO</item>
+    </string-array>
+
+    <!-- Mensagens de boas vindas -->
+    <string name="success_login">Hola% s! Ahora usted puede compartir sus lugares favoritos!</string>
+    <string name="success_check_login">Bevenido %s!</string>
+
+    <!-- Mensagens de permissões -->
+    <string name="ask_permissions_location">El Cablush usar su ubicación para sugerir con mayor precisión los lugares para practicar su deporte favorito.</string>
+    <string name="ask_permissions_storage">El Cablush necesita permiso para escribir en el dispositivo.</string>
+
+    <!-- Mensagens de erro genéricas -->
+    <string name="error_create_map">Fail to load the map!</string>
+    <string name="error_gps_not_working">Fail to reach you by GPS! Please turn your gps on and try again.</string>
+    <string name="error_no_connection">Fail to reach the server.Check out your connection and try again!</string>
+
+    <!-- Mensagens de pesquisa -->
+    <string name="msg_local_not_found">No se encontró el lugar.</string>
+    <string name="msg_search_off_line">No conection, showing cache data.</string>
+    <string name="msg_search_error">Servidor no accesible, que muestra los datos almacenados en caché.</string>
+
+    <!-- Mensagens de cadastros -->
+    <string name="msg_set_address_manually">Dirección no encontrado, por favor, rellene los datos de forma manual.</string>
+    <string name="msg_check_address">Dirección que se encuentra, por favor compruebe los datos.</string>
+    <string name="msg_confirm_no_save">Descartar los cambios no guardados?</string>
+    <string name="msg_required">Campo requerido</string>
+    <string name="msg_select_one">Selecione una opción.</string>
+    <string name="msg_invalid_web_url">Url invalida.</string>
+    <string name="msg_invalid_phone">Teléfono invalido.</string>
+    <string name="msg_invalid_loja">Comprobar los datos en el almacén pestaña!</string>
+    <string name="msg_invalid_pista">Comprobar los datos en la pestaña lugar!</string>
+    <string name="msg_invalid_evento">Comprobar los datos en la pestaña evento!</string>
+    <string name="msg_invalid_mapa">Seleccione una ubicación en el mapa!</string>
+    <string name="msg_invalid_local">Comprobar los datos de la ficha de direcciones!</string>
+    <string name="msg_invalid_horario">Comprobar los datos en la pestanã calendario!</string>
+    <string name="msg_save_on_line">Ubicación guardado correctamente</string>
+    <string name="msg_save_off_line">No hay conexión, lugar guardado en la memoria caché.</string>
+    <string name="msg_save_error">Error de conexión, lugar guardado en la memoria caché.</string>
+
+    <!-- Mensagens de login e registro -->
+    <string name="msg_register_missing_data">Todos los campos son requeridos.</string>
+    <string name="msg_login_missing_data">Email and Contraseña son requeridos.</string>
+    <string name="msg_invalid_email">Email inválido.</string>
+    <string name="msg_invalid_password">La contraseña debe tener al menos 6 caracteres.</string>
+        <string name="msg_reset_password_sent">Solicitud de nueva contraseña por correo electrónico, consulte las instrucciones en su correo electrónico.</string>
+    <string name="error_login">¡Error de inicio de sesion! Inténtalo de nuevo.</string>
+    <string name="error_register">Dejar de hacer el registro de lugar! Inténtalo de nuevo.</string>
+    <string name="msg_login_required">Por favor Iniciar sesión.</string>
+    <string name="success_register">¡Éxito! Antes de hacer login, por favor confirmar su registro en su correo electrónico!</string>
+    <string name="error_login_facebook">No se puede iniciar sesión en Facebook</string>
+    <string name="error_login_google">No se puede iniciar sesión en Google</string>
+
+    <!-- Mensagens de fotos/galeria -->
+    <string name="error_no_camera_found">Camera no encontrada.</string>
+    <string name="error_getting_picture">Error al obtener la imagen.</string>
+    <string name="error_loading_image">Erro en la carga de la foto</string>
+
+    <!-- Mensagens do serviço de localização -->
+    <string name="error_no_location_data_provided">Locación no informada.</string>
+    <string name="error_service_not_available">Buscar dirección de servicio no está disponible.</string>
+    <string name="error_invalid_lat_long_used">Locación invalida.</string>
+    <string name="error_no_address_found">Dirección no encontrada.</string>
+    <string name="msg_address_found">Dirección encontrada!</string>
+    <string name="txt_new_evento">Nuevo Evento</string>
+    <string name="txt_new_loja">Nueva Tienda</string>
+    <string name="txt_new_pista">Nuevo Lugar</string>
+    <string name="txt_inicio">Comezar</string>
+    <string name="txt_fim">Fin</string>
+    <string name="txt_detalhes">Detalles</string>
+
+</resources>
