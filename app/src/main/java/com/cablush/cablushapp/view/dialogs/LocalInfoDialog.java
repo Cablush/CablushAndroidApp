@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.cablush.cablushapp.R;
 import com.cablush.cablushapp.model.domain.Evento;
@@ -26,6 +27,9 @@ import com.cablush.cablushapp.view.CadastroEventoActivity;
 import com.cablush.cablushapp.view.CadastroLojaActivity;
 import com.cablush.cablushapp.view.CadastroPistaActivity;
 import com.cablush.cablushapp.view.MainActivity;
+import com.google.android.youtube.player.YouTubeInitializationResult;
+import com.google.android.youtube.player.YouTubePlayer;
+import com.google.android.youtube.player.YouTubePlayerView;
 
 import java.lang.ref.WeakReference;
 
@@ -33,7 +37,7 @@ import java.lang.ref.WeakReference;
  * Created by oscar on 29/12/15.
  */
 public class LocalInfoDialog<L extends Localizavel> extends DialogFragment
-        implements View.OnClickListener {
+        implements View.OnClickListener, YouTubePlayer.OnInitializedListener {
 
     private static final String TAG = LocalInfoDialog.class.getSimpleName();
 
@@ -43,6 +47,7 @@ public class LocalInfoDialog<L extends Localizavel> extends DialogFragment
      * Show the Login Dialog.
      *
      * @param fragmentManager
+     * @param localizavel
      */
     public static <L extends Localizavel> void showDialog(@NonNull FragmentManager fragmentManager,
                                                           @NonNull L localizavel) {
@@ -183,8 +188,27 @@ public class LocalInfoDialog<L extends Localizavel> extends DialogFragment
             editButton.setOnClickListener(this);
         }
 
+        YouTubePlayerView youTubeView = (YouTubePlayerView) view.findViewById(R.id.youtube_view);
+        youTubeView.initialize(getContext().getString(R.string.GOOGLE_MAPS_API_KEY), this);
         // TODO show esportes icons (?)
 
         return  view;
+    }
+
+    @Override
+    public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer player, boolean wasRestored) {
+        if (!wasRestored) {
+            player.cueVideo("fhWaJi1Hsfo"); // Plays https://www.youtube.com/watch?v=fhWaJi1Hsfo
+        }
+    }
+
+    @Override
+    public void onInitializationFailure(YouTubePlayer.Provider provider, YouTubeInitializationResult errorReason) {
+        if (errorReason.isUserRecoverableError()) {
+            //errorReason.getErrorDialog(this, RECOVERY_REQUEST).show();
+        } else {
+            String error = String.format(getString(R.string.error_getting_picture), errorReason.toString());
+            //Toast.makeText(getActivity().getApplicationContext(), error, Toast.LENGTH_LONG).show();
+        }
     }
 }
