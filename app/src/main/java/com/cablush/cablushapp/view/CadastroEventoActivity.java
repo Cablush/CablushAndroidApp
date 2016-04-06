@@ -88,6 +88,7 @@ public class CadastroEventoActivity extends CadastroActivity<Evento>
     protected boolean validate(Evento evento) {
         boolean validEvento = ValidateUtils.isNotBlank(evento.getNome());
         validEvento = ValidateUtils.isNotEmpty(evento.getData()) && validEvento;
+        validEvento = ValidateUtils.isNotEmpty(evento.getDataFim()) && validEvento;
         validEvento = ValidateUtils.isNotEmpty(evento.getHora()) && validEvento;
         validEvento = ValidateUtils.isNotBlank(evento.getDescricao()) && validEvento;
         validEvento = ValidateUtils.isNotEmpty(evento.getEsportes()) && validEvento;
@@ -100,11 +101,10 @@ public class CadastroEventoActivity extends CadastroActivity<Evento>
         if (!validMapa) {
             Toast.makeText(this, R.string.txt_select_location, Toast.LENGTH_SHORT).show();
         }
-        boolean validLocal = ValidateUtils.isNotBlank(local.getCep());
+
+        boolean validLocal = ValidateUtils.isNotBlank(local.getPais());
         validLocal = ValidateUtils.isNotBlank(local.getEstado()) && validLocal;
         validLocal = ValidateUtils.isNotBlank(local.getCidade()) && validLocal;
-        validLocal = ValidateUtils.isNotBlank(local.getBairro()) && validLocal;
-        validLocal = ValidateUtils.isNotBlank(local.getLogradouro()) && validLocal;
         validLocal = local.getLatLng() != null && validLocal;
         if (!validLocal) {
             Toast.makeText(this, R.string.msg_invalid_local, Toast.LENGTH_SHORT).show();

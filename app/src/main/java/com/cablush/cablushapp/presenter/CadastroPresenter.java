@@ -33,14 +33,15 @@ public abstract class CadastroPresenter<T> {
     }
 
     /**
+     * Save the t.
+     */
+    public abstract T doSave(T t);
+
+    /**
      * Get the esportes from local database.
      */
     public List<Esporte> getEsportes() {
         return esportesMediator.getEsportes();
     }
 
-    /**
-     * Save the t.
-     */
-    public abstract T doSave(T t);
 }

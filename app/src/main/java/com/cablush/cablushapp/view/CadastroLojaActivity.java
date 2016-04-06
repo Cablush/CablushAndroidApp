@@ -8,7 +8,6 @@ import android.widget.Toast;
 
 import com.cablush.cablushapp.R;
 import com.cablush.cablushapp.model.OperationResult;
-import com.cablush.cablushapp.model.domain.Horario;
 import com.cablush.cablushapp.model.domain.Local;
 import com.cablush.cablushapp.model.domain.Loja;
 import com.cablush.cablushapp.presenter.CadastroLojaPresenter;
@@ -106,25 +105,16 @@ public class CadastroLojaActivity extends CadastroActivity<Loja>
         if (!validMapa) {
             Toast.makeText(this, R.string.txt_select_location, Toast.LENGTH_SHORT).show();
         }
-        boolean validLocal = ValidateUtils.isNotBlank(local.getCep());
+
+        boolean validLocal = ValidateUtils.isNotBlank(local.getPais());
         validLocal = ValidateUtils.isNotBlank(local.getEstado()) && validLocal;
         validLocal = ValidateUtils.isNotBlank(local.getCidade()) && validLocal;
-        validLocal = ValidateUtils.isNotBlank(local.getBairro()) && validLocal;
-        validLocal = ValidateUtils.isNotBlank(local.getLogradouro()) && validLocal;
         validLocal = local.getLatLng() != null && validLocal;
         if (!validLocal) {
             Toast.makeText(this, R.string.msg_invalid_local, Toast.LENGTH_SHORT).show();
         }
 
-        Horario horario = loja.getHorario();
-        boolean validHorario = horario.isOpenOneDay();
-        validHorario = ValidateUtils.isNotEmpty(horario.getInicio()) && validHorario;
-        validHorario = ValidateUtils.isNotEmpty(horario.getFim()) && validHorario;
-        if (!validHorario) {
-            Toast.makeText(this, R.string.msg_invalid_horario, Toast.LENGTH_SHORT).show();
-        }
-
-        return validLoja && validMapa && validLocal && validHorario;
+        return validLoja && validMapa && validLocal;
     }
 
     @Override

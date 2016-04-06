@@ -17,8 +17,33 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="@string/txt_pais"
+            android:id="@+id/textViewPais"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="@dimen/dialog_margin"
+            android:layout_marginRight="@dimen/dialog_margin"
+            android:layout_marginTop="@dimen/vertical_spacing"/>
+
+        <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:id="@+id/spinnerPais"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/textViewPais"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="@dimen/dialog_margin"
+            android:layout_marginRight="@dimen/dialog_margin"/>
+
+        <TextView
+            style="@style/TextAppearance.Bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="@string/txt_cep"
             android:id="@+id/textViewCep"
+            android:layout_below="@+id/spinnerPais"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_marginLeft="@dimen/dialog_margin"
@@ -138,12 +163,11 @@
             android:ems="10"
             android:id="@+id/editTextLogradouro"
             android:layout_below="@+id/textViewLogradouro"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="false"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="false"
             android:layout_marginLeft="@dimen/dialog_margin"
             android:layout_marginRight="@dimen/dialog_margin"
-            android:inputType="text"
-            android:layout_alignParentStart="true"/>
+            android:inputType="text"/>
 
         <TextView
             style="@style/TextAppearance.Bold"

@@ -117,7 +117,6 @@ public class HorarioFragment extends CablushFragment implements View.OnClickList
     }
 
     private void initializeView(View view) {
-        ViewUtils.markAsRequired((TextView) view.findViewById(R.id.textViewDias));
         checkBoxSeg = (CheckBox) view.findViewById(R.id.checkBoxSeg);
         checkBoxTer = (CheckBox) view.findViewById(R.id.checkBoxTer);
         checkBoxQua = (CheckBox) view.findViewById(R.id.checkBoxQua);
@@ -126,11 +125,9 @@ public class HorarioFragment extends CablushFragment implements View.OnClickList
         checkBoxSab = (CheckBox) view.findViewById(R.id.checkBoxSab);
         checkBoxDom = (CheckBox) view.findViewById(R.id.checkBoxDom);
 
-        ViewUtils.markAsRequired((TextView) view.findViewById(R.id.textViewHoraInicio));
         editTextIni = (EditText) view.findViewById(R.id.editTextInicio);
         editTextIni.setOnClickListener(this);
 
-        ViewUtils.markAsRequired((TextView) view.findViewById(R.id.textViewHoraFim));
         editTextFim = (EditText) view.findViewById(R.id.editTextFim);
         editTextFim.setOnClickListener(this);
 
