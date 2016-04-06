@@ -36,12 +36,10 @@ public class SearchDialog extends DialogFragment {
     }
 
     private String[] types;
-    private String[] states;
     private String[] sports;
 
     private TYPE searchType;
 
-    private Spinner statesSpinner;
     private Spinner sportsSpinner;
     private EditText nameEdit;
 
@@ -89,8 +87,6 @@ public class SearchDialog extends DialogFragment {
         builder.setPositiveButton(R.string.btn_search, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 String nome = nameEdit.getText().toString();
-                String estado = ViewUtils.getCodigoEstado(getActivity(),
-                        statesSpinner.getSelectedItemPosition());
                 String esporte = ViewUtils.getSelectedItem(getActivity(), sportsSpinner);
 
                 switch (searchType) {
@@ -123,7 +119,6 @@ public class SearchDialog extends DialogFragment {
 
     private void loadData() {
         types = getResources().getStringArray(R.array.search_types);
-        states = getResources().getStringArray(R.array.states);
         sports = getResources().getStringArray(R.array.sports);
     }
 
@@ -131,9 +126,6 @@ public class SearchDialog extends DialogFragment {
         // Get the layout inflater and inflate the dialog
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.dialog_search, null);
-
-        statesSpinner = (Spinner)view.findViewById(R.id.spnEstados);
-        statesSpinner.setAdapter(new ArrayAdapter<>(getActivity(), R.layout.simple_item, states));
 
         sportsSpinner = (Spinner)view.findViewById(R.id.spnEsportes);
         sportsSpinner.setAdapter(new ArrayAdapter<>(getActivity(), R.layout.simple_item, sports));

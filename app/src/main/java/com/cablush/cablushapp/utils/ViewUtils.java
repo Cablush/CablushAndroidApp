@@ -42,26 +42,6 @@ public class ViewUtils {
     }
 
     /**
-     * Get the codigo estado by its position in the string-array.
-     */
-    public static String getCodigoEstado(Context context, int position) {
-        return context.getResources().getStringArray(R.array.states_values)[position];
-    }
-
-    /**
-     * Get the position in the string-array of a codigo estado.
-     */
-    public static int getPositionEstado(Context context, String codigoEstado) {
-        String[] codes = context.getResources().getStringArray(R.array.states_values);
-        for (int i = 0; i < codes.length; i++) {
-            if (codes[i].equalsIgnoreCase(codigoEstado)) {
-                return i;
-            }
-        }
-        return 0;
-    }
-
-    /**
      * Get the selected item from an AdapterView, or empty if the item is the "empty selection" item.
      */
     public static String getSelectedItem(Context context, AdapterView adapter) {

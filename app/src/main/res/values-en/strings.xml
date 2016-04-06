@@ -138,68 +138,6 @@
         <item>Others</item>
     </string-array>
 
-    <!-- States selection -->
-    <string-array name="states">
-        <item>Select&#8230;</item>
-        <item>Acre</item>
-        <item>Alagoas</item>
-        <item>Amapá</item>
-        <item>Amazonas</item>
-        <item>Bahia</item>
-        <item>Ceará</item>
-        <item>Distrito Federal</item>
-        <item>Espírito Santo</item>
-        <item>Goiás</item>
-        <item>Maranhão</item>
-        <item>Mato Grosso</item>
-        <item>Mato Grosso do Sul</item>
-        <item>Minas Gerais</item>
-        <item>Pará</item>
-        <item>Paraíba</item>
-        <item>Paraná</item>
-        <item>Pernambuco</item>
-        <item>Piauí</item>
-        <item>Rio de Janeiro</item>
-        <item>Rio Grande do Norte</item>
-        <item>Rio Grande do Sul</item>
-        <item>Rondônia</item>
-        <item>Roraima</item>
-        <item>Santa Catarina</item>
-        <item>São Paulo</item>
-        <item>Tocantins</item>
-    </string-array>
-
-    <!-- States values -->
-    <string-array name="states_values">
-        <item/>
-        <item>AC</item>
-        <item>AL</item>
-        <item>AP</item>
-        <item>AM</item>
-        <item>BA</item>
-        <item>CE</item>
-        <item>DF</item>
-        <item>ES</item>
-        <item>GO</item>
-        <item>MA</item>
-        <item>MT</item>
-        <item>MS</item>
-        <item>MG</item>
-        <item>PA</item>
-        <item>PB</item>
-        <item>PN</item>
-        <item>PE</item>
-        <item>PI</item>
-        <item>RJ</item>
-        <item>RN</item>
-        <item>RS</item>
-        <item>RO</item>
-        <item>RR</item>
-        <item>SC</item>
-        <item>SP</item>
-        <item>TO</item>
-    </string-array>
-
     <!-- Mensagens de boas vindas -->
     <string name="success_login">Hello %s!  Now you can share your favorites places!</string>
     <string name="success_check_login">Bem vindo %s!</string>

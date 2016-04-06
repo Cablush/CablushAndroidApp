@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -19,9 +20,13 @@ import android.widget.Toast;
 
 import com.cablush.cablushapp.R;
 import com.cablush.cablushapp.model.domain.Local;
+import com.cablush.cablushapp.model.geonames.GeonamesLoader;
 import com.cablush.cablushapp.model.services.FetchAddressIntentService;
+import com.cablush.cablushapp.utils.CountryLocale;
 import com.cablush.cablushapp.utils.ViewUtils;
 import com.google.android.gms.maps.model.LatLng;
+
+import java.util.List;
 
 /**
  * Created by oscar on 06/02/16.
@@ -32,8 +37,12 @@ public class LocalFragment extends CablushFragment implements MapaFragment.Selec
 
     private Local local;
 
+    private GeonamesLoader geonamesLoader;
+
+    private ArrayAdapter<CountryLocale> paisesAdaper;
     private ArrayAdapter<String> estadosAdapter;
 
+    private Spinner paisSpinner;
     private EditText cepEditText;
     private Spinner estadoSpinner;
     private EditText cidadeEditText;
@@ -68,8 +77,30 @@ public class LocalFragment extends CablushFragment implements MapaFragment.Selec
             local = (Local) getArguments().getSerializable(LOCAL_BUNDLE_KEY);
         }
 
-        String[] estados = getResources().getStringArray(R.array.states);
-        estadosAdapter = new ArrayAdapter<>(getActivity(), R.layout.simple_item, estados);
+        geonamesLoader = new GeonamesLoader();
+
+        paisesAdaper = new ArrayAdapter<>(getActivity(), R.layout.simple_item, CountryLocale.getContriesLocales());
+        paisSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                estadosAdapter.clear();
+                final CountryLocale country = paisesAdaper.getItem(position);
+                Thread loader = new Thread() {
+                    @Override
+                    public void run() {
+                        List<String> estados = geonamesLoader.getFirstSubdivisions(country.getCountry());
+                        estadosAdapter.addAll(estados.toArray(new String[estados.size()]));
+                    }
+                };
+                loader.start();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+
+        estadosAdapter = new ArrayAdapter<>(getActivity(), R.layout.simple_item, new String[0]);
         estadosAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         mResultReceiver = new AddressResultReceiver(new Handler());
@@ -101,28 +132,37 @@ public class LocalFragment extends CablushFragment implements MapaFragment.Selec
     }
 
     private void initializeView(View view) {
-        ViewUtils.markAsRequired((TextView) view.findViewById(R.id.textViewCep));
+        ViewUtils.markAsRequired((TextView) view.findViewById(R.id.textViewPais));
+        paisSpinner = (Spinner) view.findViewById(R.id.spinnerPais);
+        if (paisesAdaper != null) {
+            paisSpinner.setAdapter(paisesAdaper);
+            paisSpinner.setSelection(paisesAdaper.getPosition(CountryLocale.getDefault()));
+        }
+
         cepEditText = (EditText) view.findViewById(R.id.editTextCep);
-        // Estado
+
         ViewUtils.markAsRequired((TextView) view.findViewById(R.id.textViewEstado));
         estadoSpinner = (Spinner) view.findViewById(R.id.spinnerEstado);
         if (estadosAdapter != null) {
             estadoSpinner.setAdapter(estadosAdapter);
         }
+
         ViewUtils.markAsRequired((TextView) view.findViewById(R.id.textViewCidade));
         cidadeEditText = (EditText) view.findViewById(R.id.editTextCidade);
-        ViewUtils.markAsRequired((TextView) view.findViewById(R.id.textViewBairro));
+
         bairroEditText = (EditText) view.findViewById(R.id.editTextBairro);
-        ViewUtils.markAsRequired((TextView) view.findViewById(R.id.textViewLogradouro));
         logradouroEditText = (EditText) view.findViewById(R.id.editTextLogradouro);
         numeroEditText = (EditText) view.findViewById(R.id.editTextNumero);
         complementoEditText = (EditText) view.findViewById(R.id.editTextComplemento);
     }
 
     private void setViewValues() {
+        if (paisesAdaper != null) {
+            paisSpinner.setSelection(paisesAdaper.getPosition(CountryLocale.getCountryLocale(local.getPais())));
+        }
         cepEditText.setText(local.getCep());
         if (estadosAdapter != null) {
-            estadoSpinner.setSelection(ViewUtils.getPositionEstado(getContext(), local.getEstado()));
+            estadoSpinner.setSelection(estadosAdapter.getPosition(local.getEstado()));
         }
         cidadeEditText.setText(local.getCidade());
         bairroEditText.setText(local.getBairro());
@@ -132,8 +172,9 @@ public class LocalFragment extends CablushFragment implements MapaFragment.Selec
     }
 
     private void getViewValues() {
+        local.setPais(paisesAdaper.getItem(paisSpinner.getSelectedItemPosition()).getCountry());
         local.setCep(cepEditText.getText().toString());
-        local.setEstado(ViewUtils.getCodigoEstado(getActivity(), estadoSpinner.getSelectedItemPosition()));
+        local.setEstado((String)estadoSpinner.getSelectedItem());
         local.setCidade(cidadeEditText.getText().toString());
         local.setBairro(bairroEditText.getText().toString());
         local.setLogradouro(logradouroEditText.getText().toString());

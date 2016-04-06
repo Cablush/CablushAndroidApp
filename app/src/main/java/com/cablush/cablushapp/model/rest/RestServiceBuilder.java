@@ -33,7 +33,7 @@ import retrofit.converter.GsonConverter;
  */
 public class RestServiceBuilder {
 
-    protected String TAG = getClass().getSimpleName();
+    private static final String TAG = RestServiceBuilder.class.getSimpleName();
 
     public static final String X_ENTITY_TOKEN = "X-Usuario-Token";
     public static final String X_ENTITY_EMAIL = "X-Usuario-Email";
