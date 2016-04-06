@@ -17,11 +17,11 @@
       },
       "oauth_client": [
         {
-          "client_id": "576813276276-redvogqkgpa8qdkpd00q0heef63uv79q.apps.googleusercontent.com",
+          "client_id": "576813276276-803apv6f17qnrllrc9hnp0ltcn39s9jm.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.cablush.cablushapp",
-            "certificate_hash": "2ED80C7D6DFC55A41D249413C463D782366782C4"
+            "certificate_hash": "F661C74D0D151E6749C9E45E92EAA0A96B936AB9"
           }
         },
         {
