@@ -118,6 +118,22 @@ public class LoginPresenter {
         }
     }
 
+    public void logout() {
+        apiUsuario.logout(new Callback<Usuario>() {
+            @Override
+            public void success(Usuario usuario, Response response) {
+                Log.d(TAG, "Logout callback successful.");
+                onLogout();
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                Log.d(TAG, "Erro on logout callback. " + error.getMessage());
+                onLogout();
+            }
+        });
+    }
+
     /**
      * Server callback for oauth2 login.
      */
@@ -151,6 +167,14 @@ public class LoginPresenter {
         LoginView view = mView.get();
         if (view != null) {
             view.onLoginResponse(LoginResponse.ERROR);
+        }
+    }
+
+    private void onLogout() {
+        Usuario.LOGGED_USER = null;
+        LoginView view = mView.get();
+        if (view != null) {
+            view.onLoginResponse(LoginResponse.SUCCESS);
         }
     }
 }

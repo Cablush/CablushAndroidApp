@@ -24,7 +24,7 @@ import com.cablush.cablushapp.utils.ValidateUtils;
  */
 public class SignUpActivity extends CablushActivity implements RegisterPresenter.RegisterView {
 
-    private RegisterPresenter mPresenter;
+    private RegisterPresenter registerPresenter;
 
     private EditText nameEdit;
     private EditText emailEdit;
@@ -59,7 +59,7 @@ public class SignUpActivity extends CablushActivity implements RegisterPresenter
             actionBar.setTitle(getTitle());
         }
 
-        mPresenter = new RegisterPresenter(this, this);
+        registerPresenter = new RegisterPresenter(this, this);
 
         initializeView();
     }
@@ -101,7 +101,7 @@ public class SignUpActivity extends CablushActivity implements RegisterPresenter
         } else if (!ValidateUtils.isValidPassword(password)) {
             Toast.makeText(this, R.string.msg_invalid_password, Toast.LENGTH_SHORT).show();
         } else {
-            mPresenter.register(name, email, password);
+            registerPresenter.register(name, email, password);
             spinner.setVisibility(View.VISIBLE);
         }
     }

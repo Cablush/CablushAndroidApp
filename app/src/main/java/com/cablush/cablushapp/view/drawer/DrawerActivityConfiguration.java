@@ -12,6 +12,8 @@ public class DrawerActivityConfiguration {
     private int headerId;
     private int drawerOpenDesc;
     private int drawerCloseDesc;
+    private int mainDrawerContent;
+    private int optionalDrawerContent;
 
     public int getMainLayout() {
         return mainLayout;
@@ -67,5 +69,21 @@ public class DrawerActivityConfiguration {
 
     public void setDrawerCloseDesc(int drawerCloseDesc) {
         this.drawerCloseDesc = drawerCloseDesc;
+    }
+
+    public int getMainDrawerContent() {
+        return mainDrawerContent;
+    }
+
+    public void setMainDrawerContent(int mainDrawerContent) {
+        this.mainDrawerContent = mainDrawerContent;
+    }
+
+    public int getOptionalDrawerContent() {
+        return optionalDrawerContent;
+    }
+
+    public void setOptionalDrawerContent(int optionalDrawerContent) {
+        this.optionalDrawerContent = optionalDrawerContent;
     }
 }

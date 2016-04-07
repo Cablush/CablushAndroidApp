@@ -50,7 +50,7 @@ public class SignInActivity extends CablushActivity implements LoginPresenter.Lo
 
     private GoogleApiClient googleApiClient;
 
-    private LoginPresenter mPresenter;
+    private LoginPresenter loginPresenter;
 
     private EditText emailEdit;
     private EditText passwordEdit;
@@ -84,7 +84,7 @@ public class SignInActivity extends CablushActivity implements LoginPresenter.Lo
             actionBar.setTitle(getTitle());
         }
 
-        mPresenter = new LoginPresenter(this, this);
+        loginPresenter = new LoginPresenter(this, this);
 
         initializeFacebookSDK();
 
@@ -157,7 +157,7 @@ public class SignInActivity extends CablushActivity implements LoginPresenter.Lo
             public void onSuccess(LoginResult loginResult) {
                 Log.d(TAG, "Facebook login successful.");
                 AccessToken token = loginResult.getAccessToken();
-                mPresenter.omniauthCallback(LoginPresenter.OmniauthProvider.FACEBOOK, token.getToken());
+                loginPresenter.omniauthCallback(LoginPresenter.OmniauthProvider.FACEBOOK, token.getToken());
                 spinner.setVisibility(View.VISIBLE);
             }
 
@@ -204,7 +204,7 @@ public class SignInActivity extends CablushActivity implements LoginPresenter.Lo
         String password = passwordEdit.getText().toString();
 
         if (ValidateUtils.isNotBlank(email) && ValidateUtils.isNotBlank(password)) {
-            mPresenter.login(email, password);
+            loginPresenter.login(email, password);
             spinner.setVisibility(View.VISIBLE);
         } else {
             Toast.makeText(this, R.string.msg_login_missing_data, Toast.LENGTH_SHORT).show();
@@ -221,7 +221,7 @@ public class SignInActivity extends CablushActivity implements LoginPresenter.Lo
             if (result.isSuccess()) {
                 // Signed in successfully.
                 GoogleSignInAccount acct = result.getSignInAccount();
-                mPresenter.omniauthCallback(LoginPresenter.OmniauthProvider.GOOGLE, acct.getIdToken());
+                loginPresenter.omniauthCallback(LoginPresenter.OmniauthProvider.GOOGLE, acct.getIdToken());
                 spinner.setVisibility(View.VISIBLE);
             } else {
                 Toast.makeText(this, R.string.error_login_google, Toast.LENGTH_SHORT).show();

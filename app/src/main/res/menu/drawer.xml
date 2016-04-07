@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <group android:checkableBehavior="single">
+    <group android:id="@+id/drawer_group_main" android:checkableBehavior="single">
 
         <item
             android:id="@+id/section_search"
@@ -46,4 +46,12 @@
         </item>
 
     </group>
+
+    <group android:id="@+id/drawer_group_user" android:checkableBehavior="single"
+        android:visible="false">
+        <item
+            android:id="@+id/drawer_logout"
+            android:title="@string/drawer_item_logout"/>
+    </group>
+
 </menu>

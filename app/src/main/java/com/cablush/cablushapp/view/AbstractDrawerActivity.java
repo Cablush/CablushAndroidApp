@@ -23,6 +23,10 @@ public abstract class AbstractDrawerActivity extends CablushActivity {
     protected DrawerLayout drawerLayout;
     protected ActionBarDrawerToggle mDrawerToggle;
 
+    protected int mainDrawerContent;
+    protected int optionalDrawerContent;
+    protected boolean isMainContentVisible;
+
     protected abstract DrawerActivityConfiguration getNavDrawerConfiguration();
 
     protected abstract boolean onNavItemSelected(int id);
@@ -40,7 +44,6 @@ public abstract class AbstractDrawerActivity extends CablushActivity {
 
         navigationView = (NavigationView) findViewById(navConf.getNavigationId());
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-
             @Override
             public boolean onNavigationItemSelected(MenuItem menuItem) {
                 menuItem.setChecked(false); // Do not leave item checked
@@ -74,6 +77,9 @@ public abstract class AbstractDrawerActivity extends CablushActivity {
         ) {
             public void onDrawerClosed(View drawerView) {
                 invalidateOptionsMenu();
+                if (!isMainContentVisible) {
+                    toggleDrawerContent();
+                }
                 super.onDrawerClosed(drawerView);
             }
 
@@ -82,14 +88,30 @@ public abstract class AbstractDrawerActivity extends CablushActivity {
                 super.onDrawerOpened(drawerView);
             }
         };
-        drawerLayout.setDrawerListener(mDrawerToggle);
+        drawerLayout.addDrawerListener(mDrawerToggle);
         mDrawerToggle.syncState();
+
+        mainDrawerContent = navConf.getMainDrawerContent();
+        optionalDrawerContent = navConf.getOptionalDrawerContent();
+        isMainContentVisible = true;
     }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         mDrawerToggle.onConfigurationChanged(newConfig);
+    }
+
+    protected void toggleDrawerContent() {
+        if (isMainContentVisible) {
+            navigationView.getMenu().setGroupVisible(mainDrawerContent, false);
+            navigationView.getMenu().setGroupVisible(optionalDrawerContent, true);
+            isMainContentVisible = false;
+        } else {
+            navigationView.getMenu().setGroupVisible(mainDrawerContent, true);
+            navigationView.getMenu().setGroupVisible(optionalDrawerContent, false);
+            isMainContentVisible = true;
+        }
     }
 
     @Override

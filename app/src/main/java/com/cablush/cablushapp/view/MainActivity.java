@@ -19,6 +19,7 @@ import com.cablush.cablushapp.model.domain.Localizavel;
 import com.cablush.cablushapp.model.domain.Loja;
 import com.cablush.cablushapp.model.domain.Pista;
 import com.cablush.cablushapp.model.domain.Usuario;
+import com.cablush.cablushapp.presenter.LoginPresenter;
 import com.cablush.cablushapp.presenter.SearchPresenter;
 import com.cablush.cablushapp.utils.MapUtils;
 import com.cablush.cablushapp.utils.ViewUtils;
@@ -82,7 +83,6 @@ public class MainActivity extends AbstractDrawerActivity
 
         FabSpeedDial fabSpeedDial = (FabSpeedDial) findViewById(R.id.add_fabDial);
         fabSpeedDial.setMenuListener(new SimpleMenuListenerAdapter() {
-
             @Override
             public boolean onMenuItemSelected(MenuItem menuItem) {
                 switch (menuItem.getItemId()){
@@ -163,6 +163,8 @@ public class MainActivity extends AbstractDrawerActivity
         navConf.setToolbarId(R.id.toolbar);
         navConf.setNavigationId(R.id.navigation_view);
         navConf.setHeaderId(R.layout.drawer_header);
+        navConf.setMainDrawerContent(R.id.drawer_group_main);
+        navConf.setOptionalDrawerContent(R.id.drawer_group_user);
         return navConf;
     }
 
@@ -174,8 +176,12 @@ public class MainActivity extends AbstractDrawerActivity
                     drawerLayout.closeDrawers();
                     startActivityForResult(SignInActivity.makeIntent(this), REQUEST_SIGNIN);
                     return true;
+                } else {
+                    toggleDrawerContent();
                 }
                 return false;
+            case R.id.drawer_logout:
+                return logout();
             case R.id.drawer_search_lojas:
                 return getLojas();
             case R.id.drawer_search_eventos:
@@ -211,6 +217,18 @@ public class MainActivity extends AbstractDrawerActivity
                     break;
             }
         }
+    }
+
+    private boolean logout() {
+        LoginPresenter presenter = new LoginPresenter(new LoginPresenter.LoginView() {
+            @Override
+            public void onLoginResponse(LoginPresenter.LoginResponse response) {
+                Toast.makeText(MainActivity.this, R.string.success_logout, Toast.LENGTH_SHORT).show();
+                configNavigationHead();
+            }
+        }, this);
+        presenter.logout();
+        return true;
     }
 
     private boolean getLojas() {
