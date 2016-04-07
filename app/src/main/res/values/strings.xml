@@ -5,7 +5,8 @@
     <!-- Drawer Menu -->
     <string name="drawer_section_search">Buscar</string>
     <string name="drawer_section_my_places">Meus Locais</string>
-    <string name="drawer_item_login_register">Login / Cadastro</string>
+    <string name="drawer_item_login_register">Entrar / Cadastrar</string>
+    <string name="drawer_item_logout">Sair</string>
     <string name="drawer_item_stores">Lojas</string>
     <string name="drawer_item_events">Eventos</string>
     <string name="drawer_item_spots">Pistas</string>
@@ -17,7 +18,7 @@
     <string name="btn_send">Enviar</string>
     <string name="btn_cancel">Cancelar</string>
     <string name="btn_register">Cadastrar</string>
-    <string name="btn_login">Logar</string>
+    <string name="btn_login">Entrar</string>
     <string name="btn_login_google">Entrar com Google</string>
     <string name="com_facebook_loginview_log_in_button_long">Entrar com Facebook</string>
     <string name="btn_reset_password">Esqueci a Senha</string>
@@ -29,7 +30,7 @@
     <string name="btn_no">Não</string>
 
     <!--Login/Register -->
-    <string name="title_login">Login</string>
+    <string name="title_login">Entrar</string>
     <string name="title_register">Novo Cadastro</string>
     <string name="title_reset_password">Solicitar Senha</string>
     <string name="txt_login_email">Entrar com Email</string>
@@ -138,10 +139,6 @@
         <item>Outros</item>
     </string-array>
 
-    <!-- Mensagens de boas vindas -->
-    <string name="success_login">Olá %s! Agora você pode compartilhar seus locais favoritos!</string>
-    <string name="success_check_login">Bem vindo %s!</string>
-
     <!-- Mensagens de permissões -->
     <string name="ask_permissions_location">O Cablush utiliza a sua localização para sugerir locais onde praticar esportes com mais precisão.</string>
     <string name="ask_permissions_storage">O Cablush necessita permissão de escrita em seu dispositivo para salvar as fotos.</string>
@@ -175,15 +172,18 @@
     <string name="msg_save_error">Erro ao conectar ao servidor, local salvo em cache.</string>
 
     <!-- Mensagens de login e registro -->
+    <string name="success_login">Olá %s! Agora você pode compartilhar seus locais favoritos!</string>
+    <string name="success_register">Cadastro realizado! Antes de fazer Login, confirme o cadastro no email que te enviamos!</string>
+    <string name="success_check_login">Bem vindo %s!</string>
+    <string name="success_logout">Até mais!</string>
     <string name="msg_register_missing_data">Preencha todos os campos.</string>
     <string name="msg_login_missing_data">Preencha email e senha.</string>
-    <string name="msg_invalid_email">Email invalido.</string>
+    <string name="msg_invalid_email">E-mail inválido.</string>
     <string name="msg_invalid_password">A senha deve possuir pelo menos 6 caracteres.</string>
     <string name="msg_reset_password_sent">Solicitação de nova enviada, verifique as instruções no seu email.</string>
+    <string name="msg_login_required">Faça login para continuar.</string>
     <string name="error_login">Erro ao realizar login! Tente novamente.</string>
     <string name="error_register">Erro ao realizar cadastro! Tente novamente.</string>
-    <string name="msg_login_required">Faça login para continuar.</string>
-    <string name="success_register">Cadastro realizado! Antes de fazer Login, confirme o cadastro no email que te enviamos!</string>
     <string name="error_login_facebook">Não foi possível logar no Facebook</string>
     <string name="error_login_google">Não foi possível logar no Google</string>
 
@@ -199,8 +199,8 @@
     <string name="error_no_address_found">Endereço não encontrado.</string>
     <string name="msg_address_found">Endereço encontrado.</string>
     <string name="txt_periodo">Periodo</string>
-    <string name="txt_hora_fim">Hora Fim</string>
     <string name="txt_hora_inicio">Hora Início</string>
+    <string name="txt_hora_fim">Hora Fim</string>
     <string name="title_endereco">Endereço</string>
     <string name="title_evento">Evento</string>
     <string name="title_horario_funcionamento">Horário</string>
