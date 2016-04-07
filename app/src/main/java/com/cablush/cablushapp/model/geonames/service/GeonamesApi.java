@@ -16,6 +16,7 @@ public interface GeonamesApi {
                                      @Query("lang") String lang,
                                      @Query("country") String country,
                                      @Query("featureCode") String featureCode,
-                                     @Query("style") String style);
+                                     @Query("style") String style,
+                                     Callback<GeonamesResult> resultCallback);
 
 }
