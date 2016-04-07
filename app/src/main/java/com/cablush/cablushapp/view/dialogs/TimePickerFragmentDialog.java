@@ -41,6 +41,9 @@ public class TimePickerFragmentDialog extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         Log.d(TAG, "onCreateDialog()");
+        if (calendar.getTime().getTime() == 0) {
+            calendar.setTime(new Date());
+        }
         // Get the default values for the picker from the initial Calendar
         int hour = calendar.get(Calendar.HOUR_OF_DAY);
         int minute = calendar.get(Calendar.MINUTE);

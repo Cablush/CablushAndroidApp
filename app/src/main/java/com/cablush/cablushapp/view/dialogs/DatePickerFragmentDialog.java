@@ -11,6 +11,7 @@ import android.text.format.DateFormat;
 import android.util.Log;
 
 import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Created by jonathan on 10/02/16.
@@ -41,6 +42,9 @@ public class DatePickerFragmentDialog extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         Log.d(TAG, "onCreateDialog()");
+        if (calendar.getTime().getTime() == 0) {
+            calendar.setTime(new Date());
+        }
         // Get the default values for the picker from the initial Calendar
         int year  = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH);
