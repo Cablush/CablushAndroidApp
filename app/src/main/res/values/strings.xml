@@ -196,13 +196,8 @@
     <string name="error_no_location_data_provided">Localização não informada.</string>
     <string name="error_service_not_available">Serviço de busca de endereço não disponível.</string>
     <string name="error_invalid_lat_long_used">Localização inválida.</string>
+    <string name="error_locate_estados">Não foi possível recuperar estados.</string>
     <string name="error_no_address_found">Endereço não encontrado.</string>
     <string name="msg_address_found">Endereço encontrado.</string>
-    <string name="txt_periodo">Periodo</string>
-    <string name="txt_hora_inicio">Hora Início</string>
-    <string name="txt_hora_fim">Hora Fim</string>
-    <string name="title_endereco">Endereço</string>
-    <string name="title_evento">Evento</string>
-    <string name="title_horario_funcionamento">Horário</string>
 
 </resources>

@@ -64,15 +64,15 @@
     <string name="txt_select_location">Select a place in map.</string>
 
     <!-- Cadastros Evento -->
-    <string name="txt_data_inicio">Start date</string>
+    <string name="txt_data_inicio">Begin date</string>
     <string name="txt_data_fim">End date</string>
     <string name="txt_hora">Hour</string>
     <string name="txt_minuto">Minute</string>
     <string name="txt_flyer">Flyer</string>
-    <string name="txt_horario">Schedule</string>
+    <string name="txt_horario">Time</string>
 
     <!-- Cadastros Horario Funcionamento -->
-    <string name="txt_horarios">Schedules</string>
+    <string name="txt_horarios">Business hours</string>
     <string name="txt_dias">Days</string>
     <string name="txt_inicio">Begin</string>
     <string name="txt_fim">End</string>
@@ -196,13 +196,8 @@
     <string name="error_no_location_data_provided">No location data provided.</string>
     <string name="error_service_not_available">Search address service not available.</string>
     <string name="error_invalid_lat_long_used">Invalid location.</string>
+    <string name="error_locate_estados">Unable to retrieve states.</string>
     <string name="error_no_address_found">Address not found.</string>
     <string name="msg_address_found">Address found!</string>
-    <string name="txt_periodo">Period</string>
-    <string name="txt_hora_inicio">Start time</string>
-    <string name="txt_hora_fim">End time</string>
-    <string name="title_endereco">Address</string>
-    <string name="title_evento">Event</string>
-    <string name="title_horario_funcionamento">Business hours</string>
 
 </resources>

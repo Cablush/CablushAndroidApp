@@ -69,12 +69,12 @@
     <string name="txt_hora">Hora</string>
     <string name="txt_minuto">Minuto</string>
     <string name="txt_flyer">Volante</string>
-    <string name="txt_horario">Calendario</string>
+    <string name="txt_horario">Hora</string>
 
     <!-- Cadastros Horario Funcionamento -->
-    <string name="txt_horarios">Calendario</string>
+    <string name="txt_horarios">Horarios</string>
     <string name="txt_dias">Días</string>
-    <string name="txt_inicio">Comenzar</string>
+    <string name="txt_inicio">Inicio</string>
     <string name="txt_fim">Fin</string>
     <string name="txt_detalhes">Detalles</string>
 
@@ -125,7 +125,7 @@
         <item>Pista</item>
     </string-array>
 
-    <string name="empty_selection">Seleccionar…</string>
+    <string name="empty_selection">Seleccionar&#8230;</string>
 
     <!-- Sports selection -->
     <string-array name="sports">
@@ -196,13 +196,8 @@
     <string name="error_no_location_data_provided">Localización no informada.</string>
     <string name="error_service_not_available">Servicio de búsqueda no está disponible.</string>
     <string name="error_invalid_lat_long_used">Localización invalida.</string>
+    <string name="error_locate_estados">No se pudo recuperar los estados.</string>
     <string name="error_no_address_found">Dirección no encontrada.</string>
-    <string name="msg_address_found"> Dirección encontrado!</string>
-    <string name="txt_periodo">Período</string>
-    <string name="txt_hora_inicio">Hora de inicio</string>
-    <string name="txt_hora_fim">Hora de fin</string>
-    <string name="title_endereco">Dirección</string>
-    <string name="title_evento">Evento</string>
-    <string name="title_horario_funcionamento">Horas de oficina</string>
+    <string name="msg_address_found">Dirección encontrado!</string>
 
 </resources>
