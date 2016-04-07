@@ -262,7 +262,7 @@ public class MainActivity extends AbstractDrawerActivity
     }
 
     private boolean getPistas() {
-        searchPresenter.getLojas(null, null, null);
+        searchPresenter.getPistas(null, null, null);
         spinner.setVisibility(View.VISIBLE);
         return true;
     }
