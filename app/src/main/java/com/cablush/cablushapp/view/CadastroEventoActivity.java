@@ -102,15 +102,7 @@ public class CadastroEventoActivity extends CadastroActivity<Evento>
             Toast.makeText(this, R.string.txt_select_location, Toast.LENGTH_SHORT).show();
         }
 
-        boolean validLocal = ValidateUtils.isNotBlank(local.getPais());
-        validLocal = ValidateUtils.isNotBlank(local.getEstado()) && validLocal;
-        validLocal = ValidateUtils.isNotBlank(local.getCidade()) && validLocal;
-        validLocal = local.getLatLng() != null && validLocal;
-        if (!validLocal) {
-            Toast.makeText(this, R.string.msg_invalid_local, Toast.LENGTH_SHORT).show();
-        }
-
-        return validEvento && validMapa && validLocal;
+        return validEvento && validMapa;
     }
 
     @Override

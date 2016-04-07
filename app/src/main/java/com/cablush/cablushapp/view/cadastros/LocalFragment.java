@@ -15,7 +15,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cablush.cablushapp.R;
@@ -23,7 +22,6 @@ import com.cablush.cablushapp.model.domain.Local;
 import com.cablush.cablushapp.model.geonames.GeonamesLoader;
 import com.cablush.cablushapp.model.services.FetchAddressIntentService;
 import com.cablush.cablushapp.utils.CountryLocale;
-import com.cablush.cablushapp.utils.ViewUtils;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.List;
@@ -132,7 +130,6 @@ public class LocalFragment extends CablushFragment implements MapaFragment.Selec
     }
 
     private void initializeView(View view) {
-        ViewUtils.markAsRequired((TextView) view.findViewById(R.id.textViewPais));
         paisSpinner = (Spinner) view.findViewById(R.id.spinnerPais);
         if (paisesAdaper != null) {
             paisSpinner.setAdapter(paisesAdaper);
@@ -141,13 +138,11 @@ public class LocalFragment extends CablushFragment implements MapaFragment.Selec
 
         cepEditText = (EditText) view.findViewById(R.id.editTextCep);
 
-        ViewUtils.markAsRequired((TextView) view.findViewById(R.id.textViewEstado));
         estadoSpinner = (Spinner) view.findViewById(R.id.spinnerEstado);
         if (estadosAdapter != null) {
             estadoSpinner.setAdapter(estadosAdapter);
         }
 
-        ViewUtils.markAsRequired((TextView) view.findViewById(R.id.textViewCidade));
         cidadeEditText = (EditText) view.findViewById(R.id.editTextCidade);
 
         bairroEditText = (EditText) view.findViewById(R.id.editTextBairro);
