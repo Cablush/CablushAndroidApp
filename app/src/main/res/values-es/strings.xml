@@ -155,7 +155,7 @@
 
     <!-- Mensagens de cadastros -->
     <string name="msg_set_address_manually">Dirección no encontrado, por favor, rellene los datos de forma manual.</string>
-    <string name="msg_check_address"> Dirección encontrado, por favor compruebe los datos.</string>
+    <string name="msg_check_address">Dirección encontrada, por favor compruebe los datos rellenados.</string>
     <string name="msg_confirm_no_save">Descartar los cambios no guardados?</string>
     <string name="msg_required">¡Campo requerido!</string>
     <string name="msg_select_one">Seleccione una opción.</string>
@@ -198,6 +198,6 @@
     <string name="error_invalid_lat_long_used">Localización invalida.</string>
     <string name="error_locate_estados">No se pudo recuperar los estados.</string>
     <string name="error_no_address_found">Dirección no encontrada.</string>
-    <string name="msg_address_found">Dirección encontrado!</string>
+    <string name="msg_address_found">Dirección encontrada!</string>
 
 </resources>

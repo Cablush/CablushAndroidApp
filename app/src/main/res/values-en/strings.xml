@@ -155,7 +155,7 @@
 
     <!-- Mensagens de cadastros -->
     <string name="msg_set_address_manually">Address not found, please fill data manually.</string>
-    <string name="msg_check_address">Address found, please check data.</string>
+    <string name="msg_check_address">Address found, please check filled data.</string>
     <string name="msg_confirm_no_save">Discard unsaved changes?</string>
     <string name="msg_required">Required field!</string>
     <string name="msg_select_one">Select one option.</string>

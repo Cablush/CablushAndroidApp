@@ -155,7 +155,7 @@
 
     <!-- Mensagens de cadastros -->
     <string name="msg_set_address_manually">Endereço não encontrado, prencha os dados manualmente.</string>
-    <string name="msg_check_address">Endereço encontrado, confira os dados retornados.</string>
+    <string name="msg_check_address">Endereço encontrado, verifique os dados preenchidos..</string>
     <string name="msg_confirm_no_save">Descartar alterações não salvas?</string>
     <string name="msg_required">Campo obrigatório!</string>
     <string name="msg_select_one">Selecione pelo menos uma opção.</string>
