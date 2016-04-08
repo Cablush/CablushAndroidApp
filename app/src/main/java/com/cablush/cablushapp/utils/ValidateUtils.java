@@ -44,7 +44,7 @@ public class ValidateUtils {
      * Check if a collection is not empty.
      */
     public static boolean isNotEmpty(Collection collection) {
-        return collection != null || !collection.isEmpty();
+        return collection != null && !collection.isEmpty();
     }
 
     /**
