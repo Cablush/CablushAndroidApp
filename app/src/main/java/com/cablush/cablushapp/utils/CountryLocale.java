@@ -1,13 +1,14 @@
 package com.cablush.cablushapp.utils;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
 /**
  * Created by oscar on 04/04/16.
  */
-public class CountryLocale {
+public class CountryLocale implements Comparable<CountryLocale> {
 
     private Locale locale;
 
@@ -30,7 +31,7 @@ public class CountryLocale {
      * Get the CountryLocale of the Country code
      */
     public static CountryLocale getCountryLocale(String country) {
-        return new CountryLocale("", country);
+        return new CountryLocale(Locale.getDefault().getLanguage(), country);
     }
 
     /**
@@ -42,6 +43,7 @@ public class CountryLocale {
         for (String countryCode : locales) {
             countriesLocales.add(CountryLocale.getCountryLocale(countryCode));
         }
+        Collections.sort(countriesLocales);
         return countriesLocales;
     }
 
@@ -75,12 +77,17 @@ public class CountryLocale {
 
         CountryLocale that = (CountryLocale) o;
 
-        return locale != null ? locale.getCountry().equals(that.locale.getCountry()) : that.locale == null;
+        return locale != null ? getCountry().equals(that.getCountry()) : that.locale == null;
 
     }
 
     @Override
     public int hashCode() {
-        return locale != null ? locale.getCountry().hashCode() : 0;
+        return locale != null ? getCountry().hashCode() : 0;
+    }
+
+    @Override
+    public int compareTo(CountryLocale another) {
+        return this.getDisplayCountry().compareTo(another.getDisplayCountry());
     }
 }
