@@ -20,8 +20,10 @@ import android.widget.Toast;
 import com.cablush.cablushapp.R;
 import com.cablush.cablushapp.model.domain.Local;
 import com.cablush.cablushapp.model.geonames.GeonamesLoader;
+import com.cablush.cablushapp.model.geonames.dto.Geonames;
 import com.cablush.cablushapp.model.services.FetchAddressIntentService;
 import com.cablush.cablushapp.utils.CountryLocale;
+import com.cablush.cablushapp.utils.CountryState;
 import com.cablush.cablushapp.utils.ValidateUtils;
 import com.google.android.gms.maps.model.LatLng;
 
@@ -40,7 +42,7 @@ public class LocalFragment extends CablushFragment implements MapaFragment.Selec
     private GeonamesLoader geonamesLoader;
 
     private ArrayAdapter<CountryLocale> paisesAdaper;
-    private ArrayAdapter<String> estadosAdapter;
+    private ArrayAdapter<CountryState> estadosAdapter;
 
     private Spinner paisSpinner;
     private EditText cepEditText;
@@ -122,9 +124,10 @@ public class LocalFragment extends CablushFragment implements MapaFragment.Selec
                 estadosAdapter.clear();
                 geonamesLoader.getFirstSubdivisions(country.getCountry(), new GeonamesLoader.GeonamesCallback() {
                     @Override
-                    public void onLoadFirstSubdivisions(List<String> firstSubdivisions) {
+                    public void onLoadFirstSubdivisions(List<Geonames> firstSubdivisions) {
                         if (firstSubdivisions != null) {
-                            estadosAdapter.addAll(firstSubdivisions);
+                            estadosAdapter.addAll(CountryState.fromSubDivision(firstSubdivisions));
+                            setEstadoValue();
                         } else {
                             Toast.makeText(getActivity(), R.string.error_locate_estados, Toast.LENGTH_SHORT).show();
                         }
@@ -160,9 +163,7 @@ public class LocalFragment extends CablushFragment implements MapaFragment.Selec
             paisSpinner.setSelection(paisesAdaper.getPosition(CountryLocale.getCountryLocale(local.getPais())));
         }
         cepEditText.setText(local.getCep());
-        if (estadosAdapter != null && ValidateUtils.isNotBlank(local.getEstado())) {
-            estadoSpinner.setSelection(estadosAdapter.getPosition(local.getEstado()));
-        }
+        setEstadoValue();
         cidadeEditText.setText(local.getCidade());
         bairroEditText.setText(local.getBairro());
         logradouroEditText.setText(local.getLogradouro());
@@ -170,10 +171,16 @@ public class LocalFragment extends CablushFragment implements MapaFragment.Selec
         complementoEditText.setText(local.getComplemento());
     }
 
+    private void setEstadoValue() {
+        if (estadosAdapter != null && ValidateUtils.isNotBlank(local.getEstado())) {
+            estadoSpinner.setSelection(estadosAdapter.getPosition(CountryState.getContryState(local.getEstado())));
+        }
+    }
+
     private void getViewValues() {
         local.setPais(paisesAdaper.getItem(paisSpinner.getSelectedItemPosition()).getCountry());
         local.setCep(cepEditText.getText().toString());
-        local.setEstado((String)estadoSpinner.getSelectedItem());
+        local.setEstado(estadosAdapter.getItem(estadoSpinner.getSelectedItemPosition()).getCode());
         local.setCidade(cidadeEditText.getText().toString());
         local.setBairro(bairroEditText.getText().toString());
         local.setLogradouro(logradouroEditText.getText().toString());

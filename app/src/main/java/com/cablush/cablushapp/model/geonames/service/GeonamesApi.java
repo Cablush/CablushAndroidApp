@@ -12,7 +12,7 @@ import retrofit.http.Query;
 public interface GeonamesApi {
 
     @GET("/searchJSON")
-    GeonamesResult searchFromCountry(@Query("userName") String userName,
+    void searchFromCountry(@Query("userName") String userName,
                                      @Query("lang") String lang,
                                      @Query("country") String country,
                                      @Query("featureCode") String featureCode,
