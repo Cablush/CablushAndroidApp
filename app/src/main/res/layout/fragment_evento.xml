@@ -32,9 +32,9 @@
             android:hint="@string/txt_name"
             android:ems="10"
             android:id="@+id/editTextNome"
-            android:layout_alignParentStart="true"
             android:layout_below="@+id/textViewNome"
             android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
             android:layout_marginLeft="@dimen/dialog_margin"
             android:layout_marginRight="@dimen/dialog_margin"/>
 
@@ -59,13 +59,12 @@
             android:hint="@string/txt_data_inicio"
             android:ems="10"
             android:id="@+id/editTextDataInicio"
-            android:layout_alignParentStart="true"
             android:layout_below="@+id/textViewDataInicio"
             android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
             android:layout_marginLeft="@dimen/dialog_margin"
             android:layout_marginRight="@dimen/dialog_margin"/>
 
-        <!-- Inicio de horario-->
         <TextView
             style="@style/TextAppearance.Bold"
             android:layout_width="wrap_content"
@@ -87,13 +86,11 @@
             android:hint="@string/txt_horario"
             android:ems="5"
             android:id="@+id/editTextHorario"
-            android:layout_alignParentStart="true"
             android:layout_below="@+id/textViewHorario"
             android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
             android:layout_marginLeft="@dimen/dialog_margin"
             android:layout_marginRight="@dimen/dialog_margin"/>
-
-        <!--fim horario-->
 
         <TextView
             style="@style/TextAppearance.Bold"
@@ -112,13 +109,13 @@
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textEmailAddress"
+            android:inputType="date"
             android:hint="@string/txt_data_fim"
             android:ems="10"
             android:id="@+id/editTextDataFim"
-            android:layout_alignParentStart="true"
             android:layout_below="@+id/textViewDataFim"
             android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
             android:layout_marginLeft="@dimen/dialog_margin"
             android:layout_marginRight="@dimen/dialog_margin"/>
 
@@ -142,9 +139,9 @@
             android:hint="@string/txt_site"
             android:ems="10"
             android:id="@+id/editTextWebsite"
-            android:layout_alignParentStart="true"
             android:layout_below="@+id/textViewWebsite"
             android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
             android:layout_marginLeft="@dimen/dialog_margin"
             android:layout_marginRight="@dimen/dialog_margin"
             android:inputType="textUri"/>
@@ -170,8 +167,8 @@
             android:ems="10"
             android:id="@+id/editTextFacebook"
             android:layout_below="@+id/textViewFacebook"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
             android:layout_marginLeft="@dimen/dialog_margin"
             android:layout_marginRight="@dimen/dialog_margin"
             android:inputType="textUri"/>
@@ -183,12 +180,12 @@
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="@string/txt_flyer"
             android:id="@+id/textViewFlyer"
+            android:layout_below="@+id/editTextFacebook"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_marginLeft="@dimen/dialog_margin"
             android:layout_marginRight="@dimen/dialog_margin"
-            android:layout_marginTop="@dimen/vertical_spacing"
-            android:layout_below="@+id/editTextFacebook"/>
+            android:layout_marginTop="@dimen/vertical_spacing"/>
 
         <ImageButton
             style="?android:attr/buttonStyleSmall"
@@ -249,14 +246,13 @@
             android:layout_height="wrap_content"
             android:inputType="textMultiLine"
             android:ems="10"
-            android:id="@+id/editTextDescricao"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentEnd="true"
             android:hint="@string/txt_descricao"
+            android:id="@+id/editTextDescricao"
             android:layout_below="@+id/textViewDescricao"
-            android:layout_alignParentLeft="true"
             android:layout_marginLeft="@dimen/dialog_margin"
-            android:layout_marginRight="@dimen/dialog_margin"/>
+            android:layout_marginRight="@dimen/dialog_margin"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"/>
 
         <TextView
             style="@style/TextAppearance.Bold"
@@ -265,12 +261,11 @@
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="Esportes"
             android:id="@+id/textViewEsportes"
-            android:layout_alignParentBottom="false"
+            android:layout_below="@+id/editTextDescricao"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_marginLeft="@dimen/dialog_margin"
             android:layout_marginRight="@dimen/dialog_margin"
-            android:layout_below="@+id/editTextDescricao"
             android:layout_marginTop="@dimen/vertical_spacing"/>
 
         <View style="@style/Divider"
@@ -284,10 +279,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/multiAutoCompleteEsportes"
-            android:layout_alignParentBottom="false"
+            android:layout_below="@+id/textViewEsportes"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_below="@+id/textViewEsportes"
             android:layout_marginLeft="@dimen/dialog_margin"
             android:layout_marginRight="@dimen/dialog_margin"
             android:layout_marginBottom="@dimen/dialog_margin"
