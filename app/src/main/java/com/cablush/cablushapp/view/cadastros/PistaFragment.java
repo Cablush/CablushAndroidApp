@@ -35,6 +35,7 @@ public class PistaFragment extends CablushFragment implements View.OnClickListen
     private EditText nomeEditText;
     private EditText websiteEditText;
     private EditText facebookEditText;
+    private EditText videoEditText;
     private ImageButton galleryImageButton;
     private ImageButton pictureImageButton;
     private ImageView fotoImageView;
@@ -114,6 +115,7 @@ public class PistaFragment extends CablushFragment implements View.OnClickListen
 
         websiteEditText = (EditText) view.findViewById(R.id.editTextWebsite);
         facebookEditText = (EditText) view.findViewById(R.id.editTextFacebook);
+        videoEditText = (EditText) view.findViewById(R.id.editTextVideo);
 
         // gallery button
         galleryImageButton = (ImageButton) view.findViewById(R.id.buttonGallery);
@@ -141,6 +143,7 @@ public class PistaFragment extends CablushFragment implements View.OnClickListen
         nomeEditText.setText(pista.getNome());
         websiteEditText.setText(pista.getWebsite());
         facebookEditText.setText(pista.getFacebook());
+        videoEditText.setText(pista.getVideo());
         PictureUtils.loadImage(getActivity(), pista.getFoto(), fotoImageView);
         descricaoEditText.setText(pista.getDescricao());
         // esportes
@@ -155,6 +158,7 @@ public class PistaFragment extends CablushFragment implements View.OnClickListen
         pista.setNome(nomeEditText.getText().toString());
         pista.setWebsite(websiteEditText.getText().toString());
         pista.setFacebook(facebookEditText.getText().toString());
+        pista.setVideo(videoEditText.getText().toString());
         pista.setFoto(getPictureFilePath());
         pista.setDescricao(descricaoEditText.getText().toString());
         pista.setEsportes(esportesAdapter.getSelectedItems(
