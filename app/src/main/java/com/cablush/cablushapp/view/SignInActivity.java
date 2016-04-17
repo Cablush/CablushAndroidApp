@@ -131,6 +131,7 @@ public class SignInActivity extends CablushActivity implements LoginPresenter.Lo
         setGooglePlusButtonText(googleSignInButton, getString(R.string.btn_login_google));
 
         LoginButton facebookLoginButton = (LoginButton) findViewById(R.id.facebookLoginButton);
+        facebookLoginButton.setReadPermissions("email", "public_profile", "user_friends");
         registerFacebookCallback(facebookLoginButton);
 
         // Spinner
