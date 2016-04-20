@@ -404,4 +404,39 @@ public class EventoDAO extends AppBaseDAO {
         }
         return eventos;
     }
+
+    /**
+     * Clear the older eventos not owned by the responsavel.
+     *
+     * @param responsavelUuid The uuid of the responsavel.
+     */
+    public void cleanEventos(String responsavelUuid, Date limitDate) {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        try {
+            SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
+            queryBuilder.setTables(TABLE);
+
+            StringBuilder selection = new StringBuilder();
+            List<String> selectionArgs = new ArrayList<>();
+            selection.append(Columns._RESPONSAVEL_UUID.getColumnNameWithTable()).append(" != ? ");
+            selectionArgs.add(responsavelUuid);
+            selection.append(" AND ").append(Columns._DATA_FIM.getColumnNameWithTable()).append(" < ? ");
+            selectionArgs.add(String.valueOf(limitDate.getTime()));
+
+            Cursor cursor = queryBuilder.query(db, getColumnsProjectionWithAlias(Columns.class),
+                    selection.toString(), selectionArgs.toArray(new String[selectionArgs.size()]),
+                    null, null, null);
+            if (cursor.moveToFirst()) {
+                do {
+                    Evento evento = getEvento(cursor, true);
+                    delete(db, evento.getUuid());
+                } while (cursor.moveToNext());
+            }
+            cursor.close();
+        } catch (Exception ex) {
+            Log.e(TAG, "Error cleaning eventos.", ex);
+        } finally {
+            dbHelper.close(db);
+        }
+    }
 }

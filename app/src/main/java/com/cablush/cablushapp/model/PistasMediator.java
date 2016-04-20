@@ -174,10 +174,10 @@ public class PistasMediator extends CablushMediator {
     }
 
     /**
-     * Get the current user lojas.
+     * Get the current user pistas.
      */
     public void getMyPistas() {
-        Log.d(TAG, "getMyLojas()");
+        Log.d(TAG, "getMyPistas()");
         if (isOnline()) {
             getMyPistasOnline();
         } else {
