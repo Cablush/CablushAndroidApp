@@ -72,7 +72,7 @@ public class CadastroEventoActivity extends CadastroActivity<Evento>
         if (eventoFragment.isAdded() || eventoFragment.isDetached()) {
             evento = eventoFragment.getEvento();
         }
-        if (localFragment.isAdded() || localFragment.isAdded()) {
+        if (localFragment.isAdded() || localFragment.isDetached()) {
             evento.setLocal(localFragment.getLocal());
         }
         if (mapaFragment.isAdded() || mapaFragment.isDetached()) {
@@ -99,10 +99,16 @@ public class CadastroEventoActivity extends CadastroActivity<Evento>
         Local local = evento.getLocal();
         boolean validMapa = local.getLatLng() != null;
         if (!validMapa) {
-            Toast.makeText(this, R.string.txt_select_location, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.msg_invalid_mapa, Toast.LENGTH_SHORT).show();
+        }
+        boolean validLocal = ValidateUtils.isNotBlank(local.getPais());
+        validLocal = ValidateUtils.isNotBlank(local.getEstado()) && validLocal;
+        validLocal = ValidateUtils.isNotBlank(local.getCidade()) && validLocal;
+        if (!validLocal) {
+            Toast.makeText(this, R.string.msg_invalid_local, Toast.LENGTH_LONG).show();
         }
 
-        return validEvento && validMapa;
+        return validEvento && validMapa && validLocal;
     }
 
     @Override

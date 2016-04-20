@@ -103,10 +103,16 @@ public class CadastroLojaActivity extends CadastroActivity<Loja>
         Local local = loja.getLocal();
         boolean validMapa = local.getLatLng() != null;
         if (!validMapa) {
-            Toast.makeText(this, R.string.txt_select_location, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.msg_invalid_mapa, Toast.LENGTH_SHORT).show();
+        }
+        boolean validLocal = ValidateUtils.isNotBlank(local.getPais());
+        validLocal = ValidateUtils.isNotBlank(local.getEstado()) && validLocal;
+        validLocal = ValidateUtils.isNotBlank(local.getCidade()) && validLocal;
+        if (!validLocal) {
+            Toast.makeText(this, R.string.msg_invalid_local, Toast.LENGTH_LONG).show();
         }
 
-        return validLoja && validMapa;
+        return validLoja && validMapa && validLocal;
     }
 
     @Override
