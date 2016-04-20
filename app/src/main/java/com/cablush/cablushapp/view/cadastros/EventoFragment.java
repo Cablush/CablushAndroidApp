@@ -154,10 +154,14 @@ public class EventoFragment extends CablushFragment implements View.OnClickListe
                         });
                 break;
             case R.id.buttonGallery:
-                dispatchLoadPictureIntent();
+                if (checkStoragePermission()) {
+                    dispatchLoadPictureIntent();
+                }
                 break;
             case R.id.buttonPicture:
-                dispatchTakePictureIntent();
+                if (checkStoragePermission()) {
+                    dispatchTakePictureIntent();
+                }
                 break;
         }
     }

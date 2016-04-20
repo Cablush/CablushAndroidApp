@@ -136,15 +136,17 @@ public abstract class CablushFragment extends Fragment {
      * Check if the Storage Permissions are granted, requering the permissions to the user if necessary.
      * And, call '
      */
-    public void checkStoragePermission() {
+    public boolean checkStoragePermission() {
         if (!PermissionUtils.checkStoragePermission(getContext())) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 requestPermissions(
                         new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
                         PermissionUtils.PERMISSIONS_STORAGE);
             }
+            return false;
         } else {
             onStoragePermissionGranted();
+            return true;
         }
     }
 
@@ -161,7 +163,7 @@ public abstract class CablushFragment extends Fragment {
                     //http://inthecheesefactory.com/blog/things-you-need-to-know-about-android-m-permission-developer-edition/en
                     Toast.makeText(getActivity(), R.string.ask_permissions_location, Toast.LENGTH_SHORT).show();
                 }
-                return;
+                break;
             case PermissionUtils.PERMISSIONS_STORAGE:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     onStoragePermissionGranted();
@@ -170,7 +172,7 @@ public abstract class CablushFragment extends Fragment {
                     //http://inthecheesefactory.com/blog/things-you-need-to-know-about-android-m-permission-developer-edition/en
                     Toast.makeText(getActivity(), R.string.ask_permissions_storage, Toast.LENGTH_SHORT).show();
                 }
-                return;
+                break;
         }
     }
 }

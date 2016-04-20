@@ -99,13 +99,15 @@ public class PistaFragment extends CablushFragment implements View.OnClickListen
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.buttonGallery:
-                dispatchLoadPictureIntent();
-                break;
-            case R.id.buttonPicture:
-                dispatchTakePictureIntent();
-                break;
+        if (checkStoragePermission()) {
+            switch (v.getId()) {
+                case R.id.buttonGallery:
+                    dispatchLoadPictureIntent();
+                    break;
+                case R.id.buttonPicture:
+                    dispatchTakePictureIntent();
+                    break;
+            }
         }
     }
 

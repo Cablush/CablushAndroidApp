@@ -93,12 +93,6 @@ public class LojaFragment extends CablushFragment implements View.OnClickListene
     }
 
     @Override
-    public void onStoragePermissionGranted() {
-        super.onStoragePermissionGranted();
-        dispatchTakePictureIntent();
-    }
-
-    @Override
     public void onPictureLoaded(Uri pictureFileUri) {
         logoImageView.setImageBitmap(PictureUtils.getBitmapFromUri(getContext(), pictureFileUri,
                 logoImageView.getWidth(), logoImageView.getHeight()));
@@ -106,13 +100,15 @@ public class LojaFragment extends CablushFragment implements View.OnClickListene
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.buttonGallery:
-                dispatchLoadPictureIntent();
-                break;
-            case R.id.buttonPicture:
-                checkStoragePermission();
-                break;
+        if (checkStoragePermission()) {
+            switch (v.getId()) {
+                case R.id.buttonGallery:
+                    dispatchLoadPictureIntent();
+                    break;
+                case R.id.buttonPicture:
+                    dispatchTakePictureIntent();
+                    break;
+            }
         }
     }
 
