@@ -1,15 +1,29 @@
 package com.cablush.cablushapp.utils;
 
+import com.cablush.cablushapp.model.geonames.GeonamesLoader;
 import com.cablush.cablushapp.model.geonames.dto.Geonames;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by oscar on 07/04/16.
  */
 public class CountryState implements Comparable<CountryState>{
+
+    private static GeonamesLoader geonamesLoader = new GeonamesLoader();
+
+    private static Map<CountryLocale, List<CountryState>> statesByCountry = new HashMap();
+
+    /**
+     * Callback interface for Loader.
+     */
+    public interface GetStatesCallback {
+        void onLoadStates(List<CountryState> countryStates);
+    }
 
     private Geonames geonames;
 
@@ -22,13 +36,32 @@ public class CountryState implements Comparable<CountryState>{
         this.geonames.setAdminCode1(state);
     }
 
-    public static List<CountryState> fromSubDivision(List<Geonames> firstSubdivisions) {
+    private static List<CountryState> fromSubDivision(List<Geonames> firstSubdivisions) {
         List<CountryState> countryStates = new ArrayList<>();
         for (Geonames geonames : firstSubdivisions) {
             countryStates.add(new CountryState(geonames));
         }
         Collections.sort(countryStates);
         return countryStates;
+    }
+
+    /**
+     * Load the CountryState list by the CountryLocale
+     */
+    public static void loadStatesByCountry(final CountryLocale country, final GetStatesCallback callback) {
+        if (statesByCountry.containsKey(country)) {
+            callback.onLoadStates(statesByCountry.get(country));
+        } else {
+            geonamesLoader.getFirstSubdivisions(country.getCountry(), new GeonamesLoader.GeonamesCallback() {
+                @Override
+                public void onLoadFirstSubdivisions(List<Geonames> firstSubdivisions) {
+                    if (firstSubdivisions != null) {
+                        statesByCountry.put(country, fromSubDivision(firstSubdivisions));
+                    }
+                    callback.onLoadStates(statesByCountry.get(country));
+                }
+            });
+        }
     }
 
     public static CountryState getContryState(String state) {
