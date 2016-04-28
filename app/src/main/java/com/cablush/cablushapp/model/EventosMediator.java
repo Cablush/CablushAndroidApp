@@ -140,7 +140,7 @@ public class EventosMediator extends CablushMediator {
     public void getEventos(final String name, final String estado, final String esporte) {
         Log.d(TAG, "getEventos()");
         // Clean the older eventos
-        eventoDAO.cleanEventos(Usuario.LOGGED_USER.getUuid(), DateTimeUtils.clearTime(new Date()));
+        clearOldEventos();
 
         // get the eventos
         if (isOnline()) {
@@ -217,5 +217,10 @@ public class EventosMediator extends CablushMediator {
         if (listener != null) {
             listener.onGetEventosResult(result, eventoDAO.getEventos(Usuario.LOGGED_USER.getUuid()));
         }
+    }
+
+    private void clearOldEventos() {
+        String uuid = Usuario.LOGGED_USER != null ? Usuario.LOGGED_USER.getUuid() : null;
+        eventoDAO.cleanEventos(uuid, DateTimeUtils.clearTime(new Date()));
     }
 }

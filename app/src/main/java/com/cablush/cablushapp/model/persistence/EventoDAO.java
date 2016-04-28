@@ -416,10 +416,12 @@ public class EventoDAO extends AppBaseDAO {
             SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
             queryBuilder.setTables(TABLE);
 
-            StringBuilder selection = new StringBuilder();
+            StringBuilder selection = new StringBuilder(" 1=1 ");
             List<String> selectionArgs = new ArrayList<>();
-            selection.append(Columns._RESPONSAVEL_UUID.getColumnNameWithTable()).append(" != ? ");
-            selectionArgs.add(responsavelUuid);
+            if (responsavelUuid != null) {
+                selection.append(" AND ").append(Columns._RESPONSAVEL_UUID.getColumnNameWithTable()).append(" != ? ");
+                selectionArgs.add(responsavelUuid);
+            }
             selection.append(" AND ").append(Columns._DATA_FIM.getColumnNameWithTable()).append(" < ? ");
             selectionArgs.add(String.valueOf(limitDate.getTime()));
 
