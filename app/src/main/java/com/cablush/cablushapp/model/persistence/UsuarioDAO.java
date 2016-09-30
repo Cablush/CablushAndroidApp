@@ -61,7 +61,7 @@ public class UsuarioDAO extends AppBaseDAO {
         }
     }
 
-    public UsuarioDAO(@NonNull Context context) {
+    public UsuarioDAO() {
         dbHelper = CablushDBHelper.getInstance(context);
     }
 

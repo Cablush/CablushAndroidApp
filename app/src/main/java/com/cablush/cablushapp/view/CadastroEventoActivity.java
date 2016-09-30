@@ -64,7 +64,7 @@ public class CadastroEventoActivity extends CadastroActivity<Evento>
 
     @Override
     protected CadastroPresenter<Evento> setupPresenter() {
-        return new CadastroEventoPresenter(this, this);
+        return new CadastroEventoPresenter(this);
     }
 
     @Override

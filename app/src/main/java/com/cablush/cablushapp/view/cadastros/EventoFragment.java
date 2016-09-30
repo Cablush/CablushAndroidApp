@@ -78,7 +78,7 @@ public class EventoFragment extends CablushFragment implements View.OnClickListe
             evento = (Evento) getArguments().getSerializable(EVENTO_BUNDLE_KEY);
         }
 
-        EsportesMediator esportesMediator = new EsportesMediator(getContext());
+        EsportesMediator esportesMediator = new EsportesMediator();
         esportesAdapter = new EsporteArrayAdapter(getContext(),
                 android.R.layout.simple_dropdown_item_1line,
                 esportesMediator.getEsportes());

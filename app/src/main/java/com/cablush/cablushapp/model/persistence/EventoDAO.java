@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteQueryBuilder;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.cablush.cablushapp.CablushApp;
 import com.cablush.cablushapp.model.domain.Evento;
 
 import java.util.Date;
@@ -77,10 +78,10 @@ public class EventoDAO extends AppBaseDAO {
     private LocalDAO localDAO;
     private LocalizavelEsporteDAO localizavelEsporteDAO;
 
-    public EventoDAO(@NonNull Context context) {
+    public EventoDAO() {
         dbHelper = CablushDBHelper.getInstance(context);
-        localDAO = new LocalDAO(context);
-        localizavelEsporteDAO = new LocalizavelEsporteDAO(context);
+        localDAO = new LocalDAO();
+        localizavelEsporteDAO = new LocalizavelEsporteDAO();
     }
 
     static void onCreate(SQLiteDatabase db) throws SQLException {

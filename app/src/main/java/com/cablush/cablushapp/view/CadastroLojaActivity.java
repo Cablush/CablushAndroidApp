@@ -68,7 +68,7 @@ public class CadastroLojaActivity extends CadastroActivity<Loja>
 
     @Override
     protected CadastroPresenter<Loja> setupPresenter() {
-        return new CadastroLojaPresenter(this, this);
+        return new CadastroLojaPresenter(this);
     }
 
     @Override

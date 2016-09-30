@@ -85,7 +85,7 @@ public class SignInActivity extends CablushActivity implements LoginPresenter.Lo
             actionBar.setTitle(getTitle());
         }
 
-        loginPresenter = new LoginPresenter(this, this);
+        loginPresenter = new LoginPresenter(this);
 
         initializeFacebookSDK();
 

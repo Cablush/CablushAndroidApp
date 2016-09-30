@@ -75,11 +75,11 @@ public class PistaDAO extends AppBaseDAO {
     private HorarioDAO horarioDAO;
     private LocalizavelEsporteDAO localizavelEsporteDAO;
 
-    public PistaDAO(@NonNull Context context) {
+    public PistaDAO() {
         dbHelper = CablushDBHelper.getInstance(context);
-        localDAO = new LocalDAO(context);
-        horarioDAO = new HorarioDAO(context);
-        localizavelEsporteDAO = new LocalizavelEsporteDAO(context);
+        localDAO = new LocalDAO();
+        horarioDAO = new HorarioDAO();
+        localizavelEsporteDAO = new LocalizavelEsporteDAO();
     }
 
     static void onCreate(SQLiteDatabase db) throws SQLException {

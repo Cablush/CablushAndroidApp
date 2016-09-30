@@ -41,11 +41,11 @@ public class LojasMediator extends CablushMediator {
     /**
      * Constructor.
      */
-    public LojasMediator(@NonNull Context context, @NonNull LojasMediatorListener listener) {
-        super(context);
+    public LojasMediator( @NonNull LojasMediatorListener listener) {
+        super();
         this.mListener = new WeakReference<>(listener);
         this.apiLojas = RestServiceBuilder.createService(ApiLojas.class);
-        this.lojaDAO = new LojaDAO(context);
+        this.lojaDAO = new LojaDAO();
     }
 
     /**

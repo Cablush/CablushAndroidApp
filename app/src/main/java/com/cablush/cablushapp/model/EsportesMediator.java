@@ -28,9 +28,9 @@ public class EsportesMediator {
     /**
      * Constructor.
      */
-    public EsportesMediator(@NonNull Context context) {
+    public EsportesMediator() {
         this.apiEsportes = RestServiceBuilder.createService(ApiEsportes.class);
-        this.esporteDAO = new EsporteDAO(context);
+        this.esporteDAO = new EsporteDAO();
     }
 
     /**

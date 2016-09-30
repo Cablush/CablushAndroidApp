@@ -115,7 +115,7 @@ public class MainActivity extends AbstractDrawerActivity
         spinner = (ProgressBar)findViewById(R.id.progressBar);
         spinner.setVisibility(View.GONE);
 
-        searchPresenter = new SearchPresenter(this, this);
+        searchPresenter = new SearchPresenter(this);
 
         configNavigationHead();
     }
@@ -228,7 +228,7 @@ public class MainActivity extends AbstractDrawerActivity
                 Toast.makeText(MainActivity.this, R.string.success_logout, Toast.LENGTH_SHORT).show();
                 configNavigationHead();
             }
-        }, this);
+        });
         presenter.logout();
         return true;
     }

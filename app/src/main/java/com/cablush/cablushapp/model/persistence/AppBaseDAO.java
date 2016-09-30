@@ -1,7 +1,10 @@
 package com.cablush.cablushapp.model.persistence;
 
+import android.content.Context;
 import android.database.Cursor;
 import android.util.Log;
+
+import com.cablush.cablushapp.CablushApp;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,6 +19,8 @@ public abstract class AppBaseDAO {
     protected final String TAG = getClass().getName();
 
     protected CablushDBHelper dbHelper;
+
+    protected Context context = CablushApp.getInstance().getApplicationContext();
 
     interface IColumns <T extends Enum<T>> {
         String getColumnName();

@@ -59,7 +59,7 @@ public class SignUpActivity extends CablushActivity implements RegisterPresenter
             actionBar.setTitle(getTitle());
         }
 
-        registerPresenter = new RegisterPresenter(this, this);
+        registerPresenter = new RegisterPresenter(this);
 
         initializeView();
     }

@@ -67,7 +67,7 @@ class HorarioDAO extends AppBaseDAO {
         }
     }
 
-    HorarioDAO(@NonNull Context context) {
+    HorarioDAO() {
         dbHelper = CablushDBHelper.getInstance(context);
     }
 

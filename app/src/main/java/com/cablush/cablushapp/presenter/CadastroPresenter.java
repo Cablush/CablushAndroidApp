@@ -27,9 +27,9 @@ public abstract class CadastroPresenter<T> {
 
     private EsportesMediator esportesMediator;
 
-    public CadastroPresenter(@NonNull Context context, @NonNull CadastroView view) {
-        this.esportesMediator = new EsportesMediator(context);
+    public CadastroPresenter(@NonNull CadastroView view) {
         this.cadastroView = view;
+        this.esportesMediator = new EsportesMediator();
     }
 
     /**

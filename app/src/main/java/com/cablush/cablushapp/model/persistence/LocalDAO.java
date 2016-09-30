@@ -66,7 +66,7 @@ class LocalDAO extends AppBaseDAO {
         }
     }
 
-    LocalDAO(@NonNull Context context) {
+    LocalDAO() {
         dbHelper = CablushDBHelper.getInstance(context);
     }
 

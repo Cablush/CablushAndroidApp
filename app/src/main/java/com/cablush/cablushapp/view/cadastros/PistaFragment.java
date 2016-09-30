@@ -66,7 +66,7 @@ public class PistaFragment extends CablushFragment implements View.OnClickListen
             pista = (Pista) getArguments().getSerializable(PISTA_BUNDLE_KEY);
         }
 
-        EsportesMediator esportesMediator = new EsportesMediator(getContext());
+        EsportesMediator esportesMediator = new EsportesMediator();
         esportesAdapter = new EsporteArrayAdapter(getContext(),
                 android.R.layout.simple_dropdown_item_1line,
                 esportesMediator.getEsportes());

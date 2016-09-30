@@ -43,11 +43,10 @@ public class EventosMediator extends CablushMediator {
     /**
      * Constructor.
      */
-    public EventosMediator(@NonNull Context context, @NonNull EventosMediatorListener listener) {
-        super(context);
+    public EventosMediator(@NonNull EventosMediatorListener listener) {
         this.mListener = new WeakReference<>(listener);
         this.apiEventos = RestServiceBuilder.createService(ApiEventos.class);
-        this.eventoDAO = new EventoDAO(context);
+        this.eventoDAO = new EventoDAO();
     }
 
     /**

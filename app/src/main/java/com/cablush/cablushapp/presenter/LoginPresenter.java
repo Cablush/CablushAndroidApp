@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.cablush.cablushapp.CablushApp;
 import com.cablush.cablushapp.model.EsportesMediator;
 import com.cablush.cablushapp.model.persistence.UsuarioDAO;
 import com.cablush.cablushapp.model.domain.Usuario;
@@ -50,7 +51,6 @@ public class LoginPresenter {
         void onLoginResponse(LoginResponse response);
     }
 
-    private WeakReference<Context> mContext;
     private WeakReference<LoginView> mView;
     private ApiUsuario apiUsuario;
     private UsuarioDAO usuarioDAO;
@@ -60,12 +60,11 @@ public class LoginPresenter {
     /**
      * Constructor.
      */
-    public LoginPresenter(@NonNull LoginView view, @NonNull Context context) {
-        this.mContext = new WeakReference<>(context);
+    public LoginPresenter(@NonNull LoginView view) {
         this.mView = new WeakReference<>(view);
         this.apiUsuario = RestServiceBuilder.createService(ApiUsuario.class);
-        this.usuarioDAO = new UsuarioDAO(context);
-        this.esportesMediator  = new EsportesMediator(context);
+        this.usuarioDAO = new UsuarioDAO();
+        this.esportesMediator  = new EsportesMediator();
     }
 
     /**
@@ -95,7 +94,8 @@ public class LoginPresenter {
         if (usuario != null) {
             Usuario.LOGGED_USER = usuario;
             // Only validate the token if there is connection, allowing offline registries
-            if (ConnectivityChangeReceiver.isNetworkAvailable(mContext.get())) {
+            Context context = CablushApp.getInstance().getApplicationContext();
+            if (ConnectivityChangeReceiver.isNetworkAvailable(context)) {
                 apiUsuario.validateToken(new Callback<Usuario>() {
                     @Override
                     public void success(Usuario usuario, Response response) {

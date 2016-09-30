@@ -41,11 +41,11 @@ public class PistasMediator extends CablushMediator {
     /**
      * Constructor.
      */
-    public PistasMediator(@NonNull Context context, @NonNull PistasMediatorListener listener) {
-        super(context);
+    public PistasMediator(@NonNull PistasMediatorListener listener) {
+        super();
         this.mListener = new WeakReference<>(listener);
         this.apiPistas = RestServiceBuilder.createService(ApiPistas.class);
-        this.pistaDAO = new PistaDAO(context);
+        this.pistaDAO = new PistaDAO();
     }
 
     /**

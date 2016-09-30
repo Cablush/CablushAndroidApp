@@ -20,9 +20,9 @@ public class CadastroLojaPresenter extends CadastroPresenter<Loja>
     /**
      * Constructor.
      */
-    public CadastroLojaPresenter(@NonNull Context context, @NonNull CadastroView view) {
-        super(context, view);
-        lojasMediator = new LojasMediator(context, this);
+    public CadastroLojaPresenter( @NonNull CadastroView view) {
+        super(view);
+        lojasMediator = new LojasMediator(this);
     }
 
     @Override

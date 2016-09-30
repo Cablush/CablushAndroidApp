@@ -62,7 +62,7 @@ public class EsporteDAO  extends AppBaseDAO {
         }
     }
 
-    public EsporteDAO(@NonNull Context context) {
+    public EsporteDAO() {
         dbHelper = CablushDBHelper.getInstance(context);
     }
 

@@ -16,7 +16,8 @@ android {
 
     buildTypes {
         debug {
-            buildConfigField 'java.lang.String', 'RETROFIT_END_POINT', '"http://10.0.2.2:3000/api"'
+            buildConfigField 'java.lang.String', 'RETROFIT_END_POINT', '"http://www.cablush.com/api"'
+                    // "http://10.0.2.2:3000/api"'
             buildConfigField 'retrofit.RestAdapter.LogLevel', 'RETROFIT_LOG_LEVEL', 'retrofit.RestAdapter.LogLevel.FULL'
             buildConfigField 'java.lang.String', 'GEONAME_USERNAME', '"cablush"'
             resValue 'string', 'GOOGLE_API_KEY', 'AIzaSyDU-AnJmJH6XXYu8iKrWTq5Uju1OrXlq1s'

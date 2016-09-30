@@ -72,9 +72,9 @@ public class LocalizavelEsporteDAO extends AppBaseDAO {
 
     private EsporteDAO esporteDAO;
 
-    LocalizavelEsporteDAO(@NonNull Context context) {
+    LocalizavelEsporteDAO() {
         dbHelper = CablushDBHelper.getInstance(context);
-        esporteDAO = new EsporteDAO(context);
+        esporteDAO = new EsporteDAO();
     }
 
     static void onCreate(SQLiteDatabase db) throws SQLException {

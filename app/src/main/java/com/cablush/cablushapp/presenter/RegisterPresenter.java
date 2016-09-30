@@ -44,10 +44,10 @@ public class RegisterPresenter {
     /**
      * Constructor.
      */
-    public RegisterPresenter(@NonNull RegisterView view, @NonNull Context context) {
+    public RegisterPresenter(@NonNull RegisterView view) {
         this.mView = new WeakReference<>(view);
         this.apiUsuario = RestServiceBuilder.createService(ApiUsuario.class);
-        this.usuarioDAO = new UsuarioDAO(context);
+        this.usuarioDAO = new UsuarioDAO();
     }
 
     /**

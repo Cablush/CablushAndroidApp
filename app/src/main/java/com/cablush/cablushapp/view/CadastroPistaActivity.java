@@ -67,7 +67,7 @@ public class CadastroPistaActivity extends CadastroActivity<Pista>
 
     @Override
     protected CadastroPresenter<Pista> setupPresenter() {
-        return new CadastroPistaPresenter(this, this);
+        return new CadastroPistaPresenter(this);
     }
 
     @Override

@@ -76,11 +76,11 @@ public class LojaDAO extends AppBaseDAO {
     private HorarioDAO horarioDAO;
     private LocalizavelEsporteDAO localizavelEsporteDAO;
 
-    public LojaDAO(@NonNull Context context) {
+    public LojaDAO() {
         dbHelper = CablushDBHelper.getInstance(context);
-        localDAO = new LocalDAO(context);
-        horarioDAO = new HorarioDAO(context);
-        localizavelEsporteDAO = new LocalizavelEsporteDAO(context);
+        localDAO = new LocalDAO();
+        horarioDAO = new HorarioDAO();
+        localizavelEsporteDAO = new LocalizavelEsporteDAO();
     }
 
     static void onCreate(SQLiteDatabase db) throws SQLException {

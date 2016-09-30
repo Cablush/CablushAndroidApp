@@ -28,7 +28,7 @@ public class SplashScreenActivity extends Activity implements Runnable, LoginPre
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         // Check the user login
-        LoginPresenter loginPresenter = new LoginPresenter(this, this);
+        LoginPresenter loginPresenter = new LoginPresenter(this);
         loginPresenter.checkLogin();
     }
 

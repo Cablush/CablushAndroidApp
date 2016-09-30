@@ -67,7 +67,7 @@ public class LojaFragment extends CablushFragment implements View.OnClickListene
             loja = (Loja) getArguments().getSerializable(LOJA_BUNDLE_KEY);
         }
 
-        EsportesMediator esportesMediator = new EsportesMediator(getContext());
+        EsportesMediator esportesMediator = new EsportesMediator();
         esportesAdapter = new EsporteArrayAdapter(getContext(),
                 android.R.layout.simple_dropdown_item_1line,
                 esportesMediator.getEsportes());
