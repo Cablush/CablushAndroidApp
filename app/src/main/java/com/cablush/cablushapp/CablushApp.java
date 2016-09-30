@@ -9,9 +9,15 @@ import com.cablush.cablushapp.utils.FontCache;
  */
 public class CablushApp extends Application {
 
+    private static CablushApp singleton;
+
+    public static CablushApp getInstance(){
+        return singleton;
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
-        //FontCache.overrideFont(this, "normal", "fonts/PassionOne-Bold.ttf");
+        singleton = this;
     }
 }

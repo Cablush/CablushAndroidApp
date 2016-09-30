@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.cablush.cablushapp.CablushApp;
 import com.cablush.cablushapp.model.domain.Usuario;
 
 /**
