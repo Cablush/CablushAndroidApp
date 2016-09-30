@@ -220,9 +220,11 @@ public class MainActivity extends AbstractDrawerActivity
     }
 
     private boolean logout() {
+        spinner.setVisibility(View.VISIBLE);
         LoginPresenter presenter = new LoginPresenter(new LoginPresenter.LoginView() {
             @Override
             public void onLoginResponse(LoginPresenter.LoginResponse response) {
+                spinner.setVisibility(View.GONE);
                 Toast.makeText(MainActivity.this, R.string.success_logout, Toast.LENGTH_SHORT).show();
                 configNavigationHead();
             }
@@ -232,45 +234,45 @@ public class MainActivity extends AbstractDrawerActivity
     }
 
     private boolean getLojas() {
-        searchPresenter.getLojas(null, null, null);
         spinner.setVisibility(View.VISIBLE);
+        searchPresenter.getLojas(null, null, null);
         return true;
     }
 
     private boolean getMyLojas() {
         if (checkUserLoggedIn()) {
-            searchPresenter.getMyLojas();
             spinner.setVisibility(View.VISIBLE);
+            searchPresenter.getMyLojas();
             return true;
         }
         return false;
     }
 
     private boolean getEventos() {
-        searchPresenter.getEventos(null, null, null);
         spinner.setVisibility(View.VISIBLE);
+        searchPresenter.getEventos(null, null, null);
         return true;
     }
 
     private boolean getMyEventos() {
         if (checkUserLoggedIn()) {
-            searchPresenter.getMyEventos();
             spinner.setVisibility(View.VISIBLE);
+            searchPresenter.getMyEventos();
             return true;
         }
         return false;
     }
 
     private boolean getPistas() {
-        searchPresenter.getPistas(null, null, null);
         spinner.setVisibility(View.VISIBLE);
+        searchPresenter.getPistas(null, null, null);
         return true;
     }
 
     private boolean getMyPistas() {
         if (checkUserLoggedIn()) {
-            searchPresenter.getMyPistas();
             spinner.setVisibility(View.VISIBLE);
+            searchPresenter.getMyPistas();
             return true;
         }
         return false;

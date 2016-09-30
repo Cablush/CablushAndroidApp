@@ -10,10 +10,12 @@ import com.cablush.cablushapp.model.domain.Evento;
 import com.cablush.cablushapp.model.rest.ApiEventos;
 import com.cablush.cablushapp.model.rest.RestServiceBuilder;
 import com.cablush.cablushapp.model.rest.dto.ResponseDTO;
+import com.cablush.cablushapp.utils.DateTimeUtils;
 import com.cablush.cablushapp.utils.PictureUtils;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
+import java.util.Date;
 import java.util.List;
 
 import retrofit.Callback;
@@ -49,7 +51,7 @@ public class EventosMediator extends CablushMediator {
     }
 
     /**
-     * Save the loja.
+     * Save the evento.
      */
     public void saveEvento(Evento evento) {
         Log.d(TAG, "saveEvento()");
@@ -83,7 +85,7 @@ public class EventosMediator extends CablushMediator {
     }
 
     private void updateEventoOnline(final Evento evento) {
-        Log.d(TAG, "updateLojaOnline()");
+        Log.d(TAG, "updateEventoOnline()");
         apiEventos.updateEvento(evento.getUuid(), evento, new Callback<ResponseDTO<Evento>>() {
             @Override
             public void success(ResponseDTO<Evento> responseDTO, Response response) {
@@ -137,6 +139,10 @@ public class EventosMediator extends CablushMediator {
      */
     public void getEventos(final String name, final String estado, final String esporte) {
         Log.d(TAG, "getEventos()");
+        // Clean the older eventos
+        clearOldEventos();
+
+        // get the eventos
         if (isOnline()) {
             getEventosOnline(name, estado, esporte);
         } else {
@@ -174,7 +180,7 @@ public class EventosMediator extends CablushMediator {
     }
 
     /**
-     * Get the current user lojas.
+     * Get the current user eventos.
      */
     public void getMyEventos() {
         Log.d(TAG, "getMyEventos()");
@@ -211,5 +217,10 @@ public class EventosMediator extends CablushMediator {
         if (listener != null) {
             listener.onGetEventosResult(result, eventoDAO.getEventos(Usuario.LOGGED_USER.getUuid()));
         }
+    }
+
+    private void clearOldEventos() {
+        String uuid = Usuario.LOGGED_USER != null ? Usuario.LOGGED_USER.getUuid() : null;
+        eventoDAO.cleanEventos(uuid, DateTimeUtils.clearTime(new Date()));
     }
 }

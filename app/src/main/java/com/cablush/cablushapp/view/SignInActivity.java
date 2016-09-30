@@ -28,6 +28,7 @@ import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
+import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.Auth;
@@ -96,17 +97,18 @@ public class SignInActivity extends CablushActivity implements LoginPresenter.Lo
     private void initializeFacebookSDK() {
         FacebookSdk.sdkInitialize(getApplicationContext());
         facebookCallbackManager = CallbackManager.Factory.create();
+        LoginManager.getInstance().logOut(); // force logout on initialize
     }
 
     private void initializeGoogleSDK() {
-        // Configure sign-in to request the user's ID, email address, and basic
-        // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
+        // Configure sign-in to request the user's ID, email address, and basic profile.
+        // ID and basic profile are included in DEFAULT_SIGN_IN.
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.GOOGLE_CLIENT_ID))
+                .requestEmail()
                 .build();
 
-        // Build a GoogleApiClient with access to the Google Sign-In API and the
-        // options specified by gso.
+        // Build a GoogleApiClient with access to the Google Sign-In API and the options specified by gso.
         googleApiClient = new GoogleApiClient.Builder(this)
                 .enableAutoManage(this, this)
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
@@ -131,6 +133,7 @@ public class SignInActivity extends CablushActivity implements LoginPresenter.Lo
         setGooglePlusButtonText(googleSignInButton, getString(R.string.btn_login_google));
 
         LoginButton facebookLoginButton = (LoginButton) findViewById(R.id.facebookLoginButton);
+        facebookLoginButton.setReadPermissions("email", "public_profile", "user_friends");
         registerFacebookCallback(facebookLoginButton);
 
         // Spinner

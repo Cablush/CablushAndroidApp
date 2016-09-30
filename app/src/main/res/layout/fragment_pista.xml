@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     android:id="@+id/scrollView"
     android:layout_alignParentTop="true"
+    android:layout_alignParentLeft="true"
     android:layout_alignParentStart="true">
 
     <RelativeLayout android:layout_width="match_parent"
@@ -96,6 +97,33 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="@string/txt_video"
+            android:id="@+id/textViewVideo"
+            android:layout_below="@+id/editTextFacebook"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="@dimen/dialog_margin"
+            android:layout_marginRight="@dimen/dialog_margin"
+            android:layout_marginTop="@dimen/vertical_spacing"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/txt_video"
+            android:ems="10"
+            android:id="@+id/editTextVideo"
+            android:layout_below="@+id/textViewVideo"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginLeft="@dimen/dialog_margin"
+            android:layout_marginRight="@dimen/dialog_margin"
+            android:inputType="textUri"/>
+
+        <TextView
+            style="@style/TextAppearance.Bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="@string/txt_logo"
             android:id="@+id/textViewLogo"
             android:layout_alignParentLeft="true"
@@ -103,7 +131,7 @@
             android:layout_marginLeft="@dimen/dialog_margin"
             android:layout_marginRight="@dimen/dialog_margin"
             android:layout_marginTop="@dimen/vertical_spacing"
-            android:layout_below="@+id/editTextFacebook"/>
+            android:layout_below="@+id/editTextVideo"/>
 
         <ImageButton
             style="?android:attr/buttonStyleSmall"
@@ -165,10 +193,9 @@
             android:inputType="textMultiLine"
             android:ems="10"
             android:id="@+id/editTextDescricao"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentEnd="true"
             android:hint="@string/txt_descricao"
             android:layout_below="@+id/textViewDescricao"
+            android:layout_alignParentStart="true"
             android:layout_alignParentLeft="true"
             android:layout_marginLeft="@dimen/dialog_margin"
             android:layout_marginRight="@dimen/dialog_margin"/>
@@ -180,7 +207,6 @@
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="Esportes"
             android:id="@+id/textViewEsportes"
-            android:layout_alignParentBottom="false"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_marginLeft="@dimen/dialog_margin"
@@ -199,7 +225,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/multiAutoCompleteEsportes"
-            android:layout_alignParentBottom="false"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_below="@+id/textViewEsportes"

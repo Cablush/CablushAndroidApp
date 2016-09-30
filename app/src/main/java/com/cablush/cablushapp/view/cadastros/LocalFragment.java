@@ -19,8 +19,6 @@ import android.widget.Toast;
 
 import com.cablush.cablushapp.R;
 import com.cablush.cablushapp.model.domain.Local;
-import com.cablush.cablushapp.model.geonames.GeonamesLoader;
-import com.cablush.cablushapp.model.geonames.dto.Geonames;
 import com.cablush.cablushapp.model.services.FetchAddressIntentService;
 import com.cablush.cablushapp.utils.CountryLocale;
 import com.cablush.cablushapp.utils.CountryState;
@@ -38,8 +36,6 @@ public class LocalFragment extends CablushFragment implements MapaFragment.Selec
     private static final String LOCAL_BUNDLE_KEY = "LOCAL_BUNDLE_KEY";
 
     private Local local;
-
-    private GeonamesLoader geonamesLoader;
 
     private ArrayAdapter<CountryLocale> paisesAdaper;
     private ArrayAdapter<CountryState> estadosAdapter;
@@ -78,8 +74,6 @@ public class LocalFragment extends CablushFragment implements MapaFragment.Selec
         if (getArguments() != null) {
             local = (Local) getArguments().getSerializable(LOCAL_BUNDLE_KEY);
         }
-
-        geonamesLoader = new GeonamesLoader();
 
         paisesAdaper = new ArrayAdapter<>(getActivity(), R.layout.simple_item, CountryLocale.getContriesLocales());
         paisesAdaper.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -122,11 +116,11 @@ public class LocalFragment extends CablushFragment implements MapaFragment.Selec
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 final CountryLocale country = paisesAdaper.getItem(position);
                 estadosAdapter.clear();
-                geonamesLoader.getFirstSubdivisions(country.getCountry(), new GeonamesLoader.GeonamesCallback() {
+                CountryState.loadStatesByCountry(country, new CountryState.GetStatesCallback() {
                     @Override
-                    public void onLoadFirstSubdivisions(List<Geonames> firstSubdivisions) {
-                        if (firstSubdivisions != null) {
-                            estadosAdapter.addAll(CountryState.fromSubDivision(firstSubdivisions));
+                    public void onLoadStates(List<CountryState> countryStates) {
+                        if (countryStates != null) {
+                            estadosAdapter.addAll(countryStates);
                             setEstadoValue();
                         } else {
                             Toast.makeText(getActivity(), R.string.error_locate_estados, Toast.LENGTH_SHORT).show();
@@ -138,17 +132,13 @@ public class LocalFragment extends CablushFragment implements MapaFragment.Selec
             public void onNothingSelected(AdapterView<?> parent) {
             }
         });
-        if (paisesAdaper != null) {
-            paisSpinner.setAdapter(paisesAdaper);
-            paisSpinner.setSelection(paisesAdaper.getPosition(CountryLocale.getDefault()));
-        }
+        paisSpinner.setAdapter(paisesAdaper);
+        paisSpinner.setSelection(paisesAdaper.getPosition(CountryLocale.getDefault()));
 
         cepEditText = (EditText) view.findViewById(R.id.editTextCep);
 
         estadoSpinner = (Spinner) view.findViewById(R.id.spinnerEstado);
-        if (estadosAdapter != null) {
-            estadoSpinner.setAdapter(estadosAdapter);
-        }
+        estadoSpinner.setAdapter(estadosAdapter);
 
         cidadeEditText = (EditText) view.findViewById(R.id.editTextCidade);
 
@@ -159,7 +149,8 @@ public class LocalFragment extends CablushFragment implements MapaFragment.Selec
     }
 
     private void setViewValues() {
-        if (paisesAdaper != null && ValidateUtils.isNotBlank(local.getPais())) {
+        if (ValidateUtils.isNotBlank(local.getPais())
+                && !CountryLocale.getCountryLocale(local.getPais()).equals(paisSpinner.getSelectedItem())) {
             paisSpinner.setSelection(paisesAdaper.getPosition(CountryLocale.getCountryLocale(local.getPais())));
         }
         cepEditText.setText(local.getCep());
@@ -172,15 +163,19 @@ public class LocalFragment extends CablushFragment implements MapaFragment.Selec
     }
 
     private void setEstadoValue() {
-        if (estadosAdapter != null && ValidateUtils.isNotBlank(local.getEstado())) {
+        if (ValidateUtils.isNotBlank(local.getEstado())) {
             estadoSpinner.setSelection(estadosAdapter.getPosition(CountryState.getContryState(local.getEstado())));
         }
     }
 
     private void getViewValues() {
-        local.setPais(paisesAdaper.getItem(paisSpinner.getSelectedItemPosition()).getCountry());
+        if (paisSpinner.getSelectedItemPosition() > 0) {
+            local.setPais(paisesAdaper.getItem(paisSpinner.getSelectedItemPosition()).getCountry());
+        }
         local.setCep(cepEditText.getText().toString());
-        local.setEstado(estadosAdapter.getItem(estadoSpinner.getSelectedItemPosition()).getCode());
+        if (estadoSpinner.getSelectedItemPosition() > 0) {
+            local.setEstado(estadosAdapter.getItem(estadoSpinner.getSelectedItemPosition()).getCode());
+        }
         local.setCidade(cidadeEditText.getText().toString());
         local.setBairro(bairroEditText.getText().toString());
         local.setLogradouro(logradouroEditText.getText().toString());

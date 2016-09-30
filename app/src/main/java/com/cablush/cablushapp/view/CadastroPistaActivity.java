@@ -58,7 +58,7 @@ public class CadastroPistaActivity extends CadastroActivity<Pista>
 
         // Add the fragments into adapter
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(pistaFragment, getString(R.string.txt_loja));
+        adapter.addFragment(pistaFragment, getString(R.string.txt_pista));
         adapter.addFragment(mapaFragment, getString(R.string.txt_localizacao));
         adapter.addFragment(localFragment, getString(R.string.txt_endereco));
         adapter.addFragment(horarioFragment, getString(R.string.txt_horarios));
@@ -75,7 +75,7 @@ public class CadastroPistaActivity extends CadastroActivity<Pista>
         if (pistaFragment.isAdded() || pistaFragment.isDetached()) {
             pista = pistaFragment.getPista();
         }
-        if (localFragment.isAdded() || localFragment.isAdded()) {
+        if (localFragment.isAdded() || localFragment.isDetached()) {
             pista.setLocal(localFragment.getLocal());
         }
         if (mapaFragment.isAdded() || mapaFragment.isDetached()) {
@@ -102,10 +102,16 @@ public class CadastroPistaActivity extends CadastroActivity<Pista>
         Local local = pista.getLocal();
         boolean validMapa = local.getLatLng() != null;
         if (!validMapa) {
-            Toast.makeText(this, R.string.txt_select_location, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.msg_invalid_mapa, Toast.LENGTH_SHORT).show();
+        }
+        boolean validLocal = ValidateUtils.isNotBlank(local.getPais());
+        validLocal = ValidateUtils.isNotBlank(local.getEstado()) && validLocal;
+        validLocal = ValidateUtils.isNotBlank(local.getCidade()) && validLocal;
+        if (!validLocal) {
+            Toast.makeText(this, R.string.msg_invalid_local, Toast.LENGTH_LONG).show();
         }
 
-        return validPista && validMapa;
+        return validPista && validMapa && validLocal;
     }
 
     @Override
